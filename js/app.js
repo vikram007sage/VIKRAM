@@ -34,8 +34,8 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings'].forEach(k => S[k] = S[k] || {});
-  S.math = S.math || [];
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs'].forEach(k => S[k] = S[k] || {});
+  S.math = S.math || []; S.practice = S.practice || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
   function save(sync = true) { if (SIM && !qs.get('test')) return; LS.set(KEY, S); if (sync) Sync.schedule(); }
 
@@ -96,6 +96,8 @@
     Object.entries(S.days).forEach(([ds, d]) => { x += Object.values(d.items || {}).filter(i => i.v).length * 10; if (d.journal && d.journal.text) x += 15; if (d.urges) x += (d.urges.n || 0) * 5; });
     x += Object.values(S.tasks).filter(t => t.done).length * 30;
     x += S.math.reduce((a, m) => a + Math.round((m.score || 0) / 2), 0);
+    x += S.practice.reduce((a, p) => a + (p.sc || 0) * 8, 0);
+    x += Object.values(S.srs).reduce((a, c) => a + (c.reps || 0) * 2, 0);
     Object.values(S.writing).forEach(w => x += Math.min(40, Math.round(((w.text || '').split(/\s+/).filter(Boolean).length) / 5)));
     let lvl = C.LEVELS[0], next = null;
     C.LEVELS.forEach((l, i) => { if (x >= l[0]) { lvl = l; next = C.LEVELS[i + 1] || null; } });
@@ -170,6 +172,7 @@
     <div class="card list">${items.map(id => { const h = habitById[id]; const on = isOn(dd, id); const txt = id === 'hobby' && hobby ? hobby.t : (mm ? h.min : h.t); return `<label class="item ${on ? 'done' : ''}"><input type="checkbox" data-habit="${id}" ${on ? 'checked' : ''}><span>${esc(txt)}<small>${esc(mm ? '' : 'min: ' + h.min)}</small></span></label>`; }).join('')}</div>
     <h3 class="h">Placement tasks</h3>
     <div class="card list">${tasks.length ? tasks.map(t => taskRow(t, ds)).join('') : '<p class="muted">Nothing due in the next 3 days. Do a timed set or a math sprint.</p>'}</div>
+    <div class="drills"><button class="btn" data-act="cards">Flashcards · ${Cards.due(ds).length} due</button><button class="btn ghost" data-act="quiz" data-mode="quick">Quick 5</button><button class="btn ghost" data-act="mathgo">Math sprint</button></div>
     <h3 class="h">Timeline</h3>
     <div class="timeline">${blocks.map(b => { const isCur = cur && cur.s === b.s; const past = !isCur && toMin(b.e) <= n.mins && toMin(b.e) > toMin(b.s); return `<div class="blk k-${b.k} ${isCur ? 'cur' : ''} ${past ? 'past' : ''}"><span class="tm">${b.s}</span><span class="bt">${esc(b.t)}</span></div>`; }).join('')}</div>
     <h3 class="h">Evening journal</h3>
@@ -195,10 +198,22 @@
     const tracks = [...new Set(C.MODULES.map(m => m.track))];
     return `<section class="hero small"><div class="eyebrow">Placement roadmap · ${done}/${C.TASKS.length} tasks</div><h1>${esc(ph.n)}</h1><p>${esc(ph.g)}</p></section>
     <div class="card"><div class="row-between"><div><h3>Math sprint</h3><small class="muted">120 seconds · + − × ÷ · Zetamac-style · best ${best}</small></div><button class="btn" data-act="mathgo">Start</button></div>${spark(recent.map(m => m.score))}</div>
+    ${practiceCard(ds)}
     <h3 class="h">Deadlines</h3>
     ${Object.keys(months).sort().map(k => `<details ${k <= ds.slice(0, 7) || k === addDays(ds, 20).slice(0, 7) ? 'open' : ''}><summary>${new Date(k + '-01T00:00:00Z').toLocaleDateString('en-IN', { month: 'long', year: 'numeric', timeZone: 'UTC' })} <small>${months[k].filter(taskDone).length}/${months[k].length}</small></summary><div class="list">${months[k].map(t => taskRow(t, ds)).join('')}</div></details>`).join('')}
     <h3 class="h">Notes library</h3>
     ${tracks.map(tr => `<div class="eyebrow mt">${esc(tr)}</div><div class="mods">${C.MODULES.filter(m => m.track === tr).map(m => `<div class="mod ${m.local ? 'ready' : ''}"><span class="code">${m.c}</span><b>${esc(m.t)}</b>${m.local ? `<a href="${m.local}">Open ↗</a>` : `<small>due ${fmtD(m.due)}</small>`}</div>`).join('')}</div>`).join('')}`;
+  }
+  function practiceCard(ds) {
+    const P = VK_PRACTICE, last = S.practice.slice(-5).reverse();
+    const topic = {}; S.practice.forEach(p => Object.entries(p.topics || {}).forEach(([t, [c, n]]) => { topic[t] = topic[t] || [0, 0]; topic[t][0] += c; topic[t][1] += n; }));
+    const weak = Object.entries(topic).filter(([, v]) => v[1] >= 3).map(([t, v]) => [t, v[0] / v[1]]).sort((a, b) => a[1] - b[1]).slice(0, 3);
+    const decks = {}; VK_CARDS.forEach(c => decks[c.deck] = (decks[c.deck] || 0) + 1);
+    return `<div class="card"><h3>Practice</h3><p class="small muted">Fresh questions every time; every answer is computed. Results feed your weak-topic list.</p>
+      <div class="modes">${Object.entries(P.MODES).map(([k, m]) => `<button class="mode" data-act="quiz" data-mode="${k}"><b>${esc(m.title)}</b><small>${m.n} Qs · ${m.secs / 60} min</small></button>`).join('')}</div>
+      ${weak.length ? `<p class="small"><b>Weakest topics:</b> ${weak.map(([t, a]) => `${esc(t)} ${Math.round(a * 100)}%`).join(' · ')}</p>` : ''}
+      ${last.length ? `<div class="small muted">Recent: ${last.map(p => `${esc(P.MODES[p.mode] ? P.MODES[p.mode].title : p.mode)} ${p.sc}/${p.n}`).join(' · ')}</div>` : ''}</div>
+    <div class="card"><div class="row-between"><div><h3>Flashcards</h3><small class="muted">${VK_CARDS.length} cards · ${Cards.due(ds).length} due today · decks: ${Object.entries(decks).map(([d, n]) => d + ' ' + n).join(', ')}</small></div><button class="btn" data-act="cards">Review</button></div></div>`;
   }
   function spark(arr) {
     if (arr.length < 2) return '<p class="muted small">Your scores will chart here.</p>';
@@ -208,8 +223,14 @@
 
   // ---------- FEED ----------
   let feedIdx = LS.get('vikram_feed_idx', Math.floor(Math.random() * C.FEED.length));
+  let feedGen = null;
   function viewFeed() {
-    const c = C.FEED[feedIdx % C.FEED.length], ds = nowIST().date, dd = day(ds);
+    const ds = nowIST().date, dd = day(ds);
+    if (feedIdx % 4 === 3 && typeof VK_PRACTICE !== 'undefined') { const g = feedGen || (feedGen = VK_PRACTICE.one());
+      return `<section class="hero small"><div class="eyebrow">Feed · instead of Instagram</div><h1>Solve this one.</h1><div class="meta"><span class="pill"><span class="dot"></span>${(dd.urges && dd.urges.n) || 0} urges beaten today</span><span class="pill">${(dd.cards && dd.cards.n) || 0} cards read</span></div></section>
+      <div class="feedcard k-apt"><div class="eyebrow">Solve it · ${esc(g.t)}</div>${g.ctx || ''}<h2>${esc(g.q)}</h2><div class="opts">${g.opts.map((o, i) => `<button class="opt" data-act="feedopt" data-i="${i}">${esc(o)}</button>`).join('')}</div><div class="ans hide" id="ans">${esc(g.exp)}</div></div>
+      <div class="row-between"><button class="btn ghost" data-act="feedprev">← Back</button><button class="btn" data-act="feednext">Next card →</button></div>`; }
+    const c = C.FEED[feedIdx % C.FEED.length];
     const label = { apt: 'Solve it', history: 'History', geo: 'Geopolitics', french: 'Français', biz: 'Business', mind: 'Mind' }[c.k];
     return `<section class="hero small"><div class="eyebrow">Feed · instead of Instagram</div><h1>One card. Then another.</h1><div class="meta"><span class="pill"><span class="dot"></span>${(dd.urges && dd.urges.n) || 0} urges beaten today</span><span class="pill">${(dd.cards && dd.cards.n) || 0} cards read</span></div></section>
     <div class="feedcard k-${c.k}"><div class="eyebrow">${label}</div><h2>${esc(c.q)}</h2><div class="ans ${c.k === 'apt' ? 'hide' : ''}" id="ans">${esc(c.a)}</div>${c.k === 'apt' ? '<button class="btn sm" data-act="reveal">Reveal answer</button>' : ''}</div>
@@ -282,7 +303,10 @@
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, ds = nowIST().date;
     if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); toast('Urge noticed. One card instead.'); }
-    if (act === 'feednext' || act === 'feedprev') { feedIdx = (feedIdx + (act === 'feednext' ? 1 : C.FEED.length - 1)) % C.FEED.length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
+    if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : C.FEED.length - 1)) % C.FEED.length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
+    if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; b.classList.add(j === feedGen.a ? 'right' : (j === i ? 'wrong' : '')); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
+    if (act === 'quiz') Quiz.open(a.dataset.mode);
+    if (act === 'cards') Cards.open();
     if (act === 'reveal') { $('#ans').classList.remove('hide'); a.remove(); }
     if (act === 'mathgo') Math2.open();
     if (act === 'syncsave') { LS.set(SYNCKEY, { owner: $('#sOwner').value.trim(), repo: $('#sRepo').value.trim(), token: $('#sToken').value.trim() }); Sync.now(true); }
@@ -314,6 +338,53 @@
     close() { clearInterval(this.iv); $('#overlay').classList.remove('show'); render(); }
   };
 
+  // ================= timed practice sets =================
+  const Quiz = {
+    open(mode) { const M = VK_PRACTICE.MODES[mode]; this.mode = mode; this.items = M.make(); this.i = 0; this.ans = []; this.t = M.secs; this.t0 = Date.now();
+      $('#overlay').classList.add('show'); clearInterval(this.iv); this.iv = setInterval(() => { this.t--; const el = $('#qTime'); if (el) el.textContent = this.clock(); if (this.t <= 0) this.end(); }, 1000); this.show(); },
+    clock() { const m = Math.max(this.t, 0); return Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0'); },
+    show() { const q = this.items[this.i], M = VK_PRACTICE.MODES[this.mode];
+      $('#overlay').innerHTML = `<div class="quizbox"><div class="row-between"><span class="eyebrow">${esc(M.title)} · ${this.i + 1}/${this.items.length}</span><span class="qtime" id="qTime">${this.clock()}</span><button class="btn sm ghost" id="qClose">✕</button></div>
+        <div class="qbar"><i style="width:${100 * this.i / this.items.length}%"></i></div>${q.ctx || ''}<h2 class="qq">${esc(q.q)}</h2>
+        <div class="opts">${q.opts.map((o, i) => `<button class="opt ${this.ans[this.i] === i ? 'sel' : ''}" data-i="${i}">${esc(o)}</button>`).join('')}</div>
+        <div class="row-between"><button class="btn ghost sm" id="qPrev" ${this.i ? '' : 'disabled'}>← Prev</button><button class="btn ghost sm" id="qSkip">Skip</button><button class="btn sm" id="qEnd">Finish</button></div></div>`;
+      $$('#overlay .opt').forEach(b => b.onclick = () => { this.ans[this.i] = +b.dataset.i; if (this.i < this.items.length - 1) { this.i++; this.show(); } else this.show(); });
+      $('#qPrev').onclick = () => { this.i--; this.show(); }; $('#qSkip').onclick = () => { if (this.i < this.items.length - 1) { this.i++; this.show(); } };
+      $('#qEnd').onclick = () => this.end(); $('#qClose').onclick = () => { if (confirmEnd()) this.end(); }; },
+    end() { if (!this.items) return; clearInterval(this.iv); const ds = nowIST().date; let sc = 0; const topics = {};
+      this.items.forEach((q, i) => { const ok = this.ans[i] === q.a; if (ok) sc++; topics[q.t] = topics[q.t] || [0, 0]; topics[q.t][0] += ok ? 1 : 0; topics[q.t][1]++; });
+      const secs = Math.round((Date.now() - this.t0) / 1000);
+      S.practice.push({ id: 'p' + ts(), mode: this.mode, sc, n: this.items.length, secs, topics, d: ds, ts: ts() });
+      if (habitById.aptitude.start <= ds && nowIST().mins >= 1050) day(ds).items.aptitude = { v: true, ts: ts() };
+      save();
+      const items = this.items, ans = this.ans; this.items = null;
+      $('#overlay').innerHTML = `<div class="quizbox"><div class="row-between"><span class="eyebrow">Result</span><button class="btn sm ghost" id="qClose">✕</button></div>
+        <h2 class="qq">${sc} / ${items.length} <small class="muted">in ${Math.floor(secs / 60)}m ${secs % 60}s</small></h2>
+        <p class="small muted">${sc / items.length >= 0.8 ? 'Strong. Push the timer next time.' : sc / items.length >= 0.5 ? 'Solid base. Read the explanations of the misses.' : 'Read every explanation below, then redo this mode tomorrow.'}</p>
+        <div class="review">${items.map((q, i) => { const ok = ans[i] === q.a; return `<details ${ok ? '' : 'open'}><summary>${ok ? '✓' : (ans[i] == null ? '–' : '✗')} ${esc(q.q.slice(0, 70))}${q.q.length > 70 ? '…' : ''}</summary><div>${q.ctx && !ok ? q.ctx : ''}<p><b>Answer:</b> ${esc(q.opts[q.a])}${ans[i] != null && !ok ? ` · <span class="muted">you chose ${esc(q.opts[ans[i]])}</span>` : ''}</p><p class="small">${esc(q.exp)}</p></div></details>`; }).join('')}</div></div>`;
+      $('#qClose').onclick = () => { $('#overlay').classList.remove('show'); render(); }; }
+  };
+  function confirmEnd() { return true; }
+
+  // ================= spaced-repetition flashcards =================
+  const Cards = {
+    due(ds) { const seen = VK_CARDS.filter(c => S.srs[c.id]); const due = seen.filter(c => S.srs[c.id].due <= ds); const fresh = VK_CARDS.filter(c => !S.srs[c.id]);
+      const newToday = Object.values(S.srs).filter(r => r.first === ds).length; return due.concat(fresh.slice(0, Math.max(0, 15 - newToday))); },
+    open() { const ds = nowIST().date; this.q = this.due(ds); this.n = 0; $('#overlay').classList.add('show'); this.show(false); },
+    show(flip) { const c = this.q[0];
+      if (!c) { $('#overlay').innerHTML = `<div class="quizbox center"><h2 class="qq">All caught up ✓</h2><p class="muted">${this.n} reviews done. Come back tomorrow.</p><button class="btn" id="cClose">Close</button></div>`; $('#cClose').onclick = () => { $('#overlay').classList.remove('show'); render(); }; return; }
+      $('#overlay').innerHTML = `<div class="quizbox"><div class="row-between"><span class="eyebrow">Flashcards · ${esc(c.deck)} · ${this.q.length} left</span><button class="btn sm ghost" id="cClose">✕</button></div>
+        <div class="flash ${flip ? 'flipped' : ''}" id="flash"><div class="ff">${esc(c.f)}</div>${flip ? `<div class="fb">${esc(c.b)}</div>` : '<div class="muted small">tap to reveal</div>'}</div>
+        ${flip ? `<div class="grade"><button class="btn ghost" data-g="0">Again</button><button class="btn" data-g="1">Good</button><button class="btn ghost" data-g="2">Easy</button></div>` : ''}</div>`;
+      $('#cClose').onclick = () => { $('#overlay').classList.remove('show'); render(); };
+      $('#flash').onclick = () => { if (!flip) this.show(true); };
+      $$('[data-g]').forEach(b => b.onclick = () => this.grade(c, +b.dataset.g)); },
+    grade(c, g) { const ds = nowIST().date; const r = Object.assign({ ivl: 0, ease: 2.5, reps: 0, first: ds }, S.srs[c.id] || {});
+      if (g === 0) { r.ivl = 0; r.ease = Math.max(1.3, r.ease - 0.2); this.q.push(this.q.shift()); }
+      else { r.ivl = r.ivl ? Math.round(r.ivl * r.ease * (g === 2 ? 1.3 : 1)) : (g === 2 ? 3 : 1); if (g === 2) r.ease += 0.15; this.q.shift(); }
+      r.reps++; r.due = addDays(ds, r.ivl); r.ts = ts(); S.srs[c.id] = r; this.n++; save(); this.show(false); }
+  };
+
   // ================= calendar (.ics) =================
   function downloadICS() {
     const start = nowIST().date < '2026-12-01' ? '2026-12-01' : nowIST().date; const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//VIKRAM//EN', 'CALSCALE:GREGORIAN', 'X-WR-CALNAME:VIKRAM', 'X-WR-TIMEZONE:Asia/Kolkata'];
@@ -340,7 +411,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }
