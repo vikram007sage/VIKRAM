@@ -1,0 +1,32 @@
+name: VIKRAM nudges
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # GitHub may delay scheduled runs by several minutes; exact alarms come from the calendar file
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: { group: nudges, cancel-in-progress: false }
+jobs:
+  nudge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --omit=dev --no-audit --no-fund
+      - name: Send due nudges
+        env:
+          DATA_TOKEN: ${{ secrets.DATA_TOKEN }}
+          DATA_REPO: ${{ secrets.DATA_REPO }}
+          VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+        run: node push/send.js
+      - name: Keep the schedule alive (GitHub pauses idle scheduled workflows after 60 days)
+        if: github.event_name == 'schedule'
+        run: |
+          if [ "$(date -u +%d)" = "01" ] && [ "$(date -u +%H%M)" \< "0015" ]; then
+            git config user.name "vikram-bot"; git config user.email "vikram-bot@users.noreply.github.com"
+            git commit --allow-empty -m "keepalive $(date -u +%F)" && git push
+          fi

@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guesstimates and structured problem-solving for consulting, product, VC and finance interviews.">
+  <title>S1 | Guesstimates &amp; Structured Thinking — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">S1 / CASE SPINE</div>
+    <input id="search" class="search" type="search" placeholder="Search a method, number or question…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents">
+      <div class="eyebrow">Study route</div>
+      <a href="#start">Start here</a><a href="#method">1 · The 6-step method</a><a href="#clarify">2 · Clarifying questions</a><a href="#approach">3 · Pick the approach</a><a href="#segment">4 · Segmenting (MECE)</a><a href="#anchors">5 · India anchor numbers</a><a href="#math">6 · Mental maths</a><hr><a href="#we1">Worked 1 · School bags (demand)</a><a href="#we2">Worked 2 · Highway pump (supply)</a><a href="#we3">Worked 3 · Mumbai flights (triangulate)</a><a href="#we4">Worked 4 · Food orders (PM twist)</a><hr><a href="#say">7 · Saying it aloud</a><a href="#traps">8 · Traps</a><a href="#bank">9 · Practice bank (30)</a><a href="#tracker">10 · Exam-month tracker</a><a href="#lastlook">Last 10-minute look</a>
+    </aside>
+    <main>
+      <div class="hero">
+        <div class="eyebrow">IIT Kharagpur · Placement prep · Shared spine module</div>
+        <h1>Guesstimates &amp;<br>Structured Thinking</h1>
+        <p>One skill, three lanes. Consulting asks it as a guesstimate, product asks it as market sizing or RCA, VC and finance ask it as "how big can this get?". Learn the method once, then drill one problem a day.</p>
+        <div class="meta"><span class="pill"><span class="dot"></span> Built for exam month: 20 min/day</span><span class="pill">4 fully worked problems</span><span class="pill">30-question practice bank</span></div>
+      </div>
+
+      <section id="start" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Why this module comes first</h2></div></div>
+        <p class="lede">Every interviewer in your three lanes is testing the same thing here: can you turn a vague question into a clean structure, make sensible assumptions out loud, and land on a number you can defend.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Structure</strong><span class="muted">a MECE tree drawn before any number appears</span></div><span class="frequency">weighs most</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Assumptions</strong><span class="muted">stated, rounded, and justified in one line each</span></div><span class="frequency">high</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Sanity check</strong><span class="muted">a second route or a per-person check before you finish</span></div><span class="frequency">high</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Communication</strong><span class="muted">signposting, checking in, a crisp final sentence with a "so what"</span></div><span class="frequency">high</span></div>
+          <div class="priority"><span class="rank">5</span><div><strong>Arithmetic</strong><span class="muted">fast and right, but nobody hires for decimals</span></div><span class="frequency">hygiene</span></div>
+        </div>
+        <div class="summary">The final number is the least important part. A wrong-but-structured answer beats a right-but-guessed one. Interviewers often change one assumption mid-way to see whether your structure absorbs it.</div>
+        <div class="grid" style="margin-top:16px">
+          <div class="card"><h3>Where it shows up</h3><ul><li><b>Consulting:</b> standalone guesstimate, or the market-sizing step inside a market-entry case.</li><li><b>Product:</b> RCA + guesstimate round (Flipkart-style), TAM in the deck round.</li><li><b>VC:</b> "size this startup's market" in a memo or interview.</li><li><b>Finance:</b> revenue build-ups in a model; sanity-checking a DCF.</li></ul></div>
+          <div class="card"><h3>Exam-month routine</h3><ol><li>Pick one question from the bank (section 9).</li><li>Set a 12-minute timer; solve on paper, talking aloud.</li><li>Do the sanity check by a second route.</li><li>Open the hint, compare structure, tick it off in section 10.</li></ol></div>
+        </div>
+      </section>
+
+      <section id="method" data-search>
+        <div class="section-head"><div><span class="section-no">01 / CORE · HIGH YIELD</span><h2>The 6-step method</h2></div><span class="tag core">memorise</span></div>
+        <div class="sketch"><div>Clarify</div><div>Approach</div><div>Segment</div><div>Assume + compute</div></div>
+        <div class="sketch" style="grid-template-columns:repeat(2,1fr)"><div>Sanity check</div><div>Summarise + so-what</div></div>
+        <ol class="derive">
+          <li><b>Clarify (≤1 min).</b> Pin down geography, time unit, what exactly is counted, and why they want it. "Sold" vs "in use", units vs ₹, per day vs per year.</li>
+          <li><b>Choose the approach.</b> Demand side (who buys, how often), supply side (who makes or serves, at what capacity), or a proxy. Say why in one sentence.</li>
+          <li><b>Segment.</b> Break the population into 2–4 groups that behave differently (urban/rural, income, age, usage). Draw the tree before writing any number. Ask: "Does this structure make sense before I put numbers in?"</li>
+          <li><b>Assume and compute.</b> One assumption per branch, round numbers, a one-line reason each. Compute branch by branch, out loud.</li>
+          <li><b>Sanity check.</b> A second route (supply vs demand), a per-person or per-store check, or a comparison you know. If the two routes disagree by more than ~2×, find the broken assumption.</li>
+          <li><b>Summarise.</b> "So roughly X, driven mainly by Y; the most sensitive assumption is Z." Then add the so-what the interviewer can use.</li>
+        </ol>
+        <div class="memory"><b>Memory:</b> <b>C-A-S-A-S-S</b> — "Clarify, Approach, Segment, Assume, Sanity, Summarise". The tree comes before the numbers, every time.</div>
+      </section>
+
+      <section id="clarify" data-search>
+        <div class="section-head"><div><span class="section-no">02 / CORE</span><h2>Clarifying questions</h2></div></div>
+        <p class="lede">Ask two or three, not ten. Each one should change your structure; if the answer wouldn't change anything, don't ask it.</p>
+        <table class="compare">
+          <tr><th>Dimension</th><th>Ask</th><th>Why it matters</th></tr>
+          <tr><td>Definition</td><td>"By smartphone, do we include feature phones?"</td><td>Changes the base population</td></tr>
+          <tr><td>Geography</td><td>"All of India, or urban only?"</td><td>Decides whether you need an urban/rural split</td></tr>
+          <tr><td>Time</td><td>"Per day, or per year?"</td><td>Seasonality, replacement cycles</td></tr>
+          <tr><td>Metric</td><td>"Units or revenue?"</td><td>Adds a price layer</td></tr>
+          <tr><td>Flow vs stock</td><td>"Sold this year, or in use today?"</td><td>Stock ÷ life = annual flow</td></tr>
+          <tr><td>Purpose</td><td>"Is this for a market-entry decision?"</td><td>Tells you which segment to go deep on</td></tr>
+        </table>
+        <div class="warning"><b>If the interviewer says "your call":</b> state the assumption and move on. "I'll take all-India, annual, in rupees, new sales only." Hesitating here costs more than a slightly odd choice.</div>
+      </section>
+
+      <section id="approach" data-search>
+        <div class="section-head"><div><span class="section-no">03 / CORE</span><h2>Pick the approach</h2></div></div>
+        <div class="grid">
+          <article class="card accent"><h3>Demand side (top-down)</h3><p>Population → who uses it → how often → price.</p><span class="eq">Market = Users × Frequency × Price</span><p class="muted">Best for consumer goods and apps: shampoo, school bags, food orders.</p></article>
+          <article class="card accent"><h3>Supply side (bottom-up)</h3><p>Outlets or machines → capacity → utilisation.</p><span class="eq">Output = Units × Capacity/hr × Hours × Utilisation</span><p class="muted">Best for places and throughput: a petrol pump, a restaurant, an airport, a toll plaza.</p></article>
+          <article class="card"><h3>Stock → flow</h3><span class="eq">Annual sales = Installed base ÷ Life (yrs) + New adopters</span><p class="muted">Tyres, phones, fridges, ACs, spectacles.</p></article>
+          <article class="card"><h3>Proxy / area / time</h3><p>Use a known quantity that moves with the unknown: area for "golf balls in a room", hours for "flights a day", seats for "tickets sold".</p><p class="muted">Ask: "What physically limits this number?"</p></article>
+        </div>
+        <div class="memory"><b>Rule of thumb:</b> if the thing is <i>bought by people</i>, start from demand; if it is <i>served at a place</i>, start from supply; then use the other one as your sanity check.</div>
+      </section>
+
+      <section id="segment" data-search>
+        <div class="section-head"><div><span class="section-no">04 / CORE</span><h2>Segmenting the MECE way</h2></div></div>
+        <p class="lede">MECE = mutually exclusive (no overlap), collectively exhaustive (nothing missed). Pick the split along which <b>behaviour actually changes</b>.</p>
+        <table class="compare">
+          <tr><th>Axis</th><th>Typical split</th><th>Use when</th></tr>
+          <tr><td>Geography</td><td>Urban / rural; metro / tier-2 / tier-3</td><td>Penetration or price differs by place</td></tr>
+          <tr><td>Income</td><td>Top 10–20% / middle / lower</td><td>Premium vs mass products, frequency of discretionary spends</td></tr>
+          <tr><td>Age</td><td>0–5, 6–17, 18–35, 36–60, 60+</td><td>Students, first jobbers, ageing users</td></tr>
+          <tr><td>Unit of buying</td><td>Individual / household / business</td><td>TVs and fridges are per household; phones per person</td></tr>
+          <tr><td>Intensity</td><td>Heavy / medium / light / non-user</td><td>Apps, food delivery, cabs</td></tr>
+          <tr><td>Channel</td><td>Online / offline; B2B / B2C</td><td>Distribution or pricing differs</td></tr>
+        </table>
+        <div class="warning"><b>Trap:</b> overlapping segments ("students" and "urban people") double count. Split on one axis per level of the tree.</div>
+      </section>
+
+      <section id="anchors" data-search>
+        <div class="section-head"><div><span class="section-no">05 / NUMBERS · MEMORISE</span><h2>India anchor numbers (Nov 2026)</h2></div><span class="tag hot">updated</span></div>
+        <p class="lede">Round, interview-safe anchors. Interviewers accept round numbers; they reject numbers that are off by 3×. Old casebooks in your folder still use "India = 100 crore"; that's 50% too low now.</p>
+        <table class="compare">
+          <tr><th>Anchor</th><th>Use in interview</th><th>Basis</th></tr>
+          <tr><td>Population</td><td><b>~148 crore (1.48 bn)</b>; say "~150 crore"</td><td>UN data, Oct 2026 (DataReportal)</td></tr>
+          <tr><td>Urban share</td><td><b>~37–38%</b> → ~55 crore urban, ~93 crore rural</td><td>DataReportal, late 2025</td></tr>
+          <tr><td>Household size</td><td><b>~4–4.5</b> (urban ~3.5–4) → ~33–35 crore households</td><td>assumption; state it</td></tr>
+          <tr><td>Births / one age cohort</td><td><b>~2.3–2.5 crore</b> people per year of age (young cohorts)</td><td>assumption; state it</td></tr>
+          <tr><td>Active internet users</td><td><b>~95 crore</b>; ~38% of people are not active users</td><td>IAMAI 2025 (via Business Today)</td></tr>
+          <tr><td>Smartphone owners</td><td><b>~62 crore</b> (many devices are shared)</td><td>Nielsen 2026</td></tr>
+          <tr><td>Life expectancy</td><td><b>~70 years</b></td><td>round anchor</td></tr>
+          <tr><td>Working days</td><td><b>~250/yr</b>; weeks ~50; hours/yr 8,760</td><td>calendar</td></tr>
+        </table>
+        <div class="memory"><b>Lakh–crore converter:</b> 1 lakh = 100k · 1 crore = 10 million · 100 crore = 1 billion · ₹1,000 crore ≈ $115–120 mn at ~₹85–88/$.</div>
+      </section>
+
+      <section id="math" data-search>
+        <div class="section-head"><div><span class="section-no">06 / TOOLKIT</span><h2>Mental maths that saves minutes</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Round first, adjust later</h3><p>Round to 1–2 significant figures: 1.48 bn → 150 crore; 365 → 350 when it makes division clean, then say so.</p></div>
+          <div class="card"><h3>Powers of ten</h3><p>Write numbers as a × 10ⁿ, multiply the a's, add the n's. 6 × 10⁵ × 4 × 10² = 24 × 10⁷ = 2.4 × 10⁸.</p></div>
+          <div class="card"><h3>Percentages</h3><p>x% of y = y% of x. 18% of 50 = 50% of 18 = 9. 1/8 = 12.5%, 1/6 ≈ 16.7%, 1/7 ≈ 14.3%.</p></div>
+          <div class="card"><h3>Rule of 72</h3><p>Doubling time ≈ 72 ÷ growth rate (%). 12% growth doubles in ~6 years. Useful in VC and finance follow-ups.</p></div>
+        </div>
+        <span class="formula-label">annualise</span><span class="eq">per day × 30 = per month · per month × 12 = per year · per day × <em>~350</em> = per year</span>
+      </section>
+
+      <section id="we1" data-search>
+        <div class="section-head"><div><span class="section-no">WORKED 1 / DEMAND SIDE</span><h2>Annual market for school bags in India (₹)</h2></div><span class="tag">consulting · VC</span></div>
+        <p class="muted">Clarify: all-India, new bags sold per year, in rupees, all price tiers.</p>
+        <div class="card">
+          <table class="compare">
+            <tr><th>Step</th><th>Assumption</th><th>Result</th></tr>
+            <tr><td>School-age people (6–17)</td><td>12 cohorts × ~2.4 crore</td><td>~29 crore</td></tr>
+            <tr><td>Enrolled students</td><td>~90% enrolment</td><td>~26 crore</td></tr>
+            <tr><td>Split</td><td>Urban 35% / rural 65%</td><td>9 crore / 17 crore</td></tr>
+            <tr><td>Bags per student per year</td><td>one bag lasts ~1.5 years → 0.67</td><td>urban 6 crore, rural 11.4 crore bags</td></tr>
+            <tr><td>Average price</td><td>rural ₹350; urban 70% mass at ₹800 + 30% premium at ₹2,000 → ₹1,160</td><td></td></tr>
+            <tr><td>Revenue</td><td>rural 11.4 cr × ₹350 ≈ ₹4,000 cr; urban 6 cr × ₹1,160 ≈ ₹7,000 cr</td><td><b>~₹11,000 crore/yr</b></td></tr>
+          </table>
+        </div>
+        <div class="summary">About ₹11,000 crore a year (~$1.3 bn), with urban buyers at a third of the volume but ~60% of the value. Most sensitive assumption: the 1.5-year replacement cycle.</div>
+        <div class="memory"><b>Sanity check:</b> ₹11,000 cr ÷ 26 cr students ≈ ₹420 per student per year. Plausible for a family buying one mid-range bag every 18 months.</div>
+        <p><b>So-what for a market-entry case:</b> a new premium brand should target urban private-school students; that's where the value sits.</p>
+      </section>
+
+      <section id="we2" data-search>
+        <div class="section-head"><div><span class="section-no">WORKED 2 / SUPPLY SIDE</span><h2>Daily revenue of a petrol pump on NH-16 near Kharagpur</h2></div><span class="tag">finance · consulting</span></div>
+        <p class="muted">Clarify: one pump, fuel sales only (no shop), a normal weekday, 24-hour operation.</p>
+        <ol class="derive">
+          <li><b>Capacity:</b> 3 dispensers × 2 nozzles = 6 nozzles; one vehicle every 3 min at full use → 20 vehicles/nozzle/hr.</li>
+          <li><b>Utilisation by time band:</b> peak 6 h at 50% → 10/hr; normal 12 h at 25% → 5/hr; night 6 h → 1/hr.</li>
+          <li><b>Vehicles/day:</b> per nozzle 60 + 60 + 6 = 126; × 6 nozzles ≈ <b>~750 vehicles</b>.</li>
+          <li><b>Mix and litres:</b> two-wheelers 55% × 3 L ≈ 1,250 L; cars 35% × 20 L ≈ 5,300 L; trucks/buses 10% × 100 L ≈ 7,600 L → <b>~14,000 L/day</b>.</li>
+          <li><b>Price:</b> blended ~₹95/L (assumption; diesel-heavy) → <b>~₹13 lakh/day</b>, ~₹48 crore/yr gross sales.</li>
+        </ol>
+        <div class="warning"><b>Sanity check that caught a mistake:</b> a first pass with 8 nozzles, 70% peak use and 20% trucks gave ~37,000 L/day (~1,100 kL a month). If the interviewer says "a typical pump does a few hundred kL a month", your number is ~4× high: trucks and utilisation were the broken assumptions. Say this out loud and revise; it scores well.</div>
+        <div class="memory"><b>Finance follow-up they love:</b> dealer margin is a few rupees per litre, so ₹13 lakh of revenue is maybe ₹40–50k of gross margin a day. Revenue ≠ profit.</div>
+      </section>
+
+      <section id="we3" data-search>
+        <div class="section-head"><div><span class="section-no">WORKED 3 / TRIANGULATE</span><h2>Flights departing Mumbai airport in a day</h2></div><span class="tag pyq">asked: Deloitte, MakeMyTrip</span></div>
+        <div class="grid">
+          <article class="card accent"><h3>Route A · runway capacity</h3><p>Mumbai effectively runs one runway at a time.</p><ul><li>Peak 6 h × ~45 movements/hr = 270</li><li>Normal 12 h × ~30 = 360</li><li>Night 6 h × ~10 = 60</li></ul><p>≈ 690 movements → half are departures → <b>~350</b>.</p></article>
+          <article class="card accent"><h3>Route B · passenger demand</h3><ul><li>Assume ~5.5 crore passengers/yr → ~1.5 lakh/day</li><li>Half are departing → 75,000</li><li>~170 seats × 85% load ≈ 145 per flight</li></ul><p>75,000 ÷ 145 ≈ <b>~520</b>.</p></article>
+        </div>
+        <div class="summary">The two routes give 350 and 520. Don't average blindly: ask which assumption is weaker. Peak capacity is probably higher than 45/hr and the night is busier than 10/hr, so the honest answer is <b>"roughly 400–500 departures a day"</b>, with the range explained.</div>
+        <div class="memory"><b>Why interviewers love this:</b> two independent routes that roughly agree are far more convincing than one precise-looking number.</div>
+      </section>
+
+      <section id="we4" data-search>
+        <div class="section-head"><div><span class="section-no">WORKED 4 / PRODUCT TWIST</span><h2>Daily food-delivery orders in Bengaluru</h2></div><span class="tag">product · VC</span></div>
+        <p class="muted">Clarify: all apps combined, orders per day, city only.</p>
+        <table class="compare">
+          <tr><th>Segment (households)</th><th>Share</th><th>Households</th><th>Orders/week</th><th>Orders/week total</th></tr>
+          <tr><td>Affluent + young professionals</td><td>20%</td><td>8 lakh</td><td>3</td><td>24 lakh</td></tr>
+          <tr><td>Upper-middle</td><td>30%</td><td>12 lakh</td><td>1</td><td>12 lakh</td></tr>
+          <tr><td>Middle</td><td>30%</td><td>12 lakh</td><td>0.25</td><td>3 lakh</td></tr>
+          <tr><td>Non-users</td><td>20%</td><td>8 lakh</td><td>0</td><td>0</td></tr>
+        </table>
+        <p>Assumed city population ~1.4 crore ÷ 3.5 per household ≈ 40 lakh households → 39 lakh orders/week → <b>~5.5 lakh orders/day</b>.</p>
+        <div class="summary">PM follow-up: "You're the PM; orders must grow 20%." The tree tells you where: the middle segment orders once a month, so frequency there (cheaper delivery, smaller baskets) is a bigger lever than adding affluent users who already order three times a week.</div>
+        <div class="memory"><b>Pattern:</b> in product rounds, end the guesstimate by pointing at the branch with the most headroom. That converts a number into a product insight.</div>
+      </section>
+
+      <section id="say" data-search>
+        <div class="section-head"><div><span class="section-no">07 / DELIVERY</span><h2>Saying it aloud: the script</h2></div></div>
+        <div class="card dark">
+          <ol>
+            <li>"Just to confirm scope: we want X, for Y, per Z. Is that right?"</li>
+            <li>"I'll approach this from the demand side, because it's a consumer good bought by individuals."</li>
+            <li>"Let me lay out the structure first." (draw the tree; turn the page towards them)</li>
+            <li>"Does this structure look reasonable before I put in numbers?"</li>
+            <li>"For urban households I'll assume ~4 people, because…" (one reason per assumption)</li>
+            <li>"That gives roughly N. Let me sanity-check it another way…"</li>
+            <li>"So about N, driven mostly by A; the assumption I'm least sure of is B. If this is for entry, I'd focus on segment C."</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="traps" data-search>
+        <div class="section-head"><div><span class="section-no">08 / TRAPS</span><h2>Mistakes that sink good candidates</h2></div></div>
+        <div class="grid">
+          <div class="warning"><b>Numbers before structure.</b> Starting with "India has 150 crore people…" before saying where you're going.</div>
+          <div class="warning"><b>Fake precision.</b> "₹10,847 crore." Round it: "~₹11,000 crore".</div>
+          <div class="warning"><b>Silent maths.</b> Long pauses with no narration. Say each step.</div>
+          <div class="warning"><b>Ignoring the hint.</b> When the interviewer nudges an assumption, adopt it and recompute calmly.</div>
+          <div class="warning"><b>Forgetting units.</b> Mixing per day and per year, lakh and million.</div>
+          <div class="warning"><b>No so-what.</b> Ending on a bare number in a case or product round.</div>
+        </div>
+      </section>
+
+      <section id="bank" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PRACTICE</span><h2>Practice bank: 30 questions</h2></div><span class="tag pyq">many from your folder's casebooks</span></div>
+        <p class="lede">Solve first, then open the hint. Questions marked with a firm name come from the "Previously asked guesstimates" list and the Communiqué <i>Guessing Game</i> in your folder.</p>
+        <h4>Demand side</h4>
+        <details><summary>1. Market size of shampoo in India (volume, litres/yr)</summary><div>Split urban/rural × sachet vs bottle users × washes/week × ml per wash. Rural sachet-heavy.</div></details>
+        <details><summary>2. Baby diapers sold in India per year</summary><div>Babies 0–2 (~2 cohorts) × usage share by income × diapers/day (high for affluent, occasional for others).</div></details>
+        <details><summary>3. Spectacles sold in India per year (Gywnnie Bee)</summary><div>Stock → flow: people who need correction × share who own glasses ÷ replacement life (~2–3 yrs).</div></details>
+        <details><summary>4. Cricket bats sold in India per year (i3)</summary><div>Players by age × bats per year; split leather vs tennis-ball bats, and clubs/academies vs casual.</div></details>
+        <details><summary>5. Tyres sold in India per year</summary><div>Vehicle stock by type × tyres per vehicle ÷ tyre life (km ÷ km/yr) + new-vehicle tyres.</div></details>
+        <details><summary>6. Number of Excel users in the world (Microsoft)</summary><div>Office workers globally × share using spreadsheets; add students. Revenue loss = users × share paying × price.</div></details>
+        <details><summary>7. Annual market for formal ties in India</summary><div>Working men in formal jobs × share required to wear ties × ties bought per year; add gifting.</div></details>
+        <details><summary>8. Number of iPhones sold in India per year</summary><div>Smartphone owners × premium share × iPhone share of premium ÷ replacement cycle.</div></details>
+        <h4>Supply side / capacity</h4>
+        <details><summary>9. Daily revenue of a restaurant near Tech Market, KGP (High Radius)</summary><div>Seats × table turns per meal slot × occupancy × average bill; add delivery.</div></details>
+        <details><summary>10. Cars crossing a toll plaza on NH-16 per day</summary><div>Lanes × vehicles/lane/hr × utilisation by time band; check against toll revenue if known.</div></details>
+        <details><summary>11. Monthly cash withdrawn from the SBI ATM on campus</summary><div>Users × withdrawals per month × average amount; cross-check with machine capacity per refill.</div></details>
+        <details><summary>12. Number of petrol pumps in Delhi (Communiqué)</summary><div>Vehicles × fuel per day ÷ litres a pump sells per day; or road length ÷ spacing.</div></details>
+        <details><summary>13. Revenue of one multiplex screen per year</summary><div>Seats × shows/day × occupancy (weekday vs weekend) × ticket price + F&amp;B attach rate.</div></details>
+        <details><summary>14. Number of cabs needed at Lucknow airport (High Radius)</summary><div>Arriving passengers per hour × share taking cabs ÷ passengers per cab ÷ trips a cab can do per hour.</div></details>
+        <h4>Proxy, area, time</h4>
+        <details><summary>15. Tennis balls that fit in a lecture hall (MagicBricks)</summary><div>Room volume ÷ ball volume × packing efficiency (~0.6–0.7 for random packing).</div></details>
+        <details><summary>16. Airplanes in the sky over India right now</summary><div>Daily flights × average flight duration ÷ 24 h, adjusted for the time of day.</div></details>
+        <details><summary>17. Daily flights from Delhi airport (MakeMyTrip)</summary><div>Same as Worked 3: runway route + passenger route, then triangulate.</div></details>
+        <details><summary>18. Length of roads in Delhi (Communiqué)</summary><div>City area × share of land under roads ÷ average road width.</div></details>
+        <details><summary>19. People who pass through Kharagpur station daily</summary><div>Trains per day × average boarding/alighting per train; separate locals from long-distance.</div></details>
+        <h4>Campus classics</h4>
+        <details><summary>20. Maggi packets eaten on campus in a month</summary><div>Students × share who eat Maggi × times/week; add hall canteens vs room cooking.</div></details>
+        <details><summary>21. People on campus using Instagram daily</summary><div>Campus population (students, faculty, staff) × smartphone share × DAU rate by group.</div></details>
+        <details><summary>22. Revenue of a hall's night canteen per semester</summary><div>Residents × share who visit × visits/week × average spend × weeks in semester.</div></details>
+        <h4>Product / VC flavoured</h4>
+        <details><summary>23. Daily active users of a UPI app in Kolkata</summary><div>Smartphone users × UPI adoption × DAU/MAU ratio × app's share.</div></details>
+        <details><summary>24. Quick-commerce orders per day in Mumbai</summary><div>Households by income × q-commerce adoption × orders/week; check with dark stores × orders/store/day.</div></details>
+        <details><summary>25. TAM for a sub-₹100 water-quality test kit in India</summary><div>Households on borewell/untreated water × share willing to test × tests/yr; add B2G (panchayats) and B2B (RO dealers). This is your KiFayti pitch number.</div></details>
+        <details><summary>26. Number of EV two-wheelers sold in India next year</summary><div>Total two-wheeler sales × EV penetration; segment by city tier and use (delivery fleets vs personal).</div></details>
+        <details><summary>27. Revenue of a coaching institute in Kota</summary><div>Students × fee by course length; or classrooms × batches × students per batch × fee.</div></details>
+        <details><summary>28. Number of LinkedIn users at IIT KGP and conversion to Premium</summary><div>Students + alumni on platform × active share × premium conversion rate.</div></details>
+        <h4>Hard / unconventional</h4>
+        <details><summary>29. Number of people who have ever lived on Earth (Deloitte)</summary><div>Split history into eras; births per year × years per era. Tests comfort with orders of magnitude.</div></details>
+        <details><summary>30. Probability a customer orders the exact same Subway sub as you (High Radius)</summary><div>Product of choice counts (bread × protein × cheese × veggies subsets × sauces) with popularity weights.</div></details>
+      </section>
+
+      <section id="tracker" data-search>
+        <div class="section-head"><div><span class="section-no">10 / EXAM MONTH</span><h2>Tracker: one a day until 30 Nov</h2></div></div>
+        <p class="muted">Ticks are saved in this browser.</p>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Read sections 0–6 once (day 1)</label>
+          <label class="checkline"><input type="checkbox"> Re-do Worked 1 without looking</label>
+          <label class="checkline"><input type="checkbox"> Re-do Worked 2 without looking</label>
+          <label class="checkline"><input type="checkbox"> Re-do Worked 3 with both routes</label>
+          <label class="checkline"><input type="checkbox"> Re-do Worked 4 and state the so-what</label>
+          <label class="checkline"><input type="checkbox"> Bank Q1–3 (demand)</label>
+          <label class="checkline"><input type="checkbox"> Bank Q4–6</label>
+          <label class="checkline"><input type="checkbox"> Bank Q9–11 (supply)</label>
+          <label class="checkline"><input type="checkbox"> Bank Q12–14</label>
+          <label class="checkline"><input type="checkbox"> Bank Q15–17 (proxy)</label>
+          <label class="checkline"><input type="checkbox"> Bank Q20–22 (campus), aloud to a friend</label>
+          <label class="checkline"><input type="checkbox"> Bank Q23–25 (product/VC)</label>
+          <label class="checkline"><input type="checkbox"> Bank Q25 written up as your KiFayti TAM slide</label>
+          <label class="checkline"><input type="checkbox"> One timed mock with a case partner (any 2 questions)</label>
+          <label class="checkline"><input type="checkbox"> Anchor numbers recited from memory</label>
+        </div>
+      </section>
+
+      <section id="lastlook" data-search>
+        <div class="section-head"><div><span class="section-no">11 / RAPID RECALL</span><h2>Last 10-minute look</h2></div></div>
+        <div class="grid">
+          <div class="card dark"><h3>The six steps</h3><ol><li>Clarify</li><li>Approach</li><li>Segment (tree first)</li><li>Assume + compute</li><li>Sanity check</li><li>Summarise + so-what</li></ol></div>
+          <div class="card"><h3>Five anchors</h3><ul><li>India ~150 crore</li><li>Urban ~37%</li><li>~4–4.5 per household</li><li>~95 crore internet users</li><li>~2.4 crore per age cohort</li></ul></div>
+          <div class="card"><h3>Three formulas</h3><ul><li>Users × frequency × price</li><li>Units × capacity × hours × utilisation</li><li>Stock ÷ life + new adopters</li></ul></div>
+          <div class="card accent"><h3>Three habits</h3><ol><li>Check in after the structure.</li><li>Two routes when you can.</li><li>End with the lever, not the number.</li></ol></div>
+        </div>
+        <footer><b>Sources.</b> Method and practice questions condensed from your folder: Communiqué IIT KGP <i>The Guessing Game</i>, IIM Lucknow <i>Previously asked guesstimates</i>, <i>Models for Case Solving</i>, IITB <i>Case Interviews Cracked</i>, IIT-K PM roadmap. Anchor numbers: population and urban share from <a href="https://datareportal.com/reports/digital-2027-india">DataReportal, Digital 2027: India</a> and <a href="https://datareportal.com/reports/digital-2026-india">Digital 2026: India</a>; internet users from IAMAI 2025 via <a href="https://www.businesstoday.in/technology/news/story/indias-internet-user-base-tops-950-million-as-rural-growth-ai-drive-adoption-513353-2026-01-29">Business Today</a>; smartphone owners from Nielsen via <a href="https://www.medianews4u.com/india-reaches-915-million-internet-users-gender-split-stands-at-52-men-and-48-women-nielsen/">MediaNews4U</a>. All worked-example inputs (prices, utilisation, passenger counts) are stated assumptions for practice, not data.<br>Module S1 of the CDC placement-prep series · Nov 2026.</footer>
+      </section>
+      <div id="none" class="no-results">No match. Try a shorter term such as "supply", "anchor", "MECE" or "flights".</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-s1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-s1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-s1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main [id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

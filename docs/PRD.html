@@ -1,0 +1,178 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VIKRAM — PRD</title><link rel="stylesheet" href="../css/app.css"><style>.doc{max-width:820px;margin:0 auto;padding:24px 18px 60px}.doc table{width:100%;border-collapse:collapse;font-size:15px;margin:10px 0}.doc th,.doc td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}.doc th{font:11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.doc h1{font-size:40px;line-height:1}.doc h2{border-bottom:2px solid var(--ink);padding-bottom:6px;margin-top:34px}.doc blockquote{border-left:4px solid var(--gold);background:color-mix(in srgb,var(--gold) 15%,transparent);margin:12px 0;padding:8px 14px}body{padding-bottom:30px}</style></head><body><div class="doc"><p><a class="btn ghost sm" href="../index.html#more">← Back to VIKRAM</a></p><h1>VIKRAM — Product Requirements Document</h1>
+<p><em>Owner: Aryan (PM, designer, first user) · v1.0 · Nov 2026 · Status: v1 shipped, iterating</em></p>
+<blockquote>
+<p>This PRD doubles as a portfolio case study for product-management interviews: problem → user insight → decisions and trade-offs → metrics → what I learned.</p>
+</blockquote>
+<h2>1. Problem</h2>
+<p>A final-year IIT student has 13 months to become placement-ready for non-software roles (analyst, consulting, product, finance, quant, AI/ML) while running a lab project and wanting to rebuild daily habits. The materials exist (11 GB of books and casebooks). What fails is <strong>execution</strong>:
+- Plans live in many places and are re-decided every morning, which costs willpower.
+- Short-form video (Instagram) fills every gap in the day; reading never starts.
+- One missed day turns into a lost week. Generic habit apps punish streak breaks, which accelerates quitting.
+- Afternoon sleep wipes out the lab block.</p>
+<h2>2. User and insights</h2>
+<p>Primary user: me. Insights from 4 weeks of self-observation:
+1. <strong>Decision fatigue, not lack of information.</strong> I knew what to study; I didn't know what to do <em>right now</em>.
+2. <strong>The phone is the trigger.</strong> The urge to scroll appears in 2–3 minute gaps; any replacement must fit that gap.
+3. <strong>Recovery matters more than streaks.</strong> My failure mode is the second missed day, not the first.
+4. <strong>I like solving and winning.</strong> Scores and personal bests motivate me more than reminders.</p>
+<h2>3. Goals and non-goals</h2>
+<p><strong>Goals</strong>
+- G1: Tell me what to do <em>now</em>, for every hour from 5:00 to 21:00, with zero planning in the moment.
+- G2: Replace scrolling in short gaps with one-minute learning cards.
+- G3: Make returning after a bad day cheap (comeback mode).
+- G4: Run the 13-month placement roadmap with dated deadlines and offline notes.
+- G5: Work offline on phone and laptop, synced, with notifications.</p>
+<p><strong>Non-goals (v1)</strong>
+- Social features, leaderboards, accounts for other users.
+- AI chat inside the app (content is pre-generated; the app must run without a model).
+- Automatic email sending (outreach drafts only, the human sends).</p>
+<h2>4. Success metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Metric</th>
+<th>Target (Dec 2026)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>North star</td>
+<td>Planned checklist items completed per week</td>
+<td>≥ 70%</td>
+</tr>
+<tr>
+<td>Behaviour</td>
+<td>Urges beaten per day (Feed opens from the Urge button)</td>
+<td>≥ 5</td>
+</tr>
+<tr>
+<td>Recovery</td>
+<td>Days from a missed day to the next ≥ 60% day</td>
+<td>≤ 1</td>
+</tr>
+<tr>
+<td>Outcome</td>
+<td>Roadmap tasks done on or before due date</td>
+<td>≥ 80%</td>
+</tr>
+<tr>
+<td>Skill</td>
+<td>Math-sprint best score (120 s)</td>
+<td>40 by 31 Dec</td>
+</tr>
+<tr>
+<td>Guardrail</td>
+<td>Sleep by 21:00 ticked</td>
+<td>≥ 5 nights/week</td>
+</tr>
+<tr>
+<td>Guardrail</td>
+<td>Instagram screen time (phone setting)</td>
+<td>≤ 20 min/day</td>
+</tr>
+</tbody>
+</table>
+<h2>5. Solution (v1 scope)</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Feature</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Today</td>
+<td>Time-blocked day (5:00 wake → 21:00 sleep) from 3 templates (study, class, Sunday), "Now" card, checklist, score ring, streak with freezes, XP levels</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>Recovery</td>
+<td>Comeback mode: after 2 missed days or 3 low days → 3-task day, overdue tasks rescheduled over 7 days, exits after 3 good days</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>Anti-scroll</td>
+<td>"Urge to scroll?" button → Feed of 1-minute cards (aptitude, history, geopolitics, French, business, mindset)</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>Prep</td>
+<td>Dated roadmap (Dec 2026 → Day 1, 1 Dec 2027), notes library, 120-s math sprint with history</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>Life</td>
+<td>Why screen + life plan, habit heatmap, writing pad, reading tracker</td>
+<td>Should</td>
+</tr>
+<tr>
+<td>Sync</td>
+<td>Private GitHub repo as the data store; per-record newest-wins merge</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>Notifications</td>
+<td>Web Push from a scheduled GitHub Action; calendar (.ics) alarms for exact times; in-app reminders</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>Later</td>
+<td>Practice engine + question banks, outreach CRM, history reader, French course</td>
+<td>Next batches</td>
+</tr>
+</tbody>
+</table>
+<h2>6. Key decisions and trade-offs</h2>
+<ol>
+<li><strong>PWA over a native app.</strong> One codebase for Android, iPhone and laptop, installable, offline via service worker. Trade-off: background notifications need a server, so push is sent from outside the app.</li>
+<li><strong>GitHub as the backend.</strong> Free, private, versioned (every sync is a commit, so history doubles as a backup). Trade-off: not real-time; sync runs on open, on change and every 3 minutes, and a token has to be pasted once per device.</li>
+<li><strong>Scheduled GitHub Action for push.</strong> Free on a public repo and needs no server to maintain. Trade-off: GitHub can delay scheduled runs by several minutes, so exact-time alarms (5:00 wake, sleep) come from the phone calendar instead. Two channels, each used for what it's good at.</li>
+<li><strong>Newest-wins per record, not per file.</strong> Ticking a habit on the phone and writing in the journal on the laptop never overwrite each other.</li>
+<li><strong>Content as plain JS data files.</strong> The same file powers the browser app and the push sender, and works from <code>file://</code> with no build step.</li>
+<li><strong>Minimum versions for every habit.</strong> Lowers the cost of a bad day so the streak can survive; this directly addresses insight 3.</li>
+<li><strong>Phase-in of habits.</strong> New habits start on dated schedules (writing from 15 Dec, history from 1 Jan, chess from 15 Jan) so the list never overwhelms.</li>
+</ol>
+<h2>7. Risks</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I stop opening the app</td>
+<td>Push nudges + calendar alarms; home-screen spot where Instagram used to be</td>
+</tr>
+<tr>
+<td>Push delays or failures</td>
+<td>Calendar alarms are the exact-time backbone; push is the smart layer</td>
+</tr>
+<tr>
+<td>Token leak</td>
+<td>Fine-grained token limited to one private repo; it stays on the device and is never committed</td>
+</tr>
+<tr>
+<td>Over-gamification</td>
+<td>XP is a side signal; the north star is completion of planned items</td>
+</tr>
+</tbody>
+</table>
+<h2>8. Roadmap</h2>
+<ul>
+<li><strong>v1 (Nov 2026):</strong> core loop, sync, notifications, roadmap, Feed seed, math sprint.</li>
+<li><strong>v1.1:</strong> outreach CRM + company list + email templates.</li>
+<li><strong>v1.2:</strong> practice engine (timed sets, spaced-repetition flashcards), history reader with public-domain originals, French course.</li>
+<li><strong>v1.3:</strong> weekly review screen with charts; Sunday report.</li>
+</ul>
+<h2>9. What I'll measure and write up (fill in after 4 weeks)</h2>
+<ul>
+<li>North-star trend by week:</li>
+<li>Biggest behaviour change:</li>
+<li>Feature I was wrong about:</li>
+<li>What I'd build differently:</li>
+</ul></div></body></html>
