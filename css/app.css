@@ -73,3 +73,8 @@ table.di{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}table.d
 .review details summary{font-size:15px;font-weight:500}
 .flash{min-height:220px;border:1px solid var(--line);border-radius:18px;padding:22px;margin:12px 0;display:flex;flex-direction:column;justify-content:center;gap:14px;cursor:pointer;background:var(--paper)}.flash .ff{font:650 24px/1.2 "Newsreader",serif}.flash .fb{font-size:20px;color:var(--green);border-top:1px dashed var(--line);padding-top:12px}
 .grade{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.grade .btn{justify-content:center}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 12px;font:11px "DM Mono",monospace;cursor:pointer;color:var(--muted)}.chip.on{background:var(--green);border-color:var(--green);color:#fff}[data-theme=dark] .chip.on{color:#0e1512}
+.form.row2{grid-template-columns:1fr 1fr}@media(max-width:520px){.form.row2{grid-template-columns:1fr}}
+.crow{cursor:pointer}.co{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}.co small{display:block;font-size:12px}.co .bk{width:110px;flex:0 0 110px}
+.edrow2{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;margin:6px 0;font:12px "DM Mono",monospace}
+pre.tpl{white-space:pre-wrap;font:13px/1.5 "DM Mono",monospace;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px}

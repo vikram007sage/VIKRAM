@@ -34,8 +34,8 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs'].forEach(k => S[k] = S[k] || {});
-  S.math = S.math || []; S.practice = S.practice || [];
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState'].forEach(k => S[k] = S[k] || {});
+  S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
   function save(sync = true) { if (SIM && !qs.get('test')) return; LS.set(KEY, S); if (sync) Sync.schedule(); }
 
@@ -97,6 +97,7 @@
     x += Object.values(S.tasks).filter(t => t.done).length * 30;
     x += S.math.reduce((a, m) => a + Math.round((m.score || 0) / 2), 0);
     x += S.practice.reduce((a, p) => a + (p.sc || 0) * 8, 0);
+    x += S.sent.length * 12;
     x += Object.values(S.srs).reduce((a, c) => a + (c.reps || 0) * 2, 0);
     Object.values(S.writing).forEach(w => x += Math.min(40, Math.round(((w.text || '').split(/\s+/).filter(Boolean).length) / 5)));
     let lvl = C.LEVELS[0], next = null;
@@ -131,7 +132,7 @@
 
   // ================= UI shell =================
   let TAB = location.hash.replace('#', '') || 'today';
-  const tabs = ['today', 'prep', 'feed', 'life', 'more'];
+  const tabs = ['today', 'prep', 'feed', 'life', 'more', 'outreach'];
   function go(t) { TAB = tabs.includes(t) ? t : 'today'; try { history.replaceState(null, '', location.pathname + location.search + '#' + TAB); } catch (e) { } render(); window.scrollTo(0, 0); }
   window.addEventListener('hashchange', () => { const t = location.hash.replace('#', ''); if (t !== TAB && tabs.includes(t)) { TAB = t; render(); } });
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
@@ -139,7 +140,7 @@
   function render() {
     $$('.tabbar button, .toptabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
     const v = $('#view');
-    v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore }[TAB])();
+    v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach }[TAB])();
     bind[TAB] && bind[TAB]();
     $('#syncDot').className = 'syncdot ' + Sync.status;
   }
@@ -172,6 +173,7 @@
     <div class="card list">${items.map(id => { const h = habitById[id]; const on = isOn(dd, id); const txt = id === 'hobby' && hobby ? hobby.t : (mm ? h.min : h.t); return `<label class="item ${on ? 'done' : ''}"><input type="checkbox" data-habit="${id}" ${on ? 'checked' : ''}><span>${esc(txt)}<small>${esc(mm ? '' : 'min: ' + h.min)}</small></span></label>`; }).join('')}</div>
     <h3 class="h">Placement tasks</h3>
     <div class="card list">${tasks.length ? tasks.map(t => taskRow(t, ds)).join('') : '<p class="muted">Nothing due in the next 3 days. Do a timed set or a math sprint.</p>'}</div>
+    ${Out.windowOpen(ds) ? `<div class="drills"><button class="btn" data-act="go" data-to="outreach">Outreach · ${Out.sentOn(ds)}/${VK_OUTREACH.QUOTA} sent · ${Out.due(ds).length} follow-up${Out.due(ds).length === 1 ? '' : 's'} due</button></div>` : ''}
     <div class="drills"><button class="btn" data-act="cards">Flashcards · ${Cards.due(ds).length} due</button><button class="btn ghost" data-act="quiz" data-mode="quick">Quick 5</button><button class="btn ghost" data-act="mathgo">Math sprint</button></div>
     <h3 class="h">Timeline</h3>
     <div class="timeline">${blocks.map(b => { const isCur = cur && cur.s === b.s; const past = !isCur && toMin(b.e) <= n.mins && toMin(b.e) > toMin(b.s); return `<div class="blk k-${b.k} ${isCur ? 'cur' : ''} ${past ? 'past' : ''}"><span class="tm">${b.s}</span><span class="bt">${esc(b.t)}</span></div>`; }).join('')}</div>
@@ -199,6 +201,7 @@
     return `<section class="hero small"><div class="eyebrow">Placement roadmap · ${done}/${C.TASKS.length} tasks</div><h1>${esc(ph.n)}</h1><p>${esc(ph.g)}</p></section>
     <div class="card"><div class="row-between"><div><h3>Math sprint</h3><small class="muted">120 seconds · + − × ÷ · Zetamac-style · best ${best}</small></div><button class="btn" data-act="mathgo">Start</button></div>${spark(recent.map(m => m.score))}</div>
     ${practiceCard(ds)}
+    <div class="card"><div class="row-between"><div><h3>Outreach</h3><small class="muted">${VK_COMPANIES.LIST.length} target companies · ${Object.keys(S.contacts).length} contacts · ${S.sent.length} emails sent</small></div><button class="btn" data-act="go" data-to="outreach">Open</button></div></div>
     <h3 class="h">Deadlines</h3>
     ${Object.keys(months).sort().map(k => `<details ${k <= ds.slice(0, 7) || k === addDays(ds, 20).slice(0, 7) ? 'open' : ''}><summary>${new Date(k + '-01T00:00:00Z').toLocaleDateString('en-IN', { month: 'long', year: 'numeric', timeZone: 'UTC' })} <small>${months[k].filter(taskDone).length}/${months[k].length}</small></summary><div class="list">${months[k].map(t => taskRow(t, ds)).join('')}</div></details>`).join('')}
     <h3 class="h">Notes library</h3>
@@ -275,6 +278,7 @@
 
   // ================= bindings =================
   const bind = {
+    outreach() { Out.bind(); },
     today() {
       const ds = nowIST().date;
       $$('[data-habit]').forEach(cb => cb.onchange = () => { day(ds).items[cb.dataset.habit] = { v: cb.checked, ts: ts() }; save(); if (cb.checked) burst(cb); render(); });
@@ -305,6 +309,8 @@
     if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); toast('Urge noticed. One card instead.'); }
     if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : C.FEED.length - 1)) % C.FEED.length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
     if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; if (j === feedGen.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
+    if (act === 'go') go(a.dataset.to);
+    if (act && act.startsWith('o-')) Out.act(act, a);
     if (act === 'quiz') Quiz.open(a.dataset.mode);
     if (act === 'cards') Cards.open();
     if (act === 'reveal') { $('#ans').classList.remove('hide'); a.remove(); }
@@ -385,6 +391,135 @@
       r.reps++; r.due = addDays(ds, r.ivl); r.ts = ts(); S.srs[c.id] = r; this.n++; save(); this.show(false); }
   };
 
+  // ================= outreach =================
+  let OTAB = 'queue', OLANE = '', OQ = '', OSTAT = '';
+  function viewOutreach() { return Out.view(); }
+  const wkday = ds => { const d = new Date(ds + 'T00:00:00Z').getUTCDay(); return d === 6 ? addDays(ds, 2) : d === 0 ? addDays(ds, 1) : ds; };
+  const Out = {
+    windowOpen(ds) { const d = new Date(ds + 'T00:00:00Z').getUTCDay(); return d >= 1 && d <= 5 && VK_OUTREACH.WINDOW.some(([a, b]) => ds >= a && ds <= b); },
+    sentOn(ds) { return S.sent.filter(x => x.d === ds).length; },
+    due(ds) { return Object.values(S.contacts).filter(c => !c.del && c.next && c.next <= ds && ['Sent', 'Follow-up 1'].includes(c.status)); },
+    cfg() { return Object.assign({ cv: '', linkedin: '', phone: '', proofs: {} }, S.settings.out || {}); },
+    sig() { const c = this.cfg(); return ['Aryan Rajak', 'IIT Kharagpur · B.Tech + M.Tech Biotechnology (2028)', c.phone, c.linkedin].filter(Boolean).join('\n'); },
+    first(n) { return (n || '').trim().split(/\s+/)[0] || 'there'; },
+    fill(t, c, x) { const cfg = this.cfg(), lane = c.lane || 'pm'; const proof = cfg.proofs[lane] || VK_OUTREACH.PROOFS[lane];
+      const map = { first: this.first(c.name), company: c.company || 'your company', team: x.team || VK_COMPANIES.LANES[lane].n, hook: x.hook || '', proof, cv: cfg.cv || '[CV link]', linkedin: cfg.linkedin, sig: this.sig(), value: x.value || '[what you did since]', subject: c.subject || 'Summer 2027 internship' };
+      return t.replace(/\{(\w+)\}/g, (m, k) => map[k] != null ? map[k] : m); },
+    list() { return Object.values(S.contacts).filter(c => !c.del); },
+    view() {
+      const ds = nowIST().date, cs = this.list(), due = this.due(ds), cdc = S.settings.cdc && S.settings.cdc.v;
+      const counts = {}; cs.forEach(c => counts[c.status] = (counts[c.status] || 0) + 1);
+      const sub = ['queue', 'contacts', 'companies', 'import', 'setup'].map(k => `<button class="chip ${OTAB === k ? 'on' : ''}" data-act="o-tab" data-k="${k}">${{ queue: 'Today', contacts: 'Contacts', companies: 'Companies', import: 'Import', setup: 'Templates & setup' }[k]}</button>`).join('');
+      let body = '';
+      if (OTAB === 'queue') {
+        const todo = cs.filter(c => c.status === 'To contact').slice(0, 12);
+        body = `<h3 class="h">Follow-ups due (${due.length})</h3><div class="card list">${due.length ? due.map(c => this.row(c)).join('') : '<p class="muted">None due.</p>'}</div>
+          <h3 class="h">Next to contact</h3><div class="card list">${todo.length ? todo.map(c => this.row(c)).join('') : '<p class="muted">No contacts yet. Import your CDC list (Import tab) or add one by hand.</p>'}</div>
+          <button class="btn" data-act="o-new">+ Add contact</button>`;
+      }
+      if (OTAB === 'contacts') {
+        let l = cs.filter(c => (!OSTAT || c.status === OSTAT) && (!OQ || (c.name + ' ' + c.company + ' ' + c.email + ' ' + (c.title || '')).toLowerCase().includes(OQ.toLowerCase())));
+        body = `<div class="form row2"><input id="oQ" placeholder="Search name, company, email" value="${esc(OQ)}"><select id="oStat"><option value="">All statuses</option>${VK_OUTREACH.STATUSES.map(st => `<option ${st === OSTAT ? 'selected' : ''}>${st}</option>`).join('')}</select></div>
+          <div class="small muted mt">${l.length} of ${cs.length} contacts</div><div class="card list">${l.slice(0, 200).map(c => this.row(c)).join('') || '<p class="muted">Nothing here yet.</p>'}</div>
+          <div class="row"><button class="btn" data-act="o-new">+ Add contact</button><button class="btn ghost" data-act="o-export">Export CSV</button></div>`;
+      }
+      if (OTAB === 'companies') {
+        const L = VK_COMPANIES.LANES; let l = VK_COMPANIES.LIST.filter(c => (!OLANE || c.lane === OLANE) && (!OQ || (c.n + ' ' + c.roles + ' ' + c.fit).toLowerCase().includes(OQ.toLowerCase())));
+        body = `<div class="chips">${['', ...Object.keys(L)].map(k => `<button class="chip ${OLANE === k ? 'on' : ''}" data-act="o-lane" data-k="${k}">${k ? L[k].n.split(' (')[0].split(' /')[0] : 'All'}</button>`).join('')}</div>
+          ${OLANE ? `<div class="card small"><b>${esc(L[OLANE].n)}</b><br>Tests: ${esc(L[OLANE].test)}<br>Prepare: ${esc(L[OLANE].mods)}<br>When: ${esc(L[OLANE].when)}</div>` : ''}
+          <input id="oQ" placeholder="Search companies" value="${esc(OQ)}" class="mt">
+          <div class="card list">${l.map(c => { const k = c.lane + '|' + c.n, st = (S.coState[k] && S.coState[k].v) || '', n = cs.filter(x => x.company === c.n).length;
+            return `<div class="co"><div><b>${esc(c.n)}</b> ${c.kgp ? '<span class="tag">KGP Day 1</span>' : ''}<small>${esc(c.roles)}${c.fit ? ' · ' + esc(c.fit) : ''}</small><small class="muted">${L[c.lane].n}${n ? ' · ' + n + ' contact(s)' : ''}</small></div><div class="bk"><select data-co="${esc(k)}"><option value="">—</option>${['Target', 'Researching', 'Applied', 'In process', 'Offer', 'Not now'].map(o => `<option ${o === st ? 'selected' : ''}>${o}</option>`).join('')}</select><button class="btn sm ghost" data-act="o-new" data-co="${esc(c.n)}" data-lane="${c.lane}">+ contact</button></div></div>`; }).join('')}</div>
+          <p class="small muted">Starting map only. Hiring changes every season: confirm with CDC friends, LinkedIn and careers pages.</p>`;
+      }
+      if (OTAB === 'import') {
+        body = `<div class="card"><h3>Import contacts (CSV)</h3><p class="small muted">Export your sheet as CSV (Google Sheets: File → Download → CSV). Columns can be in any order; you'll map them next. Contacts stay in your browser and your private vikram-data repo, never in the public app.</p><input type="file" id="oCsv" accept=".csv,text/csv"><div id="oMap"></div></div>`;
+      }
+      if (OTAB === 'setup') {
+        const c = this.cfg();
+        body = `<div class="card"><h3>Your links</h3><div class="form"><input id="oCv" placeholder="CV link (Google Drive, anyone with link can view)" value="${esc(c.cv)}"><input id="oLi" placeholder="LinkedIn URL" value="${esc(c.linkedin)}"><input id="oPh" placeholder="Phone (optional, shown in signature)" value="${esc(c.phone)}"></div></div>
+          <div class="card"><h3>Proof line per lane</h3><p class="small muted">One sentence of evidence, inserted as {proof}. Keep only what you can defend for 5 minutes in an interview.</p>${Object.entries(VK_COMPANIES.LANES).map(([k, L]) => `<label class="small"><b>${esc(L.n)}</b><textarea data-proof="${k}" rows="2">${esc(c.proofs[k] || VK_OUTREACH.PROOFS[k])}</textarea></label>`).join('')}<button class="btn mt" data-act="o-savecfg">Save</button></div>
+          <div class="card"><h3>HR phone script (60 seconds)</h3><ol class="small">${VK_OUTREACH.CALL.map(l => `<li>${esc(l)}</li>`).join('')}</ol></div>
+          <div class="card"><h3>Templates</h3>${VK_OUTREACH.TEMPLATES.map(t => `<details><summary>${esc(t.n)}</summary><div><p class="small"><b>${esc(t.s)}</b></p><pre class="tpl">${esc(t.b)}</pre></div></details>`).join('')}<p class="small muted">Full playbook: notes module S6.</p></div>`;
+      }
+      return `<section class="hero small"><div class="eyebrow">Outreach · internships ${VK_OUTREACH.WINDOW[0][0].slice(0, 7)} → ${VK_OUTREACH.WINDOW[0][1].slice(0, 7)}</div><h1>Outreach</h1><div class="meta"><span class="pill"><span class="dot"></span>${this.sentOn(ds)}/${VK_OUTREACH.QUOTA} sent today</span><span class="pill">${due.length} follow-ups due</span><span class="pill">${cs.length} contacts · ${counts['Replied'] || 0} replied · ${(counts['Interview'] || 0) + (counts['Call / test'] || 0)} in process</span></div></section>
+        ${cdc ? '' : `<div class="comeback"><b>Before your first email:</b> several IITs bar students registered with their placement cell from contacting company HRs directly. Ask your CDC friends what KGP's rule is, and use direct outreach only where it's allowed (typically off-campus companies not in the CDC process).<label class="switch mt"><input type="checkbox" data-act="o-cdc"> I've confirmed KGP CDC's rules</label></div>`}
+        <div class="chips">${sub}</div>${body}`;
+    },
+    row(c) { return `<div class="item crow" data-act="o-open" data-id="${c.id}"><span><b>${esc(c.name || c.email)}</b><small>${esc([c.title, c.company].filter(Boolean).join(' · '))}</small><small class="muted">${esc(c.status)}${c.next ? ' · next ' + fmtD(c.next) : ''}</small></span></div>`; },
+    bind() {
+      const q = $('#oQ'); if (q) q.oninput = debounce(() => { OQ = q.value; render(); const n = $('#oQ'); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); } }, 300);
+      const st = $('#oStat'); if (st) st.onchange = () => { OSTAT = st.value; render(); };
+      $$('[data-co]').forEach(sel => { if (sel.tagName === 'SELECT') sel.onchange = () => { S.coState[sel.dataset.co] = { v: sel.value, ts: ts() }; save(); }; });
+      const f = $('#oCsv'); if (f) f.onchange = () => { const file = f.files[0]; if (!file) return; const r = new FileReader(); r.onload = () => this.mapUI(parseCSV(r.result)); r.readAsText(file); };
+    },
+    mapUI(rows) {
+      if (!rows.length) return toast('Empty CSV');
+      const head = rows[0], data = rows.slice(1).filter(r => r.some(x => x && x.trim()));
+      const guess = k => { const pats = { name: /^(full\s*)?name|contact|person/i, email: /e-?mail/i, company: /company|organi[sz]ation|firm|employer/i, title: /title|designation|role|position/i, phone: /phone|mobile|contact\s*no|number/i, linkedin: /linkedin/i };
+        const i = head.findIndex(h => pats[k].test(h)); return i; };
+      const fields = ['name', 'email', 'company', 'title', 'phone', 'linkedin'];
+      $('#oMap').innerHTML = `<p class="small"><b>${data.length}</b> rows found. Check the column mapping:</p>${fields.map(k => `<label class="edrow2"><span>${k}</span><select data-map="${k}"><option value="-1">(none)</option>${head.map((h, i) => `<option value="${i}" ${guess(k) === i ? 'selected' : ''}>${esc(h)}</option>`).join('')}</select></label>`).join('')}
+        <label class="small">Lane for these contacts <select id="oLaneImp">${Object.entries(VK_COMPANIES.LANES).map(([k, L]) => `<option value="${k}">${esc(L.n)}</option>`).join('')}</select></label>
+        <button class="btn mt" id="oDoImp">Import ${data.length} contacts</button>`;
+      $('#oDoImp').onclick = () => { const m = {}; $$('[data-map]').forEach(s2 => m[s2.dataset.map] = +s2.value); const lane = $('#oLaneImp').value; let added = 0, dup = 0;
+        const have = new Set(this.list().map(c => (c.email || '').toLowerCase()).filter(Boolean));
+        data.forEach((r, i) => { const g = k => m[k] >= 0 ? (r[m[k]] || '').trim() : ''; const email = g('email'); if (!email && !g('name')) return;
+          if (email && have.has(email.toLowerCase())) { dup++; return; } have.add(email.toLowerCase());
+          const id = 'c' + ts().toString(36) + i; S.contacts[id] = { id, name: g('name'), email, company: g('company'), title: g('title'), phone: g('phone'), linkedin: g('linkedin'), lane, status: 'To contact', source: 'CSV', notes: '', next: null, ts: ts() }; added++; });
+        save(); toast(`Imported ${added}${dup ? ', skipped ' + dup + ' duplicates' : ''}`); OTAB = 'contacts'; render(); };
+    },
+    act(act, a) {
+      const ds = nowIST().date;
+      if (act === 'o-tab') { OTAB = a.dataset.k; OQ = ''; render(); }
+      if (act === 'o-lane') { OLANE = a.dataset.k; render(); }
+      if (act === 'o-cdc') { S.settings.cdc = { v: true, date: ds, ts: ts() }; save(); render(); }
+      if (act === 'o-new') this.open(null, { company: a.dataset.co || '', lane: a.dataset.lane || 'pm' });
+      if (act === 'o-open') this.open(a.dataset.id);
+      if (act === 'o-savecfg') { const c = this.cfg(); c.cv = $('#oCv').value.trim(); c.linkedin = $('#oLi').value.trim(); c.phone = $('#oPh').value.trim(); c.proofs = {}; $$('[data-proof]').forEach(t => { if (t.value.trim() !== VK_OUTREACH.PROOFS[t.dataset.proof]) c.proofs[t.dataset.proof] = t.value.trim(); }); c.ts = ts(); S.settings.out = c; save(); toast('Saved'); }
+      if (act === 'o-export') { const cols = ['name', 'email', 'company', 'title', 'phone', 'linkedin', 'lane', 'status', 'next', 'notes']; const csv = [cols.join(',')].concat(this.list().map(c => cols.map(k => '"' + String(c[k] || '').replace(/"/g, '""') + '"').join(','))).join('\n'); download('vikram-contacts-' + ds + '.csv', csv, 'text/csv'); }
+    },
+    open(id, pre) {
+      const ds = nowIST().date; const c = id ? Object.assign({}, S.contacts[id]) : Object.assign({ id: 'c' + ts().toString(36), name: '', email: '', company: '', title: '', phone: '', linkedin: '', lane: 'pm', status: 'To contact', notes: '', next: null }, pre || {});
+      const tplFor = c.status === 'Sent' ? 'fu1' : c.status === 'Follow-up 1' ? 'fu2' : 'cold';
+      const L = VK_COMPANIES.LANES;
+      $('#overlay').innerHTML = `<div class="quizbox"><div class="row-between"><span class="eyebrow">${id ? 'Contact' : 'New contact'}</span><button class="btn sm ghost" id="cX">✕</button></div>
+        <div class="form row2"><input id="cName" placeholder="Name" value="${esc(c.name)}"><input id="cEmail" placeholder="Email" value="${esc(c.email)}"><input id="cCo" placeholder="Company" value="${esc(c.company)}"><input id="cTitle" placeholder="Title" value="${esc(c.title)}"><input id="cPhone" placeholder="Phone" value="${esc(c.phone)}"><input id="cLi" placeholder="LinkedIn" value="${esc(c.linkedin)}">
+        <select id="cLane">${Object.entries(L).map(([k, x]) => `<option value="${k}" ${k === c.lane ? 'selected' : ''}>${esc(x.n)}</option>`).join('')}</select><select id="cStat">${VK_OUTREACH.STATUSES.map(st => `<option ${st === c.status ? 'selected' : ''}>${st}</option>`).join('')}</select></div>
+        <textarea id="cNotes" rows="2" placeholder="Notes (how you found them, what they said)" class="mt">${esc(c.notes)}</textarea>
+        <div class="row"><button class="btn sm" id="cSave">Save</button>${id ? '<button class="btn sm ghost" id="cDel">Delete</button>' : ''}</div>
+        <h3 class="h">Draft</h3>
+        <div class="form row2"><select id="dTpl">${VK_OUTREACH.TEMPLATES.map(t => `<option value="${t.id}" ${t.id === tplFor ? 'selected' : ''}>${esc(t.n)}</option>`).join('')}</select><input id="dTeam" placeholder="Team / role (e.g. product, decision science)" value=""></div>
+        <input id="dHook" class="mt" placeholder="Hook: one specific line about THEM (required), e.g. 'I read your post on X'">
+        <input id="dVal" class="mt" placeholder="New value for follow-ups, e.g. '${esc(VK_OUTREACH.VALUE_IDEAS[0].replace('{company}', c.company || 'your'))}'">
+        <input id="dSub" class="mt"><textarea id="dBody" rows="10" class="mt"></textarea>
+        <div class="row"><button class="btn" id="dGmail">Open in Gmail</button><button class="btn ghost" id="dCopy">Copy</button><button class="btn ghost" id="dSent">Mark as sent</button></div>
+        <p class="small muted">"Mark as sent" schedules follow-ups on day ${VK_OUTREACH.FOLLOWUPS[0]} and day ${VK_OUTREACH.FOLLOWUPS[1]}. Only one person at a time; no blasts.</p></div>`;
+      $('#overlay').classList.add('show');
+      const read = () => Object.assign(c, { name: $('#cName').value.trim(), email: $('#cEmail').value.trim(), company: $('#cCo').value.trim(), title: $('#cTitle').value.trim(), phone: $('#cPhone').value.trim(), linkedin: $('#cLi').value.trim(), lane: $('#cLane').value, status: $('#cStat').value, notes: $('#cNotes').value });
+      const draft = () => { read(); const t = VK_OUTREACH.TEMPLATES.find(x => x.id === $('#dTpl').value); const x = { team: $('#dTeam').value.trim(), hook: $('#dHook').value.trim(), value: $('#dVal').value.trim() };
+        $('#dSub').value = this.fill(t.s, c, x); $('#dBody').value = this.fill(t.b, c, x); };
+      ['dTpl', 'dTeam', 'dHook', 'dVal', 'cName', 'cCo', 'cLane'].forEach(i => { $('#' + i).oninput = draft; $('#' + i).onchange = draft; }); draft();
+      const persist = () => { read(); c.ts = ts(); S.contacts[c.id] = c; save(); };
+      const needHook = () => { if (!$('#dHook').value.trim() && ['cold', 'alum', 'li'].includes($('#dTpl').value)) { toast('Add a specific hook first: generic emails get ignored'); $('#dHook').focus(); return true; } return false; };
+      $('#cX').onclick = () => { $('#overlay').classList.remove('show'); render(); };
+      $('#cSave').onclick = () => { persist(); toast('Saved'); };
+      if ($('#cDel')) $('#cDel').onclick = () => { c.del = true; persist(); $('#overlay').classList.remove('show'); render(); };
+      $('#dCopy').onclick = () => { if (needHook()) return; const txt = ($('#dSub').value ? 'Subject: ' + $('#dSub').value + '\n\n' : '') + $('#dBody').value; try { navigator.clipboard.writeText(txt).then(() => toast('Copied')); } catch (e) { toast('Copy blocked: select and copy manually'); } };
+      $('#dGmail').onclick = () => { if (needHook()) return; if (!$('#cEmail').value.trim()) return toast('Add an email address'); persist(); location.href = `mailto:${encodeURIComponent($('#cEmail').value.trim())}?subject=${encodeURIComponent($('#dSub').value)}&body=${encodeURIComponent($('#dBody').value)}`; };
+      $('#dSent').onclick = () => { if (needHook()) return; read(); const F = VK_OUTREACH.FOLLOWUPS;
+        if (c.status === 'To contact') { c.status = 'Sent'; c.next = wkday(addDays(ds, F[0])); c.subject = $('#dSub').value; }
+        else if (c.status === 'Sent') { c.status = 'Follow-up 1'; c.next = wkday(addDays(ds, F[1] - F[0])); }
+        else if (c.status === 'Follow-up 1') { c.status = 'Follow-up 2'; c.next = null; }
+        c.last = ds; $('#cStat').value = c.status; const nx = c.next; persist(); c.next = nx; S.contacts[c.id].next = nx; S.sent.push({ id: 's' + ts(), cid: c.id, tpl: $('#dTpl').value, d: ds, ts: ts() }); save(); toast('Logged. Next follow-up ' + (c.next ? fmtD(c.next) : 'none')); $('#overlay').classList.remove('show'); render(); };
+    }
+  };
+  function parseCSV(text) { const rows = []; let row = [], cur = '', q = false; text = text.replace(/^\uFEFF/, '');
+    for (let i = 0; i < text.length; i++) { const ch = text[i];
+      if (q) { if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+      else if (ch === '"') q = true; else if (ch === ',') { row.push(cur); cur = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cur); rows.push(row); row = []; cur = ''; } else cur += ch; }
+    if (cur || row.length) { row.push(cur); rows.push(row); } return rows; }
+
   // ================= calendar (.ics) =================
   function downloadICS() {
     const start = nowIST().date < '2026-12-01' ? '2026-12-01' : nowIST().date; const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//VIKRAM//EN', 'CALSCALE:GREGORIAN', 'X-WR-CALNAME:VIKRAM', 'X-WR-TIMEZONE:Asia/Kolkata'];
@@ -411,7 +546,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }
@@ -453,5 +588,5 @@
   window.addEventListener('online', () => Sync.now());
   setInterval(() => Sync.now(), 180000);
   save(false); render(); Sync.now();
-  window.VIKRAM = { S: () => S, merge, score, streakInfo, activeItems, dayType, blocksFor, xp };
+  window.VIKRAM = { parseCSV, Out, S: () => S, merge, score, streakInfo, activeItems, dayType, blocksFor, xp };
 })();

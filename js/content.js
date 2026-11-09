@@ -101,7 +101,7 @@ var VK_CONTENT = (function () {
     ['S1', 'Guesstimates + structured thinking', 'Case spine', '2026-11-09', 'notes/S1_Guesstimates_Structured_Thinking.html'],
     ['S2', 'Case frameworks (card + lending cases)', 'Case spine', '2026-12-05'], ['S3', 'Story bank + HR', 'Case spine', '2026-12-06'],
     ['S4', 'CV from scratch (internship + CDC)', 'Case spine', '2026-12-13'], ['B1', 'Banking + credit-card business', 'Case spine', '2026-12-14'],
-    ['S5', 'Business + unit economics', 'Case spine', '2026-12-20'], ['S6', 'Outreach + email playbook', 'Case spine', '2026-12-15'],
+    ['S5', 'Business + unit economics', 'Case spine', '2026-12-20'], ['S6', 'Outreach + email playbook', 'Case spine', '2026-12-15', 'notes/S6_Outreach_Email_Playbook.html'],
     ['D1', 'SQL: zero to interview', 'Data', '2026-12-10'], ['D2', 'Python + pandas for analysts', 'Data', '2026-12-17'],
     ['D3', 'Statistics + A/B testing', 'Data', '2026-12-19'], ['D4', 'DSA-lite, the fun way', 'Data', '2027-03-15'],
     ['M1', 'Classical ML rapid-fire', 'AI/ML', '2026-12-22'], ['M2', 'LLM internals', 'AI/ML', '2027-02-07'],

@@ -52,7 +52,7 @@ Primary user: me. Insights from 4 weeks of self-observation:
 | Life | Why screen + life plan, habit heatmap, writing pad, reading tracker | Should |
 | Sync | Private GitHub repo as the data store; per-record newest-wins merge | Must |
 | Notifications | Web Push from a scheduled GitHub Action; calendar (.ics) alarms for exact times; in-app reminders | Must |
-| Later | Practice engine + question banks, outreach CRM, history reader, French course | Next batches |
+| Later | History reader, French + chess from zero, weekly review | Next batches |
 
 ## 6. Key decisions and trade-offs
 1. **PWA over a native app.** One codebase for Android, iPhone and laptop, installable, offline via service worker. Trade-off: background notifications need a server, so push is sent from outside the app.
@@ -73,9 +73,9 @@ Primary user: me. Insights from 4 weeks of self-observation:
 
 ## 8. Roadmap
 - **v1 (Nov 2026):** core loop, sync, notifications, roadmap, Feed seed, math sprint.
-- **v1.1:** outreach CRM + company list + email templates.
-- **v1.2:** practice engine (timed sets, spaced-repetition flashcards), history reader with public-domain originals, French course.
-- **v1.3:** weekly review screen with charts; Sunday report.
+- **v1.1–1.2 (shipped):** practice engine: generated aptitude, probability and DI sets, mocks, spaced-repetition flashcards.
+- **v1.3 (shipped):** outreach CRM: 130-company target map across six lanes, CSV import of contacts, email drafter that requires a personal hook, automatic follow-ups on day 4 and 10, daily quota on Today.
+- **v1.4+:** history reader with public-domain originals, French and chess from zero, weekly review screen with charts.
 
 ## 9. What I'll measure and write up (fill in after 4 weeks)
 - North-star trend by week:
