@@ -130,12 +130,12 @@
   // ================= UI shell =================
   let TAB = location.hash.replace('#', '') || 'today';
   const tabs = ['today', 'prep', 'feed', 'life', 'more'];
-  function go(t) { TAB = tabs.includes(t) ? t : 'today'; try { history.replaceState(null, '', '#' + TAB + location.search.replace(/^/, '')); } catch (e) { } render(); window.scrollTo(0, 0); }
+  function go(t) { TAB = tabs.includes(t) ? t : 'today'; try { history.replaceState(null, '', location.pathname + location.search + '#' + TAB); } catch (e) { } render(); window.scrollTo(0, 0); }
   window.addEventListener('hashchange', () => { const t = location.hash.replace('#', ''); if (t !== TAB && tabs.includes(t)) { TAB = t; render(); } });
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
 
   function render() {
-    $$('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
+    $$('.tabbar button, .toptabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
     const v = $('#view');
     v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore }[TAB])();
     bind[TAB] && bind[TAB]();
@@ -377,7 +377,7 @@
   // ================= boot =================
   applyTheme();
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => { });
-  $$('.tabbar button').forEach(b => b.onclick = () => go(b.dataset.tab));
+  $$('.tabbar button, .toptabs button').forEach(b => b.onclick = () => go(b.dataset.tab));
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { Sync.now(); render(); } else if (Sync.cfg()) Sync.now(); });
   window.addEventListener('online', () => Sync.now());
   setInterval(() => Sync.now(), 180000);
