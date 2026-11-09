@@ -304,7 +304,7 @@
     const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, ds = nowIST().date;
     if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); toast('Urge noticed. One card instead.'); }
     if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : C.FEED.length - 1)) % C.FEED.length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
-    if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; b.classList.add(j === feedGen.a ? 'right' : (j === i ? 'wrong' : '')); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
+    if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; if (j === feedGen.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
     if (act === 'quiz') Quiz.open(a.dataset.mode);
     if (act === 'cards') Cards.open();
     if (act === 'reveal') { $('#ans').classList.remove('hide'); a.remove(); }
