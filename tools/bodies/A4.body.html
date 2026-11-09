@@ -1,0 +1,131 @@
+<!--META A4 | Probability, P&C, Expected Value + Puzzles | A4 / ODDS | Tier 1 · Aptitude / OA · Module A4 | Probability<br>+ Puzzles | Quant traders price bets, analysts reason under uncertainty, and every interviewer has a favourite puzzle. Counting, probability rules, Bayes, expected value, and the 15 classic puzzles that keep coming back, all with worked answers. | Counting → probability → EV; 15 classic puzzles solved; 20-question bank -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Why this module pays twice</h2></div></div>
+        <p class="lede">Probability shows up in aptitude MCQs (P&C, dice, cards) and again in interviews, where you reason out loud. Quant-trading OAs test it under time pressure: Optiver's probability section reportedly gives about 90 seconds per question.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Complement + counting</strong><span class="muted">"at least one", nPr vs nCr, repeats, circles</span></div><span class="frequency">every test</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Conditional probability + Bayes</strong><span class="muted">tests, defects, "given that"</span></div><span class="frequency">analyst + quant interviews</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Expected value</strong><span class="muted">pricing games, linearity, optimal stopping</span></div><span class="frequency">trader interviews</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Classic puzzles</strong><span class="muted">know the answer and be able to explain why</span></div><span class="frequency">all interviews</span></div>
+        </div>
+      </section>
+
+      <section id="count" data-nav="1 · Counting (P&C)" data-search>
+        <div class="section-head"><div><span class="section-no">01 / FOUNDATION</span><h2>Counting</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Situation</th><th>Formula</th><th>Example</th></tr>
+          <tr><td>Steps in sequence</td><td>multiply the choices</td><td>4-digit PIN, digits distinct: 10 × 9 × 8 × 7 = 5,040</td></tr>
+          <tr><td>Order matters (arrange)</td><td>nPr = n!/(n−r)!</td><td>5 people in a row: 5! = 120</td></tr>
+          <tr><td>Order doesn't matter (choose)</td><td>nCr = n!/(r!(n−r)!)</td><td>3 of 8 for a committee: 56</td></tr>
+          <tr><td>Repetition allowed</td><td>nʳ</td><td>3-letter strings from 26 letters: 17,576</td></tr>
+          <tr><td>Letters with repeats</td><td>n!/(p! q! …)</td><td>BANANA: 6!/(3!·2!) = 60</td></tr>
+          <tr><td>Round table</td><td>(n − 1)!</td><td>6 people: 120 (necklace that can flip: (n−1)!/2)</td></tr>
+          <tr><td>Identical items into groups</td><td>C(n + r − 1, r − 1)</td><td>10 identical chocolates, 3 kids: C(12, 2) = 66</td></tr>
+          <tr><td>Nobody in their own place</td><td>derangements D(n)</td><td>D(3) = 2, D(4) = 9, D(5) = 44</td></tr>
+        </table>
+        <div class="memory"><b>"At least one"</b> → count the complement: total − none. A committee with at least one woman = all committees − all-men committees.</div>
+      </section>
+
+      <section id="prob" data-nav="2 · Probability rules" data-search>
+        <div class="section-head"><div><span class="section-no">02 / CORE</span><h2>Probability rules</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><code>P(not A) = 1 − P(A)</code><b>Complement</b><small>P(at least one 6 in 4 rolls) = 1 − (5/6)⁴ ≈ 51.8%.</small></div>
+          <div class="formula-row"><code>P(A∪B) = P(A) + P(B) − P(A∩B)</code><b>Addition</b><small>Subtract the overlap or you double count.</small></div>
+          <div class="formula-row"><code>P(A|B) = P(A∩B)/P(B)</code><b>Conditional</b><small>Restrict the world to B, then count.</small></div>
+          <div class="formula-row"><code>P(A∩B) = P(A)·P(B)</code><b>Independent events</b><small>Only when one doesn't affect the other (coin tosses, not cards without replacement).</small></div>
+          <div class="formula-row"><code>C(n,k) pᵏ (1−p)ⁿ⁻ᵏ</code><b>Binomial</b><small>Exactly 2 heads in 4 tosses = 6/16 = 3/8.</small></div>
+          <div class="formula-row"><code>E[tries] = 1/p</code><b>Geometric</b><small>Expected rolls to get a 6 = 6.</small></div>
+        </div>
+      </section>
+
+      <section id="bayes" data-nav="3 · Bayes" data-search>
+        <div class="section-head"><div><span class="section-no">03 / INTERVIEW FAVOURITE</span><h2>Bayes, done the easy way</h2></div><span class="tag hot">asked a lot</span></div>
+        <p class="lede">Skip the formula; imagine 10,000 people and count.</p>
+        <div class="card accent"><h3>A disease affects 1% of people. The test catches 99% of cases but also flags 5% of healthy people. You test positive. Probability you're ill?</h3>
+          <ol class="derive">
+            <li>10,000 people → 100 ill, 9,900 healthy.</li>
+            <li>Ill and positive: 99% of 100 = <b>99</b>.</li>
+            <li>Healthy but positive: 5% of 9,900 = <b>495</b>.</li>
+            <li>P(ill | positive) = 99 / (99 + 495) = 99/594 = <b>1/6 ≈ 16.7%</b>.</li>
+          </ol>
+          <p><b>Why it's low:</b> the disease is rare, so false positives from the huge healthy group swamp the true positives. Card-fraud models face exactly this problem, which is why analyst interviews ask it.</p></div>
+      </section>
+
+      <section id="ev" data-nav="4 · Expected value" data-search>
+        <div class="section-head"><div><span class="section-no">04 / TRADER CORE</span><h2>Expected value and pricing games</h2></div></div>
+        <div class="grid">
+          <article class="card accent"><h3>Linearity of expectation</h3><p>E[X + Y] = E[X] + E[Y], even when X and Y are dependent. It turns hard problems into sums.</p><p>Expected sum of 3 dice = 3 × 3.5 = <b>10.5</b>. Expected number of people who get their own hat back when hats are shuffled = n × (1/n) = <b>1</b>.</p></article>
+          <article class="card accent"><h3>Price a game with a reroll</h3><p>Roll a die and receive the face value in rupees. You may reroll once, but then you must keep the second roll. Fair price?</p><ol><li>A second roll is worth 3.5.</li><li>Keep a first roll of 4, 5 or 6 (better than 3.5); reroll 1, 2, 3.</li><li>EV = ½ × 5 (avg of 4,5,6) + ½ × 3.5 = <b>4.25</b>.</li></ol></article>
+          <article class="card"><h3>Variance</h3><span class="eq">Var(X) = E[X²] − (E[X])²</span><p>One die: 91/6 − 3.5² = 35/12 ≈ 2.92. Traders care because a positive-EV bet with huge variance can still ruin you.</p></article>
+          <article class="card"><h3>How to answer out loud</h3><ol><li>Define the outcomes and their probabilities.</li><li>Write EV as a sum.</li><li>Check the edge cases.</li><li>State the decision: "I'd pay up to ₹4.25."</li></ol></article>
+        </div>
+      </section>
+
+      <section id="classics" data-nav="5 · 15 classic puzzles" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PUZZLES</span><h2>Fifteen classic puzzles</h2></div><span class="tag pyq">say the reasoning, not just the answer</span></div>
+        <details><summary>1. Monty Hall: switch or stay?</summary><div><p><b>Switch: you win 2/3 of the time.</b> Your first pick is right 1/3 of the time. The host always opens an empty door from the other two, so the remaining closed door carries the other 2/3.</p></div></details>
+        <details><summary>2. A family has two children, at least one is a boy. P(both boys)?</summary><div><p><b>1/3.</b> Equally likely families: BB, BG, GB, GG. "At least one boy" removes GG, leaving 3, of which 1 is BB. (If told the <i>older</i> child is a boy, it's 1/2.)</p></div></details>
+        <details><summary>3. How many people before two share a birthday with probability over 50%?</summary><div><p><b>23</b> (≈ 50.7%). There are 253 pairs among 23 people; that's why it's so low.</p></div></details>
+        <details><summary>4. Expected tosses of a fair coin until HH? Until HT?</summary><div><p><b>HH: 6. HT: 4.</b> After an H, a T sends HH back to the start, but for HT a second H keeps you one step away. That asymmetry is the whole puzzle.</p></div></details>
+        <details><summary>5. Expected rolls until you've seen all six faces?</summary><div><p><b>14.7.</b> Coupon collector: 6 × (1 + 1/2 + … + 1/6) = 6 × 2.45.</p></div></details>
+        <details><summary>6. Break a stick at two random points. P(the three pieces form a triangle)?</summary><div><p><b>1/4.</b> A triangle needs every piece shorter than half the stick; that region is a quarter of the possible break points.</p></div></details>
+        <details><summary>7. Three ants on the corners of a triangle each walk along a random edge. P(no collision)?</summary><div><p>No collision only if all go clockwise or all anticlockwise: 2 of 8 → <b>P(no collision) = 1/4</b>, so P(collision) = 3/4.</p></div></details>
+        <details><summary>8. 25 horses, 5 tracks, no stopwatch. Fewest races to find the fastest 3?</summary><div><p><b>7.</b> 5 heats; race the 5 winners (6th race) → the overall fastest is known. Only 5 horses can still be 2nd or 3rd (2nd and 3rd of the winner's heat, 1st and 2nd of the runner-up's heat, the winner of the 3rd-place heat): race them (7th).</p></div></details>
+        <details><summary>9. 12 coins, one is heavier or lighter. A balance scale. Fewest weighings?</summary><div><p><b>3.</b> Each weighing has 3 outcomes, so 3 weighings distinguish 27 cases; you need 24 (12 coins × heavy/light). Start with 4 vs 4.</p></div></details>
+        <details><summary>10. Two ropes each burn in exactly 60 minutes, unevenly. Measure 45 minutes.</summary><div><p>Light rope A at both ends and rope B at one end. A burns out in 30 minutes; then light B's other end. B finishes 15 minutes later: <b>45</b>.</p></div></details>
+        <details><summary>11. Four people cross a bridge at night with one torch (1, 2, 5, 10 minutes). Fastest total?</summary><div><p><b>17 minutes.</b> 1+2 cross (2), 1 returns (1), 5+10 cross (10), 2 returns (2), 1+2 cross (2).</p></div></details>
+        <details><summary>12. Jugs of 3 L and 5 L. Measure exactly 4 L.</summary><div><p>Fill 5 → pour into 3 (2 L left) → empty 3 → pour the 2 L in → fill 5 → top up the 3 (uses 1 L) → <b>4 L</b> left in the 5 L jug.</p></div></details>
+        <details><summary>13. Two eggs, 100 floors. Fewest drops to find the highest safe floor, worst case?</summary><div><p><b>14.</b> Drop from 14, then 27, 39, … (each step one floor shorter) so that the total worst case stays 14, because 14 + 13 + … + 1 = 105 ≥ 100.</p></div></details>
+        <details><summary>14. 100 lockers, 100 students; student k toggles every k-th locker. How many stay open?</summary><div><p><b>10.</b> A locker is toggled once per divisor; only perfect squares have an odd number of divisors (1, 4, 9, …, 100).</p></div></details>
+        <details><summary>15. How many times do a clock's hands overlap in 24 hours?</summary><div><p><b>22.</b> Once every 65 5/11 minutes: 11 times every 12 hours.</p></div></details>
+      </section>
+
+      <section id="bank" data-nav="6 · Practice bank (20)" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PRACTICE</span><h2>Practice bank: 20 questions</h2></div><span class="tag pyq">30 minutes</span></div>
+        <ol>
+          <li>Ways to arrange 5 people in a row?</li>
+          <li>Committees of 3 from 8 people?</li>
+          <li>4-digit PINs with all digits different?</li>
+          <li>Ways to seat 6 people at a round table?</li>
+          <li>Ways to give 10 identical chocolates to 3 children (some may get none)?</li>
+          <li>Ways to put 4 letters in 4 addressed envelopes so that none is right?</li>
+          <li>P(at least one 6 in 4 rolls of a die)?</li>
+          <li>P(exactly 2 heads in 4 tosses)?</li>
+          <li>A bag has 4 red and 6 blue balls; 3 are drawn without replacement. P(all blue)?</li>
+          <li>2% of parts are defective. A scanner flags 90% of defective parts and 10% of good ones. A part is flagged: P(defective)?</li>
+          <li>Expected sum of 3 dice?</li>
+          <li>Expected number of rolls to get the first 6?</li>
+          <li>A die game pays the face value; you may reroll once. Fair price?</li>
+          <li>Monty Hall: P(win) if you switch?</li>
+          <li>Two children, at least one is a girl. P(both girls)?</li>
+          <li>Expected tosses until HT?</li>
+          <li>How do you measure 45 minutes with two 60-minute uneven ropes?</li>
+          <li>Fastest crossing for 1, 2, 5, 10 with one torch?</li>
+          <li>100 lockers puzzle: how many open?</li>
+          <li>25 horses, 5 tracks: races to find the top 3?</li>
+        </ol>
+        <details><summary>Answers 1–10</summary><div><p>1) 120 · 2) 56 · 3) 5,040 · 4) 120 · 5) C(12,2) = 66 · 6) 9 · 7) 671/1,296 ≈ 51.8% · 8) 3/8 · 9) C(6,3)/C(10,3) = 20/120 = 1/6 · 10) 18/(18 + 98) = 9/58 ≈ 15.5% (think 1,000 parts: 18 true flags, 98 false)</p></div></details>
+        <details><summary>Answers 11–20</summary><div><p>11) 10.5 · 12) 6 · 13) ₹4.25 · 14) 2/3 · 15) 1/3 · 16) 4 · 17) burn A at both ends and B at one; when A is done (30 min), light B's other end (15 more) · 18) 17 min · 19) 10 · 20) 7</p></div></details>
+        <div class="memory"><b>Next:</b> VIKRAM → Practice → <b>Probability + P&C</b> for fresh timed sets, and the <b>prob</b> flashcard deck. Module Q1 (quant trading interviews, April) builds on this with market-making games.</div>
+      </section>
+
+      <section id="tracker" data-nav="7 · Tracker" data-search>
+        <div class="section-head"><div><span class="section-no">07 / TRACKER</span><h2>Tracker</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Counting table learnt</label>
+          <label class="checkline"><input type="checkbox"> Bayes example redone with my own numbers</label>
+          <label class="checkline"><input type="checkbox"> Reroll game explained out loud in 60 seconds</label>
+          <label class="checkline"><input type="checkbox"> All 15 classics explained to a friend</label>
+          <label class="checkline"><input type="checkbox"> Practice bank 16/20 or better</label>
+          <label class="checkline"><input type="checkbox"> Three VIKRAM probability sets (7/10+ on the last)</label>
+        </div>
+      </section>
+
+      <section id="lastlook" data-nav="Last 10-minute look" data-search>
+        <div class="section-head"><div><span class="section-no">08 / RAPID RECALL</span><h2>Last 10-minute look</h2></div></div>
+        <div class="grid">
+          <div class="card dark"><h3>Five rules</h3><ol><li>At least one → 1 − none</li><li>Order matters → P, else C</li><li>Bayes → imagine 10,000 people</li><li>E[sum] = sum of E</li><li>E[tries] = 1/p</li></ol></div>
+          <div class="card"><h3>Five numbers</h3><ul><li>Monty Hall: 2/3</li><li>Birthday: 23</li><li>HH 6 · HT 4</li><li>Reroll game: 4.25</li><li>Two eggs: 14</li></ul></div>
+        </div>
+        <footer><b>Sources.</b> Optiver probability section (~90 s per question) and trader interviews with betting/market-making games: <a href="https://quantvault.org/optiver-online-assessment.html">QuantVault</a>, <a href="https://www.quantt.co.uk/resources/quant-online-assessments-guide">Quantt OA guide</a>. Classic puzzles are standard interview material (see Xinfeng Zhou's <i>A Practical Guide to Quantitative Finance Interviews</i> and Mosteller's <i>Fifty Challenging Problems in Probability</i>). Every answer was computed or checked by script.<br>Module A4 · CDC prep · Nov 2026.</footer>
+      </section>

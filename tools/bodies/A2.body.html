@@ -1,0 +1,161 @@
+<!--META A2 | Quant Aptitude (CAT-style) | A2 / QUANT | Tier 1 · Aptitude / OA · Module A2 | Quant<br>Aptitude | The quant section of analyst, consulting and finance OAs is CAT-level arithmetic plus a little algebra and geometry. Twelve topics, one formula card each, a worked example, the trap, and 30 practice questions with answers. | 12 topics, CAT difficulty; Formula atlas; 30-question bank -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What OAs actually test</h2></div></div>
+        <p class="lede">Arithmetic carries most of the marks. Learn ranks 1–6 first; they appear in almost every aptitude test and in case-interview maths.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Percentages, profit & loss</strong><span class="muted">base effects, successive changes, discounts, markups</span></div><span class="frequency">every test</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Ratio, averages, mixtures</strong><span class="muted">partnership, weighted averages, alligation, dilution</span></div><span class="frequency">very high</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Time, speed, distance</strong><span class="muted">relative speed, trains, boats</span></div><span class="frequency">high</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Time & work, pipes</strong><span class="muted">rates add; leaks subtract</span></div><span class="frequency">high</span></div>
+          <div class="priority"><span class="rank">5</span><div><strong>Interest</strong><span class="muted">SI, CI, half-yearly compounding, CI − SI</span></div><span class="frequency">high (finance roles)</span></div>
+          <div class="priority"><span class="rank">6</span><div><strong>Number system</strong><span class="muted">factors, HCF/LCM, units digit, remainders, trailing zeros</span></div><span class="frequency">medium-high</span></div>
+          <div class="priority"><span class="rank">7</span><div><strong>Algebra + progressions</strong><span class="muted">quadratics, AP/GP sums</span></div><span class="frequency">medium</span></div>
+          <div class="priority"><span class="rank">8</span><div><strong>Geometry + mensuration, clocks</strong><span class="muted">formula recall</span></div><span class="frequency">medium-low</span></div>
+        </div>
+        <div class="summary">Read one topic, do its worked example from memory, then run VIKRAM → Practice → Quant aptitude (10 questions, 15 minutes). The weak-topic list there tells you which section of this page to reread.</div>
+      </section>
+
+      <section id="pct" data-nav="1 · Percent + P&L" data-search>
+        <div class="section-head"><div><span class="section-no">01 / HIGH YIELD</span><h2>Percentages, profit and loss</h2></div><span class="tag core">core</span></div>
+        <div class="grid">
+          <article class="card accent"><h3>"More than" vs "less than"</h3><p>If A is x% more than B, then B is less than A by x/(100 + x) × 100%.</p><span class="eq">A is 25% more than B → B is 25/125 = <em>20%</em> less than A</span><p class="muted">Percentage points ≠ percent: 10% → 12% is +2 points but +20%.</p></article>
+          <article class="card accent"><h3>Markup and discount</h3><span class="eq">SP = CP × (1 + m) × (1 − d)</span><p>Marked 25% above cost, 12% discount: 1.25 × 0.88 = 1.10 → <b>10% profit</b>. Profit % is on cost price; discount % is on marked price.</p></article>
+          <article class="card"><h3>Successive discounts</h3><p>20% then 10% = 1 − 0.8 × 0.9 = <b>28%</b>, not 30%.</p></article>
+          <article class="card"><h3>Dishonest dealer</h3><p>Uses a 900 g weight for 1 kg and sells at cost: gain = 100/900 = <b>11.11%</b>. Gain % = error ÷ (true value − error).</p></article>
+        </div>
+        <div class="warning"><b>Trap:</b> "Loss of 20% on SP" vs "on CP". Always ask which base. Default in Indian aptitude tests: profit and loss on cost price.</div>
+      </section>
+
+      <section id="ratio" data-nav="2 · Ratio · avg · mix" data-search>
+        <div class="section-head"><div><span class="section-no">02 / HIGH YIELD</span><h2>Ratio, averages and mixtures</h2></div></div>
+        <div class="grid">
+          <article class="card"><h3>Partnership</h3><span class="eq">profit share ∝ capital × time</span><p>A puts in ₹50,000 for 12 months, B ₹75,000 for 8 months → 6,00,000 : 6,00,000 = <b>1 : 1</b>.</p></article>
+          <article class="card"><h3>Average with a newcomer</h3><span class="eq">newcomer = new total − old total</span><p>30 students average 15 years; with the teacher the average is 16 → teacher = 31 × 16 − 30 × 15 = <b>46</b>.</p></article>
+          <article class="card"><h3>Alligation</h3><span class="eq">cheap : dear = (dear − mean) : (mean − cheap)</span><p>Works for prices, concentrations, speeds: any weighted average of two groups.</p></article>
+          <article class="card"><h3>Repeated dilution</h3><span class="eq">left = initial × (1 − x/V)ⁿ</span><p>40 L of milk; 4 L replaced with water, twice → 40 × 0.9² = <b>32.4 L</b> of milk.</p></article>
+        </div>
+      </section>
+
+      <section id="tsd" data-nav="3 · Time-speed-distance" data-search>
+        <div class="section-head"><div><span class="section-no">03 / HIGH YIELD</span><h2>Time, speed, distance</h2></div></div>
+        <div class="grid">
+          <article class="card accent"><h3>Relative speed</h3><span class="eq">opposite directions: s₁ + s₂<br>same direction: s₁ − s₂</span><p>Trains crossing each other cover the <b>sum of their lengths</b>.</p><span class="eq">150 m at 60 km/h vs 100 m at 30 km/h, opposite<br>90 km/h = 25 m/s → 250 ÷ 25 = <em>10 s</em></span></article>
+          <article class="card accent"><h3>Boats and streams</h3><span class="eq">down = b + s · up = b − s<br>b = (down + up)/2 · s = (down − up)/2</span><p>Down 15, up 9 → boat <b>12</b>, stream <b>3</b> km/h.</p></article>
+          <article class="card"><h3>Units</h3><p>km/h × 5/18 = m/s. Multiples of 18 km/h give clean m/s (36 → 10, 54 → 15, 72 → 20).</p></article>
+          <article class="card"><h3>Average speed</h3><p>Equal distances: 2uv/(u + v). Equal times: (u + v)/2. Mixing these up is the most common TSD error.</p></article>
+        </div>
+      </section>
+
+      <section id="work" data-nav="4 · Time + work" data-search>
+        <div class="section-head"><div><span class="section-no">04 / HIGH YIELD</span><h2>Time & work, pipes & cisterns</h2></div></div>
+        <div class="grid">
+          <article class="card"><h3>Rates add</h3><span class="eq">1/T = 1/a + 1/b (− 1/c for a leak)</span><p>A pipe fills a tank in 6 h, a leak empties it in 9 h → 1/6 − 1/9 = 1/18 → <b>18 h</b>.</p></article>
+          <article class="card"><h3>Efficiency (LCM) method</h3><p>Let total work = LCM of the days. A in 12, B in 18 → total 36 units; A does 3/day, B 2/day → together 5/day → 36/5 = 7.2 days. Faster with three or more people.</p></article>
+          <article class="card"><h3>Wages</h3><p>Pay is split in proportion to work done, not days present.</p></article>
+          <article class="card"><h3>Working backwards</h3><p>A + B in 12 days, A alone in 20 → B = 1/12 − 1/20 = 1/30 → <b>30 days</b>.</p></article>
+        </div>
+      </section>
+
+      <section id="interest" data-nav="5 · Interest" data-search>
+        <div class="section-head"><div><span class="section-no">05 / FINANCE-FLAVOURED</span><h2>Simple and compound interest</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><code>SI = P·r·t/100</code><b>Simple interest</b><small>Interest on the principal only.</small></div>
+          <div class="formula-row"><code>A = P(1 + r/100)ⁿ</code><b>Compound amount</b><small>CI = A − P.</small></div>
+          <div class="formula-row"><code>CI − SI (2 yrs) = P(r/100)²</code><b>Two-year gap</b><small>₹10,000 at 10% → ₹100.</small></div>
+          <div class="formula-row"><code>half-yearly: r/2, 2n</code><b>Compounding frequency</b><small>₹8,000 at 10% half-yearly for 1 year → 8,000 × 1.05² = ₹8,820.</small></div>
+          <div class="formula-row"><code>doubles in t yrs (SI) → r = 100/t</code><b>Doubling under SI</b><small>Under CI use the rule of 72.</small></div>
+        </div>
+      </section>
+
+      <section id="numbers" data-nav="6 · Number system" data-search>
+        <div class="section-head"><div><span class="section-no">06 / NUMBERS</span><h2>Number system</h2></div></div>
+        <div class="grid">
+          <article class="card"><h3>Number of factors</h3><p>Write N = pᵃ qᵇ rᶜ; factors = (a+1)(b+1)(c+1).</p><span class="eq">360 = 2³·3²·5 → 4·3·2 = <em>24</em></span></article>
+          <article class="card"><h3>Units digit cycles</h3><p>Powers repeat every 4 (2: 2,4,8,6; 3: 3,9,7,1; 7: 7,9,3,1; 8: 8,4,2,6). Use exponent mod 4 (0 → 4th term).</p><span class="eq">7⁴⁵ → 45 mod 4 = 1 → <em>7</em></span></article>
+          <article class="card"><h3>Trailing zeros of n!</h3><span class="eq">⌊n/5⌋ + ⌊n/25⌋ + ⌊n/125⌋ …</span><p>100! → 20 + 4 = <b>24</b> zeros.</p></article>
+          <article class="card"><h3>Remainders</h3><p>Reduce the base first: 17²³ ÷ 16 → 17 ≡ 1 → remainder <b>1</b>. For (a − 1)ⁿ ÷ a: remainder 1 if n is even, a − 1 if odd.</p></article>
+          <article class="card span2"><h3>HCF × LCM</h3><p>For two numbers, HCF × LCM = product. HCF 12, LCM 360, one number 72 → other = 12 × 360 ÷ 72 = <b>60</b>.</p></article>
+        </div>
+      </section>
+
+      <section id="algebra" data-nav="7 · Algebra + series" data-search>
+        <div class="section-head"><div><span class="section-no">07 / ALGEBRA</span><h2>Algebra and progressions</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><code>ax² + bx + c = 0</code><b>Sum = −b/a · product = c/a</b><small>x² − 5x + 6 → roots 2, 3. Sum of squares = (sum)² − 2·product.</small></div>
+          <div class="formula-row"><code>D = b² − 4ac</code><b>Nature of roots</b><small>&gt; 0 two real · = 0 equal · &lt; 0 none real.</small></div>
+          <div class="formula-row"><code>aₙ = a + (n−1)d</code><b>AP term</b><small>Sum = n/2 [2a + (n−1)d].</small></div>
+          <div class="formula-row"><code>1 + 2 + … + n = n(n+1)/2</code><b>Natural numbers</b><small>Sum of first n odd numbers = n².</small></div>
+          <div class="formula-row"><code>Sₙ = a(rⁿ − 1)/(r − 1)</code><b>GP sum</b><small>Infinite (|r| &lt; 1): a/(1 − r).</small></div>
+          <div class="formula-row"><code>log ab = log a + log b</code><b>Logs</b><small>log_a b = log b / log a; log aⁿ = n log a.</small></div>
+        </div>
+        <div class="warning"><b>Inequality trap:</b> multiplying or dividing by a negative number flips the sign.</div>
+      </section>
+
+      <section id="geo" data-nav="8 · Geometry + clocks" data-search>
+        <div class="section-head"><div><span class="section-no">08 / FORMULA RECALL</span><h2>Geometry, mensuration and clocks</h2></div></div>
+        <div class="grid">
+          <article class="card"><h3>Triangles</h3><ul><li>Area ½bh; equilateral √3/4·a²</li><li>Triples: 3-4-5, 5-12-13, 8-15-17, 7-24-25</li><li>Interior angles of an n-gon: (n − 2) × 180°</li></ul></article>
+          <article class="card"><h3>Circles and solids</h3><ul><li>Circle: πr², 2πr</li><li>Cylinder: πr²h; curved area 2πrh</li><li>Cone: ⅓πr²h · Sphere: 4/3πr³, 4πr²</li></ul></article>
+          <article class="card span2"><h3>Clock angle</h3><span class="eq">angle = |30H − 5.5M|  (take 360 − angle if &gt; 180)</span><p>3:40 → |90 − 220| = <b>130°</b>. The hands overlap every 65 5/11 minutes.</p></article>
+        </div>
+      </section>
+
+      <section id="bank" data-nav="9 · Practice bank (30)" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PRACTICE</span><h2>Practice bank: 30 questions</h2></div><span class="tag pyq">45 minutes, no calculator</span></div>
+        <ol>
+          <li>A is 25% more than B. By what % is B less than A?</li>
+          <li>Successive discounts of 20% and 10% equal a single discount of?</li>
+          <li>A dealer uses a 900 g weight for 1 kg and sells at cost price. Gain %?</li>
+          <li>Goods marked 40% above cost are sold at a 15% discount. Profit %?</li>
+          <li>CI − SI on ₹20,000 at 10% p.a. for 2 years?</li>
+          <li>CI on ₹8,000 at 10% p.a. compounded half-yearly for 1 year?</li>
+          <li>A invests ₹60,000 for 12 months, B ₹40,000 for 9 months. Profit ratio?</li>
+          <li>25 students average 40 kg. With the teacher, the average is 41 kg. Teacher's weight?</li>
+          <li>From 50 L of milk, 5 L is replaced with water, twice. Milk left?</li>
+          <li>Downstream 18 km/h, upstream 12 km/h. Speed of the stream?</li>
+          <li>Trains of 200 m and 160 m at 54 km/h and 36 km/h move in opposite directions. Time to cross?</li>
+          <li>The same trains in the same direction. Time to cross?</li>
+          <li>Pipes A and B fill a tank in 10 h and 15 h; pipe C empties it in 30 h. All open: time to fill?</li>
+          <li>A and B finish a job in 12 days; A alone in 20 days. B alone?</li>
+          <li>Number of factors of 720?</li>
+          <li>Units digit of 3⁹⁹?</li>
+          <li>Trailing zeros in 50!?</li>
+          <li>Remainder when 17²³ is divided by 16?</li>
+          <li>HCF of two numbers is 12, LCM 360, one number 72. The other?</li>
+          <li>Roots of x² − 7x + 12 = 0: sum of their squares?</li>
+          <li>Sum of the first 50 natural numbers?</li>
+          <li>20th term of the AP 3, 7, 11, …?</li>
+          <li>Sum of the first 6 terms of 2, 6, 18, …?</li>
+          <li>Sum to infinity of 12 + 6 + 3 + …?</li>
+          <li>Angle between the clock hands at 4:20?</li>
+          <li>A right triangle has legs 8 and 15. Hypotenuse?</li>
+          <li>Area of an equilateral triangle with side 6?</li>
+          <li>Volume of a cylinder, r = 7, h = 10 (π = 22/7)?</li>
+          <li>Sum of interior angles of a hexagon?</li>
+          <li>A sum doubles in 8 years at simple interest. Rate?</li>
+        </ol>
+        <details><summary>Answers 1–15</summary><div><p>1) 20% · 2) 28% · 3) 11.11% · 4) 19% · 5) ₹200 · 6) ₹820 · 7) 2 : 1 · 8) 66 kg · 9) 40.5 L · 10) 3 km/h · 11) 14.4 s (relative 25 m/s) · 12) 72 s (relative 5 m/s) · 13) 7.5 h · 14) 30 days · 15) 30 (720 = 2⁴·3²·5)</p></div></details>
+        <details><summary>Answers 16–30</summary><div><p>16) 7 · 17) 12 · 18) 1 · 19) 60 · 20) 25 · 21) 1,275 · 22) 79 · 23) 728 · 24) 24 · 25) 10° · 26) 17 · 27) 9√3 ≈ 15.59 · 28) 1,540 · 29) 720° · 30) 12.5%</p></div></details>
+        <div class="memory"><b>Next:</b> VIKRAM → Practice → <b>Quant aptitude</b> for fresh 10-question sets with full explanations, and the <b>apt</b> flashcard deck for formulas.</div>
+      </section>
+
+      <section id="tracker" data-nav="10 · Tracker" data-search>
+        <div class="section-head"><div><span class="section-no">10 / TRACKER</span><h2>Tracker</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Topics 1–4 read; worked examples redone from memory</label>
+          <label class="checkline"><input type="checkbox"> Topics 5–8 read</label>
+          <label class="checkline"><input type="checkbox"> Practice bank attempted (45 min)</label>
+          <label class="checkline"><input type="checkbox"> Practice bank: 24/30 or better</label>
+          <label class="checkline"><input type="checkbox"> Two VIKRAM Quant sets at 7/10+</label>
+          <label class="checkline"><input type="checkbox"> One CAT previous-year QA section, timed</label>
+        </div>
+      </section>
+
+      <section id="lastlook" data-nav="Last 10-minute look" data-search>
+        <div class="section-head"><div><span class="section-no">11 / RAPID RECALL</span><h2>Last 10-minute look</h2></div></div>
+        <div class="grid">
+          <div class="card dark"><h3>Six formulas</h3><ol><li>SP = CP(1 + m)(1 − d)</li><li>CI − SI (2 yrs) = P(r/100)²</li><li>Average speed (equal distances) = 2uv/(u+v)</li><li>1/T = Σ rates</li><li>Factors = Π(exponent + 1)</li><li>Trailing zeros = Σ ⌊n/5ᵏ⌋</li></ol></div>
+          <div class="card"><h3>Five traps</h3><ul><li>Wrong base in % change</li><li>Adding discounts</li><li>Arithmetic mean for average speed</li><li>Forgetting train lengths</li><li>Sign flip in inequalities</li></ul></div>
+        </div>
+        <footer><b>Sources.</b> Standard CAT and campus-OA syllabus; question style modelled on CAT previous-year quant and the aptitude rounds reported for analyst roles at IITs (see the A1 sources). Every answer in the bank was computed and checked by script.<br>Module A2 · CDC prep · Nov 2026.</footer>
+      </section>
