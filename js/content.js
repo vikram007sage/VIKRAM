@@ -95,8 +95,8 @@ var VK_CONTENT = (function () {
 
   // ---------- Placement roadmap (from 00_START_HERE, December onwards) ----------
   const MODULES = [
-    ['A1', 'Mental maths + speed', 'Aptitude / OA', '2026-12-02'], ['A2', 'Quant aptitude (CAT-style)', 'Aptitude / OA', '2026-12-03'],
-    ['A3', 'Data interpretation + logical reasoning', 'Aptitude / OA', '2026-12-08'], ['A4', 'Probability, P&C, expected value + puzzles', 'Aptitude / OA', '2026-12-11'],
+    ['A1', 'Mental maths + speed', 'Aptitude / OA', '2026-12-02', 'notes/A1_Mental_Maths_Speed.html'], ['A2', 'Quant aptitude (CAT-style)', 'Aptitude / OA', '2026-12-03', 'notes/A2_Quant_Aptitude.html'],
+    ['A3', 'Data interpretation + logical reasoning', 'Aptitude / OA', '2026-12-08', 'notes/A3_DI_Logical_Reasoning.html'], ['A4', 'Probability, P&C, expected value + puzzles', 'Aptitude / OA', '2026-12-11', 'notes/A4_Probability_Puzzles.html'],
     ['A5', 'Verbal, psychometric + GD', 'Aptitude / OA', '2027-01-17'],
     ['S1', 'Guesstimates + structured thinking', 'Case spine', '2026-11-09', 'notes/S1_Guesstimates_Structured_Thinking.html'],
     ['S2', 'Case frameworks (card + lending cases)', 'Case spine', '2026-12-05'], ['S3', 'Story bank + HR', 'Case spine', '2026-12-06'],

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A1 | Mental Maths + Speed — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">A1 / SPEED</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#add">1 · Add + subtract</a><a href="#mult">2 · Multiply</a><a href="#div">3 · Divide + divisibility</a><a href="#frac">4 · Fractions ↔ %</a><a href="#est">5 · Estimation</a><a href="#tactics">6 · Test tactics</a><a href="#drills">7 · Worked drills</a><a href="#bank">8 · Drill bank (30)</a><a href="#plan">9 · Training plan</a><a href="#lastlook">Last 10-minute look</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Tier 1 · Aptitude / OA · Module A1</div><h1>Mental Maths<br>+ Speed</h1><p>Every online test you'll sit starts with speed: Optiver's 80-in-8, Capital One's timed DI, the aptitude section of nearly every analyst OA. Learn a dozen tricks, then train them two minutes at a time until they're automatic.</p><div class="meta"><span class="pill"><span class=dot></span> 15 tricks that cover 90% of OA arithmetic</span><span class="pill">Fraction-percent table</span><span class="pill">30 drills + a daily plan</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Why speed is a skill, not a talent</h2></div></div>
+        <p class="lede">Speed tests reward fast, accurate arithmetic. It isn't IQ: it's a small set of patterns practised until your hand moves before you think.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Fractions ↔ percentages</strong><span class="muted">appears in every DI and percentage question</span></div><span class="frequency">daily use</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Multiplication shortcuts</strong><span class="muted">×5, ×25, ×11, near-100, squares</span></div><span class="frequency">80-in-8, Zetamac</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Percent chunks</strong><span class="muted">10% + 5% + 2.5% instead of long multiplication</span></div><span class="frequency">DI, cases</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Estimation</strong><span class="muted">round, compute, correct; compare fractions by cross-multiplying</span></div><span class="frequency">DI, guesstimates</span></div>
+          <div class="priority"><span class="rank">5</span><div><strong>Test tactics</strong><span class="muted">negative marking, skipping, input habits</span></div><span class="frequency">every OA</span></div>
+        </div>
+        <div class="summary">Learn the tricks once from this page, then train them in VIKRAM's 2-minute Math sprint (Prep tab) every day. Targets: 40 by 31 Dec, 55 by 30 Apr, 65 by 31 Aug, 70+ before tests in October 2027.</div>
+        <div class="grid" style="margin-top:16px">
+          <div class="card"><h3>Formats you'll meet</h3><ul><li><b>Optiver 80-in-8:</b> 80 arithmetic questions in 8 minutes; wrong answers cost a mark.</li><li><b>Capital One:</b> a timed data-interpretation test (one report: 30 questions in 35 minutes), heavy on quick percentages.</li><li><b>Zetamac-style drills:</b> + − × ÷ for 120 seconds; the standard practice tool among quant aspirants.</li></ul></div>
+          <div class="card"><h3>How to use this module</h3><ol><li>Read sections 1–6 once (45 minutes).</li><li>Do the 30 drills in section 8 without a calculator.</li><li>From then on: three 2-minute sprints a day, logged in VIKRAM.</li><li>Re-read the last-10-minute section before any test.</li></ol></div>
+        </div>
+      </section>
+
+      <section id="add" data-nav="1 · Add + subtract" data-search>
+        <div class="section-head"><div><span class="section-no">01 / FOUNDATION</span><h2>Adding and subtracting fast</h2></div></div>
+        <div class="grid">
+          <article class="card accent"><h3>Left to right</h3><p>School taught right-to-left with carries. Your brain reads left to right, so add the big parts first.</p><span class="eq">47 + 38 → 40 + 30 = 70, then 7 + 8 = 15 → <em>85</em></span></article>
+          <article class="card accent"><h3>Compensation</h3><p>Round one number to a friendly one, then correct.</p><span class="eq">47 + 38 = 47 + 40 − 2 = <em>85</em><br>563 − 198 = 563 − 200 + 2 = <em>365</em></span></article>
+          <article class="card"><h3>Subtract from 1000</h3><p>Take every digit from 9, the last from 10.</p><span class="eq">1000 − 467 → (9−4)(9−6)(10−7) = <em>533</em></span><p class="muted">Great for change, discounts, "what's left" questions.</p></article>
+          <article class="card"><h3>Add by counting up</h3><p>For subtraction with awkward borrowing, count up from the smaller number.</p><span class="eq">812 − 579: 579 → 600 (+21) → 812 (+212) = <em>233</em></span></article>
+        </div>
+      </section>
+
+      <section id="mult" data-nav="2 · Multiply" data-search>
+        <div class="section-head"><div><span class="section-no">02 / CORE · HIGH YIELD</span><h2>Multiplication shortcuts</h2></div><span class="tag core">memorise</span></div>
+        <table class="compare">
+          <tr><th>Pattern</th><th>Rule</th><th>Example</th></tr>
+          <tr><td>× 5</td><td>× 10, then halve</td><td>68 × 5 = 680 ÷ 2 = <b>340</b></td></tr>
+          <tr><td>× 25</td><td>× 100, then ÷ 4</td><td>36 × 25 = 3,600 ÷ 4 = <b>900</b></td></tr>
+          <tr><td>× 125</td><td>× 1000, then ÷ 8</td><td>48 × 125 = 48,000 ÷ 8 = <b>6,000</b></td></tr>
+          <tr><td>× 9 / × 99</td><td>× 10 minus the number (× 100 minus)</td><td>47 × 9 = 470 − 47 = <b>423</b></td></tr>
+          <tr><td>× 11 (2-digit)</td><td>split the digits, put their sum in the middle (carry if ≥ 10)</td><td>53 × 11 = 5 (8) 3 = <b>583</b>; 78 × 11 = 7 (15) 8 = <b>858</b></td></tr>
+          <tr><td>Double and halve</td><td>halve one factor, double the other</td><td>16 × 35 = 8 × 70 = <b>560</b></td></tr>
+          <tr><td>Split (distribute)</td><td>break the bigger number</td><td>7 × 86 = 560 + 42 = <b>602</b></td></tr>
+          <tr><td>Difference of squares</td><td>(a + b)(a − b) = a² − b²</td><td>23 × 17 = 20² − 3² = <b>391</b></td></tr>
+        </table>
+        <div class="grid" style="margin-top:16px">
+          <article class="card accent"><h3>Near 100 (base method)</h3><p>For numbers just below or above 100: cross-subtract (or add) the deviation, then multiply the deviations.</p><span class="eq">97 × 94: deviations −3, −6<br>97 − 6 = 91 | 3 × 6 = 18 → <em>9,118</em></span><span class="eq">104 × 108: deviations +4, +8<br>104 + 8 = 112 | 4 × 8 = 32 → <em>11,232</em></span><p class="muted">The right part always has two digits (pad with 0: 96 × 98 → 94 | 08 = 9,408).</p></article>
+          <article class="card accent"><h3>Squares you can do instantly</h3><p><b>Ending in 5:</b> n × (n + 1), then append 25.</p><span class="eq">65² → 6 × 7 = 42 | 25 → <em>4,225</em></span><p><b>Near 50:</b> 25 ± the distance from 50 (hundreds), then the distance squared (2 digits).</p><span class="eq">47² → 25 − 3 = 22 | 3² = 09 → <em>2,209</em><br>53² → 25 + 3 = 28 | 09 → <em>2,809</em></span><p><b>Neighbours:</b> 24 × 26 = 25² − 1 = 624.</p></article>
+        </div>
+        <div class="memory"><b>Memorise once:</b> squares 11²–30² (121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900) and tables up to 19. They're on VIKRAM's flashcards.</div>
+      </section>
+
+      <section id="div" data-nav="3 · Divide + divisibility" data-search>
+        <div class="section-head"><div><span class="section-no">03 / CORE</span><h2>Division and divisibility</h2></div></div>
+        <div class="grid">
+          <article class="card"><h3>Divide by 5, 25, 125</h3><span class="eq">÷ 5 → × 2 ÷ 10: 435 ÷ 5 = 870 ÷ 10 = <em>87</em><br>÷ 25 → × 4 ÷ 100: 1,150 ÷ 25 = <em>46</em><br>÷ 125 → × 8 ÷ 1000</span></article>
+          <article class="card"><h3>Halve repeatedly</h3><p>÷ 4 = halve twice; ÷ 8 = halve three times.</p><span class="eq">648 ÷ 8 → 324 → 162 → <em>81</em></span></article>
+        </div>
+        <table class="compare" style="margin-top:14px">
+          <tr><th>Divisible by</th><th>Test</th></tr>
+          <tr><td>3 / 9</td><td>digit sum divisible by 3 / 9</td></tr>
+          <tr><td>4 / 8</td><td>last 2 digits divisible by 4 / last 3 digits divisible by 8</td></tr>
+          <tr><td>6</td><td>divisible by 2 and 3</td></tr>
+          <tr><td>11</td><td>(sum of alternate digits) − (sum of the others) is 0 or a multiple of 11: 2,728 → (8 + 7) − (2 + 2) = 11 ✓</td></tr>
+          <tr><td>7</td><td>double the last digit, subtract from the rest, repeat: 343 → 34 − 6 = 28 ✓</td></tr>
+        </table>
+      </section>
+
+      <section id="frac" data-nav="4 · Fractions ↔ %" data-search>
+        <div class="section-head"><div><span class="section-no">04 / NUMBERS · MEMORISE</span><h2>The fraction–percent table</h2></div><span class="tag hot">most important table</span></div>
+        <p class="lede">DI questions are fractions in disguise. If you see 0.125 and think "one-eighth" instantly, you save 20 seconds a question.</p>
+        <div class="qa-grid">
+          <div><b>1/2</b>50%</div><div><b>1/3</b>33.33%</div><div><b>1/4</b>25%</div><div><b>1/5</b>20%</div><div><b>1/6</b>16.67%</div><div><b>1/7</b>14.29%</div>
+          <div><b>1/8</b>12.5%</div><div><b>1/9</b>11.11%</div><div><b>1/10</b>10%</div><div><b>1/11</b>9.09%</div><div><b>1/12</b>8.33%</div><div><b>1/13</b>7.69%</div>
+          <div><b>1/14</b>7.14%</div><div><b>1/15</b>6.67%</div><div><b>1/16</b>6.25%</div><div><b>1/20</b>5%</div><div><b>3/8</b>37.5%</div><div><b>5/8</b>62.5%</div>
+          <div><b>7/8</b>87.5%</div><div><b>2/7</b>28.57%</div><div><b>3/7</b>42.86%</div><div><b>5/6</b>83.33%</div><div><b>5/9</b>55.56%</div><div><b>4/9</b>44.44%</div>
+        </div>
+        <div class="grid" style="margin-top:16px">
+          <article class="card accent"><h3>Percent chunks</h3><p>Build any percentage from 10%, 5%, 1%, 2.5%.</p><span class="eq">17.5% of 640 = 64 + 32 + 16 = <em>112</em><br>(10% + 5% + 2.5%)</span></article>
+          <article class="card accent"><h3>Swap trick</h3><p>x% of y = y% of x. Pick whichever is easier.</p><span class="eq">18% of 50 = 50% of 18 = <em>9</em></span></article>
+          <article class="card"><h3>Successive change</h3><span class="eq">a then b → a + b + ab/100</span><p>+20% then −10% → 20 − 10 − 2 = <b>+8%</b>. +20 then −20 is −4%, never 0.</p></article>
+          <article class="card"><h3>Percent change</h3><span class="eq">(new − old) ÷ <em>old</em> × 100</span><p>The base is always the starting value. 80 → 100 is +25%; 100 → 80 is −20%.</p></article>
+        </div>
+      </section>
+
+      <section id="est" data-nav="5 · Estimation" data-search>
+        <div class="section-head"><div><span class="section-no">05 / TOOLKIT</span><h2>Estimation and comparison</h2></div></div>
+        <div class="grid">
+          <article class="card"><h3>Round, compute, correct</h3><span class="eq">4,872 ÷ 23.8 ≈ 4,800 ÷ 24 = 200</span><p>Both numbers moved down slightly, so the true answer is a bit above 200 (it's 204.7). In multiple-choice, 200-ish usually picks the option.</p></article>
+          <article class="card"><h3>Compare fractions: cross-multiply</h3><span class="eq">13/17 vs 19/25 → 13 × 25 = 325 vs 19 × 17 = 323</span><p>325 &gt; 323, so 13/17 is larger. No decimals needed.</p></article>
+          <article class="card"><h3>Growth over years</h3><p>Rule of 72: doubling time ≈ 72 ÷ rate. For small rates, (1 + r)ⁿ ≈ 1 + nr + a little: 1.06⁵ ≈ 1.34.</p></article>
+          <article class="card"><h3>Lakh–crore sanity</h3><p>1 lakh = 10⁵, 1 crore = 10⁷. ₹48 lakh is 48 ÷ 320 = 15% of ₹3.2 crore.</p></article>
+        </div>
+      </section>
+
+      <section id="tactics" data-nav="6 · Test tactics" data-search>
+        <div class="section-head"><div><span class="section-no">06 / STRATEGY</span><h2>Tactics for speed tests</h2></div></div>
+        <div class="grid">
+          <div class="card dark"><h3>80-in-8 style (negative marking)</h3><ul><li>A wrong answer costs a mark; an unsure guess is worth less than nothing.</li><li>Accuracy first for the first week of practice, then push speed.</li><li>Don't stall: if a question will take more than 15 seconds, move on if the test allows it.</li></ul></div>
+          <div class="card"><h3>Zetamac habits</h3><ul><li>Type the answer and move: the drill auto-advances on a correct answer.</li><li>Read the operation sign first (division hides as reversed multiplication).</li><li>Track a 5-day average, not your best score.</li></ul></div>
+          <div class="card"><h3>DI tests</h3><ul><li>Look at the answer options before calculating: often only one is in the right range.</li><li>Approximate with the fraction table.</li><li>Do easy questions first; mark and return.</li></ul></div>
+          <div class="card"><h3>Physical setup</h3><ul><li>Laptop, external mouse, quiet room, water.</li><li>Rough paper and a pen ready before the timer starts.</li><li>Calculator only if allowed; most aren't.</li></ul></div>
+        </div>
+      </section>
+
+      <section id="drills" data-nav="7 · Worked drills" data-search>
+        <div class="section-head"><div><span class="section-no">07 / WORKED</span><h2>Ten worked drills</h2></div></div>
+        <ol class="derive">
+          <li><b>96 × 98:</b> deviations −4, −2 → 94 | 08 → <b>9,408</b>.</li>
+          <li><b>85²:</b> 8 × 9 = 72 | 25 → <b>7,225</b>.</li>
+          <li><b>12.5% of 840:</b> 1/8 of 840 → <b>105</b>.</li>
+          <li><b>2,350 ÷ 25:</b> 2,350 × 4 = 9,400 ÷ 100 → <b>94</b>.</li>
+          <li><b>89 × 11:</b> 8 (17) 9 → carry → <b>979</b>.</li>
+          <li><b>18 × 45:</b> halve and double → 9 × 90 = <b>810</b>.</li>
+          <li><b>Is 7,315 divisible by 11?</b> (7 + 1) − (3 + 5) = 0 → <b>yes</b> (11 × 665).</li>
+          <li><b>7/9 or 11/14?</b> 7 × 14 = 98 vs 11 × 9 = 99 → <b>11/14</b> is larger.</li>
+          <li><b>+30% then −30%:</b> 30 − 30 − 9 → <b>−9%</b>.</li>
+          <li><b>7,940 ÷ 39.6:</b> ≈ 8,000 ÷ 40 = <b>~200</b> (exact 200.5).</li>
+        </ol>
+      </section>
+
+      <section id="bank" data-nav="8 · Drill bank (30)" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PRACTICE</span><h2>Drill bank: 30 questions, no calculator</h2></div><span class="tag pyq">time yourself: 6 minutes</span></div>
+        <div class="qa-grid">
+          <div><b>1</b>64 × 25</div><div><b>2</b>85²</div><div><b>3</b>96 × 98</div><div><b>4</b>103 × 107</div><div><b>5</b>46 × 11</div><div><b>6</b>89 × 11</div>
+          <div><b>7</b>37 × 9</div><div><b>8</b>1000 − 386</div><div><b>9</b>15% of 460</div><div><b>10</b>12.5% of 840</div><div><b>11</b>3/8 of 120</div><div><b>12</b>2,350 ÷ 25</div>
+          <div><b>13</b>648 ÷ 8</div><div><b>14</b>52²</div><div><b>15</b>48²</div><div><b>16</b>24 × 26</div><div><b>17</b>0.25 × 0.48</div><div><b>18</b>18 × 45</div>
+          <div><b>19</b>7/9 or 11/14: larger?</div><div><b>20</b>875 ÷ 7</div><div><b>21</b>17% of 300 + 3% of 300</div><div><b>22</b>+30% then −30%</div><div><b>23</b>1/7 of ₹4.9 lakh</div><div><b>24</b>999 × 7</div>
+          <div><b>25</b>125 × 72</div><div><b>26</b>Is 7,315 divisible by 11?</div><div><b>27</b>19 × 21</div><div><b>28</b>₹3.6 crore ÷ 12</div><div><b>29</b>₹48 lakh as % of ₹3.2 crore</div><div><b>30</b>≈ 7,940 ÷ 39.6</div>
+        </div>
+        <details><summary>Answers 1–15</summary><div><p>1) 1,600 · 2) 7,225 · 3) 9,408 · 4) 11,021 · 5) 506 · 6) 979 · 7) 333 · 8) 614 · 9) 69 · 10) 105 · 11) 45 · 12) 94 · 13) 81 · 14) 2,704 · 15) 2,304</p></div></details>
+        <details><summary>Answers 16–30</summary><div><p>16) 624 · 17) 0.12 · 18) 810 · 19) 11/14 · 20) 125 · 21) 60 · 22) −9% · 23) ₹70,000 · 24) 6,993 · 25) 9,000 · 26) yes · 27) 399 · 28) ₹30 lakh · 29) 15% · 30) ≈ 200</p></div></details>
+        <div class="memory"><b>Then go to VIKRAM → Prep → Math sprint</b> for unlimited fresh drills, and <b>Practice → Quick 5</b> for mixed aptitude.</div>
+      </section>
+
+      <section id="plan" data-nav="9 · Training plan" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>Training plan and tracker</h2></div></div>
+        <table class="compare">
+          <tr><th>When</th><th>Daily dose</th><th>Target (2-min sprint)</th></tr>
+          <tr><td>2–8 Dec</td><td>Read this module; 3 sprints/day; flashcards (math deck)</td><td>first score logged</td></tr>
+          <tr><td>9–31 Dec</td><td>3 sprints/day in the evening aptitude slot</td><td>40</td></tr>
+          <tr><td>Jan–Apr</td><td>2 sprints/day + one timed DI set a week</td><td>55</td></tr>
+          <tr><td>May–Aug</td><td>1–2 sprints/day (internship)</td><td>65</td></tr>
+          <tr><td>Sep–Nov 2027</td><td>2 sprints/day + full OA mocks</td><td>70+</td></tr>
+        </table>
+        <div class="card" style="margin-top:14px">
+          <label class="checkline"><input type="checkbox"> Read sections 1–6</label>
+          <label class="checkline"><input type="checkbox"> Fraction table recited from memory</label>
+          <label class="checkline"><input type="checkbox"> Squares 11²–30² memorised</label>
+          <label class="checkline"><input type="checkbox"> Drill bank done in under 6 minutes</label>
+          <label class="checkline"><input type="checkbox"> Drill bank 100% correct</label>
+          <label class="checkline"><input type="checkbox"> First week of daily sprints done</label>
+          <label class="checkline"><input type="checkbox"> Sprint score 30</label>
+          <label class="checkline"><input type="checkbox"> Sprint score 40 (31 Dec target)</label>
+        </div>
+      </section>
+
+      <section id="lastlook" data-nav="Last 10-minute look" data-search>
+        <div class="section-head"><div><span class="section-no">10 / RAPID RECALL</span><h2>Last 10-minute look</h2></div></div>
+        <div class="grid">
+          <div class="card dark"><h3>Five multiplication moves</h3><ol><li>× 5, 25, 125 → × 10/100/1000 then ÷ 2/4/8</li><li>× 11 → digits apart, sum in the middle</li><li>Near 100 → cross, then multiply deviations</li><li>Ends in 5 → n(n+1) | 25</li><li>(a+b)(a−b) = a² − b²</li></ol></div>
+          <div class="card"><h3>Five fractions</h3><ul><li>1/8 = 12.5%</li><li>1/6 = 16.67%</li><li>1/7 = 14.29%</li><li>1/12 = 8.33%</li><li>3/8 = 37.5%</li></ul></div>
+          <div class="card"><h3>Three percent rules</h3><ul><li>Base = starting value</li><li>a, b → a + b + ab/100</li><li>x% of y = y% of x</li></ul></div>
+          <div class="card accent"><h3>Test day</h3><ol><li>Accuracy before speed when wrong answers cost marks.</li><li>Check the options before computing.</li><li>Skip the 15-second monsters.</li></ol></div>
+        </div>
+        <footer><b>Sources.</b> Optiver 80-in-8 format (80 questions, 8 minutes, negative marking): <a href="https://quantvault.org/optiver-online-assessment.html">QuantVault</a>, <a href="https://tradermath.org/knowledge-base/the-ultimate-guide-to-the-optiver-interview">TraderMath</a>. Capital One DI test (30 questions / 35 minutes, one campus report): <a href="https://www.glassdoor.sg/Interview/Capital-One-Interview-E3736-RVW7584825.htm">Glassdoor</a>. Practice tool: <a href="https://arithmetic.zetamac.com">Zetamac</a>. All worked examples were computed and checked.<br>Module A1 · CDC prep · Nov 2026.</footer>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-a1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-a1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-a1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>
