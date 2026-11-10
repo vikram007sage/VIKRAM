@@ -5,6 +5,8 @@ Aryan's personal assistant for placements and life: an offline-first PWA for pho
 - **Today:** time-blocked day (5:00 → 21:00), checklist, score, streaks, comeback mode
 - **Prep:** dated roadmap to Day 1 (1 Dec 2027), notes library, practice engine, flashcards, outreach CRM
 - **Feed:** history Stories instead of reels (8 series: Alexander, Mughals, India's freedom struggle, Greek myths, Europe, Germany 1918–39, WWII, Cold War), plus one-minute cards (aptitude, quotes, French, chess puzzles)
+- **Gita:** the whole Bhagavad Gita as swipe cards, verse of the day, verses by mood, chapter quizzes (text data: github.com/gita/gita)
+- **Live layer:** js/live.js pulls endless cards from Wikipedia, Tatoeba and Datamuse; everything falls back to bundled content offline
 - **Learn:** history from public-domain originals (with Wikipedia links), English vocabulary, French from zero, chess from zero
 - **Accountability:** floating one-tap focus timer with escalating rude notifications if you leave, strict mode (habits tick from evidence), morning pledge, weekly review, partner report, stakes, optional partner emails
 - **Go further:** checked free outside resources for every area

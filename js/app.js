@@ -34,7 +34,7 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories'].forEach(k => S[k] = S[k] || {});
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live'].forEach(k => S[k] = S[k] || {});
   S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
   function save(sync = true) { if (SIM && !qs.get('test')) return; LS.set(KEY, S); if (sync) Sync.schedule(); }
@@ -134,7 +134,8 @@
 
   // ================= UI shell =================
   let TAB = location.hash.replace('#', '') || 'today';
-  const tabs = ['today', 'prep', 'feed', 'life', 'more', 'outreach', 'learn', 'review', 'resources'];
+  const EXT = window.VK_EXT || { views: {}, binds: {}, acts: {}, tabs: [] };
+  const tabs = ['today', 'prep', 'feed', 'life', 'more', 'outreach', 'learn', 'review', 'resources'].concat(EXT.tabs);
   function go(t) { TAB = tabs.includes(t) ? t : 'today'; try { history.replaceState(null, '', location.pathname + location.search + '#' + TAB); } catch (e) { } render(); window.scrollTo(0, 0); }
   window.addEventListener('hashchange', () => { const t = location.hash.replace('#', ''); if (t !== TAB && tabs.includes(t)) { TAB = t; render(); } });
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
@@ -142,8 +143,10 @@
   function render() {
     $$('.tabbar button, .toptabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
     const v = $('#view');
-    v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach, learn: viewLearn, review: viewReview, resources: viewResources }[TAB])();
-    bind[TAB] && bind[TAB]();
+    let html = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach, learn: viewLearn, review: viewReview, resources: viewResources }[TAB] || EXT.views[TAB] || viewToday)();
+    if (TAB === 'today' && EXT.todayCard) { const i = html.indexOf('</section>') + 10; html = html.slice(0, i) + EXT.todayCard() + html.slice(i); }
+    v.innerHTML = html;
+    bind[TAB] ? bind[TAB]() : EXT.binds[TAB] && EXT.binds[TAB]();
     $('#syncDot').className = 'syncdot ' + Sync.status;
   }
 
@@ -245,7 +248,9 @@
     const qs = (L.QUOTES || []).map(q => { const t = L.TEXTS.find(x => x.id === q.id); return { k: 'history', q: '“' + q.q + '”', a: t.author + ', ' + t.title + ' (' + t.era + '). ' + q.why, lib: q.id, li: q.i }; });
     const out = []; let qi = 0; C.FEED.forEach((c, i) => { out.push(c); if (i % 3 === 2 && qi < qs.length) out.push(qs[qi++]); }); return (FPOOL = out.concat(qs.slice(qi)));
   }
-  function viewFeed() { const h = viewFeedCards(), i = h.indexOf('</section>') + 10; return h.slice(0, i) + Story.shelf() + h.slice(i); }
+  function viewFeed() { let h = viewFeedCards(); const i = h.indexOf('</section>') + 10; const lv = EXT.feedCard && EXT.feedCard(LS.get('vikram_feed_n', 0));
+    if (lv) { feedPuz = null; h = h.slice(0, i).replace(/<h1>.*?<\/h1>/, '<h1>' + lv.h + '</h1>') + lv.html + '<div class="row-between"><button class="btn ghost" data-act="feedprev">← Back</button><button class="btn" data-act="feednext">Next card →</button></div>'; }
+    const j = h.indexOf('</section>') + 10; return h.slice(0, j) + Story.shelf() + h.slice(j).replace('Cards grow every batch: original history texts, French, aptitude, geopolitics.', 'This feed never ends: live cards from Wikipedia, the Gita, French and new words are mixed in.'); }
   function viewFeedCards() {
     const ds = nowIST().date, dd = day(ds);
     const slot = feedMap()[feedIdx % feedMap().length];
@@ -339,9 +344,10 @@
   };
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, ds = nowIST().date;
+    if (EXT.acts[act]) return EXT.acts[act](a, e);
     if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); Story.open(Story.pick()); toast('Urge noticed. A story instead.'); }
     if (act === 's-open') Story.open(a.dataset.id);
-    if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : feedMap().length - 1)) % feedMap().length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
+    if (act === 'feednext' || act === 'feedprev') { feedGen = null; LS.set('vikram_feed_n', Math.max(0, LS.get('vikram_feed_n', 0) + (act === 'feednext' ? 1 : -1))); feedIdx = (feedIdx + (act === 'feednext' ? 1 : feedMap().length - 1)) % feedMap().length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
     if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; if (j === feedGen.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
     if (act === 'go') { if (a.dataset.k) LTAB = a.dataset.k; go(a.dataset.to); }
     if (['focus', 'pledge', 'pledge1', 'pledge-edit', 'r-wk', 'r-save', 'r-paid', 'r-copy', 'r-send', 'a-save'].includes(act)) Acct.act(act, a);
@@ -447,7 +453,7 @@
   const mins = w => Math.max(3, Math.round(w / 140));
   function viewLearn() {
     const sub = ['history', 'words', 'french', 'chess'].map(k => `<button class="chip ${LTAB === k ? 'on' : ''}" data-act="l-tab" data-k="${k}">${{ history: 'History', words: 'English words', french: 'Français', chess: 'Chess' }[k]}</button>`).join('');
-    return `<section class="hero small"><div class="eyebrow">Learn · the evening slot</div><h1>${{ history: 'History, from the originals', words: 'English vocabulary', french: 'French from zero', chess: 'Chess from zero' }[LTAB]}</h1><div class="meta">${Learn.pills()}</div></section><div class="chips">${sub}</div>${LTAB === 'words' ? Wd.tab() : Learn[LTAB]()}${resBlock({ history: 'hist', words: 'words', french: 'fr', chess: 'chess' }[LTAB])}`;
+    return `<section class="hero small"><div class="eyebrow">Learn · the evening slot</div><h1>${{ history: 'History, from the originals', words: 'English vocabulary', french: 'French from zero', chess: 'Chess from zero' }[LTAB]}</h1><div class="meta">${Learn.pills()}</div></section><div class="chips">${sub}</div>${LTAB === 'words' ? Wd.tab() : Learn[LTAB]()}${EXT.learnExtra ? EXT.learnExtra(LTAB) : ''}${resBlock({ history: 'hist', words: 'words', french: 'fr', chess: 'chess' }[LTAB])}`;
   }
   const Learn = {
     pills() {
@@ -850,7 +856,7 @@
   // ---- words (English vocabulary) ----
   const dictUrl = w => w[4] || 'https://www.merriam-webster.com/dictionary/' + encodeURIComponent(w[0].split(' / ')[0]);
   function speakEn(t) { try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/ \/ /g, ', ')); u.lang = 'en-IN'; const v = ss.getVoices().find(x => /^en-(IN|GB)/i.test(x.lang)) || ss.getVoices().find(x => /^en/i.test(x.lang)); if (v) u.voice = v; u.rate = 0.9; ss.speak(u); } catch (e) { toast('Audio not supported here'); } }
-  const allWords = () => VK_WORDS.SETS.flatMap(s => s.w);
+  const allWords = () => VK_WORDS.SETS.flatMap(s => s.w).concat(Object.keys((S.live && S.live.words) || {}).filter(k => S.live.words[k].v).map(k => [k, S.live.words[k].p || '', S.live.words[k].d || '', S.live.words[k].x || '']));
   const wordOfDay = ds => { const A = allWords(); return A[(diffDays('2026-12-01', ds) % A.length + A.length) % A.length]; };
   const Wd = {
     cards() { const out = []; VK_WORDS.SETS.forEach(s => { if (S.wd[s.id] && S.wd[s.id].done) s.w.forEach((w, i) => out.push({ id: 'wd-' + s.id + '-' + i, deck: 'words', f: w[0], b: w[2] + '  ·  "' + w[3] + '"' })); }); return out; },
@@ -953,7 +959,7 @@
         ${im ? `<a class="scred" href="${esc(im.page)}" target="_blank" rel="noopener">Image: ${esc(im.by)} · ${esc(im.lic)} · Wikimedia Commons</a>` : ''}
         <div class="sbody" id="sBody"><div class="smeta"><span class="sy">${esc(c.y || '')}</span>${c.pl ? `<span class="spl">${esc(c.pl)}</span>` : ''}<span class="stag t-${c.tag}" title="${esc(tg[1])}">${tg[0]}</span></div>
           <h2>${esc(c.t)}</h2>${c.x.split(/\n\n+/).map(t => `<p>${esc(t)}</p>`).join('')}
-          <div class="ssrc">${(c.w || []).map(w => `<a href="https://en.wikipedia.org/wiki/${w}" target="_blank" rel="noopener">${esc(decodeURIComponent(w).replace(/_/g, ' '))} ↗</a>`).join('')}</div></div>
+          <div class="ssrc">${(c.w || []).map(w => `<a href="https://en.wikipedia.org/wiki/${w}" target="_blank" rel="noopener" ${EXT.acts['x-open'] ? 'data-act="x-open" data-t="' + esc(decodeURIComponent(w)) + '"' : ''}>${esc(decodeURIComponent(w).replace(/_/g, ' '))} ›</a>`).join('')}</div></div>
         <div class="snav"><button id="sPrev" aria-label="Previous">‹</button><span class="small">scroll to read · tap right for next</span><button id="sNext" aria-label="Next">›</button></div></div>`;
       const o = $('#overlay'); o.innerHTML = html; o.classList.add('show', 'full', 'dark');
       const svg = o.querySelector('.svis svg'); this.animate(svg, c);
@@ -1152,7 +1158,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }
@@ -1193,6 +1199,8 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { Sync.now(); render(); } else if (Sync.cfg()) Sync.now(); });
   window.addEventListener('online', () => Sync.now());
   setInterval(() => Sync.now(), 180000);
+  EXT.kit = { $, $$, esc, S: () => S, save, day, nowIST, ts, toast, ov, ovClose, render, go, loadScript, LS, speak, speakEn, debounce, burst, tab: () => TAB };
+  (EXT.boot || []).forEach(f => { try { f(EXT.kit); } catch (e) { console.error(e); } });
   save(false); render(); fab(); Sync.now();
   window.VIKRAM = { parseCSV, Out, S: () => S, merge, score, streakInfo, activeItems, dayType, blocksFor, xp };
 })();

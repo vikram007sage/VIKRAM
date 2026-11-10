@@ -1,0 +1,1 @@
+VK_GITA_XLOAD(16,{"4": "Showing off, arrogance, self-importance, anger, harshness and ignorance: these are the marks of a destructive nature.", "21": "Three gates lead to self-destruction: lust, anger and greed. Give up all three."});

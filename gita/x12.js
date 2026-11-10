@@ -1,0 +1,1 @@
+VK_GITA_XLOAD(12,{"13": "The one I love hates nobody, is friendly and kind to all, has no 'mine' and no ego, and stays even in pain and pleasure.", "15": "The one who doesn't disturb the world and isn't disturbed by it, who is free from elation, envy, fear and worry, is dear to me."});

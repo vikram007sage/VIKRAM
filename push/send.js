@@ -65,8 +65,13 @@ function nudgesFor(S, ds) {
   if (new Date(ds + 'T00:00:00Z').getUTCDay() === 0) out.push({ at: '20:45', title: 'Weekly review', body: 'Five minutes: look at the week\'s numbers and send the report to your partner.', tag: 'smart-review', cond: () => !((S.reviews || {})[weekKey(ds)]) });
   out.push({ at: '19:50', title: 'Minimum day', body: 'Low score today. Do the 3-task minimum: 5 sun salutations, one math sprint, 2 pages. Never miss twice.', tag: 'smart-min', cond: () => score(S, ds) < 40 });
   if (S.comeback && S.comeback.active) out.push({ at: '05:10', title: 'Welcome back', body: 'Comeback mode: just 3 tasks today. Start with the first one.', tag: 'smart-cb' });
-  return out.filter(n => ds >= '2026-12-01');
+  const res = out.filter(n => ds >= '2026-12-01'); const g = gitaVerse(ds); if (g) res.push(g); return res;
 }
+// Gita verse of the day (same shuffle as js/gita.js), sent every morning from day one
+const GCH = [47, 72, 43, 42, 29, 47, 30, 28, 34, 42, 55, 20, 35, 27, 20, 24, 28, 78];
+function gitaVerse(ds) { try { const dn = Math.floor(Date.parse(ds + 'T00:00:00Z') / 86400000); let i = ((dn * 263 + 111) % 674) + 27, c = 1; for (const n of GCH) { if (i < n) break; i -= n; c++; }
+  const raw = require('fs').readFileSync(require('path').join(__dirname, '..', 'gita', 'c' + c + '.js'), 'utf8'); const V = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1)); const v = V[i];
+  return { at: '05:05', title: 'Gita ' + c + '.' + (i + 1), body: (v[4] || v[5]).slice(0, 300), tag: 'gita', url: './#gita' }; } catch (e) { return null; } }
 
 (async () => {
   const now = NOW ? new Date(NOW) : new Date(), n = ist(now);
@@ -102,7 +107,7 @@ function nudgesFor(S, ds) {
   webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC, VAPID_PRIVATE);
   const dead = [];
   for (const d of due) for (const [id, v] of subs) {
-    try { await webpush.sendNotification(v.sub, JSON.stringify({ title: d.title, body: d.body, tag: d.tag, url: './#today' }), { TTL: 1800, urgency: 'high' }); }
+    try { await webpush.sendNotification(v.sub, JSON.stringify({ title: d.title, body: d.body, tag: d.tag, url: d.url || './#today' }), { TTL: 1800, urgency: 'high' }); }
     catch (e) { if (e.statusCode === 404 || e.statusCode === 410) dead.push(id); else console.log('push error', e.statusCode || e.message); }
   }
   log.lastRun = now.toISOString(); log.sent = (log.sent || 0) + due.length * subs.length; log.dead = [...new Set([...(log.dead || []), ...dead])];
