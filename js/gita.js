@@ -27,12 +27,12 @@
     18: "The summary. Don't give up action; give up attachment to its fruit. Do your own duty, even imperfectly. Then the final word: let go of everything and take refuge in me; do not grieve. Arjuna picks up his bow: 'My doubts are gone.'"
   };
   const MOMENTS = { lazy: ['Lazy, putting it off', [[3, 8], [6, 5], [3, 19], [2, 47], [18, 48]]], anxious: ['Anxious about results', [[2, 48], [2, 14], [6, 35], [12, 15], [18, 66]]], angry: ['Angry', [[2, 62], [2, 63], [16, 21], [5, 23], [2, 56]]], afraid: ['Afraid to fail', [[2, 38], [2, 40], [6, 40], [2, 3], [18, 66]]], lost: ['Lost, confused', [[2, 7], [3, 35], [4, 34], [18, 63], [18, 73]]], distracted: ['Distracted', [[6, 26], [6, 35], [6, 6], [2, 67], [2, 58]]], grieving: ['Grieving', [[2, 11], [2, 13], [2, 20], [2, 22], [2, 27]]], proud: ['Proud, comparing', [[3, 27], [16, 4], [2, 71], [18, 26], [12, 13]]] };
-  const XCH = [2,3,4,5,6,12,16,18]; // chapters that have gita/x<N>.js ("in plain words")
+  const XCH = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]; // chapters that have gita/x<N>.js ("in plain words")
   const DATA = {}, WAIT = {}, XP = {};
   window.VK_GITA_LOAD = (n, d) => { DATA[n] = d; (WAIT[n] || []).forEach(f => f(true)); delete WAIT[n]; };
   window.VK_GITA_XLOAD = (n, d) => { XP[n] = d; };
-  function script(src, bad) { const s = document.createElement('script'); s.src = src; s.onerror = () => { s.remove(); bad && bad(); }; document.head.appendChild(s); }
-  function load(n, cb) { if (DATA[n]) return cb(true); if (WAIT[n]) return WAIT[n].push(cb); WAIT[n] = [cb]; if (XCH.includes(n) && !XP[n]) script('gita/x' + n + '.js'); script('gita/c' + n + '.js', () => { (WAIT[n] || []).forEach(f => f(false)); delete WAIT[n]; }); }
+  function script(src, bad, ok) { const s = document.createElement('script'); s.src = src; s.onload = () => ok && ok(); s.onerror = () => { s.remove(); bad && bad(); }; document.head.appendChild(s); }
+  function load(n, cb) { if (DATA[n]) return cb(true); if (WAIT[n]) return WAIT[n].push(cb); WAIT[n] = [cb]; const main = () => script('gita/c' + n + '.js', () => { (WAIT[n] || []).forEach(f => f(false)); delete WAIT[n]; }); if (XCH.includes(n) && !XP[n]) script('gita/x' + n + '.js', main, main); else main(); }
   function plain(c, v) { const x = XP[c]; if (!x) return ''; if (x[v]) return x[v]; for (const k in x) { const m = k.split('-'); if (m.length === 2 && v >= +m[0] && v <= +m[1]) return x[k]; } return ''; }
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   // verse of the day: a fixed shuffle of every verse after the roll-call in 1.1–1.27, so the full Gita comes round in 674 days
@@ -60,7 +60,7 @@
     ${saved.length ? `<div class="card"><div class="row-between"><div class="eyebrow">Verses you kept</div><button class="btn sm" data-act="g-saved">Swipe through</button></div><div class="chips">${saved.slice(0, 40).map(k => { const r = k.split('.'); return `<button class="chip" data-act="g-open" data-c="${r[0]}" data-v="${r[1]}" data-one="1">${k}</button>`; }).join('')}</div></div>` : ''}
     ${notes.length ? `<div class="card"><div class="eyebrow">Your reflections</div>${notes.slice(0, 8).map(k => { const r = k.split('.'); return `<button class="gnote" data-act="g-open" data-c="${r[0]}" data-v="${r[1]}" data-one="1"><b>${k}</b> ${esc(g.notes[k].t)}</button>`; }).join('')}${notes.length > 8 ? `<p class="muted small">${notes.length - 8} more inside the verses.</p>` : ''}</div>` : ''}
     ${X.gitaExtra ? X.gitaExtra() : ''}
-    <p class="muted small center">Translation: Shri Purohit Swami (1935). Second translation and commentary: Swami Sivananda. "In plain words" is VIKRAM's explanation, not a translation. Text data from the open gita/gita project. Full text works offline once a chapter has been opened. Opening photos: Wikimedia Commons, credited on each screen.</p>`;
+    <p class="muted small center">Translation: Shri Purohit Swami (1935). Second translation and commentary: Swami Sivananda. "In plain words" is VIKRAM's own explanation of every verse (some cover a group of verses), not a translation. Text data from the open gita/gita project. Full text works offline once a chapter has been opened. Opening photos: Wikimedia Commons, credited on each screen.</p>`;
   };
   X.binds.gita = function () { if (!LSg('vikram_votd') || LSg('vikram_votd').ds !== K.nowIST().date) votd(o => { if (o && K.tab() === 'gita') K.render(); }); };
   X.todayCard = function () { const v = LSg('vikram_votd'); if (!v || !K || v.ds !== K.nowIST().date) return ''; return `<button class="card gtoday" data-act="g-open" data-c="${v.c}" data-v="${v.v}" data-one="1"><div class="eyebrow">Gita · ${v.c}.${v.v}</div><p>${esc(v.t)}</p></button>`; };

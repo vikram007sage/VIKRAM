@@ -306,7 +306,7 @@
     const ds = nowIST().date, dt = dayType(ds);
     return `<section class="hero small"><div class="eyebrow">Settings · v${CFG.version}</div><h1>Control room</h1></section>
     <button class="card nextcard gcont" data-act="go-seasons"><span><b>Season: ${esc(C.seasonAt(ds).n)}</b><small>Change your phase of life, habits and goals</small></span><span class="go">▶</span></button>
-    <div class="row" style="margin:10px 0"><button class="btn sm" data-act="go-tab" data-k="write">✎ Writing desk</button><button class="btn sm ghost" data-act="go-search">⌕ Search everything</button></div>
+    <div class="row" style="margin:10px 0"><button class="btn sm" data-act="go-tab" data-k="write">✎ Writing desk</button><button class="btn sm ghost" data-act="go-search">⌕ Search everything</button><button class="btn sm ghost" data-act="go-tab" data-k="year">Year in VIKRAM</button></div>
     <div class="card"><h3>Sync (phone ⇄ laptop)</h3><p class="small muted">Your data syncs through a <b>private</b> GitHub repo using a token that stays on this device. Status: <b>${Sync.status}</b>${Sync.last ? ' · last ' + new Date(Sync.last).toLocaleTimeString('en-IN') : ''} ${Sync.err ? '· ' + esc(Sync.err) : ''}</p>
       <div class="form"><input id="sOwner" placeholder="GitHub username" value="${esc(cfg.owner || '')}"><input id="sRepo" placeholder="data repo (e.g. vikram-data)" value="${esc(cfg.repo || 'vikram-data')}"><input id="sToken" type="password" placeholder="fine-grained token (contents: read/write)" value="${esc(cfg.token || '')}"></div>
       <div class="row"><button class="btn" data-act="syncsave">Save & sync now</button><button class="btn ghost" data-act="syncoff">Disconnect</button></div></div>

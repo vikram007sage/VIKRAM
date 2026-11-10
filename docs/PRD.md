@@ -82,6 +82,7 @@ Primary user: me. Insights from 4 weeks of self-observation:
 - **v1.8 (shipped):** Bhagavad Gita section (all 701 verses, Sanskrit + transliteration + two translations + commentary, swipe to keep, verse of the day, verses by mood, chapter quizzes, reflections); opening scene with public-domain Krishna paintings; live layer that never runs out (Wikipedia explorer and on-this-day, Tatoeba French sentences, new English words from Datamuse, Lichess daily link, endless feed).
 - **v1.9 (shipped):** Seasons (placement prep → job + gym → travel → UPSC/MBA; dated plan, own schedules and habits per season, hide habits, add your own habits and goals); modern opening scene (photos of deities, cars, bikes and destinations with a bold line and the day's verse).
 - **v1.10 (shipped):** weekly email report to yourself (rule-based analysis, every Monday); writing desk; wisdom shelf (Dhammapada, Meditations); search across everything; world news cards; home-screen shortcuts.
+- **v1.11 (shipped):** "In plain words" explanations for all 701 Gita verses; Year in VIKRAM; select a word to define it and add it to your quizzes.
 - **v2.0+:** remaining notes modules (S2 cases, S3 story bank, B1 banking, D1 SQL, S4 CV); then a version anyone can set up.
 
 ## 9. What I'll measure and write up (fill in after 4 weeks)
