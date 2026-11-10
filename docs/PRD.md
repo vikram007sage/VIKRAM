@@ -52,7 +52,7 @@ Primary user: me. Insights from 4 weeks of self-observation:
 | Life | Why screen + life plan, habit heatmap, writing pad, reading tracker | Should |
 | Sync | Private GitHub repo as the data store; per-record newest-wins merge | Must |
 | Notifications | Web Push from a scheduled GitHub Action; calendar (.ics) alarms for exact times; in-app reminders | Must |
-| Later | History reader, French + chess from zero, weekly review | Next batches |
+| Later | Weekly review with charts, remaining notes modules | Next batches |
 
 ## 6. Key decisions and trade-offs
 1. **PWA over a native app.** One codebase for Android, iPhone and laptop, installable, offline via service worker. Trade-off: background notifications need a server, so push is sent from outside the app.
@@ -75,7 +75,8 @@ Primary user: me. Insights from 4 weeks of self-observation:
 - **v1 (Nov 2026):** core loop, sync, notifications, roadmap, Feed seed, math sprint.
 - **v1.1–1.2 (shipped):** practice engine: generated aptitude, probability and DI sets, mocks, spaced-repetition flashcards.
 - **v1.3 (shipped):** outreach CRM: 130-company target map across six lanes, CSV import of contacts, email drafter that requires a personal hook, automatic follow-ups on day 4 and 10, daily quota on Today.
-- **v1.4+:** history reader with public-domain originals, French and chess from zero, weekly review screen with charts.
+- **v1.4 (shipped):** Learn: a 45-reading history library extracted from 15 public-domain originals (Megasthenes to Tagore, Thucydides to Madison) with context and questions; French A1 in 20 units with phone text-to-speech and quizzes that feed the flashcards; chess from zero in 12 lessons with 246 Lichess puzzles checked by script; Feed now mixes in quotes, French and chess puzzles.
+- **v1.5+:** weekly review screen with charts; remaining notes modules.
 
 ## 9. What I'll measure and write up (fill in after 4 weeks)
 - North-star trend by week:

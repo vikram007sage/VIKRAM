@@ -4,3 +4,4 @@ _PRIVATE*/
 *.csv
 backup*.json
 vikram-backup-*.json
+__pycache__/

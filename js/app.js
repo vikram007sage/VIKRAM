@@ -34,7 +34,7 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState'].forEach(k => S[k] = S[k] || {});
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess'].forEach(k => S[k] = S[k] || {});
   S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
   function save(sync = true) { if (SIM && !qs.get('test')) return; LS.set(KEY, S); if (sync) Sync.schedule(); }
@@ -98,6 +98,7 @@
     x += S.math.reduce((a, m) => a + Math.round((m.score || 0) / 2), 0);
     x += S.practice.reduce((a, p) => a + (p.sc || 0) * 8, 0);
     x += S.sent.length * 12;
+    x += Object.values(S.lib).filter(r => r.v).length * 30 + Object.values(S.fr).filter(r => r.done).length * 40 + Object.values((S.chess && S.chess.puz) || {}).filter(r => r.ok).length * 5;
     x += Object.values(S.srs).reduce((a, c) => a + (c.reps || 0) * 2, 0);
     Object.values(S.writing).forEach(w => x += Math.min(40, Math.round(((w.text || '').split(/\s+/).filter(Boolean).length) / 5)));
     let lvl = C.LEVELS[0], next = null;
@@ -132,7 +133,7 @@
 
   // ================= UI shell =================
   let TAB = location.hash.replace('#', '') || 'today';
-  const tabs = ['today', 'prep', 'feed', 'life', 'more', 'outreach'];
+  const tabs = ['today', 'prep', 'feed', 'life', 'more', 'outreach', 'learn'];
   function go(t) { TAB = tabs.includes(t) ? t : 'today'; try { history.replaceState(null, '', location.pathname + location.search + '#' + TAB); } catch (e) { } render(); window.scrollTo(0, 0); }
   window.addEventListener('hashchange', () => { const t = location.hash.replace('#', ''); if (t !== TAB && tabs.includes(t)) { TAB = t; render(); } });
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
@@ -140,7 +141,7 @@
   function render() {
     $$('.tabbar button, .toptabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
     const v = $('#view');
-    v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach }[TAB])();
+    v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach, learn: viewLearn }[TAB])();
     bind[TAB] && bind[TAB]();
     $('#syncDot').className = 'syncdot ' + Sync.status;
   }
@@ -174,6 +175,7 @@
     <h3 class="h">Placement tasks</h3>
     <div class="card list">${tasks.length ? tasks.map(t => taskRow(t, ds)).join('') : '<p class="muted">Nothing due in the next 3 days. Do a timed set or a math sprint.</p>'}</div>
     ${Out.windowOpen(ds) ? `<div class="drills"><button class="btn" data-act="go" data-to="outreach">Outreach · ${Out.sentOn(ds)}/${VK_OUTREACH.QUOTA} sent · ${Out.due(ds).length} follow-up${Out.due(ds).length === 1 ? '' : 's'} due</button></div>` : ''}
+    ${Learn.today(ds)}
     <div class="drills"><button class="btn" data-act="cards">Flashcards · ${Cards.due(ds).length} due</button><button class="btn ghost" data-act="quiz" data-mode="quick">Quick 5</button><button class="btn ghost" data-act="mathgo">Math sprint</button></div>
     <h3 class="h">Timeline</h3>
     <div class="timeline">${blocks.map(b => { const isCur = cur && cur.s === b.s; const past = !isCur && toMin(b.e) <= n.mins && toMin(b.e) > toMin(b.s); return `<div class="blk k-${b.k} ${isCur ? 'cur' : ''} ${past ? 'past' : ''}"><span class="tm">${b.s}</span><span class="bt">${esc(b.t)}</span></div>`; }).join('')}</div>
@@ -211,12 +213,12 @@
     const P = VK_PRACTICE, last = S.practice.slice(-5).reverse();
     const topic = {}; S.practice.forEach(p => Object.entries(p.topics || {}).forEach(([t, [c, n]]) => { topic[t] = topic[t] || [0, 0]; topic[t][0] += c; topic[t][1] += n; }));
     const weak = Object.entries(topic).filter(([, v]) => v[1] >= 3).map(([t, v]) => [t, v[0] / v[1]]).sort((a, b) => a[1] - b[1]).slice(0, 3);
-    const decks = {}; VK_CARDS.forEach(c => decks[c.deck] = (decks[c.deck] || 0) + 1);
+    const decks = {}; Cards.pool().forEach(c => decks[c.deck] = (decks[c.deck] || 0) + 1);
     return `<div class="card"><h3>Practice</h3><p class="small muted">Fresh questions every time; every answer is computed. Results feed your weak-topic list.</p>
       <div class="modes">${Object.entries(P.MODES).map(([k, m]) => `<button class="mode" data-act="quiz" data-mode="${k}"><b>${esc(m.title)}</b><small>${m.n} Qs · ${m.secs / 60} min</small></button>`).join('')}</div>
       ${weak.length ? `<p class="small"><b>Weakest topics:</b> ${weak.map(([t, a]) => `${esc(t)} ${Math.round(a * 100)}%`).join(' · ')}</p>` : ''}
       ${last.length ? `<div class="small muted">Recent: ${last.map(p => `${esc(P.MODES[p.mode] ? P.MODES[p.mode].title : p.mode)} ${p.sc}/${p.n}`).join(' · ')}</div>` : ''}</div>
-    <div class="card"><div class="row-between"><div><h3>Flashcards</h3><small class="muted">${VK_CARDS.length} cards · ${Cards.due(ds).length} due today · decks: ${Object.entries(decks).map(([d, n]) => d + ' ' + n).join(', ')}</small></div><button class="btn" data-act="cards">Review</button></div></div>`;
+    <div class="card"><div class="row-between"><div><h3>Flashcards</h3><small class="muted">${Cards.pool().length} cards · ${Cards.due(ds).length} due today · decks: ${Object.entries(decks).map(([d, n]) => d + ' ' + n).join(', ')}</small></div><button class="btn" data-act="cards">Review</button></div></div>`;
   }
   function spark(arr) {
     if (arr.length < 2) return '<p class="muted small">Your scores will chart here.</p>';
@@ -226,17 +228,32 @@
 
   // ---------- FEED ----------
   let feedIdx = LS.get('vikram_feed_idx', Math.floor(Math.random() * C.FEED.length));
-  let feedGen = null;
+  let feedGen = null, feedPuz = null, FPOOL = null, FMAP = null;
+  function feedMap() { if (FMAP) return FMAP; const n = feedPool().length, out = []; let st = 0; for (let i = 0; st < n; i++) { const k = i % 4 === 3 ? 'q' : i % 9 === 5 ? 'c' : i % 6 === 1 ? 'f' : null; out.push(k || st++); } return (FMAP = out); }
+  function feedPool() {
+    if (FPOOL) return FPOOL;
+    const L = typeof VK_LIBRARY !== 'undefined' ? VK_LIBRARY : { QUOTES: [], TEXTS: [] };
+    const qs = (L.QUOTES || []).map(q => { const t = L.TEXTS.find(x => x.id === q.id); return { k: 'history', q: '“' + q.q + '”', a: t.author + ', ' + t.title + ' (' + t.era + '). ' + q.why, lib: q.id, li: q.i }; });
+    const out = []; let qi = 0; C.FEED.forEach((c, i) => { out.push(c); if (i % 3 === 2 && qi < qs.length) out.push(qs[qi++]); }); return (FPOOL = out.concat(qs.slice(qi)));
+  }
   function viewFeed() {
     const ds = nowIST().date, dd = day(ds);
-    if (feedIdx % 4 === 3 && typeof VK_PRACTICE !== 'undefined') { const g = feedGen || (feedGen = VK_PRACTICE.one());
+    const slot = feedMap()[feedIdx % feedMap().length];
+    if (slot === 'q' && typeof VK_PRACTICE !== 'undefined') { const g = feedGen || (feedGen = VK_PRACTICE.one());
       return `<section class="hero small"><div class="eyebrow">Feed · instead of Instagram</div><h1>Solve this one.</h1><div class="meta"><span class="pill"><span class="dot"></span>${(dd.urges && dd.urges.n) || 0} urges beaten today</span><span class="pill">${(dd.cards && dd.cards.n) || 0} cards read</span></div></section>
       <div class="feedcard k-apt"><div class="eyebrow">Solve it · ${esc(g.t)}</div>${g.ctx || ''}<h2>${esc(g.q)}</h2><div class="opts">${g.opts.map((o, i) => `<button class="opt" data-act="feedopt" data-i="${i}">${esc(o)}</button>`).join('')}</div><div class="ans hide" id="ans">${esc(g.exp)}</div></div>
       <div class="row-between"><button class="btn ghost" data-act="feedprev">← Back</button><button class="btn" data-act="feednext">Next card →</button></div>`; }
-    const c = C.FEED[feedIdx % C.FEED.length];
-    const label = { apt: 'Solve it', history: 'History', geo: 'Geopolitics', french: 'Français', biz: 'Business', mind: 'Mind' }[c.k];
+    const hero = t => `<section class="hero small"><div class="eyebrow">Feed · instead of Instagram</div><h1>${t}</h1><div class="meta"><span class="pill"><span class="dot"></span>${(dd.urges && dd.urges.n) || 0} urges beaten today</span><span class="pill">${(dd.cards && dd.cards.n) || 0} cards read</span></div></section>`;
+    const nav = `<div class="row-between"><button class="btn ghost" data-act="feedprev">← Back</button><button class="btn" data-act="feednext">Next card →</button></div>`;
+    if (slot === 'c' && typeof VK_PUZZLES !== 'undefined') { const P = VK_PUZZLES.mixed, puz = S.chess.puz || {}; const open = P.filter(p => !puz[p.id]); const p = (open.length ? open : P)[Math.floor(feedIdx / 9) % (open.length || P.length)]; feedPuz = p;
+      return hero('Find the move.') + `<div class="feedcard k-chess"><div class="eyebrow">Chess puzzle · rated ${p.r}</div><p id="kMsg" class="kmsg"></p><div id="feedBoard"></div><div class="row"><button class="btn sm ghost" id="kH">Hint</button><button class="btn sm ghost" id="kS">Solution</button></div></div>` + nav; }
+    feedPuz = null;
+    if (slot === 'f' && typeof VK_FRENCH !== 'undefined') { const all = VK_FRENCH.UNITS.flatMap(u => u.w); const w = all[(feedIdx * 7) % all.length];
+      return hero('Un mot, s\'il vous plaît.') + `<div class="feedcard k-french"><div class="eyebrow">Français</div><h2>${esc(w[0])} <button class="btn sm ghost" data-act="l-say" data-t="${esc(w[0])}">🔊</button></h2><div class="ans" id="ans">${esc(w[1])} · <span class="muted">${esc(w[2])}</span></div></div>` + nav; }
+    const c = feedPool()[typeof slot === 'number' ? slot : feedIdx % feedPool().length];
+    const label = c.lib ? 'From the originals' : { apt: 'Solve it', history: 'History', geo: 'Geopolitics', french: 'Français', biz: 'Business', mind: 'Mind' }[c.k];
     return `<section class="hero small"><div class="eyebrow">Feed · instead of Instagram</div><h1>One card. Then another.</h1><div class="meta"><span class="pill"><span class="dot"></span>${(dd.urges && dd.urges.n) || 0} urges beaten today</span><span class="pill">${(dd.cards && dd.cards.n) || 0} cards read</span></div></section>
-    <div class="feedcard k-${c.k}"><div class="eyebrow">${label}</div><h2>${esc(c.q)}</h2><div class="ans ${c.k === 'apt' ? 'hide' : ''}" id="ans">${esc(c.a)}</div>${c.k === 'apt' ? '<button class="btn sm" data-act="reveal">Reveal answer</button>' : ''}</div>
+    <div class="feedcard k-${c.k}"><div class="eyebrow">${label}</div><h2 class="${c.lib ? 'quote' : ''}">${esc(c.q)}</h2><div class="ans ${c.k === 'apt' ? 'hide' : ''}" id="ans">${esc(c.a)}</div>${c.k === 'apt' ? '<button class="btn sm" data-act="reveal">Reveal answer</button>' : ''}${c.lib ? `<button class="btn sm ghost" data-act="l-read" data-id="${c.lib}" data-i="${c.li}">Read the passage</button>` : ''}</div>
     <div class="row-between"><button class="btn ghost" data-act="feedprev">← Back</button><button class="btn" data-act="feednext">Next card →</button></div>
     <p class="muted small center">Cards grow every batch: original history texts, French, aptitude, geopolitics.</p>`;
   }
@@ -248,6 +265,7 @@
     const hs = C.HABITS.filter(h => h.start <= (ds < '2026-12-01' ? '2026-12-01' : ds));
     const w = (S.writing[ds] && S.writing[ds].text) || '', wc = w.split(/\s+/).filter(Boolean).length;
     return `<section class="hero small"><div class="eyebrow">Life · the reason for all of this</div><h1>Why</h1><p>${esc(p.why || 'Write your why in More → Profile.')}</p></section>
+    <div class="card"><div class="row-between"><div><h3>Learn</h3><small class="muted">History from the originals · French from zero · chess from zero</small></div><button class="btn" data-act="go" data-to="learn">Open</button></div></div>
     <div class="card"><h3>The plan</h3><div class="plan">${(p.plan || []).map(x => `<div><span class="tm">${esc(x.when)}</span><span>${esc(x.t)}</span></div>`).join('')}</div></div>
     <h3 class="h">Habits · last 5 weeks</h3>
     <div class="card heat">${hs.map(h => `<div class="hrow"><span class="hl">${esc(h.t)}</span><span class="cells">${days.map(d => `<i class="${S.days[d] && isOn(S.days[d], h.id) ? 'on' : (d < h.start ? 'na' : '')}" title="${d}"></i>`).join('')}</span></div>`).join('')}</div>
@@ -287,7 +305,7 @@
       const m = $('[data-act=minimum]'); if (m) m.onchange = () => { day(ds).minimum = { v: m.checked, ts: ts() }; save(); render(); };
     },
     prep() { const ds = nowIST().date; $$('[data-task]').forEach(cb => cb.onchange = () => { S.tasks[cb.dataset.task] = { done: cb.checked, ts: ts() }; save(); render(); }); },
-    feed() { },
+    feed() { if (feedPuz && $('#feedBoard')) { const p = feedPuz; Board.puzzle($('#feedBoard'), p, ok => { S.chess.puz = S.chess.puz || {}; S.chess.puz[p.id] = { ok, d: nowIST().date, ts: ts() }; save(); }); $('#kH').onclick = () => Board.hint(); $('#kS').onclick = () => Board.solve(); } },
     life() {
       const ds = nowIST().date, w = $('#writing');
       if (w) w.oninput = debounce(() => { S.writing[ds] = { text: w.value, ts: ts() }; save(); $('#wc').textContent = w.value.split(/\s+/).filter(Boolean).length + ' words'; }, 500);
@@ -307,10 +325,11 @@
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, ds = nowIST().date;
     if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); toast('Urge noticed. One card instead.'); }
-    if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : C.FEED.length - 1)) % C.FEED.length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
+    if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : feedMap().length - 1)) % feedMap().length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
     if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; if (j === feedGen.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
     if (act === 'go') go(a.dataset.to);
     if (act && act.startsWith('o-')) Out.act(act, a);
+    if (act && act.startsWith('l-')) Learn.act(act, a);
     if (act === 'quiz') Quiz.open(a.dataset.mode);
     if (act === 'cards') Cards.open();
     if (act === 'reveal') { $('#ans').classList.remove('hide'); a.remove(); }
@@ -374,7 +393,8 @@
 
   // ================= spaced-repetition flashcards =================
   const Cards = {
-    due(ds) { const seen = VK_CARDS.filter(c => S.srs[c.id]); const due = seen.filter(c => S.srs[c.id].due <= ds); const fresh = VK_CARDS.filter(c => !S.srs[c.id]);
+    pool() { return VK_CARDS.concat(Fr.cards()); },
+    due(ds) { const P = this.pool(); const seen = P.filter(c => S.srs[c.id]); const due = seen.filter(c => S.srs[c.id].due <= ds); const fresh = P.filter(c => !S.srs[c.id]);
       const newToday = Object.values(S.srs).filter(r => r.first === ds).length; return due.concat(fresh.slice(0, Math.max(0, 15 - newToday))); },
     open() { const ds = nowIST().date; this.q = this.due(ds); this.n = 0; $('#overlay').classList.add('show'); this.show(false); },
     show(flip) { const c = this.q[0];
@@ -389,6 +409,219 @@
       if (g === 0) { r.ivl = 0; r.ease = Math.max(1.3, r.ease - 0.2); this.q.push(this.q.shift()); }
       else { r.ivl = r.ivl ? Math.round(r.ivl * r.ease * (g === 2 ? 1.3 : 1)) : (g === 2 ? 3 : 1); if (g === 2) r.ease += 0.15; this.q.shift(); }
       r.reps++; r.due = addDays(ds, r.ivl); r.ts = ts(); S.srs[c.id] = r; this.n++; save(); this.show(false); }
+  };
+
+  // ================= learn: history library, French, chess =================
+  let LTAB = 'history';
+  const LIBDATA = {}, LIBWAIT = {};
+  window.VK_LIB_LOAD = (id, d) => { LIBDATA[id] = d; (LIBWAIT[id] || []).forEach(f => f(true)); delete LIBWAIT[id]; };
+  function loadLib(id, cb) {
+    if (LIBDATA[id]) return cb(true);
+    if (LIBWAIT[id]) return LIBWAIT[id].push(cb);
+    LIBWAIT[id] = [cb]; const s = document.createElement('script'); s.src = 'library/' + id + '.js';
+    s.onerror = () => { (LIBWAIT[id] || []).forEach(f => f(false)); delete LIBWAIT[id]; s.remove(); };
+    document.head.appendChild(s);
+  }
+  const LIB = typeof VK_LIBRARY !== 'undefined' ? VK_LIBRARY : { SHELVES: [], TEXTS: [] };
+  const libPath = () => { const out = []; LIB.TEXTS.forEach(t => t.r.forEach((r, i) => out.push([t, i]))); return out; };
+  const libDone = (id, i) => !!(S.lib[id + ':' + i] && S.lib[id + ':' + i].v);
+  const mins = w => Math.max(3, Math.round(w / 140));
+  function viewLearn() {
+    const sub = ['history', 'french', 'chess'].map(k => `<button class="chip ${LTAB === k ? 'on' : ''}" data-act="l-tab" data-k="${k}">${{ history: 'History', french: 'Français', chess: 'Chess' }[k]}</button>`).join('');
+    return `<section class="hero small"><div class="eyebrow">Learn · the evening slot</div><h1>${{ history: 'History, from the originals', french: 'French from zero', chess: 'Chess from zero' }[LTAB]}</h1><div class="meta">${Learn.pills()}</div></section><div class="chips">${sub}</div>${Learn[LTAB]()}`;
+  }
+  const Learn = {
+    pills() {
+      const P = libPath(), done = P.filter(([t, i]) => libDone(t.id, i)).length;
+      const fr = VK_FRENCH.UNITS.filter(u => S.fr[u.id] && S.fr[u.id].done).length;
+      const ch = VK_CHESS.LESSONS.filter(l => S.chess.les && S.chess.les[l.id] && S.chess.les[l.id].v).length;
+      const pz = Object.values(S.chess.puz || {}).filter(x => x.ok).length;
+      return `<span class="pill"><span class="dot"></span>${done}/${P.length} readings</span><span class="pill">${fr}/${VK_FRENCH.UNITS.length} French units</span><span class="pill">${ch}/${VK_CHESS.LESSONS.length} chess lessons · ${pz} puzzles solved</span>`;
+    },
+    next() { return libPath().find(([t, i]) => !libDone(t.id, i)); },
+    today(ds) {
+      const wd = new Date(ds + 'T00:00:00Z').getUTCDay(), b = [], d = day(ds);
+      const hs = (C.HABITS.find(h => h.id === 'history') || {}).start || '2027-01-01';
+      if (ds >= hs && this.next()) b.push(`<button class="btn ${isOn(d, 'history') ? 'ghost' : ''}" data-act="l-today" data-k="history">History 15 min${isOn(d, 'history') ? ' ✓' : ''}</button>`);
+      if (ds >= VK_FRENCH.START && [1, 3, 5].includes(wd)) b.push(`<button class="btn ghost" data-act="l-today" data-k="french">Français</button>`);
+      if (ds >= VK_CHESS.START && [2, 4, 6].includes(wd)) b.push(`<button class="btn ghost" data-act="l-today" data-k="chess">Chess</button>`);
+      return b.length ? `<div class="drills">${b.join('')}</div>` : '';
+    },
+    history() {
+      const nx = this.next();
+      return `${nx ? `<div class="card nextcard"><div class="eyebrow">Continue · about ${mins(nx[0].r[nx[1]][1])} min</div><h3>${esc(nx[0].author)}: ${esc(nx[0].r[nx[1]][0])}</h3><small class="muted">${esc(nx[0].title)} · ${esc(nx[0].era)}</small><div class="row"><button class="btn" data-act="l-read" data-id="${nx[0].id}" data-i="${nx[1]}">Read now</button></div></div>` : '<div class="card"><h3>Library finished ✓</h3><p class="small muted">Re-read your favourites, or pick a full book from the Life → Books list.</p></div>'}
+        ${LIB.SHELVES.map(([k, name]) => `<h3 class="h">${esc(name)}</h3><div class="card list">${LIB.TEXTS.filter(t => t.shelf === k).map(t => `<details class="libt"><summary><b>${esc(t.author)}</b> · ${esc(t.title)} <small class="muted">${esc(t.era)} · ${t.r.filter((r, i) => libDone(t.id, i)).length}/${t.r.length}</small></summary><p class="small">${esc(t.intro)}</p>${t.r.map((r, i) => `<button class="rd ${libDone(t.id, i) ? 'done' : ''}" data-act="l-read" data-id="${t.id}" data-i="${i}"><span>${libDone(t.id, i) ? '✓' : i + 1}</span>${esc(r[0])} <small class="muted">${mins(r[1])} min</small></button>`).join('')}<p class="small muted">Translation: ${esc(t.tr)} · public domain · <a href="${esc(t.src)}" target="_blank" rel="noopener">source</a></p></details>`).join('')}</div>`).join('')}
+        <div class="row"><button class="btn ghost" data-act="l-dlall">Save all texts for offline</button></div>
+        <p class="small muted">Readings are extracts chosen for a 15-minute evening slot. Old translations use old spellings; read for the argument, not every name.</p>`;
+    },
+    french() {
+      const U = VK_FRENCH.UNITS, nx = U.find(u => !(S.fr[u.id] && S.fr[u.id].done));
+      return `${nx ? `<div class="card nextcard"><div class="eyebrow">Next unit · 15 min</div><h3>${esc(nx.t)}</h3><div class="row"><button class="btn" data-act="l-fr" data-id="${nx.id}">Start</button></div></div>` : '<div class="card"><h3>A1 course complete ✓</h3><p class="small muted">Keep the words alive with daily flashcards, and listen to a slow-news podcast in French.</p></div>'}
+        <div class="card list">${U.map((u, i) => { const st = S.fr[u.id]; return `<button class="rd ${st && st.done ? 'done' : ''}" data-act="l-fr" data-id="${u.id}"><span>${st && st.done ? '✓' : i + 1}</span>${esc(u.t)} <small class="muted">${u.w.length} phrases${st && st.best != null ? ' · best ' + st.best + '/8' : ''}</small></button>`; }).join('')}</div>
+        <p class="small muted">Tap 🔊 to hear each phrase (uses your phone's French voice). Passing a unit's quiz (6/8) adds its phrases to your daily flashcards.</p>`;
+    },
+    chess() {
+      const L = VK_CHESS.LESSONS, les = S.chess.les || {}, nx = L.find(l => !(les[l.id] && les[l.id].v));
+      const daily = Chess.daily(nowIST().date), solvedToday = daily.filter(p => S.chess.puz && S.chess.puz[p.id] && S.chess.puz[p.id].d === nowIST().date).length;
+      return `${nx ? `<div class="card nextcard"><div class="eyebrow">Next lesson</div><h3>${esc(nx.t)}</h3><div class="row"><button class="btn" data-act="l-chess" data-id="${nx.id}">Start</button></div></div>` : ''}
+        <div class="card"><div class="row-between"><div><h3>Daily puzzles</h3><small class="muted">${solvedToday}/${daily.length} done today · easy to harder</small></div><button class="btn" data-act="l-puz">Solve</button></div></div>
+        <div class="card list">${L.map((l, i) => `<button class="rd ${les[l.id] && les[l.id].v ? 'done' : ''}" data-act="l-chess" data-id="${l.id}"><span>${les[l.id] && les[l.id].v ? '✓' : i + 1}</span>${esc(l.t)}</button>`).join('')}</div>
+        <p class="small muted">Puzzles are real positions from the Lichess puzzle database (free, CC0). Play games for free at lichess.org.</p>`;
+    },
+    act(act, a) {
+      if (act === 'l-tab') { LTAB = a.dataset.k; render(); }
+      if (act === 'l-say') speak(a.dataset.t);
+      if (act === 'l-today') { const k = a.dataset.k;
+        if (k === 'history') { const nx = this.next(); if (nx) Reader.open(nx[0].id, nx[1]); }
+        if (k === 'french') { const u = VK_FRENCH.UNITS.find(x => !(S.fr[x.id] && S.fr[x.id].done)); if (u) Fr.open(u.id); else { LTAB = 'french'; go('learn'); } }
+        if (k === 'chess') { const l = VK_CHESS.LESSONS.find(x => !(S.chess.les && S.chess.les[x.id] && S.chess.les[x.id].v)); if (l) Chess.lesson(l.id); else Chess.run(Chess.daily(nowIST().date), 'Daily puzzles'); } }
+      if (act === 'l-read') Reader.open(a.dataset.id, +a.dataset.i);
+      if (act === 'l-fr') Fr.open(a.dataset.id);
+      if (act === 'l-chess') Chess.lesson(a.dataset.id);
+      if (act === 'l-puz') Chess.run(Chess.daily(nowIST().date), 'Daily puzzles');
+      if (act === 'l-dlall') { let n = 0; LIB.TEXTS.forEach(t => loadLib(t.id, ok => { n += ok ? 1 : 0; if (n === LIB.TEXTS.length) toast('All ' + n + ' texts saved for offline'); })); setTimeout(() => { if (n < LIB.TEXTS.length) toast(n + '/' + LIB.TEXTS.length + ' saved; try again online'); }, 8000); }
+    }
+  };
+  const ov = html => { const o = $('#overlay'); o.innerHTML = html; o.classList.add('show'); o.scrollTop = 0; return o; };
+  const ovClose = () => { $('#overlay').classList.remove('show'); $('#overlay').classList.remove('full'); try { speechSynthesis.cancel(); } catch (e) { } render(); };
+  const tickHabit = id => { const ds = nowIST().date; const d = day(ds); if (!isOn(d, id)) { d.items[id] = { v: true, ts: ts() }; } };
+  const Reader = {
+    open(id, i) {
+      const t = LIB.TEXTS.find(x => x.id === id); if (!t) return;
+      ov(`<div class="quizbox reader"><p class="muted">Opening ${esc(t.title)}…</p></div>`); $('#overlay').classList.add('full');
+      loadLib(id, ok => { if (!ok) { ov(`<div class="quizbox reader"><p>This text isn't saved on this device yet. Open it once while online (or use "Save all texts for offline").</p><button class="btn" id="rX">Close</button></div>`); $('#rX').onclick = ovClose; return; } this.show(t, i); });
+    },
+    show(t, i) {
+      const R = LIBDATA[t.id][i], key = t.id + ':' + i, rec = S.lib[key] || {}, fs = LS.get('vikram_fs', 18), first = !Object.keys(S.lib).some(k => k.startsWith(t.id + ':'));
+      const body = R.p.map(p => p.startsWith('## ') ? `<h4>${esc(p.slice(3))}</h4>` : `<p${t.verse ? ' class="verse"' : ''}>${esc(p)}</p>`).join('');
+      ov(`<div class="quizbox reader" style="--fs:${fs}px"><div class="rtop"><button class="btn sm ghost" id="rX">✕</button><span class="eyebrow">${esc(t.author)} · ${i + 1}/${t.r.length}</span><span><button class="btn sm ghost" id="rS">A−</button><button class="btn sm ghost" id="rL">A+</button></span></div>
+        <h2>${esc(R.t)}</h2><p class="small muted">${esc(t.title)} · ${esc(t.era)} · tr. ${esc(t.tr)} · about ${mins(t.r[i][1])} min</p>
+        <details class="card" ${first || i === 0 ? 'open' : ''}><summary><b>Context</b></summary><p class="small">${esc(t.intro)}</p></details>
+        <div class="rbody">${body}</div>
+        <div class="card"><h3>Think about</h3><ol class="small">${t.read_for.map(q => `<li>${esc(q)}</li>`).join('')}</ol><textarea id="rNote" rows="3" placeholder="One line worth remembering, in your own words">${esc(rec.note || '')}</textarea>
+        <div class="row"><button class="btn" id="rDone">${rec.v ? 'Save note' : 'Done ✓'}</button>${i + 1 < t.r.length ? '<button class="btn ghost" id="rNext">Next part →</button>' : ''}</div></div></div>`);
+      $('#rX').onclick = ovClose;
+      const setFs = d => { const v = Math.min(24, Math.max(14, fs + d)); LS.set('vikram_fs', v); this.show(t, i); };
+      $('#rS').onclick = () => setFs(-1); $('#rL').onclick = () => setFs(1);
+      const mark = () => { S.lib[key] = { v: true, d: nowIST().date, note: $('#rNote').value.trim(), ts: ts() }; tickHabit('history'); save(); };
+      $('#rDone').onclick = () => { const was = rec.v; mark(); toast(was ? 'Note saved' : 'Reading done · history ticked for today'); if (!was) ovClose(); };
+      if ($('#rNext')) $('#rNext').onclick = () => { mark(); this.show(t, i + 1); };
+    }
+  };
+  // ---- French ----
+  function speak(text) {
+    try { const ss = window.speechSynthesis; if (!ss) throw 0; ss.cancel(); const u = new SpeechSynthesisUtterance(text.replace(/ \/ /g, ', ')); u.lang = 'fr-FR'; u.rate = 0.85;
+      const v = ss.getVoices().find(x => /^fr/i.test(x.lang)); if (v) u.voice = v; else if (ss.getVoices().length) toast('No French voice found: add one in your phone\'s text-to-speech settings');
+      ss.speak(u); } catch (e) { toast('Audio not supported in this browser'); }
+  }
+  const Fr = {
+    cards() { const out = []; VK_FRENCH.UNITS.forEach(u => { if (S.fr[u.id] && S.fr[u.id].done) u.w.forEach((w, i) => out.push({ id: 'fr-' + u.id + '-' + i, deck: 'français', f: w[0], b: w[1] + '  ·  ' + w[2] })); }); return out; },
+    open(id) {
+      const u = VK_FRENCH.UNITS.find(x => x.id === id);
+      ov(`<div class="quizbox"><div class="row-between"><span class="eyebrow">Français · ${esc(u.t)}</span><button class="btn sm ghost" id="fX">✕</button></div>
+        <div class="memory small">${esc(u.tip)}</div>
+        <div class="list">${u.w.map((w, i) => `<div class="frw"><button class="btn sm ghost" data-say="${i}" aria-label="Listen">🔊</button><div><b>${esc(w[0])}</b><small>${esc(w[1])}</small><small class="muted">${esc(w[2])}</small></div></div>`).join('')}</div>
+        <p class="small muted">Say each one out loud twice. Cover the English and test yourself, then take the quiz.</p>
+        <div class="row"><button class="btn" id="fQ">Take the quiz (8 questions)</button><button class="btn ghost" id="fAll">🔊 Play all</button></div></div>`);
+      $('#fX').onclick = ovClose;
+      $$('[data-say]').forEach(b => b.onclick = () => speak(u.w[+b.dataset.say][0]));
+      $('#fAll').onclick = () => { let k = 0; const nxt = () => { if (k >= u.w.length) return; const t = u.w[k++][0]; try { const ss = speechSynthesis; const ut = new SpeechSynthesisUtterance(t); ut.lang = 'fr-FR'; ut.rate = 0.85; const v = ss.getVoices().find(x => /^fr/i.test(x.lang)); if (v) ut.voice = v; ut.onend = () => setTimeout(nxt, 700); ss.speak(ut); } catch (e) { } }; try { speechSynthesis.cancel(); } catch (e) { } nxt(); };
+      $('#fQ').onclick = () => this.quiz(u);
+    },
+    quiz(u) {
+      const idx = VK_FRENCH.UNITS.indexOf(u), near = VK_FRENCH.UNITS.slice(Math.max(0, idx - 2), idx + 1).flatMap(x => x.w);
+      const pick = [...u.w].sort(() => Math.random() - 0.5).slice(0, 8);
+      const qs = pick.map((w, k) => { const dir = k % 2; const pool = (u.w.length >= 4 ? u.w : near).filter(x => x !== w); const ds2 = [...pool].sort(() => Math.random() - 0.5).slice(0, 3);
+        const opts = [w, ...ds2].sort(() => Math.random() - 0.5); return { q: dir ? w[1] : w[0], say: dir ? null : w[0], opts: opts.map(o => dir ? o[0] : o[1]), a: opts.indexOf(w), dir }; });
+      let n = 0, sc = 0;
+      const show = () => {
+        if (n >= qs.length) { const st = Object.assign({}, S.fr[u.id] || {}), pass = sc >= 6; st.best = Math.max(st.best || 0, sc); if (pass && !st.done) { st.done = true; st.d = nowIST().date; } st.ts = ts(); S.fr[u.id] = st; if (pass) tickHabit('hobby'); save();
+          ov(`<div class="quizbox center"><h2 class="qq">${sc}/8 ${pass ? '✓' : ''}</h2><p>${pass ? 'Unit passed. Its phrases are now in your daily flashcards.' : 'Need 6/8 to pass. Listen once more and retry.'}</p><div class="row" style="justify-content:center"><button class="btn" id="fB">Back to unit</button><button class="btn ghost" id="fC">Close</button></div></div>`);
+          $('#fB').onclick = () => this.open(u.id); $('#fC').onclick = ovClose; return; }
+        const q = qs[n];
+        ov(`<div class="quizbox"><div class="row-between"><span class="eyebrow">Quiz · ${n + 1}/8 · ${sc} right</span><button class="btn sm ghost" id="fX">✕</button></div><p class="small muted">${q.dir ? 'Pick the French' : 'What does it mean?'}</p><h2 class="qq">${esc(q.q)} ${q.say ? '<button class="btn sm ghost" id="fS">🔊</button>' : ''}</h2>
+          <div class="opts">${q.opts.map((o, i) => `<button class="opt" data-o="${i}">${esc(o)}</button>`).join('')}</div></div>`);
+        $('#fX').onclick = ovClose; if (q.say) { $('#fS').onclick = () => speak(q.say); }
+        $$('[data-o]').forEach(b => b.onclick = () => { const i = +b.dataset.o; $$('[data-o]').forEach(x => x.disabled = true); b.classList.add(i === q.a ? 'right' : 'wrong'); $$('[data-o]')[q.a].classList.add('right'); if (i === q.a) sc++; if (q.dir) speak(q.opts[q.a]); setTimeout(() => { n++; show(); }, i === q.a ? 650 : 1400); });
+      };
+      show();
+    }
+  };
+  // ---- Chess ----
+  const GL = { k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟' };
+  const sqName = i => 'abcdefgh'[i % 8] + (Math.floor(i / 8) + 1), sqIdx = s => (s.charCodeAt(0) - 97) + (+s[1] - 1) * 8;
+  function fenParse(fen) { const [rows, side] = fen.split(' '); const b = Array(64).fill(null); rows.split('/').forEach((row, ri) => { let f = 0; for (const ch of row) { if (/\d/.test(ch)) f += +ch; else { b[(7 - ri) * 8 + f] = ch; f++; } } }); return { b, side }; }
+  function applyUci(pos, u) { const b = pos.b.slice(), f = sqIdx(u.slice(0, 2)), t = sqIdx(u.slice(2, 4)), pc = b[f], white = pc === pc.toUpperCase();
+    if (pc.toLowerCase() === 'k' && Math.abs((f % 8) - (t % 8)) === 2) { const rank = Math.floor(f / 8) * 8; if (t % 8 === 6) { b[rank + 5] = b[rank + 7]; b[rank + 7] = null; } else { b[rank + 3] = b[rank]; b[rank] = null; } }
+    if (pc.toLowerCase() === 'p' && (f % 8) !== (t % 8) && !b[t]) b[t + (white ? -8 : 8)] = null;
+    b[t] = u[4] ? (white ? u[4].toUpperCase() : u[4]) : pc; b[f] = null; return { b, side: white ? 'b' : 'w' }; }
+  const Chess = {
+    daily(ds) { const pool = VK_PUZZLES.mixed, puz = S.chess.puz || {}; const fresh = pool.filter(p => !puz[p.id] || puz[p.id].d === ds); return fresh.slice(0, 10); },
+    lesson(id) {
+      const L = VK_CHESS.LESSONS.find(x => x.id === id), done = S.chess.les && S.chess.les[id] && S.chess.les[id].v;
+      const P = L.p === 'coords' ? null : (L.p === 'mixed' ? Chess.daily(nowIST().date) : VK_PUZZLES[L.p] || []);
+      ov(`<div class="quizbox"><div class="row-between"><span class="eyebrow">Chess · lesson ${VK_CHESS.LESSONS.indexOf(L) + 1}</span><button class="btn sm ghost" id="kX">✕</button></div><h2>${esc(L.t)}</h2>
+        <div class="rbody small">${L.body.map(p => p.startsWith('## ') ? `<h4>${esc(p.slice(3))}</h4>` : `<p>${esc(p)}</p>`).join('')}</div>
+        <div class="row"><button class="btn" id="kGo">${P ? `Solve ${P.length} puzzles` : 'Square-naming drill (30 s)'}</button><button class="btn ghost" id="kDone">${done ? 'Done ✓' : 'Mark lesson done'}</button></div></div>`);
+      $('#kX').onclick = ovClose;
+      const mark = () => { S.chess.les = S.chess.les || {}; S.chess.les[id] = { v: true, d: nowIST().date, ts: ts() }; tickHabit('hobby'); save(); };
+      $('#kDone').onclick = () => { mark(); toast('Lesson done'); ovClose(); };
+      $('#kGo').onclick = () => P ? this.run(P, L.t, () => mark()) : this.coords(() => mark());
+    },
+    run(list, title, onFinish) {
+      let k = 0, solved = 0;
+      const next = () => {
+        if (k >= list.length) { if (onFinish) onFinish(); tickHabit('hobby'); save(); ov(`<div class="quizbox center"><h2 class="qq">${solved}/${list.length} solved first try</h2><p class="muted">Every miss is a pattern you'll recognise next time.</p><button class="btn" id="kC">Close</button></div>`); $('#kC').onclick = ovClose; return; }
+        const p = list[k];
+        ov(`<div class="quizbox chessbox"><div class="row-between"><span class="eyebrow">${esc(title)} · ${k + 1}/${list.length}</span><button class="btn sm ghost" id="kX">✕</button></div><p id="kMsg" class="kmsg">Watch the opponent's move…</p><div id="kB"></div>
+          <div class="row"><button class="btn sm ghost" id="kH">Hint</button><button class="btn sm ghost" id="kS">Show solution</button><button class="btn sm" id="kN" disabled>Next →</button></div><p class="small muted">Rated ${p.r} on Lichess${p.th.length ? ' · ' + p.th.slice(0, 3).join(', ') : ''}</p></div>`);
+        $('#kX').onclick = ovClose;
+        Board.puzzle($('#kB'), p, ok => { if (ok) solved++; S.chess.puz = S.chess.puz || {}; S.chess.puz[p.id] = { ok, d: nowIST().date, ts: ts() }; save(); $('#kN').disabled = false; });
+        $('#kN').onclick = () => { k++; next(); };
+        $('#kH').onclick = () => Board.hint(); $('#kS').onclick = () => Board.solve();
+      };
+      next();
+    },
+    coords(onFinish) {
+      ov(`<div class="quizbox chessbox"><div class="row-between"><span class="eyebrow">Square drill · 30 seconds</span><button class="btn sm ghost" id="kX">✕</button></div><h2 class="qq" id="cT">Ready?</h2><div id="kB"></div><div class="row"><button class="btn" id="cGo">Start</button><span class="small muted" id="cS"></span></div></div>`);
+      $('#kX').onclick = ovClose;
+      const best = (S.chess.best && S.chess.best.coords && S.chess.best.coords.v) || 0; $('#cS').textContent = 'Best: ' + best;
+      Board.draw($('#kB'), fenParse('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w'), 'w', null);
+      $('#cGo').onclick = () => { let sc = 0, target = Math.floor(Math.random() * 64), end = Date.now() + 30000; $('#cT').textContent = 'Tap ' + sqName(target);
+        const tm = setInterval(() => { const left = Math.ceil((end - Date.now()) / 1000); $('#cS').textContent = left + ' s · ' + sc + ' right'; if (left <= 0) { clearInterval(tm); Board.onTap = null; const nb = Math.max(best, sc); S.chess.best = S.chess.best || {}; S.chess.best.coords = { v: nb, ts: ts() }; save(); if (onFinish && sc >= 10) onFinish(); $('#cT').textContent = sc + ' squares' + (sc > best ? ' · new best!' : ''); $('#cGo').textContent = 'Again'; } }, 250);
+        Board.onTap = i => { if (i === target) { sc++; target = Math.floor(Math.random() * 64); $('#cT').textContent = 'Tap ' + sqName(target); } else if (navigator.vibrate) navigator.vibrate(40); }; };
+    }
+  };
+  const Board = {
+    onTap: null,
+    draw(el, pos, orient, hl, sel) {
+      this.el = el; const order = []; for (let r = 7; r >= 0; r--) for (let f = 0; f < 8; f++) order.push(r * 8 + f); if (orient === 'b') order.reverse();
+      el.innerHTML = `<div class="board">${order.map(i => { const pc = pos.b[i], light = ((i % 8) + Math.floor(i / 8)) % 2 === 1;
+        return `<div class="sq ${light ? 'l' : 'd'} ${hl && hl.includes(i) ? 'hl' : ''} ${sel === i ? 'sel' : ''}" data-sq="${i}">${pc ? `<span class="pc ${pc === pc.toUpperCase() ? 'pw' : 'pb'}">${GL[pc.toLowerCase()]}︎</span>` : ''}</div>`; }).join('')}</div>`;
+      el.querySelectorAll('.sq').forEach(s => s.onclick = () => this.onTap && this.onTap(+s.dataset.sq));
+    },
+    puzzle(el, p, done) {
+      const ms = p.m.split(' '); let pos = fenParse(p.fen), step = 0, sel = null, hl = null, clean = true, over = false;
+      const me = pos.side === 'w' ? 'b' : 'w', mine = pc => pc && (me === 'w' ? pc === pc.toUpperCase() : pc === pc.toLowerCase());
+      const draw = () => this.draw(el, pos, me, hl, sel);
+      const msg = t => { const m = $('#kMsg'); if (m) m.innerHTML = t; };
+      const play = u => { hl = [sqIdx(u.slice(0, 2)), sqIdx(u.slice(2, 4))]; pos = applyUci(pos, u); step++; sel = null; draw(); };
+      const finish = ok => { over = true; this.onTap = null; msg(ok ? '<b>Solved ✓</b>' : 'Solution shown. Try to see why it works.'); done(ok); };
+      const oppMove = () => setTimeout(() => { play(ms[step]); if (step >= ms.length) finish(clean); else msg(`<b>${me === 'w' ? 'White' : 'Black'} to move.</b> Find the best move.`); }, 550);
+      draw(); oppMove();
+      this.hint = () => { if (over || step % 2 === 0) return; clean = false; sel = sqIdx(ms[step].slice(0, 2)); draw(); msg('Hint: move the highlighted piece.'); };
+      this.solve = () => { if (over) return; clean = false; const run = () => { if (step >= ms.length) return finish(false); play(ms[step]); setTimeout(run, 650); }; run(); };
+      this.onTap = i => {
+        if (over || step % 2 === 0) return;
+        if (sel === null || mine(pos.b[i])) { if (mine(pos.b[i])) { sel = i; draw(); } return; }
+        const u = sqName(sel) + sqName(i), want = ms[step], last = step === ms.length - 1;
+        if (u === want.slice(0, 4) || (last && p.alt.some(x => x.slice(0, 4) === u))) {
+          const mv = u === want.slice(0, 4) ? want : p.alt.find(x => x.slice(0, 4) === u);
+          play(mv.length === 4 && pos.b[sel] && pos.b[sel].toLowerCase() === 'p' && /[18]$/.test(u) ? mv + 'q' : mv);
+          if (step >= ms.length) finish(clean); else { msg('Good. Keep going…'); oppMove(); }
+        } else { clean = false; sel = null; draw(); msg('Not that one. Try again.'); if (navigator.vibrate) navigator.vibrate(60); }
+      };
+    }
   };
 
   // ================= outreach =================
@@ -546,7 +779,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }
