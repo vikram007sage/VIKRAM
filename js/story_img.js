@@ -176,3 +176,75 @@ VK_STORIES.IMG = {
 "file": "Legendary walls of Troy (8708672267).jpg"
 }
 };
+Object.assign(VK_STORIES.IMG, {
+"taj": {
+"by": "Yann (talk)",
+"lic": "CC BY-SA 4.0",
+"page": "https://commons.wikimedia.org/wiki/File:Taj_Mahal,_Agra,_India.jpg",
+"alt": "The Taj Mahal, Agra",
+"file": "Taj Mahal, Agra, India.jpg"
+},
+"buland": {
+"by": "Marcin Białek",
+"lic": "CC BY-SA 3.0",
+"page": "https://commons.wikimedia.org/wiki/File:Fatehput_Sikiri_Buland_Darwaza_gate_2010.jpg",
+"alt": "The Buland Darwaza at Fatehpur Sikri",
+"file": "Fatehput Sikiri Buland Darwaza gate 2010.jpg"
+},
+"humayun": {
+"by": "Naveen R Gowda",
+"lic": "CC BY-SA 4.0",
+"page": "https://commons.wikimedia.org/wiki/File:Humayun%27s_Tomb,_Delhi_1.jpg",
+"alt": "Humayun's Tomb, Delhi",
+"file": "Humayun's Tomb, Delhi 1.jpg"
+},
+"redfort": {
+"by": "Rickard Törnblad",
+"lic": "CC BY-SA 4.0",
+"page": "https://commons.wikimedia.org/wiki/File:Lahori_Gate,_Red_Fort,_Delhi,_India_-_September_2014.jpg",
+"alt": "Lahori Gate of the Red Fort, Delhi",
+"file": "Lahori Gate, Red Fort, Delhi, India - September 2014.jpg"
+},
+"cellular": {
+"by": "Jomesh",
+"lic": "CC BY 3.0",
+"page": "https://commons.wikimedia.org/wiki/File:Front_View_of_Cellular_Jail,_Port_Blair.JPG",
+"alt": "The Cellular Jail, Port Blair",
+"file": "Front View of Cellular Jail, Port Blair.JPG"
+},
+"jallianwala": {
+"by": "Bernard Gagnon",
+"lic": "CC BY-SA 4.0",
+"page": "https://commons.wikimedia.org/wiki/File:Jallianwala_Bagh,_Amritsar_01.jpg",
+"alt": "Jallianwala Bagh, Amritsar",
+"file": "Jallianwala Bagh, Amritsar 01.jpg"
+},
+"sputnik": {
+"by": "Rept0n1x",
+"lic": "CC BY-SA 3.0",
+"page": "https://commons.wikimedia.org/wiki/File:Replica_of_Sputnik_1,_World_Museum_Liverpool_(1).JPG",
+"alt": "A replica of Sputnik 1",
+"file": "Replica of Sputnik 1, World Museum Liverpool (1).JPG"
+},
+"checkpoint": {
+"by": "U.S. Army photo Photo Credit: USAMHI",
+"lic": "Public domain",
+"page": "https://commons.wikimedia.org/wiki/File:US_Army_tanks_face_off_against_Soviet_tanks,_Berlin_1961.jpg",
+"alt": "US and Soviet tanks face each other at Checkpoint Charlie, October 1961",
+"file": "US Army tanks face off against Soviet tanks, Berlin 1961.jpg"
+},
+"earthrise": {
+"by": "NASA/Bill Anders",
+"lic": "Public domain",
+"page": "https://commons.wikimedia.org/wiki/File:NASA-Apollo8-Dec24-Earthrise.jpg",
+"alt": "Earthrise, photographed from Apollo 8 on 24 December 1968",
+"file": "NASA-Apollo8-Dec24-Earthrise.jpg"
+},
+"chernobyl": {
+"by": "Clay Gilliland",
+"lic": "CC BY-SA 2.0",
+"page": "https://commons.wikimedia.org/wiki/File:Reactor_4_and_Sarcophagus_(15186962197).jpg",
+"alt": "Reactor 4 at Chernobyl under its shelter",
+"file": "Reactor 4 and Sarcophagus (15186962197).jpg"
+}
+});

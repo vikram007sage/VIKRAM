@@ -172,7 +172,7 @@
     ${prev}${cb}
     <div class="nowcard"><div>${cur ? `<div class="eyebrow">Now · until ${cur.e}</div><h2>${esc(cur.t)}</h2><div class="muted small">${cur.left} min left · next: ${esc(cur.next ? cur.next.s + ' ' + cur.next.t : 'sleep')}</div>` : '<h2>Sleep</h2>'}</div>
       <div class="ring" style="--p:${sc}"><span>${sc}</span><small>today</small></div></div>
-    <div class="drills"><button class="btn focusbtn" data-act="focus">${Focus.live() ? '⏱ Focus running · open' : '▶ Start focus timer'}</button><button class="btn ghost" data-act="go" data-to="review">Weekly review</button></div>
+
     ${pledgeCard(ds, n)}
     <button class="urge" data-act="urge">Urge to scroll? <b>Beat it →</b><small>${(dd.urges && dd.urges.n) || 0} beaten today</small></button>
     <div class="row-between"><h3 class="h">Today's checklist</h3><label class="switch"><input type="checkbox" data-act="minimum" ${mm ? 'checked' : ''} ${S.comeback.active ? 'disabled' : ''}> Minimum day</label></div>
@@ -317,7 +317,6 @@
       $$('[data-task]').forEach(cb => cb.onchange = () => { S.tasks[cb.dataset.task] = { done: cb.checked, ts: ts() }; save(); render(); });
       const j = $('#journal'); if (j) j.oninput = debounce(() => { day(ds).journal = { text: j.value, ts: ts() }; save(); }, 600);
       $$('[data-pl]').forEach(cb => cb.onchange = () => { const p = day(ds).pledge; p.items[+cb.dataset.pl].done = cb.checked; p.ts = ts(); save(); if (cb.checked) burst(cb); render(); });
-      const pw = $('#plWhy'); if (pw) pw.oninput = debounce(() => { const p = day(ds).pledge; p.why = pw.value; p.ts = ts(); save(); }, 600);
       const m = $('[data-act=minimum]'); if (m) m.onchange = () => { day(ds).minimum = { v: m.checked, ts: ts() }; save(); render(); };
     },
     prep() { const ds = nowIST().date; $$('[data-task]').forEach(cb => cb.onchange = () => { S.tasks[cb.dataset.task] = { done: cb.checked, ts: ts() }; save(); render(); }); },
@@ -345,7 +344,7 @@
     if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : feedMap().length - 1)) % feedMap().length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
     if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; if (j === feedGen.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
     if (act === 'go') { if (a.dataset.k) LTAB = a.dataset.k; go(a.dataset.to); }
-    if (['focus', 'pledge', 'r-wk', 'r-save', 'r-paid', 'r-copy', 'r-send', 'a-save'].includes(act)) Acct.act(act, a);
+    if (['focus', 'pledge', 'pledge1', 'pledge-edit', 'r-wk', 'r-save', 'r-paid', 'r-copy', 'r-send', 'a-save'].includes(act)) Acct.act(act, a);
     if (act === 'w-set') Wd.open(a.dataset.id);
     if (act === 'w-say') speakEn(a.dataset.t);
     if (act && act.startsWith('o-')) Out.act(act, a);
@@ -676,60 +675,97 @@
   function targetMins(ds) { const t = (S.settings.targets && S.settings.targets[dayType(ds)]) || { study: 240, class: 120, sunday: 60 }[dayType(ds)] || 120; return +t; }
   // ---- focus timer ----
   const FKINDS = { study: 'Study', reading: 'Reading', meditate: 'Meditation', yoga: 'Yoga', lab: 'Lab / project' };
+  const FDEF = { study: 45, reading: 25, meditate: 15, yoga: 25, lab: 60 };
+  // harsh, escalating notifications when you leave a focus session (messages in content.js, shared with the server)
+  const Nag = {
+    timers: [],
+    lvl() { return Math.min(3, (S.nag && S.nag.lvl) || 0); },
+    msg(l) { const L = C.NAG[Math.min(3, l)], k = ((S.nag && S.nag.k) || 0); S.nag = Object.assign({}, S.nag || {}, { k: k + 1, ts: ts() }); return L[k % L.length]; },
+    send(l) { const body = this.msg(l), title = ['Focus. Now.', 'Hey. Back to work.', 'Seriously?', 'VIKRAM is disappointed'][Math.min(3, l)];
+      const opt = { body, tag: 'vikram-nag', renotify: true, icon: 'icons/icon-192.png', vibrate: [300, 120, 300, 120, 300], requireInteraction: l >= 2, data: { url: './#today' } };
+      try { if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return; if (navigator.serviceWorker && navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(r => r.showNotification(title, opt)); else new Notification(title, opt); } catch (e) { } },
+    away() { // app hidden during a session
+      this.clear(); const base = this.lvl();
+      [[12, 0], [60, 1], [180, 2], [420, 3]].forEach(([sec, up]) => this.timers.push(setTimeout(() => { const l = Math.min(3, base + up); S.nag = Object.assign({}, S.nag || {}, { lvl: Math.min(3, Math.max(this.lvl(), l + (up ? 0 : 0))), ts: ts() }); this.send(l); this.fired = l + 1; S.focusAway = { since: S.focusAway && S.focusAway.since, lvl: l, ts: ts() }; save(false); }, sec * 1000)));
+      S.focusAway = { since: Date.now(), lvl: base, ts: ts() }; save(false); try { Sync.now(); } catch (e) { }
+    },
+    back(awayMs) {
+      this.clear(); if (this.fired) { S.nag = Object.assign({}, S.nag || {}, { lvl: Math.min(3, this.lvl() + 1), ts: ts() }); } this.fired = 0;
+      S.focusAway = { since: null, lvl: 0, ts: ts() }; save(false); try { Sync.now(); } catch (e) { }
+      if (awayMs > 12000) toast(this.msg(this.lvl()));
+    },
+    calm() { if (this.lvl() > 0) S.nag = Object.assign({}, S.nag, { lvl: this.lvl() - 1, ts: ts() }); },
+    clear() { this.timers.forEach(clearTimeout); this.timers = []; }
+  };
   const Focus = {
     live() { return LS.get('vikram_focus_live', null); },
-    open(kind) {
-      const l = this.live(); if (l) return this.run();
-      const ds = nowIST().date, cur = currentBlock(blocksFor(ds), nowIST().mins), tk = tasksForToday(ds).find(t => !taskDone(t));
-      const label = kind === 'study' || !kind ? (tk ? (tk.m ? tk.m + ' · ' : '') + tk.t : (cur ? cur.t : '')) : FKINDS[kind];
-      ov(`<div class="quizbox"><div class="row-between"><span class="eyebrow">Focus session</span><button class="btn sm ghost" id="fX">✕</button></div><h2>What are you working on?</h2>
-        <div class="chips">${Object.entries(FKINDS).map(([k, n]) => `<button class="chip ${k === (kind || 'study') ? 'on' : ''}" data-fk="${k}">${n}</button>`).join('')}</div>
-        <input id="fLabel" value="${esc(label)}" placeholder="e.g. A2 · 20 percentage questions">
-        <div class="chips">${[25, 45, 60, 90].map(m => `<button class="chip ${m === (kind === 'meditate' ? 15 : kind === 'yoga' ? 25 : 45) ? 'on' : ''}" data-fm="${m}">${m} min</button>`).join('')}<button class="chip" data-fm="15">15</button></div>
-        <p class="small muted">Only timed minutes count as verified. Leaving VIKRAM during the session is logged as an interruption. Put the phone face down.</p>
-        <button class="btn" id="fGo">▶ Start</button></div>`);
-      let k = kind || 'study', m = kind === 'meditate' ? 15 : kind === 'yoga' ? 25 : 45;
-      $$('[data-fk]').forEach(b => b.onclick = () => { k = b.dataset.fk; $$('[data-fk]').forEach(x => x.classList.toggle('on', x === b)); });
-      $$('[data-fm]').forEach(b => b.onclick = () => { m = +b.dataset.fm; $$('[data-fm]').forEach(x => x.classList.toggle('on', x === b)); });
-      $('#fX').onclick = ovClose;
-      $('#fGo').onclick = () => { LS.set('vikram_focus_live', { kind: k, label: $('#fLabel').value.trim() || FKINDS[k], mins: m, start: Date.now(), away: 0, ints: 0, hid: null }); this.run(); };
+    defaults(kind) { const ds = nowIST().date, cur = currentBlock(blocksFor(ds), nowIST().mins), tk = tasksForToday(ds).find(t => !taskDone(t)); kind = kind || 'study';
+      return { kind, mins: kind === 'study' && minimumMode(ds) ? 25 : FDEF[kind], label: kind === 'study' ? (tk ? (tk.m ? tk.m + ' · ' : '') + tk.t : (cur ? cur.t : 'Study')) : FKINDS[kind] }; },
+    open(kind) { if (this.live()) return this.run(); this.start(kind); },
+    start(kind) {
+      const d = this.defaults(kind); LS.set('vikram_focus_live', Object.assign(d, { start: Date.now(), away: 0, hid: null }));
+      try { if (typeof Notification !== 'undefined' && Notification.permission === 'default') Notification.requestPermission(); } catch (e) { }
+      fab(); this.run();
     },
+    set(k, v) { const L = this.live(); if (!L) return; L[k] = v; if (k === 'kind') { L.label = this.defaults(v).label; } LS.set('vikram_focus_live', L); fab(); this.run(); },
     run() {
       const l = this.live(); if (!l) return;
-      ov(`<div class="quizbox center focusbox"><div class="row-between"><span class="eyebrow">${esc(FKINDS[l.kind])} · ${l.mins} min</span><span class="small muted" id="fInt"></span></div>
+      ov(`<div class="quizbox center focusbox"><div class="row-between"><span class="eyebrow">${esc(FKINDS[l.kind])} · ${l.mins} min</span><button class="btn sm ghost" id="fBg">Hide</button></div>
         <h2 class="small">${esc(l.label)}</h2><div class="fring" id="fRing"><span id="fT">--:--</span></div>
-        <div class="row" style="justify-content:center"><button class="btn ghost" id="fStop">Stop early</button><button class="btn ghost" id="fBg">Hide</button></div>
-        <p class="small muted">The timer keeps running if you lock the phone. Come back when it ends.</p></div>`);
+        <div class="chips center">${[25, 45, 60, 90].map(m => `<button class="chip ${m === l.mins ? 'on' : ''}" data-fm="${m}">${m}m</button>`).join('')}</div>
+        <div class="chips center">${Object.entries(FKINDS).map(([k, n]) => `<button class="chip ${k === l.kind ? 'on' : ''}" data-fk="${k}">${n}</button>`).join('')}</div>
+        <p class="small muted">Leave VIKRAM and it will come after you. Time away doesn't count.</p><button class="btn ghost" id="fStop">Stop now</button></div>`);
       $('#fBg').onclick = () => { $('#overlay').classList.remove('show'); render(); };
       $('#fStop').onclick = () => this.finish(true);
+      $$('[data-fm]').forEach(b => b.onclick = () => this.set('mins', +b.dataset.fm));
+      $$('[data-fk]').forEach(b => b.onclick = () => this.set('kind', b.dataset.fk));
       clearInterval(this.tm);
       const tick = () => { const L = this.live(); if (!L) return clearInterval(this.tm); const el = (Date.now() - L.start) / 1000, left = Math.max(0, L.mins * 60 - el);
-        const t = $('#fT'); if (t) { t.textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(Math.floor(left % 60)).padStart(2, '0'); $('#fRing').style.setProperty('--p', Math.round(100 * (1 - left / (L.mins * 60)))); $('#fInt').textContent = L.ints ? L.ints + ' interruption' + (L.ints > 1 ? 's' : '') : ''; }
+        const t = $('#fT'); if (t) { t.textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(Math.floor(left % 60)).padStart(2, '0'); $('#fRing').style.setProperty('--p', Math.round(100 * (1 - left / (L.mins * 60)))); }
         if (left <= 0) { clearInterval(this.tm); this.finish(false); } };
       tick(); this.tm = setInterval(tick, 1000);
     },
-    vis(hidden) { const L = this.live(); if (!L) return; if (hidden) { L.hid = Date.now(); } else if (L.hid) { const away = Date.now() - L.hid; if (away > 15000) { L.ints++; L.away += away; } L.hid = null; } LS.set('vikram_focus_live', L); if (!hidden && $('#overlay').classList.contains('show') === false && L) { /* resume quietly */ } },
+    vis(hidden) { const L = this.live(); if (!L) return; if (hidden) { L.hid = Date.now(); Nag.away(); } else if (L.hid) { const away = Date.now() - L.hid; if (away > 12000) L.away += away; L.hid = null; Nag.back(away); } LS.set('vikram_focus_live', L); },
     finish(early) {
-      const L = this.live(); if (!L) return; clearInterval(this.tm);
-      const mins = Math.min(L.mins, Math.round((Date.now() - L.start) / 60000));
-      if (early && mins < 10) { LS.set('vikram_focus_live', null); toast('Stopped before 10 minutes: not logged'); ovClose(); return; }
-      try { if (!early && typeof Notification !== 'undefined' && Notification.permission === 'granted') new Notification('VIKRAM · focus done', { body: mins + ' minutes logged. Write what you finished.', icon: 'icons/icon-192.png' }); } catch (e) { }
+      const L = this.live(); if (!L) return; clearInterval(this.tm); Nag.clear();
+      const mins = Math.max(0, Math.min(L.mins, Math.round((Date.now() - L.start - (L.away || 0)) / 60000)));
+      if (mins < 10) { LS.set('vikram_focus_live', null); fab(); toast(early ? 'Under 10 focused minutes: not logged. Try again.' : 'Too much time away: not logged'); ovClose(); return; }
+      try { if (!early && typeof Notification !== 'undefined' && Notification.permission === 'granted') new Notification('VIKRAM · focus done', { body: mins + ' minutes. Good. Log it with one tap.', icon: 'icons/icon-192.png' }); } catch (e) { }
       if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-      ov(`<div class="quizbox"><span class="eyebrow">${mins} minutes · ${esc(FKINDS[L.kind])}</span><h2>What did you get done?</h2><p class="small muted">One line of proof, e.g. "A2: 20 questions, 16 right" or "S2 notes, sections 1–3".</p><textarea id="fNote" rows="2"></textarea>${L.ints ? `<p class="small">You left VIKRAM ${L.ints} time${L.ints > 1 ? 's' : ''} (${Math.round(L.away / 60000)} min away).</p>` : ''}<button class="btn" id="fSave">Log session</button></div>`);
-      $('#fSave').onclick = () => { const note = $('#fNote').value.trim(); if (!note) { toast('Write one line first: that is the proof'); return; }
-        const st = istOf(L.start); S.focus.push({ id: 'f' + L.start, d: st.date, sm: st.mins, mins, kind: L.kind, label: L.label, note, ints: L.ints, away: Math.round(L.away / 60000), ts: ts() });
-        LS.set('vikram_focus_live', null); autoVerify(st.date); save(); toast(mins + ' verified minutes logged'); ovClose(); };
+      ov(`<div class="quizbox center"><span class="eyebrow">${mins} focused minutes · ${esc(FKINDS[L.kind])}</span><h2>How did it go?</h2>
+        <div class="opts"><button class="opt" data-fr="done">✓ Did what I planned</button><button class="opt" data-fr="part">Partly</button><button class="opt" data-fr="dist">Got distracted</button></div>
+        <input id="fNote" placeholder="Optional: what exactly? e.g. A2, 20 questions"></div>`);
+      $$('[data-fr]').forEach(b => b.onclick = () => { const st = istOf(L.start); const note = $('#fNote').value.trim() || b.textContent;
+        S.focus.push({ id: 'f' + L.start, d: st.date, sm: st.mins, mins, kind: L.kind, label: L.label, note, res: b.dataset.fr, away: Math.round((L.away || 0) / 60000), ts: ts() });
+        if (!L.away && b.dataset.fr !== 'dist') Nag.calm();
+        LS.set('vikram_focus_live', null); autoVerify(st.date); save(); fab(); toast(mins + ' verified minutes logged'); ovClose(); });
     }
   };
   document.addEventListener('visibilitychange', () => Focus.vis(document.visibilityState === 'hidden'));
+  // floating focus button: one tap from opening VIKRAM to studying
+  function fab() {
+    let b = document.getElementById('fab'); if (!b) { b = document.createElement('button'); b.id = 'fab'; b.setAttribute('aria-label', 'Focus timer'); b.onclick = () => Focus.open(); document.body.appendChild(b); }
+    const L = Focus.live(); clearInterval(fab.tm);
+    const paint = () => { const l = Focus.live(); if (!l) { b.className = ''; b.innerHTML = '<span>▶</span><small>Focus</small>'; return; } const left = Math.max(0, l.mins * 60 - (Date.now() - l.start) / 1000);
+      b.className = 'live'; b.style.setProperty('--p', Math.round(100 * (1 - left / (l.mins * 60)))); b.innerHTML = `<span>${Math.ceil(left / 60)}</span><small>min</small>`; if (left <= 0 && !$('#overlay').classList.contains('show')) Focus.finish(false); };
+    paint(); if (L) fab.tm = setInterval(paint, 15000);
+  }
   // ---- pledge ----
+  function pledgeSuggest(ds) {
+    const out = [], tk = tasksForToday(ds).filter(t => !taskDone(t));
+    if (tk[0]) out.push((tk[0].m ? tk[0].m + ': ' : '') + tk[0].t);
+    out.push(`${targetMins(ds)} verified focus minutes`);
+    if (tk[1]) out.push((tk[1].m ? tk[1].m + ': ' : '') + tk[1].t); else out.push(Cards.due(ds).length ? 'Clear today\'s flashcards' : '10 story cards in the evening');
+    return out.slice(0, 3);
+  }
   function pledgeCard(ds, n) {
     const d = day(ds), p = d.pledge;
-    if (!p) return `<div class="card pledge"><div class="eyebrow">Morning pledge</div><h3>Three outcomes that make today a win</h3><p class="small muted">Outcomes, not activities: "A2 set with 75%+", not "study A2".</p>${[0, 1, 2].map(i => `<input class="pin" data-pin="${i}" placeholder="${['1. Most important', '2.', '3.'][i]}">`).join('')}<button class="btn mt" data-act="pledge">Commit</button></div>`;
-    const done = p.items.filter(x => x.done).length, eve = n.mins >= 1140;
-    return `<div class="card pledge"><div class="row-between"><div class="eyebrow">Pledge · ${done}/${p.items.length} kept</div>${eve && done < p.items.length && !p.why ? '<span class="tag">evening check</span>' : ''}</div>
-      ${p.items.map((x, i) => `<label class="item ${x.done ? 'done' : ''}"><input type="checkbox" data-pl="${i}" ${x.done ? 'checked' : ''}><span>${esc(x.t)}</span></label>`).join('')}
-      ${eve && done < p.items.length ? `<textarea id="plWhy" rows="2" placeholder="What got in the way? (honest, one line)">${esc(p.why || '')}</textarea>` : ''}</div>`;
+    if (!p) { const sg = pledgeSuggest(ds);
+      return `<div class="card pledge"><div class="eyebrow">Today's pledge</div>${sg.map(t => `<div class="pl-s">${esc(t)}</div>`).join('')}<div class="row"><button class="btn" data-act="pledge1">✓ Commit</button><button class="btn sm ghost" data-act="pledge-edit">edit</button></div>
+        <div id="plEdit" class="hide">${[0, 1, 2].map(i => `<input class="pin" data-pin="${i}" value="${esc(sg[i] || '')}">`).join('')}<button class="btn mt" data-act="pledge">Commit these</button></div></div>`; }
+    const done = p.items.filter(x => x.done).length;
+    return `<div class="card pledge"><div class="eyebrow">Pledge · ${done}/${p.items.length} kept · tap when done</div>
+      ${p.items.map((x, i) => `<label class="item ${x.done ? 'done' : ''}"><input type="checkbox" data-pl="${i}" ${x.done ? 'checked' : ''}><span>${esc(x.t)}</span></label>`).join('')}</div>`;
   }
   // ---- weekly review ----
   const weekKey = ds => { const wd = (new Date(ds + 'T00:00:00Z').getUTCDay() + 6) % 7; return addDays(ds, -wd); };
@@ -785,6 +821,8 @@
     act(act, a) {
       const ds = nowIST().date;
       if (act === 'focus') Focus.open(a.dataset.kind);
+      if (act === 'pledge1') { day(ds).pledge = { items: pledgeSuggest(ds).map(t => ({ t, done: false })), at: nowIST().mins, ts: ts() }; save(); render(); }
+      if (act === 'pledge-edit') { $('#plEdit').classList.toggle('hide'); }
       if (act === 'pledge') { const items = $$('[data-pin]').map(i => i.value.trim()).filter(Boolean); if (!items.length) return toast('Write at least one outcome'); day(ds).pledge = { items: items.map(t => ({ t, done: false })), at: nowIST().mins, ts: ts() }; save(); render(); }
       if (act === 'r-wk') { RWEEK = addDays(RWEEK || weekKey(ds), +a.dataset.d); render(); }
       const wk = RWEEK || weekKey(ds);
@@ -874,7 +912,7 @@
     shelf() {
       const nx = this.pick(), s = SER(nx), r = stRec(nx);
       return `<div class="stshelf">${VK_STORIES.SERIES.map(x => { const rr = stRec(x.id), im = VK_STORIES.IMG[x.cover]; const pct = rr.done ? 100 : rr.n ? Math.round(100 * (rr.max + 1) / rr.n) : 0;
-        return `<button class="stc" data-act="s-open" data-id="${x.id}" style="--c:${x.color};--p:${pct}"><span class="sring"><span class="img" style="${im ? `background-image:url(stories/img/${x.cover}.jpg)` : ''}"></span></span><small>${esc(x.t.split(':')[0])}</small></button>`; }).join('')}</div>
+        return `<button class="stp" data-act="s-open" data-id="${x.id}" style="--c:${x.color};--p:${pct}%;${im ? `background-image:linear-gradient(180deg,#0000 35%,#000d),url(stories/img/${x.cover}.jpg)` : ''}"><span class="stt">${esc(x.t)}</span><span class="sts">${esc(x.sub)}</span><span class="stbar"><i></i></span><span class="stn">${rr.done ? '✓ finished' : rr.max >= 0 ? `${rr.max + 1}/${rr.n || x.n || ''} read` : 'new'}</span></button>`; }).join('')}</div>
         <button class="stgo" data-act="s-open" data-id="${nx}"><b>${r.max >= 0 ? 'Continue' : 'Start'}: ${esc(s.t)}</b><small>${r.max >= 0 && r.n ? `card ${Math.min(r.i + 1, r.n)} of ${r.n} · ` : ''}swipe stories instead of reels</small></button>`;
     },
     open(id, at) {
@@ -914,16 +952,16 @@
         <div class="svis ${im ? 'hasimg' : ''}">${im ? `<img src="stories/img/${c.img}.jpg" alt="${esc(im.alt || c.t)}" loading="eager"><div class="minimap">${this.mapSvg(c)}</div>` : this.mapSvg(c)}</div>
         ${im ? `<a class="scred" href="${esc(im.page)}" target="_blank" rel="noopener">Image: ${esc(im.by)} · ${esc(im.lic)} · Wikimedia Commons</a>` : ''}
         <div class="sbody" id="sBody"><div class="smeta"><span class="sy">${esc(c.y || '')}</span>${c.pl ? `<span class="spl">${esc(c.pl)}</span>` : ''}<span class="stag t-${c.tag}" title="${esc(tg[1])}">${tg[0]}</span></div>
-          <h2>${esc(c.t)}</h2><p>${esc(c.x)}</p>
+          <h2>${esc(c.t)}</h2>${c.x.split(/\n\n+/).map(t => `<p>${esc(t)}</p>`).join('')}
           <div class="ssrc">${(c.w || []).map(w => `<a href="https://en.wikipedia.org/wiki/${w}" target="_blank" rel="noopener">${esc(decodeURIComponent(w).replace(/_/g, ' '))} ↗</a>`).join('')}</div></div>
-        <div class="snav"><button id="sPrev" aria-label="Previous">‹</button><span class="small">tap or swipe</span><button id="sNext" aria-label="Next">›</button></div></div>`;
+        <div class="snav"><button id="sPrev" aria-label="Previous">‹</button><span class="small">scroll to read · tap right for next</span><button id="sNext" aria-label="Next">›</button></div></div>`;
       const o = $('#overlay'); o.innerHTML = html; o.classList.add('show', 'full', 'dark');
       const svg = o.querySelector('.svis svg'); this.animate(svg, c);
       $('#sX').onclick = () => { $('#overlay').classList.remove('dark'); ovClose(); };
       $('#sPrev').onclick = () => this.prev(); $('#sNext').onclick = () => this.next();
       const st = o.querySelector('.story'); let x0 = null, y0 = null, t0 = 0;
       st.ontouchstart = e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); };
-      st.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null; if (Math.max(Math.abs(dx), Math.abs(dy)) < 40) return; e.preventDefault(); this.swiped = Date.now(); if (dy < -40 && Math.abs(dy) > Math.abs(dx) || dx < -40 && Math.abs(dx) > Math.abs(dy)) this.next(); else this.prev(); };
+      st.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null; this.swiped = Date.now(); if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return; e.preventDefault(); if (dx < 0) this.next(); else this.prev(); };
       st.onclick = e => { if (Date.now() - (this.swiped || 0) < 400) return; if (e.target.closest('a,button')) return; const wv = window.innerWidth; if (e.clientX < wv * 0.3) this.prev(); else this.next(); };
       document.onkeydown = e => { if (!$('#overlay .story')) { document.onkeydown = null; return; } if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') this.next(); if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') this.prev(); if (e.key === 'Escape') $('#sX').click(); };
       this.prevLL = c.ll || this.prevLL;
@@ -1155,6 +1193,6 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { Sync.now(); render(); } else if (Sync.cfg()) Sync.now(); });
   window.addEventListener('online', () => Sync.now());
   setInterval(() => Sync.now(), 180000);
-  save(false); render(); Sync.now();
+  save(false); render(); fab(); Sync.now();
   window.VIKRAM = { parseCSV, Out, S: () => S, merge, score, streakInfo, activeItems, dayType, blocksFor, xp };
 })();

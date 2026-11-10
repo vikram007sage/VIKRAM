@@ -61,7 +61,7 @@ function nudgesFor(S, ds) {
   out.push({ at: '11:00', title: 'Deep block check', body: 'Study block 1 isn\'t ticked yet. 25 focused minutes still counts.', tag: 'smart-deep', cond: () => !ticked(S, ds, 'deep1') });
   out.push({ at: '09:30', title: 'Morning pledge', body: 'No pledge yet. Write the 3 outcomes that make today a win.', tag: 'smart-pledge', cond: () => !pledge(S, ds) });
   out.push({ at: '13:15', title: 'Verified minutes', body: 'Your morning has less than 45 verified focus minutes. Start a 25-minute timer before lunch ends.', tag: 'smart-focus', cond: () => dayType(S, ds) !== 'sunday' && focusMins(S, ds, 780) < 45 });
-  out.push({ at: '20:30', title: 'Evening check', body: 'Tick your pledge. If something slipped, write one honest line about why.', tag: 'smart-eve', cond: () => { const p = pledge(S, ds); return p && p.items.some(i => !i.done) && !p.why; } });
+  out.push({ at: '20:30', title: 'Evening check', body: 'Tick your pledge. One tap each.', tag: 'smart-eve', cond: () => { const p = pledge(S, ds); return p && p.items.some(i => !i.done); } });
   if (new Date(ds + 'T00:00:00Z').getUTCDay() === 0) out.push({ at: '20:45', title: 'Weekly review', body: 'Five minutes: look at the week\'s numbers and send the report to your partner.', tag: 'smart-review', cond: () => !((S.reviews || {})[weekKey(ds)]) });
   out.push({ at: '19:50', title: 'Minimum day', body: 'Low score today. Do the 3-task minimum: 5 sun salutations, one math sprint, 2 pages. Never miss twice.', tag: 'smart-min', cond: () => score(S, ds) < 40 });
   if (S.comeback && S.comeback.active) out.push({ at: '05:10', title: 'Welcome back', body: 'Comeback mode: just 3 tasks today. Start with the first one.', tag: 'smart-cb' });
@@ -77,6 +77,11 @@ function nudgesFor(S, ds) {
   const f = ist(from);
   const due = []; const days = f.date === n.date ? [n.date] : [f.date, n.date];
   days.forEach(ds => nudgesFor(S, ds).forEach(x => { const m = toMin(x.at); const lo = ds === f.date ? f.mins : -1, hi = ds === n.date ? n.mins : 1440; if (m > lo && m <= hi && (!x.cond || x.cond())) due.push(x); }));
+  // left a focus session and never came back: escalate every run (~15 min)
+  const fa = S.focusAway; if (fa && fa.since && now.getTime() - fa.since > 10 * 60000 && now.getTime() - fa.since < 4 * 3600000) {
+    const lvl = Math.min(3, Math.max((S.nag && S.nag.lvl) || 0, fa.lvl || 0) + Math.floor((now.getTime() - fa.since) / (15 * 60000)));
+    const L = C.NAG[lvl]; due.push({ at: '', title: ['Focus. Now.', 'Hey. Back to work.', 'Seriously?', 'VIKRAM is disappointed'][lvl], body: L[Math.floor(now.getTime() / 900000) % L.length], tag: 'vikram-nag' });
+  }
   const subs = Object.entries(S.subs || {}).filter(([, v]) => v && v.sub && v.sub.endpoint);
   console.log(`window ${f.date} ${f.mins} → ${n.date} ${n.mins}: ${due.length} nudge(s), ${subs.length} device(s)`);
   // partner emails (optional: only if SMTP_USER, SMTP_PASS and PARTNER_EMAIL secrets exist)

@@ -272,8 +272,16 @@ var VK_CONTENT = (function () {
     { k: 'mind', q: 'Hofstadter\'s law', a: '"It always takes longer than you expect, even when you take into account Hofstadter\'s law." Build buffer days into any plan, which is why VIKRAM has streak freezes.' },
   ];
 
+
+  // Harsh notifications when Aryan leaves a focus session. Level rises every time one is ignored. Mean about the behaviour, never about the person's worth.
+  const NAG = [
+    ['The timer is running. You are not. Back to VIKRAM.', 'That wasn\'t a break, that was an escape. Get back.', 'Your session isn\'t paused. Your excuse is. Return.', 'Whatever you opened, it can wait 40 minutes. Your placement can\'t.', 'Phone down, books up. Now.', 'You started a focus session 10 minutes ago. Remember that guy? Be him.', 'Instagram will still be useless when the timer ends.', 'Back. The question you were stuck on doesn\'t solve itself.'],
+    ['Again? You promised yourself a session and couldn\'t last it. Get back.', 'Capital One doesn\'t hire scroll history.', 'Every reel you watch, someone else finishes another DI set.', 'You\'re not tired. You\'re bored. Bored people don\'t get Day 1 offers.', 'Close it. You know exactly what you\'re doing.', 'Is this what the 5 AM version of you signed up for?', 'You built an app to stop this. Use it.', 'Two minutes of this is how two hours disappear. Back.'],
+    ['Third warning. You are choosing average. Open VIKRAM.', 'Still gone. Your competition isn\'t.', 'You can\'t buy this hour back. Stop wasting it.', 'This is the exact habit you said was ruining you. Here it is again.', 'Nobody is coming to make you work. That was the whole point of me. Get back.', 'The reels are designed to beat you. Right now they\'re winning.', 'Pathetic session so far. Fix it before the timer does.', 'You set this alarm because you knew you\'d do this. Prove yourself wrong.'],
+    ['Unbelievable. Your timer is running empty while you scroll. Get. Back. Now.', 'Your partner sees your focus hours every Sunday. Want them to see this?', 'Your streak, your pledge and your placement are all waiting. You\'re watching strangers.', 'At this rate December 2027 arrives and you\'re still "starting tomorrow".', 'Stop. Breathe. Put the phone down and open VIKRAM. This is the last polite version.', 'You wanted me to be harsh. Here it is: this is how people end up regretting a whole year.', 'Every minute away is deleted from your verified time. You\'re paying for this scroll.', 'Enough. Back to work.']
+  ];
   const LEVELS = [[0, 'Aspirant'], [1500, 'Analyst'], [5000, 'Associate'], [12000, 'Strategist'], [25000, 'Traveller'], [45000, 'Statesman']];
 
-  return { DAY1, SCHEDULES, defaultDayType, HABITS, HOBBY_PLAN, MODULES, PHASES, TASKS, BOOKS, FEED, LEVELS };
+  return { DAY1, SCHEDULES, defaultDayType, HABITS, HOBBY_PLAN, MODULES, PHASES, TASKS, BOOKS, FEED, LEVELS, NAG };
 })();
 if (typeof module !== 'undefined') module.exports = VK_CONTENT;

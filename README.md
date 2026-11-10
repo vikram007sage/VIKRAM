@@ -4,9 +4,9 @@ Aryan's personal assistant for placements and life: an offline-first PWA for pho
 
 - **Today:** time-blocked day (5:00 → 21:00), checklist, score, streaks, comeback mode
 - **Prep:** dated roadmap to Day 1 (1 Dec 2027), notes library, practice engine, flashcards, outreach CRM
-- **Feed:** swipeable history Stories instead of reels, plus one-minute cards (aptitude, quotes, French, chess puzzles)
+- **Feed:** history Stories instead of reels (8 series: Alexander, Mughals, India's freedom struggle, Greek myths, Europe, Germany 1918–39, WWII, Cold War), plus one-minute cards (aptitude, quotes, French, chess puzzles)
 - **Learn:** history from public-domain originals (with Wikipedia links), English vocabulary, French from zero, chess from zero
-- **Accountability:** focus timer, strict mode (habits tick from evidence), morning pledge, weekly review, partner report, stakes, optional partner emails
+- **Accountability:** floating one-tap focus timer with escalating rude notifications if you leave, strict mode (habits tick from evidence), morning pledge, weekly review, partner report, stakes, optional partner emails
 - **Go further:** checked free outside resources for every area
 - **Life:** why + plan, habit heatmap, writing pad, books
 - **Sync:** private GitHub repo · **Notifications:** Web Push via GitHub Actions + calendar alarms
