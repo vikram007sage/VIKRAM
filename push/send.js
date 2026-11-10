@@ -45,14 +45,13 @@ function weekReport(S, wk, today) {
   return [`Average day score: ${avg}/100`, `Verified focus: ${(focus / 60).toFixed(1)} hours`, `Pledges kept: ${pk}/${pl}`, `Aptitude practice: ${q} questions${q ? `, ${Math.round(100 * ok / q)}% right` : ''}`,
     `Days below ${st.thr}: ${misses}${st.amt ? (misses > st.allow ? ` (stake: owes ₹${st.amt} to ${st.to || 'you'})` : ' (no stake owed)') : ''}`, rv.change ? `His plan for next week: ${rv.change}` : 'He has not written his weekly review yet.'].join('\n');
 }
-async function mail(subject, text) {
-  const { SMTP_USER, SMTP_PASS, PARTNER_EMAIL } = process.env; if (!SMTP_USER || !SMTP_PASS || !PARTNER_EMAIL) return false;
-  if (DRY_RUN) { console.log('would email partner:', subject); if (process.env.SHOW_MAIL) console.log(text); return true; }
+async function mail(subject, text, to, html) {
+  const { SMTP_USER, SMTP_PASS, PARTNER_EMAIL } = process.env; to = to || PARTNER_EMAIL; if (!SMTP_USER || !SMTP_PASS || !to) return false;
+  if (DRY_RUN) { console.log('  would mail', to.replace(/.(?=.*@)/g, '*'), '|', subject); return false; }
   const nodemailer = require('nodemailer');
   const t = nodemailer.createTransport({ service: 'gmail', auth: { user: SMTP_USER, pass: SMTP_PASS } });
-  await t.sendMail({ from: `VIKRAM <${SMTP_USER}>`, to: PARTNER_EMAIL, subject, text }); return true;
+  await t.sendMail({ from: `VIKRAM <${SMTP_USER}>`, to, subject, text, html }); return true;
 }
-
 function nudgesFor(S, ds) {
   const out = [];
   blocksFor(S, ds).forEach(b => { if (b.nudge) out.push({ at: b.s, title: b.t, body: b.nudge, tag: 'blk-' + b.s }); (b.extra || []).forEach(x => out.push({ at: x.at, title: b.t, body: x.msg, tag: 'x-' + x.at })); });
@@ -96,6 +95,12 @@ function gitaVerse(ds) { try { const dn = Math.floor(Date.parse(ds + 'T00:00:00Z
     const wk = weekKey(n.date);
     if (n.date >= '2026-12-06' && new Date(n.date + 'T00:00:00Z').getUTCDay() === 0 && n.mins >= 1290 && log.weeklySent !== wk) {
       if (await mail(`${nm}'s week on VIKRAM`, `Hi ${pn},\n\n${nm} asked VIKRAM to send you his numbers every Sunday so someone holds him to his plan.\n\n${weekReport(S, wk, n.date)}\n\nA one-line reply ("saw it, push harder on X") is all it takes.\n\nVIKRAM`)) { log.weeklySent = wk; mailed = true; }
+    }
+    // your own weekly report: every Monday from 05:00 IST for the week that just ended (needs only SMTP_USER + SMTP_PASS; goes to MY_EMAIL or SMTP_USER)
+    const lastWk = addDays(wk, -7);
+    if (new Date(n.date + 'T00:00:00Z').getUTCDay() === 1 && n.mins >= 300 && log.selfSent !== lastWk) {
+      const r = require('./report.js').build(S, C, lastWk, { blocksFor });
+      if (await mail(r.subject, r.text, process.env.MY_EMAIL || process.env.SMTP_USER, r.html)) { log.selfSent = lastWk; mailed = true; }
     }
     const y1 = addDays(n.date, -1), y2 = addDays(n.date, -2);
     if (y2 >= '2026-12-01' && n.mins >= 720 && !touched(S, y1) && !touched(S, y2) && !touched(S, n.date) && log.silentSent !== y1) {

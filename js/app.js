@@ -34,7 +34,7 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live', 'my'].forEach(k => S[k] = S[k] || {});
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live', 'my', 'essays', 'wis'].forEach(k => S[k] = S[k] || {});
   C.setPlan(S.settings.seasonPlan);
   S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
@@ -306,6 +306,7 @@
     const ds = nowIST().date, dt = dayType(ds);
     return `<section class="hero small"><div class="eyebrow">Settings · v${CFG.version}</div><h1>Control room</h1></section>
     <button class="card nextcard gcont" data-act="go-seasons"><span><b>Season: ${esc(C.seasonAt(ds).n)}</b><small>Change your phase of life, habits and goals</small></span><span class="go">▶</span></button>
+    <div class="row" style="margin:10px 0"><button class="btn sm" data-act="go-tab" data-k="write">✎ Writing desk</button><button class="btn sm ghost" data-act="go-search">⌕ Search everything</button></div>
     <div class="card"><h3>Sync (phone ⇄ laptop)</h3><p class="small muted">Your data syncs through a <b>private</b> GitHub repo using a token that stays on this device. Status: <b>${Sync.status}</b>${Sync.last ? ' · last ' + new Date(Sync.last).toLocaleTimeString('en-IN') : ''} ${Sync.err ? '· ' + esc(Sync.err) : ''}</p>
       <div class="form"><input id="sOwner" placeholder="GitHub username" value="${esc(cfg.owner || '')}"><input id="sRepo" placeholder="data repo (e.g. vikram-data)" value="${esc(cfg.repo || 'vikram-data')}"><input id="sToken" type="password" placeholder="fine-grained token (contents: read/write)" value="${esc(cfg.token || '')}"></div>
       <div class="row"><button class="btn" data-act="syncsave">Save & sync now</button><button class="btn ghost" data-act="syncoff">Disconnect</button></div></div>
@@ -1167,7 +1168,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live', 'my'].forEach(k => S[k] = S[k] || {}); C.setPlan(S.settings.seasonPlan); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live', 'my', 'essays', 'wis'].forEach(k => S[k] = S[k] || {}); C.setPlan(S.settings.seasonPlan); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }

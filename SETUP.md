@@ -53,6 +53,14 @@ New content from Claude lands in this folder and the repo. After each update, bu
 - Personal data: your browser + your private `vikram-data` repo only. Every sync is a commit, so the repo's history is also a backup.
 - The token can only touch `vikram-data`. If a phone is lost: revoke the token on GitHub and make a new one.
 
+## Your weekly report by email (set up once, runs forever)
+
+Every **Monday morning after 5:00** the same GitHub Action emails you a report on the week that just ended: average score against last week, verified focus hours, a day-by-day chart, what the numbers say (best and worst day, when you actually work, habits slipping and holding, a four-week trend), what you finished and learned, and one thing to fix next week. It is built from rules over your own data in `push/report.js`, with no AI and no outside service, so it keeps working without anyone touching it.
+
+It needs two repository secrets (steps 1 and 2 of the partner section below): `SMTP_USER` and `SMTP_PASS`. The report goes to `SMTP_USER` itself. To send it to a different address, add a secret `MY_EMAIL` and add the line `MY_EMAIL: ${{ secrets.MY_EMAIL }}` under `env:` in `.github/workflows/nudges.yml`.
+
+Things that can stop it, and how to avoid them: a Gmail app password stops working if you change your Google password (make a new one and update `SMTP_PASS`); a fine-grained GitHub token for `vikram-data` expires on the date you chose (pick "No expiration" or renew it); GitHub pauses scheduled workflows in repos with no activity for 60 days (the workflow already keeps itself alive).
+
 ## Partner emails (optional, recommended)
 
 The strongest accountability is a person your phone can't silence. Once set up, the GitHub Action that sends your nudges also emails one accountability partner:
