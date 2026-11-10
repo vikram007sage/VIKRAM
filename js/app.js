@@ -34,7 +34,8 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live'].forEach(k => S[k] = S[k] || {});
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live', 'my'].forEach(k => S[k] = S[k] || {});
+  C.setPlan(S.settings.seasonPlan);
   S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
   function save(sync = true) { if (SIM && !qs.get('test')) return; LS.set(KEY, S); if (sync) Sync.schedule(); }
@@ -51,7 +52,10 @@
   }
 
   // ================= day model =================
-  const habitById = Object.fromEntries(C.HABITS.map(h => [h.id, h]));
+  const habitBase = Object.fromEntries(C.HABITS.map(h => [h.id, h]));
+  const habitById = new Proxy(habitBase, { get(t, id) { if (t[id]) return t[id]; const m = S.my && S.my.habits && S.my.habits[id]; return m ? { id, t: m.t, min: m.t, start: '2000-01-01', cat: 'my' } : undefined; } });
+  const myList = (kind, ds) => { const sid = C.seasonAt(ds).id, o = (S.my && S.my[kind]) || {}; return Object.keys(o).filter(k => o[k].v && o[k].season === sid).sort((a, b) => o[a].ts - o[b].ts); };
+  const hidden = (ds, id) => { const o = S.my && S.my.off && S.my.off[C.seasonAt(ds).id + ':' + id]; return !!(o && o.v); };
   function day(ds) { S.days[ds] = S.days[ds] || { items: {} }; S.days[ds].items = S.days[ds].items || {}; return S.days[ds]; }
   function dayType(ds) { const o = S.settings.dayType && S.settings.dayType[ds]; return (o && o.v) || C.defaultDayType(ds); }
   function blocksFor(ds) {
@@ -60,15 +64,17 @@
   }
   const isOn = (d, id) => !!(d.items[id] && d.items[id].v);
   function activeItems(ds) {
-    const set = []; blocksFor(ds).forEach(b => (b.items || []).forEach(id => { const h = habitById[id]; if (h && h.start <= ds && !set.includes(id)) set.push(id); }));
-    if (minimumMode(ds)) return ['yoga', 'deep1', 'reading'].filter(id => habitById[id].start <= ds);
-    return set;
+    const set = []; blocksFor(ds).forEach(b => (b.items || []).forEach(id => { const h = habitById[id]; if (h && h.start <= ds && !set.includes(id) && !hidden(ds, id)) set.push(id); }));
+    if (minimumMode(ds)) return C.seasonAt(ds).id === 'placement' ? ['yoga', 'deep1', 'reading'].filter(id => habitById[id].start <= ds) : set.slice(0, 3);
+    return set.concat(myList('habits', ds));
   }
   function minimumMode(ds) { const d = S.days[ds]; return !!(d && d.minimum && d.minimum.v) || (S.comeback.active && ds >= (S.comeback.since || ds)); }
   function taskDue(t) { const o = S.taskDue[t.id]; return (o && o.date) || t.due; }
   const taskDone = t => !!(S.tasks[t.id] && S.tasks[t.id].done);
   function tasksForToday(ds) {
-    return C.TASKS.filter(t => !taskDone(t) && taskDue(t) <= addDays(ds, 3)).sort((a, b) => taskDue(a) < taskDue(b) ? -1 : 1).slice(0, minimumMode(ds) ? 1 : 4);
+    const mine = myList('tasks', ds).map(id => ({ id, t: S.my.tasks[id].t, due: ds, my: 1 })).filter(t => !taskDone(t));
+    if (C.seasonAt(ds).id !== 'placement') return mine.slice(0, minimumMode(ds) ? 1 : 5);
+    return mine.concat(C.TASKS.filter(t => !taskDone(t) && taskDue(t) <= addDays(ds, 3)).sort((a, b) => taskDue(a) < taskDue(b) ? -1 : 1).slice(0, minimumMode(ds) ? 1 : 4));
   }
   function score(ds) {
     const d = S.days[ds]; if (!d) return 0;
@@ -127,7 +133,7 @@
     }
   }
   function reschedule(today) {
-    const overdue = C.TASKS.filter(t => !taskDone(t) && taskDue(t) < today);
+    const overdue = C.seasonAt(today).id !== 'placement' ? [] : C.TASKS.filter(t => !taskDone(t) && taskDue(t) < today);
     overdue.forEach((t, i) => { S.taskDue[t.id] = { date: addDays(today, 1 + Math.floor(i * 7 / Math.max(overdue.length, 1))), ts: ts() }; });
     if (overdue.length) S.comeback.moved = overdue.length;
   }
@@ -141,6 +147,7 @@
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
 
   function render() {
+    C.setPlan(S.settings.seasonPlan);
     $$('.tabbar button, .toptabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
     const v = $('#view');
     let html = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach, learn: viewLearn, review: viewReview, resources: viewResources }[TAB] || EXT.views[TAB] || viewToday)();
@@ -201,7 +208,7 @@
   function taskRow(t, ds) {
     const due = taskDue(t), late = due < ds && !taskDone(t), mod = t.m && C.MODULES.find(m => m.c === t.m);
     const link = mod && mod.local ? `<a href="${mod.local}" class="lnk">open notes ↗</a>` : (mod ? `<span class="tag">notes coming</span>` : '');
-    return `<label class="item ${taskDone(t) ? 'done' : ''} ${late ? 'late' : ''}"><input type="checkbox" data-task="${t.id}" ${taskDone(t) ? 'checked' : ''}><span><span class="tt"><b>${t.m ? t.m + ' · ' : ''}</b>${esc(t.t)}</span><small>${late ? 'overdue · ' : ''}due ${fmtD(due)} ${link}</small></span></label>`;
+    return `<label class="item ${taskDone(t) ? 'done' : ''} ${late ? 'late' : ''}"><input type="checkbox" data-task="${t.id}" ${taskDone(t) ? 'checked' : ''}><span><span class="tt"><b>${t.m ? t.m + ' · ' : ''}</b>${esc(t.t)}</span><small>${t.my ? 'your goal' : (late ? 'overdue · ' : '') + 'due ' + fmtD(due)} ${link}</small></span></label>`;
   }
 
   // ---------- PREP ----------
@@ -298,6 +305,7 @@
     const cfg = LS.get(SYNCKEY, {}), perm = typeof Notification !== 'undefined' ? Notification.permission : 'unsupported';
     const ds = nowIST().date, dt = dayType(ds);
     return `<section class="hero small"><div class="eyebrow">Settings · v${CFG.version}</div><h1>Control room</h1></section>
+    <button class="card nextcard gcont" data-act="go-seasons"><span><b>Season: ${esc(C.seasonAt(ds).n)}</b><small>Change your phase of life, habits and goals</small></span><span class="go">▶</span></button>
     <div class="card"><h3>Sync (phone ⇄ laptop)</h3><p class="small muted">Your data syncs through a <b>private</b> GitHub repo using a token that stays on this device. Status: <b>${Sync.status}</b>${Sync.last ? ' · last ' + new Date(Sync.last).toLocaleTimeString('en-IN') : ''} ${Sync.err ? '· ' + esc(Sync.err) : ''}</p>
       <div class="form"><input id="sOwner" placeholder="GitHub username" value="${esc(cfg.owner || '')}"><input id="sRepo" placeholder="data repo (e.g. vikram-data)" value="${esc(cfg.repo || 'vikram-data')}"><input id="sToken" type="password" placeholder="fine-grained token (contents: read/write)" value="${esc(cfg.token || '')}"></div>
       <div class="row"><button class="btn" data-act="syncsave">Save & sync now</button><button class="btn ghost" data-act="syncoff">Disconnect</button></div></div>
@@ -305,8 +313,8 @@
     <div class="card"><h3>Notifications</h3><p class="small muted">Permission: <b>${perm}</b>. Push needs the installed app (https). Exact-time alarms come from the calendar file below.</p>
       <div class="row"><button class="btn" data-act="push">Enable push on this device</button><button class="btn ghost" data-act="pushtest">Test notification</button></div></div>
     <div class="card"><h3>Calendar alarms</h3><p class="small muted">Downloads a calendar file with every block of your next 62 days (each with an alert at its start time). Import it into Google Calendar: it rings on phone and laptop at the exact time. Re-download monthly.</p><button class="btn" data-act="ics">Download vikram-alarms.ics</button></div>
-    <div class="card"><h3>Today's schedule type</h3><select id="dtSel">${Object.entries(C.SCHEDULES).map(([k, s]) => `<option value="${k}" ${k === dt ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select><p class="small muted">Change it for today (exam day, travel, holiday class-off).</p></div>
-    <div class="card"><h3>Edit block times</h3><select id="edSel">${Object.entries(C.SCHEDULES).map(([k, s]) => `<option value="${k}">${esc(s.name)}</option>`).join('')}</select><div id="edBox"></div></div>
+    <div class="card"><h3>Today's schedule type</h3><select id="dtSel">${Object.entries(C.SCHEDULES).filter(([k]) => C.seasonAt(ds).types.includes(k) || k === dt).map(([k, s]) => `<option value="${k}" ${k === dt ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select><p class="small muted">Change it for today (exam day, travel, holiday class-off).</p></div>
+    <div class="card"><h3>Edit block times</h3><select id="edSel">${Object.entries(C.SCHEDULES).filter(([k]) => C.seasonAt(ds).types.includes(k)).map(([k, s]) => `<option value="${k}">${esc(s.name)}</option>`).join('')}</select><div id="edBox"></div></div>
     <div class="card"><h3>Install on phone</h3><ol class="plain small"><li>Open your Vikram link in Chrome (Android) or Safari (iPhone).</li><li>Android: menu ⋮ → <b>Add to Home screen</b>. iPhone: Share → <b>Add to Home Screen</b>.</li><li>Put it where Instagram was. Move Instagram to the last screen and set a 20-minute daily limit (Digital Wellbeing / Screen Time).</li></ol></div>
     <div class="card"><h3>Backup</h3><div class="row"><button class="btn" data-act="export">Export backup</button><label class="btn ghost">Import<input type="file" id="importFile" accept="application/json" hidden></label></div></div>
     <div class="card"><h3>Theme</h3><div class="row"><button class="btn ghost" data-act="theme" data-v="light">Light</button><button class="btn ghost" data-act="theme" data-v="dark">Dark</button><button class="btn ghost" data-act="theme" data-v="auto">Auto</button></div></div>
@@ -345,6 +353,7 @@
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, ds = nowIST().date;
     if (EXT.acts[act]) return EXT.acts[act](a, e);
+    if (act === 'go-seasons') return go('seasons');
     if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); Story.open(Story.pick()); toast('Urge noticed. A story instead.'); }
     if (act === 's-open') Story.open(a.dataset.id);
     if (act === 'feednext' || act === 'feedprev') { feedGen = null; LS.set('vikram_feed_n', Math.max(0, LS.get('vikram_feed_n', 0) + (act === 'feednext' ? 1 : -1))); feedIdx = (feedIdx + (act === 'feednext' ? 1 : feedMap().length - 1)) % feedMap().length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
@@ -1158,7 +1167,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories', 'gita', 'live', 'my'].forEach(k => S[k] = S[k] || {}); C.setPlan(S.settings.seasonPlan); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }
@@ -1199,7 +1208,7 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { Sync.now(); render(); } else if (Sync.cfg()) Sync.now(); });
   window.addEventListener('online', () => Sync.now());
   setInterval(() => Sync.now(), 180000);
-  EXT.kit = { $, $$, esc, S: () => S, save, day, nowIST, ts, toast, ov, ovClose, render, go, loadScript, LS, speak, speakEn, debounce, burst, tab: () => TAB };
+  EXT.kit = { $, $$, esc, S: () => S, save, day, nowIST, ts, toast, ov, ovClose, render, go, loadScript, LS, speak, speakEn, addDays, fmtD, activeItems, debounce, burst, tab: () => TAB };
   (EXT.boot || []).forEach(f => { try { f(EXT.kit); } catch (e) { console.error(e); } });
   save(false); render(); fab(); Sync.now();
   window.VIKRAM = { parseCSV, Out, S: () => S, merge, score, streakInfo, activeItems, dayType, blocksFor, xp };

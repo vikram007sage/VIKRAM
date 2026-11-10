@@ -80,7 +80,8 @@ Primary user: me. Insights from 4 weeks of self-observation:
 - **v1.6 (shipped):** Stories: 144 swipeable cards in 5 series (Alexander, Greek myths, Europe in 33 moments, Germany 1918–39, World War II). Each card has a date, an animated route map, a Fact / Debated / Legend / Myth tag and Wikipedia links (all 243 checked); 25 licensed images; the urge-to-scroll button opens a story directly. Dropped the 3D atlas and notes widgets as low-use.
 - **v1.7 (shipped):** One-tap pledge and strict mode. A floating Focus button starts a timer instantly; leaving the app triggers rotating, escalating rude notifications (also pushed from the server if you stay away). Stories rewritten in a conversational voice with longer, scrollable, bigger cards; 3 new series (Mughals, India's freedom struggle, Cold War) for 207 cards in 8 series, 35 licensed images.
 - **v1.8 (shipped):** Bhagavad Gita section (all 701 verses, Sanskrit + transliteration + two translations + commentary, swipe to keep, verse of the day, verses by mood, chapter quizzes, reflections); opening scene with public-domain Krishna paintings; live layer that never runs out (Wikipedia explorer and on-this-day, Tatoeba French sentences, new English words from Datamuse, Lichess daily link, endless feed).
-- **v1.9+:** remaining notes modules (S2 cases, S3 story bank, B1 banking, D1 SQL, S4 CV); then a version anyone can set up.
+- **v1.9 (shipped):** Seasons (placement prep → job + gym → travel → UPSC/MBA; dated plan, own schedules and habits per season, hide habits, add your own habits and goals); modern opening scene (photos of deities, cars, bikes and destinations with a bold line and the day's verse).
+- **v2.0+:** remaining notes modules (S2 cases, S3 story bank, B1 banking, D1 SQL, S4 CV); then a version anyone can set up.
 
 ## 9. What I'll measure and write up (fill in after 4 weeks)
 - North-star trend by week:

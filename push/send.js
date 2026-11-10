@@ -76,6 +76,7 @@ function gitaVerse(ds) { try { const dn = Math.floor(Date.parse(ds + 'T00:00:00Z
 (async () => {
   const now = NOW ? new Date(NOW) : new Date(), n = ist(now);
   const { json: S } = await getFile('state.json'); if (!S) { console.log('no state yet'); return; }
+  if (C.setPlan) C.setPlan(S.settings && S.settings.seasonPlan);
   const { json: log0, sha: logSha } = await getFile('push-log.json'); const log = log0 || {};
   const lastRun = log.lastRun ? new Date(log.lastRun) : new Date(now.getTime() - 16 * 60000);
   const from = new Date(Math.max(lastRun.getTime(), now.getTime() - 60 * 60000)); // never send anything older than 60 min

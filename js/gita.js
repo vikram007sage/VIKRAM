@@ -59,7 +59,7 @@
     <div class="gch">${CH.map(c => { const n = readN(c[0]), q = g.quiz[c[0]]; return `<button class="gtile ${n >= c[4] ? 'done' : ''}" data-act="g-ch" data-c="${c[0]}"><span class="gn">${c[0]}</span><b>${esc(c[2])}</b><small>${esc(c[1])}</small><i><u style="width:${Math.round(100 * n / c[4])}%"></u></i><small class="muted">${n}/${c[4]}${q ? ' · quiz ' + q.best + '/' + q.of : ''}</small></button>`; }).join('')}</div>
     ${saved.length ? `<div class="card"><div class="row-between"><div class="eyebrow">Verses you kept</div><button class="btn sm" data-act="g-saved">Swipe through</button></div><div class="chips">${saved.slice(0, 40).map(k => { const r = k.split('.'); return `<button class="chip" data-act="g-open" data-c="${r[0]}" data-v="${r[1]}" data-one="1">${k}</button>`; }).join('')}</div></div>` : ''}
     ${notes.length ? `<div class="card"><div class="eyebrow">Your reflections</div>${notes.slice(0, 8).map(k => { const r = k.split('.'); return `<button class="gnote" data-act="g-open" data-c="${r[0]}" data-v="${r[1]}" data-one="1"><b>${k}</b> ${esc(g.notes[k].t)}</button>`; }).join('')}${notes.length > 8 ? `<p class="muted small">${notes.length - 8} more inside the verses.</p>` : ''}</div>` : ''}
-    <p class="muted small center">Translation: Shri Purohit Swami (1935). Second translation and commentary: Swami Sivananda. "In plain words" is VIKRAM's explanation, not a translation. Text data from the open gita/gita project. Full text works offline once a chapter has been opened. Opening paintings: public-domain works from Wikimedia Commons (c. 1830 album, V&amp;A Vishvarupa c. 1800–20, a 1940 print, S. Hardy 1899, Raja Ravi Varma 1905, an 1824 manuscript).</p>`;
+    <p class="muted small center">Translation: Shri Purohit Swami (1935). Second translation and commentary: Swami Sivananda. "In plain words" is VIKRAM's explanation, not a translation. Text data from the open gita/gita project. Full text works offline once a chapter has been opened. Opening photos: Wikimedia Commons, credited on each screen.</p>`;
   };
   X.binds.gita = function () { if (!LSg('vikram_votd') || LSg('vikram_votd').ds !== K.nowIST().date) votd(o => { if (o && K.tab() === 'gita') K.render(); }); };
   X.todayCard = function () { const v = LSg('vikram_votd'); if (!v || !K || v.ds !== K.nowIST().date) return ''; return `<button class="card gtoday" data-act="g-open" data-c="${v.c}" data-v="${v.v}" data-one="1"><div class="eyebrow">Gita · ${v.c}.${v.v}</div><p>${esc(v.t)}</p></button>`; };
@@ -141,19 +141,25 @@
 
   // ---------- opening scene ----------
   const ART = [
-    { src: 'gita/img/k1.jpg', credit: 'Krishna driving Arjuna\'s chariot, album painting, c. 1830. Public domain, Wikimedia Commons' },
-    { src: 'gita/img/k2.jpg', credit: 'Vishnu Vishvarupa, c. 1800–20, Victoria and Albert Museum. Public domain, Wikimedia Commons' },
-    { src: 'gita/img/k3.jpg', credit: 'Virat Swarup (the cosmic form), print, c. 1940. Public domain, Wikimedia Commons' },
-    { src: 'gita/img/k4.jpg', credit: 'Krishna and Arjuna driving towards Bhishma, S. Hardy, 1899. Public domain, Wikimedia Commons' },
-    { src: 'gita/img/k5.jpg', credit: 'Krishna as Envoy, Raja Ravi Varma, 1905. Public domain, Wikimedia Commons' },
-    { src: 'gita/img/k6.jpg', credit: 'Illustrated Bhagavad Gita manuscript, chapter 1, 1824. Public domain, Wikimedia Commons' }
+    { src: 'gita/img/s1.jpg', line: 'STILL MIND. LOUD RESULTS.', credit: 'Adiyogi Shiva · photo: Anu 21 Anusha, CC0', pos: '50% 35%' },
+    { src: 'gita/img/s2.jpg', line: 'STRENGTH WITH DEVOTION.', credit: 'Hanuman statue · photo: Harshakamanuru, CC BY-SA 4.0', pos: '50% 30%' },
+    { src: 'gita/img/s3.jpg', line: 'EARN IT.', credit: 'Lamborghini Aventador SVJ · photo: Alexander-93, CC BY-SA 4.0', pos: '45% 50%' },
+    { src: 'gita/img/s4.jpg', line: 'WORK NOW. DRIVE LATER.', credit: 'Porsche 911 GT3 RS · photo: Alexander-93, CC BY-SA 4.0', pos: '55% 50%' },
+    { src: 'gita/img/s5.jpg', line: 'FAST IS BUILT SLOWLY.', credit: 'Kawasaki Ninja H2 · photo: Rainmaker47, CC BY-SA 4.0', pos: '50% 60%' },
+    { src: 'gita/img/s6.jpg', line: 'LADAKH IS WAITING.', credit: 'Royal Enfield on the road · photo: Chris Hunkeler, CC BY-SA 2.0', pos: '30% 50%' },
+    { src: 'gita/img/s7.jpg', line: 'AIM HIGHER.', credit: 'Milky Way over the Matterhorn · photo: Giles Laurent, CC BY-SA 4.0', pos: '50% 60%' },
+    { src: 'gita/img/s8.jpg', line: 'GO SEE IT.', credit: 'Northern lights, Mývatn, Iceland · photo: Giles Laurent, CC BY-SA 4.0', pos: '45% 50%' },
+    { src: 'gita/img/s9.jpg', line: 'THE WORLD IS BIG. GET OUT THERE.', credit: 'Kabukicho, Tokyo · photo: Basile Morin, CC BY-SA 4.0', pos: '50% 40%' },
+    { src: 'gita/img/s10.jpg', line: 'SMALL TENT. BIG SKY.', credit: 'Milky Way at Elbrus · photo: oliwok, CC BY 4.0', pos: '50% 70%' },
+    { src: 'gita/img/s11.jpg', line: 'A YEAR OF TRAVEL. PAY FOR IT NOW.', credit: 'Oia, Santorini · photo: Giles Laurent, CC BY-SA 4.0', pos: '70% 50%' },
+    { src: 'gita/img/s12.jpg', line: 'CLIMB.', credit: 'Matterhorn at sunset · photo: Sam Ferrara, CC0', pos: '55% 50%' }
   ];
   function splash() {
     const el = document.getElementById('splash'); if (!el) return; const q = new URLSearchParams(location.search);
     if ((q.get('test') && !q.get('splash')) || sessionStorage.getItem('vk_splash')) { el.remove(); return; }
     try { sessionStorage.setItem('vk_splash', '1'); } catch (e) { }
     const n = (+localStorage.getItem('vk_splash_n') || 0) + 1; try { localStorage.setItem('vk_splash_n', n); } catch (e) { }
-    if (ART.length) { const a = ART[n % ART.length]; const im = document.getElementById('spImg'); im.style.backgroundImage = 'url(' + a.src + ')'; im.title = a.credit; }
+    if (ART.length) { const a = ART[n % ART.length]; const im = document.getElementById('spImg'); im.style.backgroundImage = 'url(' + a.src + ')'; im.style.backgroundPosition = a.pos; document.getElementById('spL').textContent = a.line; document.getElementById('spC').textContent = a.credit; }
     el.classList.add('show'); let gone = false; const bye = () => { if (gone) return; gone = true; el.classList.add('bye'); setTimeout(() => el.remove(), 600); };
     el.onclick = bye; const fill = o => { if (!o) return; document.getElementById('spQ').textContent = o.t; document.getElementById('spR').textContent = 'Bhagavad Gita ' + o.c + '.' + o.v; };
     fill(LSg('vikram_votd')); votd(fill); setTimeout(bye, 6000);

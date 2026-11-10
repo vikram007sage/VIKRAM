@@ -282,6 +282,74 @@ var VK_CONTENT = (function () {
   ];
   const LEVELS = [[0, 'Aspirant'], [1500, 'Analyst'], [5000, 'Associate'], [12000, 'Strategist'], [25000, 'Traveller'], [45000, 'Statesman']];
 
-  return { DAY1, SCHEDULES, defaultDayType, HABITS, HOBBY_PLAN, MODULES, PHASES, TASKS, BOOKS, FEED, LEVELS, NAG };
+  // ---------- SEASONS: the same assistant for every phase of life ----------
+  // A season has its own day types, blocks and habits. The plan (which season starts when) lives in settings.seasonPlan,
+  // so past days keep the schedule they had. Block times of any day type can still be edited in More.
+  const S0 = '2026-01-01';
+  HABITS.push(
+    { id: 'gym', t: 'Gym / strength 45 min', min: '15 min bodyweight', start: S0, cat: 'body' },
+    { id: 'protein', t: 'Ate enough protein, drank 3 L water', min: 'One proper meal', start: S0, cat: 'body' },
+    { id: 'workdeep', t: 'One deep hour on the most important work task', min: '25 focused minutes', start: S0, cat: 'work' },
+    { id: 'skill', t: 'Learn 30 min (skill, course or side project)', min: '10 minutes', start: S0, cat: 'mind' },
+    { id: 'spend', t: 'Logged today\'s spending', min: 'Logged it', start: S0, cat: 'money' },
+    { id: 'write', t: 'Wrote 200 words', min: 'Wrote 3 lines', start: S0, cat: 'mind' },
+    { id: 'explore', t: 'Saw or did one new thing', min: 'A 20-minute walk somewhere new', start: S0, cat: 'life' },
+    { id: 'people', t: 'Talked to one new person', min: 'Called home', start: S0, cat: 'life' },
+    { id: 'decide', t: 'UPSC vs MBA: 15 min of real research', min: 'Read one page about either', start: S0, cat: 'mind' },
+    { id: 'revise', t: 'Revised yesterday for 20 min', min: '5-minute recall', start: S0, cat: 'prep' },
+    { id: 'mock', t: 'Timed test or answer writing', min: '10 questions', start: S0, cat: 'prep' }
+  );
+  const night = (from, sleep) => [
+    { s: from, e: sleep, t: 'Journal · brush · phone away', k: 'ritual', items: ['journal', 'brushPM'], nudge: '3 lines: one win, one lesson, tomorrow\'s first task. Then brush and put the phone away.' }
+  ];
+  const morning = [{ s: '05:30', e: '05:45', t: 'Wake · brush · water', k: 'ritual', items: ['brushAM'], nudge: 'Up. Brush, water, no phone.' }, { s: '05:45', e: '06:05', t: 'Meditation + puja', k: 'ritual', items: ['meditate', 'puja'] }];
+  Object.assign(SCHEDULES, {
+    work: { name: 'Work day', blocks: morning.concat([
+      { s: '06:15', e: '07:30', t: 'Gym', k: 'body', items: ['gym'], nudge: 'Gym. The job pays for the life; the body carries it.' },
+      { s: '07:30', e: '09:00', t: 'Bath · breakfast · commute', k: 'break', items: ['bath'] },
+      { s: '09:00', e: '13:00', t: 'Work · hardest task first', k: 'prep', items: ['workdeep'], nudge: 'Start with the hardest task. One deep hour before email.' },
+      { s: '13:00', e: '14:00', t: 'Lunch + 10-minute walk', k: 'break', items: ['walk'] },
+      { s: '14:00', e: '18:30', t: 'Work', k: 'prep', items: [] },
+      { s: '19:00', e: '19:45', t: 'Learn: skill or side project', k: 'mind', items: ['skill'], nudge: '30 minutes on the skill you picked. This is what compounds.' },
+      { s: '19:45', e: '20:30', t: 'Dinner', k: 'break', items: ['protein'] },
+      { s: '20:30', e: '21:15', t: 'Reading or hobby', k: 'hobby', items: ['reading', 'hobby'], nudge: 'Read 10 pages or do the hobby. Not the phone.' },
+      { s: '21:15', e: '21:30', t: 'Log spending', k: 'mind', items: ['spend'] }]).concat(night('21:30', '22:00')) },
+    weekend: { name: 'Weekend', blocks: morning.concat([
+      { s: '07:00', e: '08:30', t: 'Long workout or sport', k: 'body', items: ['gym'], nudge: 'Weekend session. Go longer than usual.' },
+      { s: '10:00', e: '12:00', t: 'Side project / writing', k: 'mind', items: ['skill', 'write'], nudge: 'Two hours on something that is yours.' },
+      { s: '16:00', e: '18:00', t: 'People, outdoors, history', k: 'hobby', items: ['explore', 'history'] },
+      { s: '20:00', e: '20:45', t: 'Weekly review + money check', k: 'mind', items: ['review', 'spend', 'reading'], nudge: 'Sunday: weekly review. What did the week buy you?' }]).concat(night('21:30', '22:00')) },
+    road: { name: 'Travel day', blocks: [
+      { s: '06:00', e: '06:30', t: 'Wake · move · meditate', k: 'ritual', items: ['brushAM', 'yoga', 'meditate'], nudge: 'New place, same first half hour.' },
+      { s: '07:00', e: '13:00', t: 'Explore', k: 'hobby', items: ['explore', 'walk'], nudge: 'Go and see one thing you will remember.' },
+      { s: '13:00', e: '15:00', t: 'Lunch + rest', k: 'break', items: [] },
+      { s: '15:00', e: '18:00', t: 'People and places', k: 'hobby', items: ['people'] },
+      { s: '18:30', e: '19:30', t: 'Write about today', k: 'mind', items: ['write'], nudge: 'Write 200 words about today while it is fresh.' },
+      { s: '20:30', e: '21:00', t: 'Read + the big decision', k: 'mind', items: ['reading', 'decide'], nudge: '15 minutes on UPSC vs MBA. A year of travel is also a year to decide.' },
+      { s: '21:00', e: '21:15', t: 'Log spending', k: 'mind', items: ['spend'] }].concat(night('21:15', '22:00')) },
+    examday: { name: 'Exam prep day', blocks: ritual.concat([
+      { s: '07:00', e: '10:00', t: 'Study block 1 · new material', k: 'prep', items: ['deep1'], nudge: 'Block 1. New material while the mind is fresh.' },
+      { s: '10:00', e: '10:30', t: 'Breakfast + walk', k: 'break', items: [] },
+      { s: '10:30', e: '13:00', t: 'Study block 2 · practice', k: 'prep', items: ['deep2'], nudge: 'Block 2: questions, not reading.' },
+      { s: '13:00', e: '14:00', t: 'Lunch + walk (no bed)', k: 'break', items: ['noNap'] },
+      { s: '14:00', e: '16:30', t: 'Timed test / answer writing', k: 'prep', items: ['mock'], nudge: 'Timed work. The exam is timed; so is this.' },
+      { s: '16:30', e: '17:30', t: 'Gym or walk', k: 'body', items: ['gym'] },
+      { s: '18:00', e: '19:00', t: 'Current affairs + revise', k: 'prep', items: ['revise'], nudge: 'Revise yesterday before learning anything new.' },
+      { s: '20:00', e: '20:30', t: 'Reading', k: 'mind', items: ['reading'] }]).concat(night('20:30', '21:00')) }
+  });
+  const SEASONS = [
+    { id: 'placement', n: 'Placement prep', g: 'Crack the job: aptitude, cases, projects, outreach.', types: ['study', 'class', 'sunday'].filter(k => SCHEDULES[k]).concat(Object.keys(SCHEDULES).filter(k => !['study', 'class', 'sunday', 'work', 'weekend', 'road', 'examday'].includes(k))), type: defaultDayType },
+    { id: 'job', n: 'Job + gym year', g: 'Do the job well, build a strong body, save money, keep learning.', types: ['work', 'weekend'], type: ds => { const wd = new Date(ds + 'T00:00:00').getDay(); return wd === 0 || wd === 6 ? 'weekend' : 'work'; } },
+    { id: 'travel', n: 'Travel year', g: 'See the world, write about it, and decide: UPSC or MBA.', types: ['road', 'weekend'], type: () => 'road' },
+    { id: 'exam', n: 'UPSC / MBA prep', g: 'One exam, full focus, same discipline.', types: ['examday', 'weekend'], type: ds => new Date(ds + 'T00:00:00').getDay() === 0 ? 'weekend' : 'examday' }
+  ];
+  SEASONS[0].types = [...new Set(SEASONS[0].types)];
+  let PLAN = [{ id: 'placement', from: '2000-01-01' }];
+  const api = { DAY1, SCHEDULES, HABITS, HOBBY_PLAN, MODULES, PHASES, TASKS, BOOKS, FEED, LEVELS, NAG, SEASONS,
+    setPlan(p) { const l = ((p && p.list) || []).filter(x => x && SEASONS.some(s => s.id === x.id) && /^\d{4}-\d\d-\d\d$/.test(x.from)); PLAN = [{ id: 'placement', from: '2000-01-01' }].concat(l).sort((a, b) => a.from < b.from ? -1 : a.from > b.from ? 1 : 0); },
+    plan: () => PLAN.slice(1),
+    seasonAt(ds) { let cur = PLAN[0]; PLAN.forEach(x => { if (x.from <= ds) cur = x; }); return SEASONS.find(s => s.id === cur.id); },
+    defaultDayType(ds) { return api.seasonAt(ds).type(ds); } };
+  return api;
 })();
 if (typeof module !== 'undefined') module.exports = VK_CONTENT;
