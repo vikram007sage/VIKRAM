@@ -34,7 +34,7 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes'].forEach(k => S[k] = S[k] || {});
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories'].forEach(k => S[k] = S[k] || {});
   S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
   function save(sync = true) { if (SIM && !qs.get('test')) return; LS.set(KEY, S); if (sync) Sync.schedule(); }
@@ -98,6 +98,7 @@
     x += S.math.reduce((a, m) => a + Math.round((m.score || 0) / 2), 0);
     x += S.practice.reduce((a, p) => a + (p.sc || 0) * 8, 0);
     x += S.sent.length * 12;
+    x += Object.values(S.stories).reduce((a, r) => a + ((r.max || 0) + 1) * 3, 0);
     x += Object.values(S.lib).filter(r => r.v).length * 30 + Object.values(S.fr).filter(r => r.done).length * 40 + Object.values((S.chess && S.chess.puz) || {}).filter(r => r.ok).length * 5;
     x += Object.values(S.srs).reduce((a, c) => a + (c.reps || 0) * 2, 0);
     Object.values(S.writing).forEach(w => x += Math.min(40, Math.round(((w.text || '').split(/\s+/).filter(Boolean).length) / 5)));
@@ -244,7 +245,8 @@
     const qs = (L.QUOTES || []).map(q => { const t = L.TEXTS.find(x => x.id === q.id); return { k: 'history', q: '“' + q.q + '”', a: t.author + ', ' + t.title + ' (' + t.era + '). ' + q.why, lib: q.id, li: q.i }; });
     const out = []; let qi = 0; C.FEED.forEach((c, i) => { out.push(c); if (i % 3 === 2 && qi < qs.length) out.push(qs[qi++]); }); return (FPOOL = out.concat(qs.slice(qi)));
   }
-  function viewFeed() {
+  function viewFeed() { const h = viewFeedCards(), i = h.indexOf('</section>') + 10; return h.slice(0, i) + Story.shelf() + h.slice(i); }
+  function viewFeedCards() {
     const ds = nowIST().date, dd = day(ds);
     const slot = feedMap()[feedIdx % feedMap().length];
     if (slot === 'q' && typeof VK_PRACTICE !== 'undefined') { const g = feedGen || (feedGen = VK_PRACTICE.one());
@@ -338,7 +340,8 @@
   };
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return; const act = a.dataset.act, ds = nowIST().date;
-    if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); toast('Urge noticed. One card instead.'); }
+    if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); Story.open(Story.pick()); toast('Urge noticed. A story instead.'); }
+    if (act === 's-open') Story.open(a.dataset.id);
     if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : feedMap().length - 1)) % feedMap().length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
     if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; if (j === feedGen.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
     if (act === 'go') { if (a.dataset.k) LTAB = a.dataset.k; go(a.dataset.to); }
@@ -468,7 +471,7 @@
     },
     history() {
       const nx = this.next();
-      return `${nx ? `<div class="card nextcard"><div class="eyebrow">Continue · about ${mins(nx[0].r[nx[1]][1])} min</div><h3>${esc(nx[0].author)}: ${esc(nx[0].r[nx[1]][0])}</h3><small class="muted">${esc(nx[0].title)} · ${esc(nx[0].era)}</small><div class="row"><button class="btn" data-act="l-read" data-id="${nx[0].id}" data-i="${nx[1]}">Read now</button></div></div>` : '<div class="card"><h3>Library finished ✓</h3><p class="small muted">Re-read your favourites, or pick a full book from the Life → Books list.</p></div>'}
+      return `<h3 class="h">Stories</h3>${Story.shelf()}<h3 class="h">The originals</h3>${nx ? `<div class="card nextcard"><div class="eyebrow">Continue · about ${mins(nx[0].r[nx[1]][1])} min</div><h3>${esc(nx[0].author)}: ${esc(nx[0].r[nx[1]][0])}</h3><small class="muted">${esc(nx[0].title)} · ${esc(nx[0].era)}</small><div class="row"><button class="btn" data-act="l-read" data-id="${nx[0].id}" data-i="${nx[1]}">Read now</button></div></div>` : '<div class="card"><h3>Library finished ✓</h3><p class="small muted">Re-read your favourites, or pick a full book from the Life → Books list.</p></div>'}
         ${LIB.SHELVES.map(([k, name]) => `<h3 class="h">${esc(name)}</h3><div class="card list">${LIB.TEXTS.filter(t => t.shelf === k).map(t => `<details class="libt"><summary><b>${esc(t.author)}</b> · ${esc(t.title)} <small class="muted">${esc(t.era)} · ${t.r.filter((r, i) => libDone(t.id, i)).length}/${t.r.length}</small></summary><p class="small">${esc(t.intro)}</p>${t.r.map((r, i) => `<button class="rd ${libDone(t.id, i) ? 'done' : ''}" data-act="l-read" data-id="${t.id}" data-i="${i}"><span>${libDone(t.id, i) ? '✓' : i + 1}</span>${esc(r[0])} <small class="muted">${mins(r[1])} min</small></button>`).join('')}<p class="small muted">Translation: ${esc(t.tr)} · public domain · <a href="${esc(t.src)}" target="_blank" rel="noopener">source</a></p></details>`).join('')}</div>`).join('')}
         <div class="row"><button class="btn ghost" data-act="l-dlall">Save all texts for offline</button></div>
         <p class="small muted">Readings are extracts chosen for a 15-minute evening slot. Old translations use old spellings; read for the argument, not every name.</p>`;
@@ -659,7 +662,7 @@
     meditate: { how: 'Meditation timer', act: 'focus', kind: 'meditate', test: (ds, mm) => focusMins(ds, 'meditate') >= (mm ? 3 : 10) },
     yoga: { how: 'Yoga timer', act: 'focus', kind: 'yoga', test: (ds, mm) => focusMins(ds, 'yoga') >= (mm ? 5 : 15) },
     reading: { how: 'Update pages, a library reading, or a reading timer', test: (ds, mm) => Object.values(S.books).some(b => tsDay(b.ts) === ds) || Object.values(S.lib).some(r => r.d === ds) || focusMins(ds, 'reading') >= (mm ? 5 : 10) },
-    history: { how: 'Finish a library reading', act: 'l-today', k: 'history', test: ds => Object.values(S.lib).some(r => r.d === ds) },
+    history: { how: 'A library reading, or 10 story cards', act: 'l-today', k: 'history', test: ds => Object.values(S.lib).some(r => r.d === ds) || ((S.days[ds] && S.days[ds].st && S.days[ds].st.n) || 0) >= 10 },
     hobby: { how: 'French unit, chess, vocab set or 100 words written', test: ds => Object.values(S.fr).some(r => r.d === ds) || Object.values(S.wd).some(r => r.d === ds) || Object.values((S.chess.les) || {}).some(r => r.d === ds) || Object.values((S.chess.puz) || {}).some(r => r.d === ds) || (((S.writing[ds] && S.writing[ds].text) || '').split(/\s+/).filter(Boolean).length >= 100) },
     journal: { how: 'Write one line in the journal', test: ds => ((S.days[ds] && S.days[ds].journal && S.days[ds].journal.text) || '').trim().length >= 15 },
     review: { how: 'Save the weekly review', act: 'go', to: 'review', test: ds => !!(S.reviews[weekKey(ds)] && S.reviews[weekKey(ds)].d === ds) }
@@ -856,6 +859,106 @@
       ${VK_RESOURCES.map(g => `<h3 class="h">${esc(g.t)}</h3><div class="card list res">${g.r.map(r => `<a class="resl" href="${r[1]}" target="_blank" rel="noopener"><b>${esc(r[0])} ↗</b><small>${esc(r[2])}</small></a>`).join('')}</div>`).join('')}`;
   }
 
+  // ================= stories: swipeable history series =================
+  const STDATA = {}, STWAIT = {};
+  window.VK_STORY_LOAD = (id, d) => { STDATA[id] = d; (STWAIT[id] || []).forEach(f => f(true)); delete STWAIT[id]; };
+  function loadScript(src, ok, bad) { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => { s.remove(); bad && bad(); }; document.head.appendChild(s); }
+  function loadStory(id, cb) {
+    const need = () => { if (STDATA[id]) return cb(true); if (STWAIT[id]) return STWAIT[id].push(cb); STWAIT[id] = [cb]; loadScript('stories/' + id + '.js', null, () => { (STWAIT[id] || []).forEach(f => f(false)); delete STWAIT[id]; }); };
+    if (typeof VK_LAND === 'undefined') loadScript('js/land.js', need, () => need()); else need();
+  }
+  const SER = id => VK_STORIES.SERIES.find(s => s.id === id);
+  const stRec = id => S.stories[id] || { i: 0, max: -1 };
+  const Story = {
+    pick() { const prog = VK_STORIES.SERIES.map(s => ({ s, r: stRec(s.id) })); const cur = prog.filter(x => x.r.max >= 0 && !x.r.done).sort((a, b) => (b.r.ts || 0) - (a.r.ts || 0))[0]; return (cur || prog.find(x => !x.r.done) || prog[0]).s.id; },
+    shelf() {
+      const nx = this.pick(), s = SER(nx), r = stRec(nx);
+      return `<div class="stshelf">${VK_STORIES.SERIES.map(x => { const rr = stRec(x.id), im = VK_STORIES.IMG[x.cover]; const pct = rr.done ? 100 : rr.n ? Math.round(100 * (rr.max + 1) / rr.n) : 0;
+        return `<button class="stc" data-act="s-open" data-id="${x.id}" style="--c:${x.color};--p:${pct}"><span class="sring"><span class="img" style="${im ? `background-image:url(stories/img/${x.cover}.jpg)` : ''}"></span></span><small>${esc(x.t.split(':')[0])}</small></button>`; }).join('')}</div>
+        <button class="stgo" data-act="s-open" data-id="${nx}"><b>${r.max >= 0 ? 'Continue' : 'Start'}: ${esc(s.t)}</b><small>${r.max >= 0 && r.n ? `card ${Math.min(r.i + 1, r.n)} of ${r.n} · ` : ''}swipe stories instead of reels</small></button>`;
+    },
+    open(id, at) {
+      ov(`<div class="story"><p class="muted center" style="margin-top:40vh">Loading…</p></div>`); $('#overlay').classList.add('full', 'dark');
+      loadStory(id, ok => { if (!ok) { ov(`<div class="quizbox"><p>This series isn't saved on this device yet. Open it once while online.</p><button class="btn" id="sX">Close</button></div>`); $('#sX').onclick = () => { $('#overlay').classList.remove('dark'); ovClose(); }; return; }
+        const C = STDATA[id], r = stRec(id); this.id = id; this.cards = C; this.i = at != null ? at : (r.done ? 0 : Math.min(r.i || 0, C.length - 1)); this.prevLL = null; this.buildMap(); this.show(); });
+    },
+    chapterOf(i) { let s = i; while (s > 0 && !this.cards[s].ch) s--; let e = i + 1; while (e < this.cards.length && !this.cards[e].ch) e++; return { s, e, t: this.cards[s].ch || '' }; },
+    buildMap() {
+      const ser = SER(this.id), pts = this.cards.filter(c => c.ll), lat0 = pts.reduce((a, c) => a + c.ll[0], 0) / (pts.length || 1);
+      this.k = Math.cos(lat0 * Math.PI / 180);
+      const L = (typeof VK_LAND !== 'undefined' && VK_LAND[ser.land]) || [];
+      this.landPath = L.map(r => { let d = ''; for (let j = 0; j < r.length; j += 2) d += (j ? 'L' : 'M') + (r[j] * this.k).toFixed(2) + ' ' + (-r[j + 1]).toFixed(2); return d + 'Z'; }).join('');
+      this.span = ser.span;
+    },
+    xy(ll) { return [ll[1] * this.k, -ll[0]]; },
+    mapSvg(c) {
+      const route = []; for (let j = 0; j <= this.i; j++) { const cc = this.cards[j]; if (cc.ll) { const p = this.xy(cc.ll); const last = route[route.length - 1]; if (!last || Math.hypot(last[0] - p[0], last[1] - p[1]) > 0.05) route.push(p); } }
+      const cur = c.ll ? this.xy(c.ll) : route[route.length - 1] || [0, 0];
+      const w = this.span * this.k * 1.4, h = this.span * 0.7, vb = [cur[0] - w / 2, cur[1] - h / 2, w, h];
+      const prevPts = route.slice(0, -1), lastSeg = route.length > 1 ? route.slice(-2) : null;
+      const sw = this.span / 160;
+      return `<svg class="smap" viewBox="${vb.join(' ')}" preserveAspectRatio="xMidYMid slice" data-vb="${vb.join(' ')}"><rect x="${vb[0] - 400}" y="${vb[1] - 400}" width="${w + 800}" height="${h + 800}" class="sea"/><path d="${this.landPath}" class="land" stroke-width="${sw / 2}"/>
+        ${prevPts.length > 1 ? `<polyline points="${prevPts.map(p => p.join(',')).join(' ')}" class="route" stroke-width="${sw}"/>` : ''}
+        ${lastSeg ? `<polyline points="${lastSeg.map(p => p.join(',')).join(' ')}" class="route new" stroke-width="${sw}" pathLength="1"/>` : ''}
+        ${route.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="${sw * 1.2}" class="dot"/>`).join('')}
+        ${c.ll ? `<circle cx="${cur[0]}" cy="${cur[1]}" r="${sw * 3}" class="pulse"/><circle cx="${cur[0]}" cy="${cur[1]}" r="${sw * 1.8}" class="pin" stroke-width="${sw * 0.8}"/><text x="${cur[0] + sw * 3.5}" y="${cur[1] - sw * 2.5}" font-size="${sw * 6}" stroke-width="${sw * 0.9}" class="plbl">${esc(c.pl || '')}</text>` : ''}</svg>`;
+    },
+    show() {
+      const C = this.cards, c = C[this.i], ser = SER(this.id), ch = this.chapterOf(this.i), tg = VK_STORIES.TAGS[c.tag] || VK_STORIES.TAGS.fact, im = c.img && VK_STORIES.IMG[c.img];
+      const r = Object.assign({}, stRec(this.id)); const fresh = this.i > (r.max == null ? -1 : r.max);
+      r.i = this.i; r.n = C.length; if (fresh) { r.max = this.i; const d = day(nowIST().date); d.st = { n: ((d.st && d.st.n) || 0) + 1, ts: ts() }; }
+      if (this.i === C.length - 1) r.done = true; r.ts = ts(); S.stories[this.id] = r; autoVerify(nowIST().date); save();
+      const html = `<div class="story" style="--c:${ser.color}">
+        <div class="sbars">${C.slice(ch.s, ch.e).map((x, j) => `<i class="${ch.s + j < this.i ? 'full' : ch.s + j === this.i ? 'cur' : ''}"></i>`).join('')}</div>
+        <div class="shead"><div><b>${esc(ser.t)}</b><small>${esc(ch.t)} · ${this.i + 1}/${C.length}</small></div><button class="sx" id="sX" aria-label="Close">✕</button></div>
+        <div class="svis ${im ? 'hasimg' : ''}">${im ? `<img src="stories/img/${c.img}.jpg" alt="${esc(im.alt || c.t)}" loading="eager"><div class="minimap">${this.mapSvg(c)}</div>` : this.mapSvg(c)}</div>
+        ${im ? `<a class="scred" href="${esc(im.page)}" target="_blank" rel="noopener">Image: ${esc(im.by)} · ${esc(im.lic)} · Wikimedia Commons</a>` : ''}
+        <div class="sbody" id="sBody"><div class="smeta"><span class="sy">${esc(c.y || '')}</span>${c.pl ? `<span class="spl">${esc(c.pl)}</span>` : ''}<span class="stag t-${c.tag}" title="${esc(tg[1])}">${tg[0]}</span></div>
+          <h2>${esc(c.t)}</h2><p>${esc(c.x)}</p>
+          <div class="ssrc">${(c.w || []).map(w => `<a href="https://en.wikipedia.org/wiki/${w}" target="_blank" rel="noopener">${esc(decodeURIComponent(w).replace(/_/g, ' '))} ↗</a>`).join('')}</div></div>
+        <div class="snav"><button id="sPrev" aria-label="Previous">‹</button><span class="small">tap or swipe</span><button id="sNext" aria-label="Next">›</button></div></div>`;
+      const o = $('#overlay'); o.innerHTML = html; o.classList.add('show', 'full', 'dark');
+      const svg = o.querySelector('.svis svg'); this.animate(svg, c);
+      $('#sX').onclick = () => { $('#overlay').classList.remove('dark'); ovClose(); };
+      $('#sPrev').onclick = () => this.prev(); $('#sNext').onclick = () => this.next();
+      const st = o.querySelector('.story'); let x0 = null, y0 = null, t0 = 0;
+      st.ontouchstart = e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); };
+      st.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null; if (Math.max(Math.abs(dx), Math.abs(dy)) < 40) return; e.preventDefault(); this.swiped = Date.now(); if (dy < -40 && Math.abs(dy) > Math.abs(dx) || dx < -40 && Math.abs(dx) > Math.abs(dy)) this.next(); else this.prev(); };
+      st.onclick = e => { if (Date.now() - (this.swiped || 0) < 400) return; if (e.target.closest('a,button')) return; const wv = window.innerWidth; if (e.clientX < wv * 0.3) this.prev(); else this.next(); };
+      document.onkeydown = e => { if (!$('#overlay .story')) { document.onkeydown = null; return; } if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') this.next(); if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') this.prev(); if (e.key === 'Escape') $('#sX').click(); };
+      this.prevLL = c.ll || this.prevLL;
+    },
+    animate(svg, c) {
+      if (!svg) return; const to = svg.dataset.vb.split(' ').map(Number), from = this.lastVB || to; this.lastVB = to; const t0 = performance.now(), D = 900;
+      const step = t => { const k = Math.min(1, (t - t0) / D), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; svg.setAttribute('viewBox', from.map((v, j) => v + (to[j] - v) * e).join(' ')); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    },
+    next() {
+      const c = this.cards[this.i];
+      if (c.q && !this.answered) return this.quiz(c.q);
+      this.answered = false;
+      if (this.i < this.cards.length - 1) { this.i++; this.show(); $('#overlay').scrollTop = 0; } else this.end();
+    },
+    prev() { this.answered = false; if (this.i > 0) { this.i--; this.show(); } },
+    quiz(q) {
+      const o = $('#overlay'); const box = document.createElement('div'); box.className = 'squiz';
+      box.innerHTML = `<div class="sqin"><div class="eyebrow">Quick check · one tap</div><h3>${esc(q.q)}</h3><div class="opts">${q.o.map((x, i) => `<button class="opt" data-o="${i}">${esc(x)}</button>`).join('')}</div><button class="btn sm ghost" id="sqSkip">Skip</button></div>`;
+      o.querySelector('.story').appendChild(box);
+      box.onclick = e => e.stopPropagation(); box.ontouchend = e => e.stopPropagation();
+      box.querySelectorAll('[data-o]').forEach(b => b.onclick = () => { const i = +b.dataset.o; box.querySelectorAll('[data-o]').forEach(x => x.disabled = true); b.classList.add(i === q.a ? 'right' : 'wrong'); box.querySelectorAll('[data-o]')[q.a].classList.add('right');
+        const r = S.stories[this.id]; r.qok = (r.qok || 0) + (i === q.a ? 1 : 0); r.qn = (r.qn || 0) + 1; r.ts = ts(); save(); if (navigator.vibrate) navigator.vibrate(i === q.a ? 15 : [30, 40, 30]); setTimeout(() => { this.answered = true; this.next(); }, i === q.a ? 700 : 1500); });
+      box.querySelector('#sqSkip').onclick = () => { this.answered = true; this.next(); };
+    },
+    end() {
+      const ser = SER(this.id), r = stRec(this.id), nx = VK_STORIES.SERIES.find(s => !stRec(s.id).done && s.id !== this.id);
+      ov(`<div class="quizbox center"><div class="eyebrow">Series complete</div><h2>${esc(ser.t)} ✓</h2><p class="muted">${this.cards.length} cards${r.qn ? ` · quick checks ${r.qok || 0}/${r.qn}` : ''}</p>
+        ${ser.primary.length ? `<div class="card" style="text-align:left"><h3>Read the originals</h3>${ser.primary.map(([n, u]) => `<a class="lnk" href="${u}" target="_blank" rel="noopener">${esc(n)} ↗</a><br>`).join('')}</div>` : ''}
+        <div class="row" style="justify-content:center">${nx ? `<button class="btn" id="sN">Next series: ${esc(nx.t)}</button>` : ''}<button class="btn ghost" id="sC">Close</button></div></div>`);
+      $('#overlay').classList.remove('dark');
+      if (nx) $('#sN').onclick = () => this.open(nx.id, 0); $('#sC').onclick = ovClose;
+    }
+  };
+
   // ================= outreach =================
   let OTAB = 'queue', OLANE = '', OQ = '', OSTAT = '';
   function viewOutreach() { return Out.view(); }
@@ -1011,7 +1114,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes', 'stories'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }

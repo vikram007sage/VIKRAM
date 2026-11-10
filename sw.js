@@ -1,6 +1,6 @@
 /* VIKRAM service worker: offline cache + push notifications. Bump VERSION on every deploy. */
-const VERSION = 'vikram-v1.5.0';
-const CORE = ['./', 'index.html', 'css/app.css', 'js/config.js', 'js/content.js', 'js/practice.js', 'js/cards.js', 'js/library.js', 'js/french.js', 'js/chess.js', 'js/chess_puzzles.js', 'js/words.js', 'js/resources.js', 'js/companies.js', 'js/outreach.js', 'js/app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'notes/S1_Guesstimates_Structured_Thinking.html', 'notes/A1_Mental_Maths_Speed.html', 'notes/A2_Quant_Aptitude.html', 'notes/A3_DI_Logical_Reasoning.html', 'notes/A4_Probability_Puzzles.html', 'notes/S6_Outreach_Email_Playbook.html', 'docs/PRD.html'];
+const VERSION = 'vikram-v1.6.0';
+const CORE = ['./', 'index.html', 'css/app.css', 'js/config.js', 'js/content.js', 'js/practice.js', 'js/cards.js', 'js/library.js', 'js/french.js', 'js/chess.js', 'js/chess_puzzles.js', 'js/words.js', 'js/stories.js', 'js/story_img.js', 'js/land.js', 'js/resources.js', 'js/companies.js', 'js/outreach.js', 'js/app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'notes/S1_Guesstimates_Structured_Thinking.html', 'notes/A1_Mental_Maths_Speed.html', 'notes/A2_Quant_Aptitude.html', 'notes/A3_DI_Logical_Reasoning.html', 'notes/A4_Probability_Puzzles.html', 'notes/S6_Outreach_Email_Playbook.html', 'docs/PRD.html'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {
