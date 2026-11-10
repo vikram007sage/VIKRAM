@@ -52,3 +52,22 @@ New content from Claude lands in this folder and the repo. After each update, bu
 ## Privacy
 - Personal data: your browser + your private `vikram-data` repo only. Every sync is a commit, so the repo's history is also a backup.
 - The token can only touch `vikram-data`. If a phone is lost: revoke the token on GitHub and make a new one.
+
+## Partner emails (optional, recommended)
+
+The strongest accountability is a person your phone can't silence. Once set up, the GitHub Action that sends your nudges also emails one accountability partner:
+
+- every **Sunday after 21:30**: your week's numbers (average score, verified focus hours, pledges kept, aptitude accuracy, stake owed, your plan for next week);
+- whenever you **log nothing for two full days**: a short note asking them to check on you (sent once per quiet spell, after noon on the third day).
+
+Setup (10 minutes, free):
+
+1. Use a Gmail account for sending (your own, or a new one just for VIKRAM). Turn on 2-Step Verification, then create an **App password** (Google Account → Security → App passwords). Copy the 16-character password.
+2. In the public `VIKRAM` repo → Settings → Secrets and variables → Actions → New repository secret, add:
+   - `SMTP_USER` = the Gmail address
+   - `SMTP_PASS` = the app password
+   - `PARTNER_EMAIL` = your partner's email
+   - `PARTNER_NAME` = their first name
+3. Tell your partner they'll get one email a week. Ask them to reply with one line every time.
+
+Remove any of these secrets to switch the emails off. Secrets are never visible in the public repo or the logs.

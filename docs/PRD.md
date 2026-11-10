@@ -76,7 +76,8 @@ Primary user: me. Insights from 4 weeks of self-observation:
 - **v1.1–1.2 (shipped):** practice engine: generated aptitude, probability and DI sets, mocks, spaced-repetition flashcards.
 - **v1.3 (shipped):** outreach CRM: 130-company target map across six lanes, CSV import of contacts, email drafter that requires a personal hook, automatic follow-ups on day 4 and 10, daily quota on Today.
 - **v1.4 (shipped):** Learn: a 45-reading history library extracted from 15 public-domain originals (Megasthenes to Tagore, Thucydides to Madison) with context and questions; French A1 in 20 units with phone text-to-speech and quizzes that feed the flashcards; chess from zero in 12 lessons with 246 Lichess puzzles checked by script; Feed now mixes in quotes, French and chess puzzles.
-- **v1.5+:** weekly review screen with charts; remaining notes modules.
+- **v1.5 (shipped):** accountability: focus timer with interruption logging and a proof line per session, strict mode (provable habits tick only from evidence), morning pledge with an evening check, weekly review with charts and a WhatsApp report to a partner, stakes, optional partner emails from the GitHub Action; English vocabulary (240 words, 24 roots); Wikipedia and source links on every history reading; a hub of 36 checked free resources.
+- **v1.6+:** 3D history atlas, interactive widgets in notes, remaining notes modules; then a version anyone can set up.
 
 ## 9. What I'll measure and write up (fill in after 4 weeks)
 - North-star trend by week:

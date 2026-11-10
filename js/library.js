@@ -29,6 +29,32 @@ const VK_LIBRARY = {
 "He says there are no slaves in India. Why might a Greek visitor have believed that?",
 "Which details sound like observation, and which like hearsay?"
 ],
+"links": [
+[
+"Megasthenes",
+"https://en.wikipedia.org/wiki/Megasthenes"
+],
+[
+"Indica (the lost book)",
+"https://en.wikipedia.org/wiki/Indica_(Megasthenes)"
+],
+[
+"Chandragupta Maurya",
+"https://en.wikipedia.org/wiki/Chandragupta_Maurya"
+],
+[
+"Seleucus I",
+"https://en.wikipedia.org/wiki/Seleucus_I_Nicator"
+],
+[
+"Pataliputra",
+"https://en.wikipedia.org/wiki/Pataliputra"
+],
+[
+"Maurya Empire",
+"https://en.wikipedia.org/wiki/Maurya_Empire"
+]
+],
 "verse": false,
 "r": [
 [
@@ -54,6 +80,20 @@ const VK_LIBRARY = {
 "Compare the king's eight-part day with your own VIKRAM day.",
 "How does Kautilya test a minister's loyalty? Would that work in a company?",
 "Find the line on the happiness of subjects. Is the book cynical or idealistic?"
+],
+"links": [
+[
+"Arthashastra",
+"https://en.wikipedia.org/wiki/Arthashastra"
+],
+[
+"Chanakya (Kautilya)",
+"https://en.wikipedia.org/wiki/Chanakya"
+],
+[
+"Maurya Empire",
+"https://en.wikipedia.org/wiki/Maurya_Empire"
+]
 ],
 "verse": false,
 "r": [
@@ -89,6 +129,24 @@ const VK_LIBRARY = {
 "How are the Chandalas treated, and what does that tell you?",
 "What public services does he find in Pataliputra?"
 ],
+"links": [
+[
+"Faxian",
+"https://en.wikipedia.org/wiki/Faxian"
+],
+[
+"Gupta Empire",
+"https://en.wikipedia.org/wiki/Gupta_Empire"
+],
+[
+"Chandragupta II",
+"https://en.wikipedia.org/wiki/Chandragupta_II"
+],
+[
+"Pataliputra",
+"https://en.wikipedia.org/wiki/Pataliputra"
+]
+],
 "verse": false,
 "r": [
 [
@@ -114,6 +172,16 @@ const VK_LIBRARY = {
 "List the barriers he names between Muslims and Hindus. Which apply to any outsider studying a culture?",
 "Where is he critical, and where does he blame his own side?",
 "Would his method work for understanding a new market or company?"
+],
+"links": [
+[
+"Al-Biruni",
+"https://en.wikipedia.org/wiki/Al-Biruni"
+],
+[
+"Mahmud of Ghazni",
+"https://en.wikipedia.org/wiki/Mahmud_of_Ghazni"
+]
 ],
 "verse": false,
 "r": [
@@ -141,6 +209,28 @@ const VK_LIBRARY = {
 "Why does he dislike Hindustan, and what makes him stay?",
 "What does the passage on Bengal's offices tell you about how power worked there?"
 ],
+"links": [
+[
+"Babur",
+"https://en.wikipedia.org/wiki/Babur"
+],
+[
+"Baburnama",
+"https://en.wikipedia.org/wiki/Baburnama"
+],
+[
+"First Battle of Panipat",
+"https://en.wikipedia.org/wiki/First_Battle_of_Panipat"
+],
+[
+"Rana Sanga",
+"https://en.wikipedia.org/wiki/Rana_Sanga"
+],
+[
+"Mughal Empire",
+"https://en.wikipedia.org/wiki/Mughal_Empire"
+]
+],
 "verse": false,
 "r": [
 [
@@ -167,6 +257,16 @@ const VK_LIBRARY = {
 "Why did these short speeches matter so much back in India?",
 "How would you use this in a GD on India's soft power?"
 ],
+"links": [
+[
+"Swami Vivekananda",
+"https://en.wikipedia.org/wiki/Swami_Vivekananda"
+],
+[
+"Parliament of the World's Religions",
+"https://en.wikipedia.org/wiki/Parliament_of_the_World%27s_Religions"
+]
+],
 "verse": false,
 "r": [
 [
@@ -188,6 +288,16 @@ const VK_LIBRARY = {
 "What does Gandhi mean by swaraj, and what does he reject?",
 "Why does he say the English did not take India, but Indians gave it?",
 "Where do you agree with him, and where not?"
+],
+"links": [
+[
+"Hind Swaraj",
+"https://en.wikipedia.org/wiki/Hind_Swaraj_or_Indian_Home_Rule"
+],
+[
+"Mahatma Gandhi",
+"https://en.wikipedia.org/wiki/Mahatma_Gandhi"
+]
 ],
 "verse": false,
 "r": [
@@ -227,6 +337,12 @@ const VK_LIBRARY = {
 "What is his objection to the Western idea of the nation?",
 "Gandhi and Tagore disagreed: what would each say to the other?"
 ],
+"links": [
+[
+"Rabindranath Tagore",
+"https://en.wikipedia.org/wiki/Rabindranath_Tagore"
+]
+],
 "verse": false,
 "r": [
 [
@@ -261,6 +377,28 @@ const VK_LIBRARY = {
 "Who does Solon call the happiest man, and why not Croesus?",
 "Apply \"call no man happy until he is dead\" to a company or a career."
 ],
+"links": [
+[
+"Herodotus",
+"https://en.wikipedia.org/wiki/Herodotus"
+],
+[
+"The Histories",
+"https://en.wikipedia.org/wiki/Histories_(Herodotus)"
+],
+[
+"Croesus",
+"https://en.wikipedia.org/wiki/Croesus"
+],
+[
+"Solon",
+"https://en.wikipedia.org/wiki/Solon"
+],
+[
+"Greco-Persian Wars",
+"https://en.wikipedia.org/wiki/Greco-Persian_Wars"
+]
+],
 "verse": false,
 "r": [
 [
@@ -286,6 +424,28 @@ const VK_LIBRARY = {
 "What does Pericles claim makes Athens special?",
 "In the Melian Dialogue, what are the Athenians' arguments, and the Melians'?",
 "Where do you see the same logic between great powers and small states today?"
+],
+"links": [
+[
+"Thucydides",
+"https://en.wikipedia.org/wiki/Thucydides"
+],
+[
+"History of the Peloponnesian War",
+"https://en.wikipedia.org/wiki/History_of_the_Peloponnesian_War"
+],
+[
+"Pericles' Funeral Oration",
+"https://en.wikipedia.org/wiki/Pericles%27_Funeral_Oration"
+],
+[
+"Melian Dialogue",
+"https://en.wikipedia.org/wiki/Melian_Dialogue"
+],
+[
+"Thucydides Trap",
+"https://en.wikipedia.org/wiki/Thucydides_Trap"
+]
 ],
 "verse": false,
 "r": [
@@ -320,6 +480,16 @@ const VK_LIBRARY = {
 "Which five factors does Sun Tzu use to assess a war? Use them on a competitor of a company you like.",
 "What does \"the supreme art of war is to subdue the enemy without fighting\" mean in business?",
 "Why does he value spies and information so highly?"
+],
+"links": [
+[
+"Sun Tzu",
+"https://en.wikipedia.org/wiki/Sun_Tzu"
+],
+[
+"The Art of War",
+"https://en.wikipedia.org/wiki/The_Art_of_War"
+]
 ],
 "verse": false,
 "r": [
@@ -367,6 +537,16 @@ const VK_LIBRARY = {
 "How much of life does he give to fortune, and how much to our own action?",
 "Find one idea that Kautilya would agree with."
 ],
+"links": [
+[
+"Niccolò Machiavelli",
+"https://en.wikipedia.org/wiki/Niccol%C3%B2_Machiavelli"
+],
+[
+"The Prince",
+"https://en.wikipedia.org/wiki/The_Prince"
+]
+],
 "verse": false,
 "r": [
 [
@@ -396,6 +576,24 @@ const VK_LIBRARY = {
 "How does Madison propose to control factions without destroying liberty?",
 "\"If men were angels, no government would be necessary.\" What follows from that?",
 "Map his checks and balances onto India's Constitution."
+],
+"links": [
+[
+"The Federalist Papers",
+"https://en.wikipedia.org/wiki/The_Federalist_Papers"
+],
+[
+"Federalist No. 10",
+"https://en.wikipedia.org/wiki/Federalist_No._10"
+],
+[
+"Federalist No. 51",
+"https://en.wikipedia.org/wiki/Federalist_No._51"
+],
+[
+"James Madison",
+"https://en.wikipedia.org/wiki/James_Madison"
+]
 ],
 "verse": false,
 "r": [
@@ -427,6 +625,20 @@ const VK_LIBRARY = {
 "Find the verses on working without attachment to the fruits of action.",
 "How does that apply to a placement season where results are not in your control?"
 ],
+"links": [
+[
+"Bhagavad Gita",
+"https://en.wikipedia.org/wiki/Bhagavad_Gita"
+],
+[
+"Kurukshetra War",
+"https://en.wikipedia.org/wiki/Kurukshetra_War"
+],
+[
+"Edwin Arnold",
+"https://en.wikipedia.org/wiki/Edwin_Arnold"
+]
+],
 "verse": true,
 "r": [
 [
@@ -448,6 +660,16 @@ const VK_LIBRARY = {
 "What is the morning exercise at the start of Book II? Try it tomorrow.",
 "Pick one line to copy into your journal.",
 "Where does he sound like the Gita?"
+],
+"links": [
+[
+"Marcus Aurelius",
+"https://en.wikipedia.org/wiki/Marcus_Aurelius"
+],
+[
+"Meditations",
+"https://en.wikipedia.org/wiki/Meditations"
+]
 ],
 "verse": false,
 "r": [

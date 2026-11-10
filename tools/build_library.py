@@ -108,7 +108,7 @@ def main():
         with open(f"library/{spec['id']}.js", 'w', encoding='utf-8') as f:
             f.write('/* VIKRAM library: ' + spec['author'] + ', ' + spec['title'] + ' (' + spec['tr'] + '). Public domain. Source: ' + spec['src'] + ' */\n')
             f.write('VK_LIB_LOAD(' + json.dumps(spec['id']) + ', ' + json.dumps(data, ensure_ascii=False) + ');\n')
-        meta = {k: spec[k] for k in ('id', 'shelf', 'era', 'title', 'author', 'tr', 'src', 'intro', 'read_for')}
+        meta = {k: spec[k] for k in ('id', 'shelf', 'era', 'title', 'author', 'tr', 'src', 'intro', 'read_for', 'links')}
         meta['verse'] = bool(spec.get('verse'))
         meta['r'] = [[t, wc(ps)] for t, ps in rs]
         cat.append(meta)

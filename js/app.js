@@ -34,8 +34,8 @@
   let deviceId = LS.get(DEVKEY, null);
   if (!deviceId) { deviceId = 'dev-' + Math.random().toString(36).slice(2, 10); LS.set(DEVKEY, deviceId); }
   let S = LS.get(KEY, null) || { v: 1, days: {}, tasks: {}, taskDue: {}, math: [], books: {}, writing: {}, subs: {}, settings: {}, comeback: { active: false, since: null, ts: 0 }, profile: null };
-  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess'].forEach(k => S[k] = S[k] || {});
-  S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || [];
+  ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes'].forEach(k => S[k] = S[k] || {});
+  S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || [];
   if (!S.profile && typeof VK_PERSONAL !== 'undefined') S.profile = Object.assign({ ts: ts() }, VK_PERSONAL);
   function save(sync = true) { if (SIM && !qs.get('test')) return; LS.set(KEY, S); if (sync) Sync.schedule(); }
 
@@ -133,7 +133,7 @@
 
   // ================= UI shell =================
   let TAB = location.hash.replace('#', '') || 'today';
-  const tabs = ['today', 'prep', 'feed', 'life', 'more', 'outreach', 'learn'];
+  const tabs = ['today', 'prep', 'feed', 'life', 'more', 'outreach', 'learn', 'review', 'resources'];
   function go(t) { TAB = tabs.includes(t) ? t : 'today'; try { history.replaceState(null, '', location.pathname + location.search + '#' + TAB); } catch (e) { } render(); window.scrollTo(0, 0); }
   window.addEventListener('hashchange', () => { const t = location.hash.replace('#', ''); if (t !== TAB && tabs.includes(t)) { TAB = t; render(); } });
   function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
@@ -141,7 +141,7 @@
   function render() {
     $$('.tabbar button, .toptabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
     const v = $('#view');
-    v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach, learn: viewLearn }[TAB])();
+    v.innerHTML = ({ today: viewToday, prep: viewPrep, feed: viewFeed, life: viewLife, more: viewMore, outreach: viewOutreach, learn: viewLearn, review: viewReview, resources: viewResources }[TAB])();
     bind[TAB] && bind[TAB]();
     $('#syncDot').className = 'syncdot ' + Sync.status;
   }
@@ -156,6 +156,8 @@
       <div class="card"><h3>Before 1 Dec (5 minutes, once)</h3><ol class="plain"><li>Install Vikram on your phone (More → Install).</li><li>Turn on sync + notifications (More).</li><li>Import the calendar alarms (More → Calendar).</li><li>Move Instagram off your home screen; put Vikram in its place.</li></ol><a class="btn" href="?date=2026-12-01#today">Preview 1 December →</a></div>`;
     }
     checkComeback(ds);
+    if (!SIM) { const d0 = day(ds); if (!d0.firstSeen) { d0.firstSeen = { v: n.mins, ts: 2e13 - Date.now() }; save(); } }
+    autoVerify(ds);
     const prev = SIM ? `<div class="comeback"><b>Preview mode</b> (${fmtD(ds)}${SIMTIME ? ' ' + SIMTIME : ''}). Nothing you tick here is saved. <a href="./#today">Exit preview</a></div>` : '';
     const blocks = blocksFor(ds), cur = currentBlock(blocks, n.mins), dd = day(ds);
     const sc = score(ds), st = streakInfo(ds), X = xp(), mm = minimumMode(ds), items = activeItems(ds);
@@ -165,13 +167,18 @@
     return `
     <section class="hero small"><div class="eyebrow">${fmtDL(ds)} · ${esc(C.SCHEDULES[dayType(ds)].name)}</div>
       <h1>${greet(n.mins)}, ${esc(p.name || 'Aryan')}.</h1>
-      <div class="meta"><span class="pill"><span class="dot"></span>${d1} days to Day 1</span><span class="pill">Lv · ${X.level} · ${X.x} XP</span><span class="pill">🔥 ${st.streak} day streak${st.freezes ? ` · ❄ ${st.freezes}` : ''}</span></div></section>
+      <div class="meta"><span class="pill"><span class="dot"></span>${d1} days to Day 1</span><span class="pill">Lv · ${X.level} · ${X.x} XP</span><span class="pill">🔥 ${st.streak} day streak${st.freezes ? ` · ❄ ${st.freezes}` : ''}</span><span class="pill">✓ ${focusMins(ds)}/${targetMins(ds)} verified min</span></div></section>
     ${prev}${cb}
-    <div class="nowcard">${cur ? `<div class="eyebrow">Now · until ${cur.e}</div><h2>${esc(cur.t)}</h2><div class="muted">${cur.left} min left · next: ${esc(cur.next ? cur.next.s + ' ' + cur.next.t : 'sleep')}</div>` : '<h2>Sleep</h2>'}
+    <div class="nowcard"><div>${cur ? `<div class="eyebrow">Now · until ${cur.e}</div><h2>${esc(cur.t)}</h2><div class="muted small">${cur.left} min left · next: ${esc(cur.next ? cur.next.s + ' ' + cur.next.t : 'sleep')}</div>` : '<h2>Sleep</h2>'}</div>
       <div class="ring" style="--p:${sc}"><span>${sc}</span><small>today</small></div></div>
+    <div class="drills"><button class="btn focusbtn" data-act="focus">${Focus.live() ? '⏱ Focus running · open' : '▶ Start focus timer'}</button><button class="btn ghost" data-act="go" data-to="review">Weekly review</button></div>
+    ${pledgeCard(ds, n)}
     <button class="urge" data-act="urge">Urge to scroll? <b>Beat it →</b><small>${(dd.urges && dd.urges.n) || 0} beaten today</small></button>
     <div class="row-between"><h3 class="h">Today's checklist</h3><label class="switch"><input type="checkbox" data-act="minimum" ${mm ? 'checked' : ''} ${S.comeback.active ? 'disabled' : ''}> Minimum day</label></div>
-    <div class="card list">${items.map(id => { const h = habitById[id]; const on = isOn(dd, id); const txt = id === 'hobby' && hobby ? hobby.t : (mm ? h.min : h.t); return `<label class="item ${on ? 'done' : ''}"><input type="checkbox" data-habit="${id}" ${on ? 'checked' : ''}><span>${esc(txt)}<small>${esc(mm ? '' : 'min: ' + h.min)}</small></span></label>`; }).join('')}</div>
+    <div class="card list">${items.map(id => { const h = habitById[id]; const on = isOn(dd, id); const txt = id === 'hobby' && hobby ? hobby.t : (mm ? h.min : h.t); const V = VERIFY[id], ver = verified(ds, id), lock = strict() && V && !on;
+      const badge = on ? (ver ? '<span class="vb">✓ verified</span>' : (V ? '<span class="vb self">self-reported</span>' : '')) : (V ? `<span class="vb need">proof: ${esc(V.how)}</span>` : '');
+      const go = lock && V.act ? `<button class="btn sm ghost" data-act="${V.act}" ${V.kind ? `data-kind="${V.kind}"` : ''} ${V.k ? `data-k="${V.k}"` : ''} ${V.to ? `data-to="${V.to}"` : ''}>${V.act === 'focus' ? '▶ timer' : 'open'}</button>` : '';
+      return `<label class="item ${on ? 'done' : ''} ${lock ? 'locked' : ''}"><input type="checkbox" data-habit="${id}" ${on ? 'checked' : ''} ${lock || (on && ver) ? 'disabled' : ''}><span>${esc(txt)}<small>${esc(mm ? '' : 'min: ' + h.min)}</small>${badge}</span>${go}</label>`; }).join('')}</div>
     <h3 class="h">Placement tasks</h3>
     <div class="card list">${tasks.length ? tasks.map(t => taskRow(t, ds)).join('') : '<p class="muted">Nothing due in the next 3 days. Do a timed set or a math sprint.</p>'}</div>
     ${Out.windowOpen(ds) ? `<div class="drills"><button class="btn" data-act="go" data-to="outreach">Outreach · ${Out.sentOn(ds)}/${VK_OUTREACH.QUOTA} sent · ${Out.due(ds).length} follow-up${Out.due(ds).length === 1 ? '' : 's'} due</button></div>` : ''}
@@ -203,6 +210,7 @@
     return `<section class="hero small"><div class="eyebrow">Placement roadmap · ${done}/${C.TASKS.length} tasks</div><h1>${esc(ph.n)}</h1><p>${esc(ph.g)}</p></section>
     <div class="card"><div class="row-between"><div><h3>Math sprint</h3><small class="muted">120 seconds · + − × ÷ · Zetamac-style · best ${best}</small></div><button class="btn" data-act="mathgo">Start</button></div>${spark(recent.map(m => m.score))}</div>
     ${practiceCard(ds)}
+    <div class="card"><div class="row-between"><div><h3>Go further</h3><small class="muted">${VK_RESOURCES.reduce((a, g) => a + g.r.length, 0)} free outside resources, sorted by area</small></div><button class="btn" data-act="go" data-to="resources">Open</button></div></div>
     <div class="card"><div class="row-between"><div><h3>Outreach</h3><small class="muted">${VK_COMPANIES.LIST.length} target companies · ${Object.keys(S.contacts).length} contacts · ${S.sent.length} emails sent</small></div><button class="btn" data-act="go" data-to="outreach">Open</button></div></div>
     <h3 class="h">Deadlines</h3>
     ${Object.keys(months).sort().map(k => `<details ${k <= ds.slice(0, 7) || k === addDays(ds, 20).slice(0, 7) ? 'open' : ''}><summary>${new Date(k + '-01T00:00:00Z').toLocaleDateString('en-IN', { month: 'long', year: 'numeric', timeZone: 'UTC' })} <small>${months[k].filter(taskDone).length}/${months[k].length}</small></summary><div class="list">${months[k].map(t => taskRow(t, ds)).join('')}</div></details>`).join('')}
@@ -229,7 +237,7 @@
   // ---------- FEED ----------
   let feedIdx = LS.get('vikram_feed_idx', Math.floor(Math.random() * C.FEED.length));
   let feedGen = null, feedPuz = null, FPOOL = null, FMAP = null;
-  function feedMap() { if (FMAP) return FMAP; const n = feedPool().length, out = []; let st = 0; for (let i = 0; st < n; i++) { const k = i % 4 === 3 ? 'q' : i % 9 === 5 ? 'c' : i % 6 === 1 ? 'f' : null; out.push(k || st++); } return (FMAP = out); }
+  function feedMap() { if (FMAP) return FMAP; const n = feedPool().length, out = []; let st = 0; for (let i = 0; st < n; i++) { const k = i % 4 === 3 ? 'q' : i % 9 === 5 ? 'c' : i % 6 === 1 ? 'f' : i % 10 === 8 ? 'v' : null; out.push(k || st++); } return (FMAP = out); }
   function feedPool() {
     if (FPOOL) return FPOOL;
     const L = typeof VK_LIBRARY !== 'undefined' ? VK_LIBRARY : { QUOTES: [], TEXTS: [] };
@@ -250,6 +258,8 @@
     feedPuz = null;
     if (slot === 'f' && typeof VK_FRENCH !== 'undefined') { const all = VK_FRENCH.UNITS.flatMap(u => u.w); const w = all[(feedIdx * 7) % all.length];
       return hero('Un mot, s\'il vous plaît.') + `<div class="feedcard k-french"><div class="eyebrow">Français</div><h2>${esc(w[0])} <button class="btn sm ghost" data-act="l-say" data-t="${esc(w[0])}">🔊</button></h2><div class="ans" id="ans">${esc(w[1])} · <span class="muted">${esc(w[2])}</span></div></div>` + nav; }
+    if (slot === 'v' && typeof VK_WORDS !== 'undefined') { const A = allWords(), w = A[(feedIdx * 13) % A.length];
+      return hero('Word up.') + `<div class="feedcard k-words"><div class="eyebrow">English · ${esc(w[1])}</div><h2>${esc(w[0])} <button class="btn sm ghost" data-act="w-say" data-t="${esc(w[0])}">🔊</button></h2><div class="ans hide" id="ans">${esc(w[2])}<br><span class="muted">"${esc(w[3])}"</span></div><button class="btn sm" data-act="reveal">Reveal meaning</button> <a class="lnk" href="${dictUrl(w)}" target="_blank" rel="noopener">dictionary ↗</a></div>` + nav; }
     const c = feedPool()[typeof slot === 'number' ? slot : feedIdx % feedPool().length];
     const label = c.lib ? 'From the originals' : { apt: 'Solve it', history: 'History', geo: 'Geopolitics', french: 'Français', biz: 'Business', mind: 'Mind' }[c.k];
     return `<section class="hero small"><div class="eyebrow">Feed · instead of Instagram</div><h1>One card. Then another.</h1><div class="meta"><span class="pill"><span class="dot"></span>${(dd.urges && dd.urges.n) || 0} urges beaten today</span><span class="pill">${(dd.cards && dd.cards.n) || 0} cards read</span></div></section>
@@ -265,7 +275,8 @@
     const hs = C.HABITS.filter(h => h.start <= (ds < '2026-12-01' ? '2026-12-01' : ds));
     const w = (S.writing[ds] && S.writing[ds].text) || '', wc = w.split(/\s+/).filter(Boolean).length;
     return `<section class="hero small"><div class="eyebrow">Life · the reason for all of this</div><h1>Why</h1><p>${esc(p.why || 'Write your why in More → Profile.')}</p></section>
-    <div class="card"><div class="row-between"><div><h3>Learn</h3><small class="muted">History from the originals · French from zero · chess from zero</small></div><button class="btn" data-act="go" data-to="learn">Open</button></div></div>
+    <div class="card"><div class="row-between"><div><h3>Weekly review</h3><small class="muted">Score, verified focus, pledges, accuracy, stake · send to your partner</small></div><button class="btn" data-act="go" data-to="review">Open</button></div></div>
+    <div class="card"><div class="row-between"><div><h3>Learn</h3><small class="muted">History from the originals · English words · French · chess</small></div><button class="btn" data-act="go" data-to="learn">Open</button></div></div>
     <div class="card"><h3>The plan</h3><div class="plan">${(p.plan || []).map(x => `<div><span class="tm">${esc(x.when)}</span><span>${esc(x.t)}</span></div>`).join('')}</div></div>
     <h3 class="h">Habits · last 5 weeks</h3>
     <div class="card heat">${hs.map(h => `<div class="hrow"><span class="hl">${esc(h.t)}</span><span class="cells">${days.map(d => `<i class="${S.days[d] && isOn(S.days[d], h.id) ? 'on' : (d < h.start ? 'na' : '')}" title="${d}"></i>`).join('')}</span></div>`).join('')}</div>
@@ -283,6 +294,7 @@
     <div class="card"><h3>Sync (phone ⇄ laptop)</h3><p class="small muted">Your data syncs through a <b>private</b> GitHub repo using a token that stays on this device. Status: <b>${Sync.status}</b>${Sync.last ? ' · last ' + new Date(Sync.last).toLocaleTimeString('en-IN') : ''} ${Sync.err ? '· ' + esc(Sync.err) : ''}</p>
       <div class="form"><input id="sOwner" placeholder="GitHub username" value="${esc(cfg.owner || '')}"><input id="sRepo" placeholder="data repo (e.g. vikram-data)" value="${esc(cfg.repo || 'vikram-data')}"><input id="sToken" type="password" placeholder="fine-grained token (contents: read/write)" value="${esc(cfg.token || '')}"></div>
       <div class="row"><button class="btn" data-act="syncsave">Save & sync now</button><button class="btn ghost" data-act="syncoff">Disconnect</button></div></div>
+    ${acctSettings()}
     <div class="card"><h3>Notifications</h3><p class="small muted">Permission: <b>${perm}</b>. Push needs the installed app (https). Exact-time alarms come from the calendar file below.</p>
       <div class="row"><button class="btn" data-act="push">Enable push on this device</button><button class="btn ghost" data-act="pushtest">Test notification</button></div></div>
     <div class="card"><h3>Calendar alarms</h3><p class="small muted">Downloads a calendar file with every block of your next 62 days (each with an alert at its start time). Import it into Google Calendar: it rings on phone and laptop at the exact time. Re-download monthly.</p><button class="btn" data-act="ics">Download vikram-alarms.ics</button></div>
@@ -302,6 +314,8 @@
       $$('[data-habit]').forEach(cb => cb.onchange = () => { day(ds).items[cb.dataset.habit] = { v: cb.checked, ts: ts() }; save(); if (cb.checked) burst(cb); render(); });
       $$('[data-task]').forEach(cb => cb.onchange = () => { S.tasks[cb.dataset.task] = { done: cb.checked, ts: ts() }; save(); render(); });
       const j = $('#journal'); if (j) j.oninput = debounce(() => { day(ds).journal = { text: j.value, ts: ts() }; save(); }, 600);
+      $$('[data-pl]').forEach(cb => cb.onchange = () => { const p = day(ds).pledge; p.items[+cb.dataset.pl].done = cb.checked; p.ts = ts(); save(); if (cb.checked) burst(cb); render(); });
+      const pw = $('#plWhy'); if (pw) pw.oninput = debounce(() => { const p = day(ds).pledge; p.why = pw.value; p.ts = ts(); save(); }, 600);
       const m = $('[data-act=minimum]'); if (m) m.onchange = () => { day(ds).minimum = { v: m.checked, ts: ts() }; save(); render(); };
     },
     prep() { const ds = nowIST().date; $$('[data-task]').forEach(cb => cb.onchange = () => { S.tasks[cb.dataset.task] = { done: cb.checked, ts: ts() }; save(); render(); }); },
@@ -327,7 +341,10 @@
     if (act === 'urge') { const d = day(ds); d.urges = { n: ((d.urges && d.urges.n) || 0) + 1, ts: ts() }; save(); go('feed'); toast('Urge noticed. One card instead.'); }
     if (act === 'feednext' || act === 'feedprev') { feedGen = null; feedIdx = (feedIdx + (act === 'feednext' ? 1 : feedMap().length - 1)) % feedMap().length; LS.set('vikram_feed_idx', feedIdx); if (act === 'feednext') { const d = day(ds); d.cards = { n: ((d.cards && d.cards.n) || 0) + 1, ts: ts() }; save(); } render(); }
     if (act === 'feedopt' && feedGen) { const i = +a.dataset.i; $$('.opt').forEach((b, j) => { b.disabled = true; if (j === feedGen.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); }); $('#ans').classList.remove('hide'); if (navigator.vibrate) navigator.vibrate(i === feedGen.a ? 15 : [30, 40, 30]); }
-    if (act === 'go') go(a.dataset.to);
+    if (act === 'go') { if (a.dataset.k) LTAB = a.dataset.k; go(a.dataset.to); }
+    if (['focus', 'pledge', 'r-wk', 'r-save', 'r-paid', 'r-copy', 'r-send', 'a-save'].includes(act)) Acct.act(act, a);
+    if (act === 'w-set') Wd.open(a.dataset.id);
+    if (act === 'w-say') speakEn(a.dataset.t);
     if (act && act.startsWith('o-')) Out.act(act, a);
     if (act && act.startsWith('l-')) Learn.act(act, a);
     if (act === 'quiz') Quiz.open(a.dataset.mode);
@@ -393,7 +410,7 @@
 
   // ================= spaced-repetition flashcards =================
   const Cards = {
-    pool() { return VK_CARDS.concat(Fr.cards()); },
+    pool() { return VK_CARDS.concat(Fr.cards(), Wd.cards()); },
     due(ds) { const P = this.pool(); const seen = P.filter(c => S.srs[c.id]); const due = seen.filter(c => S.srs[c.id].due <= ds); const fresh = P.filter(c => !S.srs[c.id]);
       const newToday = Object.values(S.srs).filter(r => r.first === ds).length; return due.concat(fresh.slice(0, Math.max(0, 15 - newToday))); },
     open() { const ds = nowIST().date; this.q = this.due(ds); this.n = 0; $('#overlay').classList.add('show'); this.show(false); },
@@ -427,8 +444,8 @@
   const libDone = (id, i) => !!(S.lib[id + ':' + i] && S.lib[id + ':' + i].v);
   const mins = w => Math.max(3, Math.round(w / 140));
   function viewLearn() {
-    const sub = ['history', 'french', 'chess'].map(k => `<button class="chip ${LTAB === k ? 'on' : ''}" data-act="l-tab" data-k="${k}">${{ history: 'History', french: 'Français', chess: 'Chess' }[k]}</button>`).join('');
-    return `<section class="hero small"><div class="eyebrow">Learn · the evening slot</div><h1>${{ history: 'History, from the originals', french: 'French from zero', chess: 'Chess from zero' }[LTAB]}</h1><div class="meta">${Learn.pills()}</div></section><div class="chips">${sub}</div>${Learn[LTAB]()}`;
+    const sub = ['history', 'words', 'french', 'chess'].map(k => `<button class="chip ${LTAB === k ? 'on' : ''}" data-act="l-tab" data-k="${k}">${{ history: 'History', words: 'English words', french: 'Français', chess: 'Chess' }[k]}</button>`).join('');
+    return `<section class="hero small"><div class="eyebrow">Learn · the evening slot</div><h1>${{ history: 'History, from the originals', words: 'English vocabulary', french: 'French from zero', chess: 'Chess from zero' }[LTAB]}</h1><div class="meta">${Learn.pills()}</div></section><div class="chips">${sub}</div>${LTAB === 'words' ? Wd.tab() : Learn[LTAB]()}${resBlock({ history: 'hist', words: 'words', french: 'fr', chess: 'chess' }[LTAB])}`;
   }
   const Learn = {
     pills() {
@@ -436,13 +453,15 @@
       const fr = VK_FRENCH.UNITS.filter(u => S.fr[u.id] && S.fr[u.id].done).length;
       const ch = VK_CHESS.LESSONS.filter(l => S.chess.les && S.chess.les[l.id] && S.chess.les[l.id].v).length;
       const pz = Object.values(S.chess.puz || {}).filter(x => x.ok).length;
-      return `<span class="pill"><span class="dot"></span>${done}/${P.length} readings</span><span class="pill">${fr}/${VK_FRENCH.UNITS.length} French units</span><span class="pill">${ch}/${VK_CHESS.LESSONS.length} chess lessons · ${pz} puzzles solved</span>`;
+      const wd = VK_WORDS.SETS.filter(x => S.wd[x.id] && S.wd[x.id].done).length;
+      return `<span class="pill"><span class="dot"></span>${done}/${P.length} readings</span><span class="pill">${wd * 10} words</span><span class="pill">${fr}/${VK_FRENCH.UNITS.length} French units</span><span class="pill">${ch}/${VK_CHESS.LESSONS.length} chess lessons · ${pz} puzzles solved</span>`;
     },
     next() { return libPath().find(([t, i]) => !libDone(t.id, i)); },
     today(ds) {
       const wd = new Date(ds + 'T00:00:00Z').getUTCDay(), b = [], d = day(ds);
       const hs = (C.HABITS.find(h => h.id === 'history') || {}).start || '2027-01-01';
       if (ds >= hs && this.next()) b.push(`<button class="btn ${isOn(d, 'history') ? 'ghost' : ''}" data-act="l-today" data-k="history">History 15 min${isOn(d, 'history') ? ' ✓' : ''}</button>`);
+      if (ds >= VK_WORDS.START) { const nxw = VK_WORDS.SETS.find(x => !(S.wd[x.id] && S.wd[x.id].done)); b.push(`<button class="btn ghost" data-act="${nxw ? 'w-set' : 'go'}" data-id="${nxw ? nxw.id : ''}" data-to="learn" data-k="words">Words</button>`); }
       if (ds >= VK_FRENCH.START && [1, 3, 5].includes(wd)) b.push(`<button class="btn ghost" data-act="l-today" data-k="french">Français</button>`);
       if (ds >= VK_CHESS.START && [2, 4, 6].includes(wd)) b.push(`<button class="btn ghost" data-act="l-today" data-k="chess">Chess</button>`);
       return b.length ? `<div class="drills">${b.join('')}</div>` : '';
@@ -498,6 +517,7 @@
         <h2>${esc(R.t)}</h2><p class="small muted">${esc(t.title)} · ${esc(t.era)} · tr. ${esc(t.tr)} · about ${mins(t.r[i][1])} min</p>
         <details class="card" ${first || i === 0 ? 'open' : ''}><summary><b>Context</b></summary><p class="small">${esc(t.intro)}</p></details>
         <div class="rbody">${body}</div>
+        <div class="card"><h3>Go further</h3><p class="small muted">The full story is bigger than this extract. Read around it:</p><div class="links">${(t.links || []).map(([n, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(n)} · Wikipedia ↗</a>`).join('')}<a href="${esc(t.src)}" target="_blank" rel="noopener">The full original text ↗</a></div></div>
         <div class="card"><h3>Think about</h3><ol class="small">${t.read_for.map(q => `<li>${esc(q)}</li>`).join('')}</ol><textarea id="rNote" rows="3" placeholder="One line worth remembering, in your own words">${esc(rec.note || '')}</textarea>
         <div class="row"><button class="btn" id="rDone">${rec.v ? 'Save note' : 'Done ✓'}</button>${i + 1 < t.r.length ? '<button class="btn ghost" id="rNext">Next part →</button>' : ''}</div></div></div>`);
       $('#rX').onclick = ovClose;
@@ -623,6 +643,218 @@
       };
     }
   };
+
+  // ================= accountability: focus timer, evidence, pledge, weekly review =================
+  const istOf = t => { const d = new Date(t + 330 * 60000); return { date: d.toISOString().slice(0, 10), mins: d.getUTCHours() * 60 + d.getUTCMinutes() }; };
+  const focusOn = (ds, kind) => S.focus.filter(f => f.d === ds && (!kind || f.kind === kind));
+  const focusMins = (ds, kind, before) => focusOn(ds, kind).filter(f => before == null || f.sm < before).reduce((a, f) => a + f.mins, 0);
+  const tsDay = t => t ? istOf(t).date : '';
+  const strict = () => !(S.settings.strict && S.settings.strict.v === false);
+  // evidence rules: what counts as proof for each habit
+  const VERIFY = {
+    wake5: { how: 'Open VIKRAM by 5:30', test: (ds, mm) => { const f = S.days[ds] && S.days[ds].firstSeen; return !!f && f.v <= (mm ? 360 : 330); } },
+    deep1: { how: 'Focus timer: 45 min before 13:00', act: 'focus', test: (ds, mm) => focusMins(ds, 'study', 780) >= (mm ? 25 : 45) },
+    deep2: { how: 'Focus 90 min total, or one timed set', act: 'focus', test: (ds, mm) => focusMins(ds, 'study') >= (mm ? 25 : 90) || S.practice.some(p => p.d === ds && p.mode !== 'quick') },
+    aptitude: { how: 'A math sprint or practice set', act: 'mathgo', test: ds => S.math.some(m => m.d === ds) || S.practice.some(p => p.d === ds) },
+    meditate: { how: 'Meditation timer', act: 'focus', kind: 'meditate', test: (ds, mm) => focusMins(ds, 'meditate') >= (mm ? 3 : 10) },
+    yoga: { how: 'Yoga timer', act: 'focus', kind: 'yoga', test: (ds, mm) => focusMins(ds, 'yoga') >= (mm ? 5 : 15) },
+    reading: { how: 'Update pages, a library reading, or a reading timer', test: (ds, mm) => Object.values(S.books).some(b => tsDay(b.ts) === ds) || Object.values(S.lib).some(r => r.d === ds) || focusMins(ds, 'reading') >= (mm ? 5 : 10) },
+    history: { how: 'Finish a library reading', act: 'l-today', k: 'history', test: ds => Object.values(S.lib).some(r => r.d === ds) },
+    hobby: { how: 'French unit, chess, vocab set or 100 words written', test: ds => Object.values(S.fr).some(r => r.d === ds) || Object.values(S.wd).some(r => r.d === ds) || Object.values((S.chess.les) || {}).some(r => r.d === ds) || Object.values((S.chess.puz) || {}).some(r => r.d === ds) || (((S.writing[ds] && S.writing[ds].text) || '').split(/\s+/).filter(Boolean).length >= 100) },
+    journal: { how: 'Write one line in the journal', test: ds => ((S.days[ds] && S.days[ds].journal && S.days[ds].journal.text) || '').trim().length >= 15 },
+    review: { how: 'Save the weekly review', act: 'go', to: 'review', test: ds => !!(S.reviews[weekKey(ds)] && S.reviews[weekKey(ds)].d === ds) }
+  };
+  function autoVerify(ds) {
+    if (SIM && !qs.get('test')) return false; const d = day(ds), mm = minimumMode(ds); let ch = false;
+    Object.entries(VERIFY).forEach(([id, r]) => { if (habitById[id] && habitById[id].start <= ds && r.test(ds, mm) && !(d.items[id] && d.items[id].v && d.items[id].src === 'auto')) { d.items[id] = { v: true, src: 'auto', ts: ts() }; ch = true; } });
+    if (ch) save(); return ch;
+  }
+  const verified = (ds, id) => { const it = S.days[ds] && S.days[ds].items[id]; return !!(it && it.v && it.src === 'auto'); };
+  function targetMins(ds) { const t = (S.settings.targets && S.settings.targets[dayType(ds)]) || { study: 240, class: 120, sunday: 60 }[dayType(ds)] || 120; return +t; }
+  // ---- focus timer ----
+  const FKINDS = { study: 'Study', reading: 'Reading', meditate: 'Meditation', yoga: 'Yoga', lab: 'Lab / project' };
+  const Focus = {
+    live() { return LS.get('vikram_focus_live', null); },
+    open(kind) {
+      const l = this.live(); if (l) return this.run();
+      const ds = nowIST().date, cur = currentBlock(blocksFor(ds), nowIST().mins), tk = tasksForToday(ds).find(t => !taskDone(t));
+      const label = kind === 'study' || !kind ? (tk ? (tk.m ? tk.m + ' · ' : '') + tk.t : (cur ? cur.t : '')) : FKINDS[kind];
+      ov(`<div class="quizbox"><div class="row-between"><span class="eyebrow">Focus session</span><button class="btn sm ghost" id="fX">✕</button></div><h2>What are you working on?</h2>
+        <div class="chips">${Object.entries(FKINDS).map(([k, n]) => `<button class="chip ${k === (kind || 'study') ? 'on' : ''}" data-fk="${k}">${n}</button>`).join('')}</div>
+        <input id="fLabel" value="${esc(label)}" placeholder="e.g. A2 · 20 percentage questions">
+        <div class="chips">${[25, 45, 60, 90].map(m => `<button class="chip ${m === (kind === 'meditate' ? 15 : kind === 'yoga' ? 25 : 45) ? 'on' : ''}" data-fm="${m}">${m} min</button>`).join('')}<button class="chip" data-fm="15">15</button></div>
+        <p class="small muted">Only timed minutes count as verified. Leaving VIKRAM during the session is logged as an interruption. Put the phone face down.</p>
+        <button class="btn" id="fGo">▶ Start</button></div>`);
+      let k = kind || 'study', m = kind === 'meditate' ? 15 : kind === 'yoga' ? 25 : 45;
+      $$('[data-fk]').forEach(b => b.onclick = () => { k = b.dataset.fk; $$('[data-fk]').forEach(x => x.classList.toggle('on', x === b)); });
+      $$('[data-fm]').forEach(b => b.onclick = () => { m = +b.dataset.fm; $$('[data-fm]').forEach(x => x.classList.toggle('on', x === b)); });
+      $('#fX').onclick = ovClose;
+      $('#fGo').onclick = () => { LS.set('vikram_focus_live', { kind: k, label: $('#fLabel').value.trim() || FKINDS[k], mins: m, start: Date.now(), away: 0, ints: 0, hid: null }); this.run(); };
+    },
+    run() {
+      const l = this.live(); if (!l) return;
+      ov(`<div class="quizbox center focusbox"><div class="row-between"><span class="eyebrow">${esc(FKINDS[l.kind])} · ${l.mins} min</span><span class="small muted" id="fInt"></span></div>
+        <h2 class="small">${esc(l.label)}</h2><div class="fring" id="fRing"><span id="fT">--:--</span></div>
+        <div class="row" style="justify-content:center"><button class="btn ghost" id="fStop">Stop early</button><button class="btn ghost" id="fBg">Hide</button></div>
+        <p class="small muted">The timer keeps running if you lock the phone. Come back when it ends.</p></div>`);
+      $('#fBg').onclick = () => { $('#overlay').classList.remove('show'); render(); };
+      $('#fStop').onclick = () => this.finish(true);
+      clearInterval(this.tm);
+      const tick = () => { const L = this.live(); if (!L) return clearInterval(this.tm); const el = (Date.now() - L.start) / 1000, left = Math.max(0, L.mins * 60 - el);
+        const t = $('#fT'); if (t) { t.textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(Math.floor(left % 60)).padStart(2, '0'); $('#fRing').style.setProperty('--p', Math.round(100 * (1 - left / (L.mins * 60)))); $('#fInt').textContent = L.ints ? L.ints + ' interruption' + (L.ints > 1 ? 's' : '') : ''; }
+        if (left <= 0) { clearInterval(this.tm); this.finish(false); } };
+      tick(); this.tm = setInterval(tick, 1000);
+    },
+    vis(hidden) { const L = this.live(); if (!L) return; if (hidden) { L.hid = Date.now(); } else if (L.hid) { const away = Date.now() - L.hid; if (away > 15000) { L.ints++; L.away += away; } L.hid = null; } LS.set('vikram_focus_live', L); if (!hidden && $('#overlay').classList.contains('show') === false && L) { /* resume quietly */ } },
+    finish(early) {
+      const L = this.live(); if (!L) return; clearInterval(this.tm);
+      const mins = Math.min(L.mins, Math.round((Date.now() - L.start) / 60000));
+      if (early && mins < 10) { LS.set('vikram_focus_live', null); toast('Stopped before 10 minutes: not logged'); ovClose(); return; }
+      try { if (!early && typeof Notification !== 'undefined' && Notification.permission === 'granted') new Notification('VIKRAM · focus done', { body: mins + ' minutes logged. Write what you finished.', icon: 'icons/icon-192.png' }); } catch (e) { }
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      ov(`<div class="quizbox"><span class="eyebrow">${mins} minutes · ${esc(FKINDS[L.kind])}</span><h2>What did you get done?</h2><p class="small muted">One line of proof, e.g. "A2: 20 questions, 16 right" or "S2 notes, sections 1–3".</p><textarea id="fNote" rows="2"></textarea>${L.ints ? `<p class="small">You left VIKRAM ${L.ints} time${L.ints > 1 ? 's' : ''} (${Math.round(L.away / 60000)} min away).</p>` : ''}<button class="btn" id="fSave">Log session</button></div>`);
+      $('#fSave').onclick = () => { const note = $('#fNote').value.trim(); if (!note) { toast('Write one line first: that is the proof'); return; }
+        const st = istOf(L.start); S.focus.push({ id: 'f' + L.start, d: st.date, sm: st.mins, mins, kind: L.kind, label: L.label, note, ints: L.ints, away: Math.round(L.away / 60000), ts: ts() });
+        LS.set('vikram_focus_live', null); autoVerify(st.date); save(); toast(mins + ' verified minutes logged'); ovClose(); };
+    }
+  };
+  document.addEventListener('visibilitychange', () => Focus.vis(document.visibilityState === 'hidden'));
+  // ---- pledge ----
+  function pledgeCard(ds, n) {
+    const d = day(ds), p = d.pledge;
+    if (!p) return `<div class="card pledge"><div class="eyebrow">Morning pledge</div><h3>Three outcomes that make today a win</h3><p class="small muted">Outcomes, not activities: "A2 set with 75%+", not "study A2".</p>${[0, 1, 2].map(i => `<input class="pin" data-pin="${i}" placeholder="${['1. Most important', '2.', '3.'][i]}">`).join('')}<button class="btn mt" data-act="pledge">Commit</button></div>`;
+    const done = p.items.filter(x => x.done).length, eve = n.mins >= 1140;
+    return `<div class="card pledge"><div class="row-between"><div class="eyebrow">Pledge · ${done}/${p.items.length} kept</div>${eve && done < p.items.length && !p.why ? '<span class="tag">evening check</span>' : ''}</div>
+      ${p.items.map((x, i) => `<label class="item ${x.done ? 'done' : ''}"><input type="checkbox" data-pl="${i}" ${x.done ? 'checked' : ''}><span>${esc(x.t)}</span></label>`).join('')}
+      ${eve && done < p.items.length ? `<textarea id="plWhy" rows="2" placeholder="What got in the way? (honest, one line)">${esc(p.why || '')}</textarea>` : ''}</div>`;
+  }
+  // ---- weekly review ----
+  const weekKey = ds => { const wd = (new Date(ds + 'T00:00:00Z').getUTCDay() + 6) % 7; return addDays(ds, -wd); };
+  let RWEEK = null;
+  function weekStats(wk) {
+    const days = [...Array(7)].map((_, i) => addDays(wk, i)), today = nowIST().date, past = days.filter(x => x <= today && x >= '2026-12-01');
+    const sc = days.map(x => x <= today && x >= '2026-12-01' ? score(x) : null), fm = days.map(x => focusMins(x));
+    let pl = 0, pk = 0; past.forEach(x => { const p = S.days[x] && S.days[x].pledge; if (p) { pl += p.items.length; pk += p.items.filter(i => i.done).length; } });
+    const pr = S.practice.filter(p => days.includes(p.d)), q = pr.reduce((a, p) => a + p.n, 0), ok = pr.reduce((a, p) => a + p.sc, 0);
+    const cnt = (o, f) => Object.values(o).filter(f).length;
+    const st = Object.assign({ thr: 60, allow: 2, amt: 0, to: '' }, S.settings.stake || {});
+    const misses = past.filter(x => x < today && score(x) < st.thr).length;
+    const habits = C.HABITS.filter(h => h.start <= (past[past.length - 1] || wk)).map(h => { const act = past.filter(x => x >= h.start && x < today && activeItems(x).includes(h.id)); const dn = act.filter(x => isOn(S.days[x] || { items: {} }, h.id)); return { h, n: act.length, k: dn.length, pct: act.length ? Math.round(100 * dn.length / act.length) : null }; }).filter(x => x.n);
+    return { days, past, sc, fm, avg: past.length ? Math.round(past.reduce((a, x) => a + score(x), 0) / past.length) : 0, focus: fm.reduce((a, b) => a + b, 0), pl, pk, q, acc: q ? Math.round(100 * ok / q) : null,
+      reads: cnt(S.lib, r => days.includes(r.d)), fr: cnt(S.fr, r => days.includes(r.d)), wd: cnt(S.wd, r => days.includes(r.d)), puz: cnt((S.chess.puz) || {}, r => r.ok && days.includes(r.d)), sent: S.sent.filter(x => days.includes(x.d)).length,
+      urges: days.reduce((a, x) => a + ((S.days[x] && S.days[x].urges && S.days[x].urges.n) || 0), 0), misses, st, owe: st.amt && misses > st.allow ? st.amt : 0, habits };
+  }
+  function viewReview() {
+    const ds = nowIST().date, wk = RWEEK || weekKey(ds), W = weekStats(wk), P = weekStats(addDays(wk, -7)), rv = S.reviews[wk] || {}, cfg = S.settings.partner || {};
+    const delta = (a, b, u = '') => b == null || a == null ? '' : `<small class="${a >= b ? 'up' : 'down'}">${a >= b ? '▲' : '▼'} ${Math.abs(a - b)}${u} vs last week</small>`;
+    const maxF = Math.max(60, ...W.fm), tgt = targetMins(ds);
+    const chart = `<svg viewBox="0 0 350 170" class="wchart" role="img" aria-label="Daily score and focus minutes">${W.days.map((x, i) => { const sc = W.sc[i], h = sc == null ? 0 : sc * 1.2, fh = W.fm[i] / maxF * 120, X = 14 + i * 48;
+      return `<rect x="${X}" y="${140 - h}" width="18" height="${h}" rx="3" class="bs"><title>${fmtD(x)} score ${sc == null ? '–' : sc}</title></rect><rect x="${X + 20}" y="${140 - fh}" width="10" height="${fh}" rx="3" class="bf"><title>${W.fm[i]} focus min</title></rect><text x="${X + 15}" y="158" text-anchor="middle">${'MTWTFSS'[i]}</text>`; }).join('')}
+      <line x1="8" x2="344" y1="${140 - Math.min(120, tgt / maxF * 120)}" y2="${140 - Math.min(120, tgt / maxF * 120)}" class="tl"/><text x="344" y="${136 - Math.min(120, tgt / maxF * 120)}" text-anchor="end" class="tt">focus target ${tgt}m</text></svg>`;
+    const worst = [...W.habits].filter(x => x.pct != null).sort((a, b) => a.pct - b.pct).slice(0, 2);
+    return `<section class="hero small"><div class="eyebrow">Weekly review · ${fmtD(wk)} – ${fmtD(addDays(wk, 6))}</div><h1>The honest numbers</h1><div class="meta"><button class="pill" data-act="r-wk" data-d="-7">← prev</button><button class="pill" data-act="r-wk" data-d="7">next →</button></div></section>
+      <div class="kpis">
+        <div class="kpi"><b>${W.avg}</b><span>avg score</span>${delta(W.avg, P.avg)}</div>
+        <div class="kpi"><b>${(W.focus / 60).toFixed(1)}h</b><span>verified focus</span>${delta(Math.round(W.focus / 6) / 10, Math.round(P.focus / 6) / 10, 'h')}</div>
+        <div class="kpi"><b>${W.pk}/${W.pl}</b><span>pledges kept</span></div>
+        <div class="kpi"><b>${W.acc == null ? '–' : W.acc + '%'}</b><span>accuracy · ${W.q} Qs</span>${delta(W.acc, P.acc, '%')}</div>
+      </div>
+      <div class="card"><h3>Day by day</h3>${chart}<p class="small muted"><span class="lg bs"></span> score <span class="lg bf"></span> focus minutes</p></div>
+      <div class="card"><h3>Also this week</h3><p class="small">${W.reads} readings · ${W.fr} French units · ${W.wd} word sets · ${W.puz} chess puzzles · ${W.sent} outreach emails · ${W.urges} urges beaten</p>
+        ${worst.length ? `<p class="small"><b>Weakest habits:</b> ${worst.map(x => `${esc(x.h.t)} (${x.k}/${x.n})`).join(', ')}. Make one of them next week's focus.</p>` : ''}</div>
+      <div class="card ${W.owe ? 'owe' : ''}"><h3>Stake</h3>${W.st.amt ? `<p class="small">Rule: more than ${W.st.allow} day(s) below ${W.st.thr} → ₹${W.st.amt} to ${esc(W.st.to || 'your partner')}. This week: ${W.misses} day(s) below.</p>${W.owe ? `<p><b>You owe ₹${W.owe} to ${esc(W.st.to || 'your partner')}.</b></p><label class="switch"><input type="checkbox" data-act="r-paid" ${S.stakes[wk] && S.stakes[wk].paid ? 'checked' : ''}> Paid</label>` : '<p class="small">Nothing owed. ✓</p>'}` : '<p class="small muted">No stake set. Add one in More → Accountability: a real cost makes the plan real.</p>'}</div>
+      <div class="card"><h3>Reflect (5 minutes)</h3>
+        <label class="small">What went well?<textarea id="rv1" rows="2">${esc(rv.good || '')}</textarea></label>
+        <label class="small">What got in the way?<textarea id="rv2" rows="2">${esc(rv.bad || '')}</textarea></label>
+        <label class="small">One change for next week<textarea id="rv3" rows="2">${esc(rv.change || '')}</textarea></label>
+        <div class="row"><button class="btn" data-act="r-save">Save review</button><button class="btn ghost" data-act="r-send">Send to ${esc(cfg.name || 'partner')} on WhatsApp</button><button class="btn ghost" data-act="r-copy">Copy report</button></div>
+        <p class="small muted">${cfg.name ? '' : 'Set your accountability partner in More → Accountability. '}One person who sees your numbers every Sunday beats any notification.</p></div>`;
+  }
+  function reportText(wk) {
+    const W = weekStats(wk), rv = S.reviews[wk] || {}, nm = (S.profile && S.profile.name) || 'Aryan';
+    return `VIKRAM weekly report · ${nm} · ${fmtD(wk)}–${fmtD(addDays(wk, 6))}\n` +
+      `Avg day score: ${W.avg}/100\nVerified focus: ${(W.focus / 60).toFixed(1)} h\nPledges kept: ${W.pk}/${W.pl}\n` +
+      `Aptitude: ${W.q} questions${W.acc != null ? ', ' + W.acc + '% right' : ''}\nReadings ${W.reads} · French units ${W.fr} · word sets ${W.wd} · chess puzzles ${W.puz} · outreach emails ${W.sent}\n` +
+      `Days below ${W.st.thr}: ${W.misses}${W.st.amt ? (W.owe ? ` → I owe you ₹${W.owe}` : ' → nothing owed') : ''}\n` +
+      (rv.change ? `Next week I will: ${rv.change}\n` : '') + `Hold me to it.`;
+  }
+  const Acct = {
+    act(act, a) {
+      const ds = nowIST().date;
+      if (act === 'focus') Focus.open(a.dataset.kind);
+      if (act === 'pledge') { const items = $$('[data-pin]').map(i => i.value.trim()).filter(Boolean); if (!items.length) return toast('Write at least one outcome'); day(ds).pledge = { items: items.map(t => ({ t, done: false })), at: nowIST().mins, ts: ts() }; save(); render(); }
+      if (act === 'r-wk') { RWEEK = addDays(RWEEK || weekKey(ds), +a.dataset.d); render(); }
+      const wk = RWEEK || weekKey(ds);
+      const readRv = () => { S.reviews[wk] = { good: $('#rv1').value.trim(), bad: $('#rv2').value.trim(), change: $('#rv3').value.trim(), d: ds, ts: ts() }; autoVerify(ds); save(); };
+      if (act === 'r-save') { readRv(); toast('Review saved'); render(); }
+      if (act === 'r-paid') { S.stakes[wk] = { owed: weekStats(wk).owe, paid: a.checked, ts: ts() }; save(); }
+      if (act === 'r-copy') { readRv(); try { navigator.clipboard.writeText(reportText(wk)).then(() => toast('Report copied')); } catch (e) { toast('Copy blocked'); } }
+      if (act === 'r-send') { readRv(); const cfg = S.settings.partner || {}, num = (cfg.phone || '').replace(/\D/g, ''); location.href = 'https://wa.me/' + (num ? (num.length === 10 ? '91' + num : num) : '') + '?text=' + encodeURIComponent(reportText(wk)); }
+      if (act === 'a-save') { S.settings.strict = { v: $('#aStrict').checked, ts: ts() };
+        S.settings.partner = { name: $('#aPName').value.trim(), phone: $('#aPPhone').value.trim(), ts: ts() };
+        S.settings.stake = { thr: +$('#aThr').value || 60, allow: +$('#aAllow').value || 0, amt: +$('#aAmt').value || 0, to: $('#aTo').value.trim(), ts: ts() };
+        S.settings.targets = { study: +$('#aTS').value || 240, class: +$('#aTC').value || 120, sunday: +$('#aTU').value || 60, ts: ts() }; save(); toast('Saved'); }
+    }
+  };
+  function acctSettings() {
+    const p = S.settings.partner || {}, st = Object.assign({ thr: 60, allow: 2, amt: 0, to: '' }, S.settings.stake || {}), tg = Object.assign({ study: 240, class: 120, sunday: 60 }, S.settings.targets || {});
+    return `<div class="card"><h3>Accountability</h3>
+      <label class="switch"><input type="checkbox" id="aStrict" ${strict() ? 'checked' : ''}> Strict mode: habits that can be proven (study blocks, meditation, reading…) tick only from evidence</label>
+      <p class="small"><b>Verified focus target (minutes)</b></p><div class="form row3"><label class="small">Study day<input id="aTS" type="number" value="${tg.study}"></label><label class="small">Class day<input id="aTC" type="number" value="${tg.class}"></label><label class="small">Sunday<input id="aTU" type="number" value="${tg.sunday}"></label></div>
+      <p class="small"><b>Accountability partner</b> (gets your Sunday report)</p><div class="form row2"><input id="aPName" placeholder="Name" value="${esc(p.name || '')}"><input id="aPPhone" placeholder="WhatsApp number" value="${esc(p.phone || '')}"></div>
+      <p class="small"><b>Stake</b>: if more than <input id="aAllow" type="number" class="mini" value="${st.allow}"> day(s) a week score below <input id="aThr" type="number" class="mini" value="${st.thr}">, I pay ₹<input id="aAmt" type="number" class="mini" value="${st.amt}"> to <input id="aTo" class="mini2" placeholder="whom" value="${esc(st.to)}"></p>
+      <button class="btn" data-act="a-save">Save</button>
+      <p class="small muted">For alerts your phone can't silence: SETUP.md → "Partner emails" makes the GitHub Action email your partner on Sundays and whenever you go quiet for two days.</p></div>`;
+  }
+  // ---- words (English vocabulary) ----
+  const dictUrl = w => w[4] || 'https://www.merriam-webster.com/dictionary/' + encodeURIComponent(w[0].split(' / ')[0]);
+  function speakEn(t) { try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/ \/ /g, ', ')); u.lang = 'en-IN'; const v = ss.getVoices().find(x => /^en-(IN|GB)/i.test(x.lang)) || ss.getVoices().find(x => /^en/i.test(x.lang)); if (v) u.voice = v; u.rate = 0.9; ss.speak(u); } catch (e) { toast('Audio not supported here'); } }
+  const allWords = () => VK_WORDS.SETS.flatMap(s => s.w);
+  const wordOfDay = ds => { const A = allWords(); return A[(diffDays('2026-12-01', ds) % A.length + A.length) % A.length]; };
+  const Wd = {
+    cards() { const out = []; VK_WORDS.SETS.forEach(s => { if (S.wd[s.id] && S.wd[s.id].done) s.w.forEach((w, i) => out.push({ id: 'wd-' + s.id + '-' + i, deck: 'words', f: w[0], b: w[2] + '  ·  "' + w[3] + '"' })); }); return out; },
+    tab() {
+      const Sx = VK_WORDS.SETS, nx = Sx.find(s => !(S.wd[s.id] && S.wd[s.id].done)), w = wordOfDay(nowIST().date);
+      return `<div class="card wod"><div class="eyebrow">Word of the day</div><h2>${esc(w[0])} <button class="btn sm ghost" data-act="w-say" data-t="${esc(w[0])}">🔊</button></h2><p><i>${esc(w[1])}</i> · ${esc(w[2])}</p><p class="small muted">"${esc(w[3])}"</p><a class="lnk" href="${dictUrl(w)}" target="_blank" rel="noopener">dictionary ↗</a></div>
+        ${nx ? `<div class="card nextcard"><div class="eyebrow">Next set · 10 words · 10 min</div><h3>${esc(nx.t)}</h3><div class="row"><button class="btn" data-act="w-set" data-id="${nx.id}">Start</button></div></div>` : ''}
+        <div class="card list">${Sx.map((s, i) => { const st = S.wd[s.id]; return `<button class="rd ${st && st.done ? 'done' : ''}" data-act="w-set" data-id="${s.id}"><span>${st && st.done ? '✓' : i + 1}</span>${esc(s.t)} <small class="muted">${st && st.best != null ? 'best ' + st.best + '/8' : '10 words'}</small></button>`; }).join('')}</div>
+        <details class="card"><summary><b>Word roots</b> · ${VK_WORDS.ROOTS.length} roots unlock thousands of words</summary><table class="roots">${VK_WORDS.ROOTS.map(r => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}<small class="muted"> · ${esc(r[2])}</small><br><small>${esc(r[3])}</small></td></tr>`).join('')}</table></details>
+        <p class="small muted">Pass a set's quiz (6/8) and its words join your daily flashcards.</p>`;
+    },
+    open(id) {
+      const s = VK_WORDS.SETS.find(x => x.id === id);
+      ov(`<div class="quizbox"><div class="row-between"><span class="eyebrow">Words · ${esc(s.t)}</span><button class="btn sm ghost" id="wX">✕</button></div>
+        <div class="list">${s.w.map((w, i) => `<div class="frw"><button class="btn sm ghost" data-say="${i}" aria-label="Listen">🔊</button><div><b>${esc(w[0])}</b> <i class="small muted">${esc(w[1])}</i><small>${esc(w[2])}</small><small class="muted">"${esc(w[3])}"</small><a class="lnk small" href="${dictUrl(w)}" target="_blank" rel="noopener">dictionary ↗</a></div></div>`).join('')}</div>
+        <p class="small muted">Read each example aloud, then make your own sentence in your head. Then the quiz.</p><button class="btn" id="wQ">Take the quiz (8 questions)</button></div>`);
+      $('#wX').onclick = ovClose; $$('[data-say]').forEach(b => b.onclick = () => speakEn(s.w[+b.dataset.say][0]));
+      $('#wQ').onclick = () => this.quiz(s);
+    },
+    quiz(s) {
+      const pick = [...s.w].sort(() => Math.random() - 0.5).slice(0, 8);
+      const blankable = w => !w[0].includes(' / ') && new RegExp('\\b' + w[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(w[3]);
+      const qs = pick.map((w, k) => { const others = s.w.filter(x => x !== w).sort(() => Math.random() - 0.5).slice(0, 3), opts = [w, ...others].sort(() => Math.random() - 0.5); const type = k % 3 === 2 && blankable(w) ? 'blank' : k % 2 ? 'rev' : 'mean';
+        if (type === 'mean') return { p: 'What does it mean?', q: w[0], opts: opts.map(o => o[2]), a: opts.indexOf(w) };
+        if (type === 'rev') return { p: 'Which word means this?', q: w[2], opts: opts.map(o => o[0]), a: opts.indexOf(w) };
+        return { p: 'Fill the blank', q: w[3].replace(new RegExp('\\b' + w[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i'), '_____'), opts: opts.map(o => o[0]), a: opts.indexOf(w) }; });
+      let n = 0, sc = 0;
+      const show = () => {
+        if (n >= qs.length) { const st = Object.assign({}, S.wd[s.id] || {}), pass = sc >= 6; st.best = Math.max(st.best || 0, sc); if (pass && !st.done) st.done = true; st.d = nowIST().date; st.ts = ts(); S.wd[s.id] = st; autoVerify(nowIST().date); save();
+          ov(`<div class="quizbox center"><h2 class="qq">${sc}/8 ${pass ? '✓' : ''}</h2><p>${pass ? 'Set passed. These words are now in your daily flashcards.' : 'Need 6/8. Read the examples once more and retry.'}</p><div class="row" style="justify-content:center"><button class="btn" id="wB">Back to set</button><button class="btn ghost" id="wC">Close</button></div></div>`);
+          $('#wB').onclick = () => this.open(s.id); $('#wC').onclick = ovClose; return; }
+        const q = qs[n];
+        ov(`<div class="quizbox"><div class="row-between"><span class="eyebrow">Quiz · ${n + 1}/8 · ${sc} right</span><button class="btn sm ghost" id="wX">✕</button></div><p class="small muted">${q.p}</p><h2 class="qq">${esc(q.q)}</h2><div class="opts">${q.opts.map((o, i) => `<button class="opt" data-o="${i}">${esc(o)}</button>`).join('')}</div></div>`);
+        $('#wX').onclick = ovClose;
+        $$('[data-o]').forEach(b => b.onclick = () => { const i = +b.dataset.o; $$('[data-o]').forEach(x => x.disabled = true); b.classList.add(i === q.a ? 'right' : 'wrong'); $$('[data-o]')[q.a].classList.add('right'); if (i === q.a) sc++; setTimeout(() => { n++; show(); }, i === q.a ? 650 : 1500); });
+      };
+      show();
+    }
+  };
+  // ---- go further ----
+  const resBlock = k => { const g = VK_RESOURCES.find(x => x.k === k); return g ? `<h3 class="h">Go further</h3><div class="card list res">${g.r.map(r => `<a class="resl" href="${r[1]}" target="_blank" rel="noopener"><b>${esc(r[0])} ↗</b><small>${esc(r[2])}</small></a>`).join('')}</div>` : ''; };
+  function viewResources() {
+    return `<section class="hero small"><div class="eyebrow">Go further · beyond VIKRAM</div><h1>The best free resources</h1><p>VIKRAM tracks and teaches the core; these take you further. All free, links checked.</p></section>
+      ${VK_RESOURCES.map(g => `<h3 class="h">${esc(g.t)}</h3><div class="card list res">${g.r.map(r => `<a class="resl" href="${r[1]}" target="_blank" rel="noopener"><b>${esc(r[0])} ↗</b><small>${esc(r[2])}</small></a>`).join('')}</div>`).join('')}`;
+  }
 
   // ================= outreach =================
   let OTAB = 'queue', OLANE = '', OQ = '', OSTAT = '';
@@ -779,7 +1011,7 @@
           let remote = null, sha = undefined; const r = await fetch(url + '?t=' + ts(), { headers: H, cache: 'no-store' });
           if (r.status === 200) { const j = await r.json(); sha = j.sha; let txt = j.content ? this.b64d(j.content) : null; if (!txt) { const rr = await fetch(url, { headers: Object.assign({}, H, { Accept: 'application/vnd.github.raw' }), cache: 'no-store' }); txt = await rr.text(); } remote = JSON.parse(txt); }
           else if (r.status !== 404) throw new Error('GitHub ' + r.status + (r.status === 401 ? ' (token?)' : ''));
-          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; LS.set(KEY, S);
+          const merged = merge(remote, S); const local = S; S = merged; ['days', 'tasks', 'taskDue', 'books', 'writing', 'subs', 'settings', 'srs', 'contacts', 'coState', 'lib', 'fr', 'chess', 'wd', 'reviews', 'stakes'].forEach(k => S[k] = S[k] || {}); S.math = S.math || []; S.practice = S.practice || []; S.sent = S.sent || []; S.focus = S.focus || []; LS.set(KEY, S);
           const body = { message: 'vikram sync ' + deviceId + ' ' + new Date().toISOString(), content: this.b64e(JSON.stringify(S)) }; if (sha) body.sha = sha;
           const p = await fetch(url, { method: 'PUT', headers: H, body: JSON.stringify(body) });
           if (p.status === 409 || p.status === 422) { continue; }

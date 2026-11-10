@@ -22,6 +22,10 @@ jobs:
           VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
           VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
           VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          PARTNER_EMAIL: ${{ secrets.PARTNER_EMAIL }}
+          PARTNER_NAME: ${{ secrets.PARTNER_NAME }}
         run: node push/send.js
       - name: Keep the schedule alive (GitHub pauses idle scheduled workflows after 60 days)
         if: github.event_name == 'schedule'

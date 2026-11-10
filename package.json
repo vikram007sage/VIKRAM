@@ -1,1 +1,1 @@
-{ "name": "vikram", "version": "1.0.0", "private": true, "description": "VIKRAM personal assistant: PWA + push nudger", "scripts": { "nudge": "node push/send.js" }, "dependencies": { "web-push": "^3.6.7" } }
+{ "name": "vikram", "version": "1.0.0", "private": true, "description": "VIKRAM personal assistant: PWA + push nudger", "scripts": { "nudge": "node push/send.js" }, "dependencies": { "web-push": "^3.6.7", "nodemailer": "^6.9.16" } }

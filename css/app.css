@@ -98,3 +98,21 @@ pre.tpl{white-space:pre-wrap;font:13px/1.5 "DM Mono",monospace;background:var(--
 .kmsg{min-height:22px;text-align:center;margin:4px 0}
 .memory{background:var(--mint);border-radius:12px;padding:10px 12px;margin:8px 0}
 .feedcard h2.quote{font-style:italic;font-size:22px;line-height:1.4}.k-chess .board{width:min(100%,360px)}
+/* v1.5: accountability, words, resources */
+.vb{display:inline-block;margin-top:3px;font:10.5px "DM Mono",monospace;color:#2f7d55}.vb.self{color:var(--muted)}.vb.need{color:var(--orange)}
+.item.locked span{opacity:.75}.item .btn{margin-left:auto;align-self:center}
+.focusbtn{font-size:13px;padding:11px 16px}
+.pledge .pin{width:100%;margin:6px 0}.pledge .eyebrow{color:var(--orange)}
+.fring{--p:0;width:220px;height:220px;margin:18px auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--mint) 0)}
+.fring span{width:180px;height:180px;border-radius:50%;background:var(--card);display:grid;place-items:center;font:500 44px "DM Mono",monospace;color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}.kpi b{display:block;font-size:26px;color:var(--green)}.kpi span{font:11px "DM Mono",monospace;color:var(--muted)}.kpi small{display:block;font-size:11px}.kpi .up{color:#2f7d55}.kpi .down{color:var(--red)}
+.wchart{width:100%;height:auto}.wchart text{font:10px "DM Mono",monospace;fill:var(--muted)}.wchart .bs{fill:var(--green)}.wchart .bf{fill:var(--orange)}.wchart .tl{stroke:var(--orange);stroke-dasharray:4 4;opacity:.6}.wchart .tt{fill:var(--orange)}
+.lg{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px;vertical-align:middle}.lg.bs{background:var(--green)}.lg.bf{background:var(--orange)}
+.owe{border-color:var(--red);background:color-mix(in srgb,var(--red) 8%,var(--card))}
+.form.row3{grid-template-columns:repeat(3,1fr)}input.mini{width:64px;display:inline-block;padding:4px 6px}input.mini2{width:110px;display:inline-block;padding:4px 6px}
+.links{display:flex;flex-wrap:wrap;gap:8px}.links a{font:12px "DM Mono",monospace;color:var(--green);border:1px solid var(--line);border-radius:99px;padding:6px 10px;text-decoration:none}
+.res .resl{display:block;padding:10px 0;border-bottom:1px dashed var(--line);text-decoration:none;color:var(--ink)}.res .resl:last-child{border:0}.res .resl b{color:var(--green)}.res .resl small{display:block;font-size:14px;color:var(--muted)}
+.wod h2{margin:4px 0}.roots td{padding:6px 8px;border-bottom:1px dashed var(--line);vertical-align:top;font-size:15px}
+.lnk{font:12px "DM Mono",monospace;color:var(--green)}
+.hero button.pill{cursor:pointer;font:inherit;font-size:11px;color:inherit;background:transparent}.nowcard>div:first-child{flex:1;min-width:0}
