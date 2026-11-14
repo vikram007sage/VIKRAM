@@ -1,0 +1,298 @@
+<!--META D1 | SQL: zero to interview | D1 / SQL | Data + AI track · Module D1 | SQL: zero<br>to interview | Every analyst, decision-science, product and fintech OA has a SQL round. This module takes you from SELECT to window functions and the nine patterns that cover almost every interview question, all on one credit-card dataset. Every query here was run and checked. | 22 tested queries; 9 interview patterns; 25-question bank -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What SQL rounds test</h2></div></div>
+        <p class="lede">You will get a schema of 2–4 tables and 2–5 questions in 30–45 minutes, usually on HackerRank, CoderPad or a shared doc. Correctness matters, but interviewers also watch whether you clarify the question, handle NULLs and duplicates, and explain your logic.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>JOIN + GROUP BY + HAVING</strong><span class="muted">every single test</span></div><span class="frequency">100%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Window functions</strong><span class="muted">ROW_NUMBER, RANK, LAG, running SUM</span></div><span class="frequency">~80%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>CTEs + CASE WHEN</strong><span class="muted">readable multi-step logic, conditional counts</span></div><span class="frequency">~70%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Dates</strong><span class="muted">month buckets, retention, gaps between events</span></div><span class="frequency">~60%</span></div>
+        </div>
+        <h3>The dataset used throughout</h3>
+        <table class="compare">
+          <tr><th>Table</th><th>Columns</th></tr>
+          <tr><td><b>customers</b></td><td>customer_id, name, city, signup_date, income, segment</td></tr>
+          <tr><td><b>cards</b></td><td>card_id, customer_id, product, credit_limit, open_date, status</td></tr>
+          <tr><td><b>txns</b></td><td>txn_id, card_id, txn_date, amount, merchant_category, channel (POS / online / UPI)</td></tr>
+          <tr><td><b>payments</b></td><td>payment_id, card_id, due_date, paid_date (NULL if unpaid), amount_due, amount_paid</td></tr>
+        </table>
+        <div class="memory"><b>Practise on real engines:</b> the queries are written in standard SQL and tested on SQLite. Notes in section 8 show the few things that differ in MySQL, PostgreSQL, BigQuery and Snowflake.</div>
+      </section>
+
+      <section id="order" data-nav="1 · How a query runs" data-search>
+        <div class="section-head"><div><span class="section-no">01 / MENTAL MODEL</span><h2>Written order vs execution order</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Written: SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT<br>Executed: FROM / JOIN → WHERE → GROUP BY → HAVING → SELECT (window functions here) → DISTINCT → ORDER BY → LIMIT</div>
+        <div class="grid">
+          <div class="card"><h3>Why it matters</h3><p>You can't use a SELECT alias in WHERE (WHERE runs first). You can't filter on a window function in WHERE either: wrap it in a subquery or CTE. HAVING filters groups, WHERE filters rows.</p></div>
+          <div class="card"><h3>Grain</h3><p>Before writing, say the grain of the output: "one row per customer per month". Most wrong answers come from joining tables at different grains and double-counting.</p></div>
+          <div class="card"><h3>Talk while you type</h3><p>"I'll join cards to txns on card_id, group by customer, and use LEFT JOIN so customers with no spend still appear." Interviewers give credit for reasoning even if a comma is off.</p></div>
+        </div>
+      </section>
+
+      <section id="basics" data-nav="2 · Basics + aggregation" data-search>
+        <div class="section-head"><div><span class="section-no">02 / BASICS</span><h2>SELECT, WHERE, GROUP BY, HAVING</h2></div></div>
+        <pre class="eq">-- customers per city
+SELECT city, COUNT(*) AS customers
+FROM customers
+GROUP BY city
+ORDER BY customers DESC;
+
+-- categories with more than ₹5 lakh spend
+SELECT merchant_category,
+       COUNT(*)              AS n,
+       ROUND(SUM(amount), 0) AS spend,
+       ROUND(AVG(amount), 0) AS avg_ticket
+FROM txns
+GROUP BY merchant_category
+HAVING SUM(amount) &gt; 500000
+ORDER BY spend DESC;</pre>
+        <div class="formula-list card">
+          <div class="formula-row"><b>COUNT(*)</b><span>counts rows; <b>COUNT(col)</b> skips NULLs; <b>COUNT(DISTINCT col)</b> counts unique values.</span></div>
+          <div class="formula-row"><b>Filters</b><span>IN (...), BETWEEN a AND b (inclusive), LIKE 'Mum%', IS NULL / IS NOT NULL (never = NULL).</span></div>
+          <div class="formula-row"><b>Integer division</b><span>In many engines 7/2 = 3. Multiply by 100.0 or CAST to get a decimal percentage.</span></div>
+          <div class="formula-row"><b>Every non-aggregated column</b><span>in SELECT must be in GROUP BY (MySQL lets you break this; don't).</span></div>
+        </div>
+      </section>
+
+      <section id="joins" data-nav="3 · Joins" data-search>
+        <div class="section-head"><div><span class="section-no">03 / JOINS</span><h2>Joins, and the two bugs they cause</h2></div><span class="tag hot">most tested</span></div>
+        <table class="compare">
+          <tr><th>Join</th><th>Keeps</th><th>Use for</th></tr>
+          <tr><td>INNER JOIN</td><td>only matching rows</td><td>"customers with transactions"</td></tr>
+          <tr><td>LEFT JOIN</td><td>all of the left table; NULLs where no match</td><td>"all customers, including those with zero spend"; finding missing records</td></tr>
+          <tr><td>FULL OUTER JOIN</td><td>everything from both</td><td>reconciling two systems</td></tr>
+          <tr><td>CROSS JOIN</td><td>every combination</td><td>building a date × product grid</td></tr>
+          <tr><td>Self join</td><td>table joined to itself</td><td>duplicates, employee–manager, consecutive events</td></tr>
+        </table>
+        <pre class="eq">-- top 5 customers by spend (customer → cards → txns)
+SELECT c.customer_id, c.name, ROUND(SUM(t.amount), 0) AS spend
+FROM customers c
+JOIN cards k ON k.customer_id = c.customer_id
+JOIN txns  t ON t.card_id     = k.card_id
+GROUP BY c.customer_id, c.name
+ORDER BY spend DESC
+LIMIT 5;
+
+-- customers who never transacted (anti-join)
+SELECT c.customer_id, c.name
+FROM customers c
+LEFT JOIN cards k ON k.customer_id = c.customer_id
+LEFT JOIN txns  t ON t.card_id     = k.card_id
+WHERE t.txn_id IS NULL
+GROUP BY c.customer_id, c.name;</pre>
+        <div class="grid">
+          <div class="card"><h3>Bug 1: fan-out</h3><p>Joining customers to cards (one-to-many) and then to payments <i>and</i> txns multiplies rows: each txn repeats for every payment. Aggregate each child table in its own CTE first, then join the summaries.</p></div>
+          <div class="card"><h3>Bug 2: LEFT JOIN turned INNER</h3><p>A WHERE condition on the right table (<code>WHERE t.channel = 'UPI'</code>) removes the NULL rows. Put the condition in the ON clause instead: <code>LEFT JOIN txns t ON ... AND t.channel = 'UPI'</code>.</p></div>
+          <div class="card"><h3>Duplicate keys</h3><p>Always ask: is the join key unique on at least one side? If both sides have duplicates you get a many-to-many explosion.</p></div>
+        </div>
+      </section>
+
+      <section id="case" data-nav="4 · CASE, NULL, subqueries, CTEs" data-search>
+        <div class="section-head"><div><span class="section-no">04 / LOGIC</span><h2>CASE WHEN, NULLs, subqueries and CTEs</h2></div></div>
+        <pre class="eq">-- late-or-missed payment rate and revolve rate in one pass
+SELECT
+  ROUND(100.0 * SUM(CASE WHEN paid_date IS NULL OR paid_date &gt; due_date THEN 1 ELSE 0 END) / COUNT(*), 1) AS late_or_missed_pct,
+  ROUND(100.0 * SUM(CASE WHEN amount_paid &lt; amount_due THEN 1 ELSE 0 END) / COUNT(*), 1)                AS revolve_pct
+FROM payments;
+
+-- pivot: spend by channel × category
+SELECT channel,
+       SUM(CASE WHEN merchant_category = 'travel'  THEN amount END) AS travel,
+       SUM(CASE WHEN merchant_category = 'grocery' THEN amount END) AS grocery,
+       SUM(CASE WHEN merchant_category = 'dining'  THEN amount END) AS dining
+FROM txns
+GROUP BY channel;
+
+-- customers earning above average (scalar subquery)
+SELECT customer_id, name, income
+FROM customers
+WHERE income &gt; (SELECT AVG(income) FROM customers);</pre>
+        <div class="formula-list card">
+          <div class="formula-row"><b>NULL logic</b><span>NULL = NULL is not true. NULL + 5 is NULL. AVG ignores NULLs (so the denominator shrinks). COALESCE(x, 0) replaces NULL.</span></div>
+          <div class="formula-row"><b>CTE</b><span><code>WITH name AS (SELECT ...) SELECT ... FROM name</code>. Use one CTE per logical step; name them by what they hold (monthly_spend, first_txn).</span></div>
+          <div class="formula-row"><b>EXISTS vs IN</b><span>NOT IN breaks if the subquery returns any NULL (returns nothing). Prefer NOT EXISTS or a LEFT JOIN anti-join.</span></div>
+          <div class="formula-row"><b>UNION vs UNION ALL</b><span>UNION removes duplicates (slower); UNION ALL keeps them. Default to UNION ALL unless you need distinct rows.</span></div>
+        </div>
+      </section>
+
+      <section id="windows" data-nav="5 · Window functions" data-search>
+        <div class="section-head"><div><span class="section-no">05 / WINDOWS</span><h2>Window functions: the topic that separates candidates</h2></div><span class="tag hot">must</span></div>
+        <div class="eq">function() OVER (PARTITION BY group ORDER BY sort ROWS BETWEEN ... AND ...)</div>
+        <p>A window function computes over a set of rows related to the current row <b>without collapsing them</b> (unlike GROUP BY).</p>
+        <table class="compare">
+          <tr><th>Function</th><th>Ties 100, 90, 90, 80 →</th><th>Use</th></tr>
+          <tr><td>ROW_NUMBER()</td><td>1, 2, 3, 4</td><td>pick exactly one row per group (latest, first, dedupe)</td></tr>
+          <tr><td>RANK()</td><td>1, 2, 2, 4</td><td>competition ranking with gaps</td></tr>
+          <tr><td>DENSE_RANK()</td><td>1, 2, 2, 3</td><td>"Nth highest" with ties counted once</td></tr>
+          <tr><td>LAG / LEAD(col, n)</td><td colspan="2">value n rows before / after: month-over-month change, time between events</td></tr>
+          <tr><td>SUM / AVG OVER</td><td colspan="2">running totals, moving averages, share of total</td></tr>
+          <tr><td>NTILE(n)</td><td colspan="2">split into quartiles / deciles</td></tr>
+          <tr><td>FIRST_VALUE / LAST_VALUE</td><td colspan="2">first or last value in the window (LAST_VALUE needs a full frame)</td></tr>
+        </table>
+        <pre class="eq">-- month-over-month spend growth
+WITH m AS (
+  SELECT strftime('%Y-%m', txn_date) AS month, SUM(amount) AS spend
+  FROM txns GROUP BY month
+)
+SELECT month, ROUND(spend, 0) AS spend,
+       ROUND(100.0 * (spend - LAG(spend) OVER (ORDER BY month))
+             / LAG(spend) OVER (ORDER BY month), 1) AS mom_pct
+FROM m ORDER BY month;
+
+-- running total and 3-transaction moving average per card
+SELECT card_id, txn_date, amount,
+       SUM(amount) OVER (PARTITION BY card_id ORDER BY txn_date, txn_id
+                         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total,
+       AVG(amount) OVER (PARTITION BY card_id ORDER BY txn_date
+                         ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)         AS moving_avg_3
+FROM txns;</pre>
+        <div class="memory"><b>Frame default trap:</b> with ORDER BY and no frame, most engines use RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, which treats tied dates as one block. Write ROWS explicitly and add a tie-breaker (txn_id) to ORDER BY.</div>
+      </section>
+
+      <section id="patterns" data-nav="6 · Nine interview patterns" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PATTERNS</span><h2>Nine patterns that answer most questions</h2></div><span class="tag core">core</span></div>
+        <details><summary><b>1 · Top N per group</b> (top 2 spenders in each city)</summary><pre class="eq">WITH s AS (
+  SELECT c.city, c.customer_id, SUM(t.amount) AS spend
+  FROM customers c JOIN cards k USING (customer_id) JOIN txns t USING (card_id)
+  GROUP BY c.city, c.customer_id
+)
+SELECT city, customer_id, spend, rnk
+FROM (SELECT *, DENSE_RANK() OVER (PARTITION BY city ORDER BY spend DESC) AS rnk FROM s)
+WHERE rnk &lt;= 2
+ORDER BY city, rnk;</pre></details>
+        <details><summary><b>2 · Nth highest</b> (second-largest transaction per card)</summary><pre class="eq">WITH ranked AS (
+  SELECT card_id, amount, ROW_NUMBER() OVER (PARTITION BY card_id ORDER BY amount DESC) AS r
+  FROM txns
+)
+SELECT card_id, amount AS second_highest FROM ranked WHERE r = 2;</pre><p>Use DENSE_RANK if "second highest distinct value" is meant. Clarify which.</p></details>
+        <details><summary><b>3 · First / latest record</b> (first transaction of each card)</summary><pre class="eq">SELECT card_id, txn_date
+FROM (SELECT card_id, txn_date,
+             ROW_NUMBER() OVER (PARTITION BY card_id ORDER BY txn_date, txn_id) AS rn
+      FROM txns)
+WHERE rn = 1;</pre></details>
+        <details><summary><b>4 · Period-over-period change</b></summary><p>LAG on a monthly aggregate (section 5). For year-over-year on monthly data, use LAG(spend, 12).</p></details>
+        <details><summary><b>5 · Running total / share of total</b></summary><pre class="eq">SELECT merchant_category, SUM(amount) AS spend,
+       ROUND(100.0 * SUM(amount) / SUM(SUM(amount)) OVER (), 1) AS share_pct
+FROM txns GROUP BY merchant_category;</pre><p><code>SUM(SUM(amount)) OVER ()</code> = a window over the grouped result: the grand total.</p></details>
+        <details><summary><b>6 · Retention cohort</b> (of customers who first spent in month M, how many spent in M+1?)</summary><pre class="eq">WITH first AS (
+  SELECT k.customer_id, MIN(strftime('%Y-%m', t.txn_date)) AS cohort
+  FROM cards k JOIN txns t USING (card_id) GROUP BY k.customer_id
+), act AS (
+  SELECT DISTINCT k.customer_id, strftime('%Y-%m', t.txn_date) AS month
+  FROM cards k JOIN txns t USING (card_id)
+)
+SELECT f.cohort,
+       COUNT(DISTINCT f.customer_id) AS size,
+       COUNT(DISTINCT CASE WHEN a.month = strftime('%Y-%m', date(f.cohort || '-01', '+1 month'))
+                           THEN a.customer_id END) AS active_next_month
+FROM first f LEFT JOIN act a USING (customer_id)
+GROUP BY f.cohort ORDER BY f.cohort;</pre></details>
+        <details><summary><b>7 · Gaps and islands</b> (longest streak of consecutive spending days)</summary><pre class="eq">WITH d AS (SELECT DISTINCT card_id, date(txn_date) AS d FROM txns),
+g AS (
+  SELECT card_id, d,
+         julianday(d) - ROW_NUMBER() OVER (PARTITION BY card_id ORDER BY d) AS grp
+  FROM d
+)
+SELECT card_id, MIN(d) AS start, MAX(d) AS finish, COUNT(*) AS days
+FROM g GROUP BY card_id, grp
+HAVING COUNT(*) &gt;= 2
+ORDER BY days DESC;</pre><p>The trick: date minus row number is constant within a run of consecutive days.</p></details>
+        <details><summary><b>8 · Duplicates</b> (same card, amount and date twice: possible double charge)</summary><pre class="eq">SELECT a.card_id, a.txn_id AS t1, b.txn_id AS t2, a.amount, a.txn_date
+FROM txns a
+JOIN txns b ON a.card_id = b.card_id AND a.amount = b.amount
+           AND a.txn_date = b.txn_date AND a.txn_id &lt; b.txn_id;</pre><p>To delete duplicates, keep ROW_NUMBER() = 1 per key.</p></details>
+        <details><summary><b>9 · Ratio / conditional aggregation</b> (UPI share of spend by city)</summary><pre class="eq">SELECT c.city,
+       ROUND(100.0 * SUM(CASE WHEN t.channel = 'UPI' THEN t.amount ELSE 0 END) / SUM(t.amount), 1) AS upi_share_pct
+FROM customers c JOIN cards k USING (customer_id) JOIN txns t USING (card_id)
+GROUP BY c.city ORDER BY upi_share_pct DESC;</pre></details>
+      </section>
+
+      <section id="dates" data-nav="7 · Dates" data-search>
+        <div class="section-head"><div><span class="section-no">07 / DATES</span><h2>Dates: the part that changes by engine</h2></div></div>
+        <table class="compare">
+          <tr><th>Task</th><th>PostgreSQL / Snowflake</th><th>MySQL</th><th>BigQuery</th><th>SQLite</th></tr>
+          <tr><td>Month bucket</td><td>DATE_TRUNC('month', d)</td><td>DATE_FORMAT(d, '%Y-%m-01')</td><td>DATE_TRUNC(d, MONTH)</td><td>strftime('%Y-%m', d)</td></tr>
+          <tr><td>Add 30 days</td><td>d + INTERVAL '30 days'</td><td>DATE_ADD(d, INTERVAL 30 DAY)</td><td>DATE_ADD(d, INTERVAL 30 DAY)</td><td>date(d, '+30 days')</td></tr>
+          <tr><td>Days between</td><td>d2 - d1 (Postgres); DATEDIFF('day', d1, d2) (Snowflake)</td><td>DATEDIFF(d2, d1)</td><td>DATE_DIFF(d2, d1, DAY)</td><td>julianday(d2) - julianday(d1)</td></tr>
+          <tr><td>Extract</td><td>EXTRACT(DOW FROM d)</td><td>DAYOFWEEK(d)</td><td>EXTRACT(DAYOFWEEK FROM d)</td><td>strftime('%w', d)</td></tr>
+        </table>
+        <div class="memory"><b>In an interview:</b> say "I'll write DATE_TRUNC; in MySQL it would be DATE_FORMAT." Nobody fails you for dialect if you name it.</div>
+      </section>
+
+      <section id="perf" data-nav="8 · Performance + data quality" data-search>
+        <div class="section-head"><div><span class="section-no">08 / BEYOND CORRECT</span><h2>Performance, indexes and checking your own answer</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Indexes</h3><p>An index is a sorted lookup on a column (like a book index). It speeds WHERE, JOIN and ORDER BY on that column but slows inserts. Functions on an indexed column (<code>WHERE YEAR(d) = 2026</code>) stop the index being used; write a range instead (<code>d &gt;= '2026-01-01' AND d &lt; '2027-01-01'</code>).</p></div>
+          <div class="card"><h3>Big-data engines</h3><p>BigQuery and Snowflake charge or slow down by data scanned. Select only needed columns (never SELECT * on a big table), filter on the partition column (usually a date), and aggregate before joining.</p></div>
+          <div class="card"><h3>Sanity checks</h3><p>Count rows before and after each join. Check for NULLs in join keys. Compare a total to a known figure. Look at 5 sample rows. Say these checks out loud in an interview.</p></div>
+        </div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Normalisation</b><span>Split data so each fact lives once (customers vs cards vs txns). Analytics warehouses often denormalise into a wide fact table plus dimension tables (star schema).</span></div>
+          <div class="formula-row"><b>Primary / foreign key</b><span>card_id is the primary key of cards and a foreign key in txns.</span></div>
+          <div class="formula-row"><b>OLTP vs OLAP</b><span>Transaction systems (fast writes, row stores like MySQL/Postgres) vs analytics warehouses (big scans, column stores like BigQuery, Snowflake, Redshift).</span></div>
+          <div class="formula-row"><b>Using AI</b><span>LLMs write decent first drafts of SQL, so interviews now probe whether you can spot when a query is wrong: fan-out, NULL handling, wrong grain. Learn to read SQL critically, not just write it.</span></div>
+        </div>
+      </section>
+
+      <section id="bank" data-nav="9 · Question bank" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PRACTICE</span><h2>25 interview questions on this dataset</h2></div><span class="tag pyq">try before opening</span></div>
+        <div class="qa-grid">
+          <div><b>Q1</b>Number of active cards per product</div><div><b>Q2</b>Average ticket size by channel</div><div><b>Q3</b>Customers with more than one card</div>
+          <div><b>Q4</b>Cards with no transactions in June</div><div><b>Q5</b>Monthly spend and MoM growth</div><div><b>Q6</b>Top 3 categories per city by spend</div>
+          <div><b>Q7</b>Share of spend from top 10% of customers</div><div><b>Q8</b>Each customer's first and last transaction date</div><div><b>Q9</b>Average days between transactions per card</div>
+          <div><b>Q10</b>Credit utilisation = max bill ÷ limit; list cards above 50%</div><div><b>Q11</b>Customers who paid late in 2+ consecutive months</div><div><b>Q12</b>Second-highest transaction per card</div>
+          <div><b>Q13</b>Month-1 retention by signup cohort</div><div><b>Q14</b>Percentage of payments that were partial (revolvers)</div><div><b>Q15</b>Cities where UPI share of spend &gt; 40%</div>
+          <div><b>Q16</b>Running total of spend per card</div><div><b>Q17</b>Detect possible duplicate charges</div><div><b>Q18</b>Customers whose spend fell 50%+ from Q1 to Q2</div>
+          <div><b>Q19</b>Rank products by average spend per active card</div><div><b>Q20</b>Longest streak of consecutive spending days</div><div><b>Q21</b>Median transaction amount (no MEDIAN function)</div>
+          <div><b>Q22</b>Percentage of customers who used all three channels</div><div><b>Q23</b>Category mix (% of spend) per segment</div><div><b>Q24</b>Cards whose first transaction was over ₹10,000</div>
+          <div><b>Q25</b>For each month, number of new vs returning spenders</div>
+        </div>
+        <details><summary>Answers to the hardest five (Q7, Q11, Q18, Q21, Q25)</summary>
+<pre class="eq">-- Q7 share of spend from top 10% of customers
+WITH s AS (SELECT k.customer_id, SUM(t.amount) AS spend
+           FROM cards k JOIN txns t USING (card_id) GROUP BY k.customer_id),
+d AS (SELECT *, NTILE(10) OVER (ORDER BY spend DESC) AS decile FROM s)
+SELECT ROUND(100.0 * SUM(CASE WHEN decile = 1 THEN spend END) / SUM(spend), 1) FROM d;
+
+-- Q11 late in two consecutive months
+WITH l AS (SELECT card_id, due_date,
+                  CASE WHEN paid_date IS NULL OR paid_date &gt; due_date THEN 1 ELSE 0 END AS late
+           FROM payments),
+x AS (SELECT *, LAG(late) OVER (PARTITION BY card_id ORDER BY due_date) AS prev_late FROM l)
+SELECT DISTINCT card_id FROM x WHERE late = 1 AND prev_late = 1;
+
+-- Q18 spend fell 50%+ from Q1 to Q2 2026
+WITH q AS (SELECT k.customer_id,
+             SUM(CASE WHEN t.txn_date &lt; '2026-04-01' THEN amount ELSE 0 END) AS q1,
+             SUM(CASE WHEN t.txn_date &gt;= '2026-04-01' THEN amount ELSE 0 END) AS q2
+           FROM cards k JOIN txns t USING (card_id) GROUP BY k.customer_id)
+SELECT customer_id, q1, q2 FROM q WHERE q1 &gt; 0 AND q2 &lt;= 0.5 * q1;
+
+-- Q21 median without a MEDIAN function
+WITH o AS (SELECT amount, ROW_NUMBER() OVER (ORDER BY amount) AS rn, COUNT(*) OVER () AS n FROM txns)
+SELECT AVG(amount) FROM o WHERE rn IN ((n + 1) / 2, (n + 2) / 2);
+
+-- Q25 new vs returning spenders per month
+WITH m AS (SELECT DISTINCT k.customer_id, strftime('%Y-%m', t.txn_date) AS month
+           FROM cards k JOIN txns t USING (card_id)),
+f AS (SELECT customer_id, MIN(month) AS first_month FROM m GROUP BY customer_id)
+SELECT m.month,
+       SUM(CASE WHEN m.month = f.first_month THEN 1 ELSE 0 END) AS new_spenders,
+       SUM(CASE WHEN m.month &gt; f.first_month THEN 1 ELSE 0 END) AS returning_spenders
+FROM m JOIN f USING (customer_id) GROUP BY m.month ORDER BY m.month;</pre></details>
+      </section>
+
+      <section id="plan" data-nav="10 · 14-day plan" data-search>
+        <div class="section-head"><div><span class="section-no">10 / PLAN</span><h2>Two weeks to interview-ready</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Days 1–2: SQLBolt lessons 1–12 (free, browser) + sections 1–2 here</label>
+          <label class="checkline"><input type="checkbox"> Days 3–4: joins and the two join bugs; 10 easy problems on LeetCode "SQL 50"</label>
+          <label class="checkline"><input type="checkbox"> Days 5–6: CASE, CTEs, subqueries; 10 medium problems</label>
+          <label class="checkline"><input type="checkbox"> Days 7–9: window functions; DataLemur free questions (company-tagged: Amex, Visa, PayPal)</label>
+          <label class="checkline"><input type="checkbox"> Day 10: dates in your target company's engine (BigQuery or Snowflake are common)</label>
+          <label class="checkline"><input type="checkbox"> Days 11–12: the nine patterns from memory; Q1–Q25 above</label>
+          <label class="checkline"><input type="checkbox"> Day 13: two timed mock tests (45 min, 4 questions) on HackerRank or StrataScratch</label>
+          <label class="checkline"><input type="checkbox"> Day 14: explain three of your queries out loud as if to an interviewer</label>
+        </div>
+        <div class="memory"><b>Setup:</b> install DB Browser for SQLite or use an online Postgres playground (e.g. DB Fiddle), create these four tables and insert 20 rows each. Typing the schema yourself is part of learning it.</div>
+      </section>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S3 | Story Bank + HR — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">S3 / STORIES</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#star">1 · STAR + the drill</a><a href="#bank">2 · Your 8 stories</a><a href="#map">3 · Question → story map</a><a href="#tmay">4 · Tell me about yourself</a><a href="#tricky">5 · Your tricky questions</a><a href="#hrq">6 · 40 HR questions</a><a href="#video">7 · AI + video rounds</a><a href="#ask">8 · Your questions</a><a href="#plan">9 · Prep checklist</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Shared case spine · Module S3</div><h1>Story bank<br>+ HR round</h1><p>Every interview, from McKinsey's PEI to a fintech HR round, asks the same ten questions in different words. Build eight true stories once, in STAR form with numbers, and you can answer almost all of them. This module drafts your stories from your own CV, then covers tell-me-about-yourself, the tricky questions a biotech student gets, AI video rounds and what to ask at the end.</p><div class="meta"><span class="pill"><span class=dot></span> 8 stories from your CV</span><span class="pill">40 HR questions mapped</span><span class="pill">Biotech → non-core answers</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Why the HR round decides more offers than you think</h2></div></div>
+        <p class="lede">On campus, when two candidates clear the technical or case round, the behavioural round picks one. Interviewers are asking three things: Can you do the job? Will you do it (are you motivated)? Will we enjoy working with you?</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Tell me about yourself</strong><span class="muted">first 90 seconds frame the whole interview</span></div><span class="frequency">every interview</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Why this role / firm / non-core?</strong><span class="muted">the biotech-to-consulting/finance/product question</span></div><span class="frequency">every interview</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Behavioural stories</strong><span class="muted">leadership, conflict, failure, impact, pressure</span></div><span class="frequency">2–4 per interview</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Your questions</strong><span class="muted">the last 3 minutes leave the final impression</span></div><span class="frequency">every interview</span></div>
+        </div>
+        <div class="memory"><b>Golden rule:</b> every story must be true, and every number must be one you can defend for five minutes. Interviewers drill: "How did you measure 8%? What was the sample size? What did the other person say?" A made-up detail collapses under the second follow-up.</div>
+      </section>
+
+      <section id="star" data-nav="1 · STAR + the drill" data-search>
+        <div class="section-head"><div><span class="section-no">01 / FORMAT</span><h2>STAR, and the follow-ups that come after it</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>S · Situation</b><span>One or two sentences of context. Where, when, what was at stake. (10%)</span></div>
+          <div class="formula-row"><b>T · Task</b><span>What <i>you</i> were responsible for. (10%)</span></div>
+          <div class="formula-row"><b>A · Action</b><span>What <i>you</i> did, in 3 steps, with "I" not "we". Include one judgment call or trade-off. (60%)</span></div>
+          <div class="formula-row"><b>R · Result</b><span>Number + what you learned or would do differently. (20%)</span></div>
+        </div>
+        <p>Keep the first telling to <b>about 90 seconds</b>. Then expect the drill, especially at McKinsey, whose Personal Experience Interview spends 10–15 minutes on one story:</p>
+        <div class="qa-grid">
+          <div><b>Drill 1</b>"What exactly did you say to them?"</div><div><b>Drill 2</b>"What was the other person's view?"</div><div><b>Drill 3</b>"What would you do differently?"</div>
+          <div><b>Drill 4</b>"How did you know it worked?"</div><div><b>Drill 5</b>"What was the hardest moment?"</div><div><b>Drill 6</b>"Who disagreed, and why?"</div>
+        </div>
+        <div class="memory"><b>McKinsey PEI themes:</b> personal impact (influencing people who didn't report to you), entrepreneurial drive (creating something from nothing), inclusive leadership (getting a diverse group to work together), courageous change (pushing a change in an uncertain situation). Map one of your stories to each before any McKinsey interview.</div>
+      </section>
+
+      <section id="bank" data-nav="2 · Your 8 stories" data-search>
+        <div class="section-head"><div><span class="section-no">02 / STORY BANK</span><h2>Eight stories, drafted from your CV</h2></div><span class="tag hot">fill in the real details</span></div>
+        <p>These are skeletons built from the facts on your June 2026 CV. Fill every <b>[bracket]</b> with what actually happened, then say each one aloud until it runs 90 seconds.</p>
+        <details><summary><b>Story 1 · Impact with data</b> — CheQ onboarding A/B tests (+8% conversion)</summary>
+          <p><b>S:</b> Summer 2025, PM intern at CheQ, a fintech credit-management app in Bengaluru. Onboarding drop-off was [X% at step Y].</p>
+          <p><b>T:</b> I owned onboarding analytics and was asked to find and fix the biggest leak.</p>
+          <p><b>A:</b> (1) Mapped the funnel and found [step] lost the most users. (2) Wrote 4 UX hypotheses [e.g. fewer fields, explain why we need PAN, progress bar, deferred permissions] and prioritised by expected impact × effort. (3) Ran A/B tests with [sample size, duration], agreed the success metric with engineering beforehand, waited for significance instead of stopping early.</p>
+          <p><b>R:</b> 2 of 4 variants won and shipped: onboarding conversion +8%. Two losers taught me [what]. Lesson: pre-register the metric so nobody argues about results later.</p>
+          <p class="muted">Use for: impact, analytical, data-driven decision, "a time you used data to convince someone".</p></details>
+        <details><summary><b>Story 2 · Influence without authority</b> — aligning 3 teams on one sprint model (+25% experiment velocity)</summary>
+          <p><b>S:</b> At CheQ, design, engineering and analytics ran on different cadences, so experiments waited [N days] between teams.</p>
+          <p><b>T:</b> As an intern I had no authority over any of them, but my experiments were blocked.</p>
+          <p><b>A:</b> (1) Measured the delay and showed it in one chart. (2) Met each lead separately to learn what they needed [e.g. QA wanted test cases earlier]. (3) Proposed a shared sprint calendar, QA checklist and release cadence, piloted it for [2 sprints] before asking for permanent change.</p>
+          <p><b>R:</b> Experimentation velocity up ~25%. [Who resisted and how you handled it.] Lesson: show the cost of the status quo in their terms, then pilot small.</p>
+          <p class="muted">Use for: teamwork, conflict, persuasion, McKinsey "personal impact".</p></details>
+        <details><summary><b>Story 3 · Leading a large team</b> — GES '25 with 76 people, 2,000+ delegates</summary>
+          <p><b>S:</b> E-Cell IIT Kharagpur's Global Entrepreneurship Summit 2025: 2,000+ delegates, 35+ CXO speakers.</p>
+          <p><b>T:</b> As Associate Manager I led a 76-member team across logistics, content and operations.</p>
+          <p><b>A:</b> (1) Split the team into pods with one owner each and a daily 15-minute stand-up. (2) [A crisis: e.g. a keynote speaker cancelled 48 hours before / venue clash] — I [what you did]. (3) Built a run-sheet and backup for every critical item.</p>
+          <p><b>R:</b> Event ran for 2,000+ delegates; [metric: feedback score, sponsor renewal]. Lesson: [delegation / backups / communicating early].</p>
+          <p class="muted">Use for: leadership, pressure, managing a big group, inclusive leadership.</p></details>
+        <details><summary><b>Story 4 · Initiative, alone</b> — Entrepreneurship Awareness Drive, Ranchi '24 (1,000+ students)</summary>
+          <p><b>S/T:</b> I independently hosted the Ranchi edition: venue, colleges, speakers.</p>
+          <p><b>A:</b> Negotiated with [N] colleges and speakers, [obstacle: a college backed out / budget cut] and [your response].</p>
+          <p><b>R:</b> 1,000+ students reached. Lesson about negotiating when you have nothing to offer except the idea.</p>
+          <p class="muted">Use for: ownership, entrepreneurial drive, negotiation.</p></details>
+        <details><summary><b>Story 5 · Persistence through failure</b> — 500+ trials to get 20 Ω/sq graphene on polyimide</summary>
+          <p><b>S:</b> Research intern at the One Health Technologies Lab (Prof. Vinay Patel), building laser-induced graphene sensors.</p>
+          <p><b>T:</b> Get reliable low-resistance graphene; early runs were inconsistent.</p>
+          <p><b>A:</b> (1) Logged every run's parameters (power, speed, focus, passes). (2) [The point where it kept failing and what you changed in method, not just effort.] (3) Validated with Raman spectroscopy and 20+ cyclic-voltammetry runs, separating real graphene electroactivity from carbon artefacts.</p>
+          <p><b>R:</b> 20 Ω/sq achieved and validated. Lesson: a failed run is data only if you record it.</p>
+          <p class="muted">Use for: failure/setback, resilience, attention to detail, "a time you were stuck".</p></details>
+        <details><summary><b>Story 6 · Creative problem solving</b> — Gaussian-process optimiser: 500 experiments → ~60</summary>
+          <p><b>S:</b> After 500+ manual trials, I realised brute force would not scale to new materials.</p>
+          <p><b>A:</b> Built a Gaussian-process surrogate model with Kriging-believer batching to pick the next experiments, added transfer learning across carbon-similar materials, deployed it on Streamlit + Supabase for the lab.</p>
+          <p><b>R:</b> Search for the optimum cut from ~500 to ~60 experiments. Lesson: step back and fix the process, not just the next result.</p>
+          <p class="muted">Use for: innovation, analytical, "a time you improved a process". Great bridge for analytics / AI roles.</p></details>
+        <details><summary><b>Story 7 · Building from zero</b> — co-founding KiFayti</summary>
+          <p><b>S:</b> Farmers pay ~₹2,000 per lab soil/water test; LIG sensors could do it for under ₹100 in the field.</p>
+          <p><b>A:</b> Co-founded KiFayti; built 2 sensor products; wrote a ₹5 lakh IIT KGP grant application with pitch deck, projections, market sizing and GTM; mapped an IP roadmap.</p>
+          <p><b>R:</b> [Grant outcome / cohort / pilot status — be exact]. Lesson about sizing a market honestly (SAM, not TAM).</p>
+          <p class="muted">Use for: entrepreneurial drive, ambiguity, "why should we hire someone who might leave to run a startup?" (prepare for that follow-up).</p></details>
+        <details><summary><b>Story 8 · Team win under time pressure</b> — Open IIT '25 Gold (Flipkart Minutes, 48 hours)</summary>
+          <p><b>S/T:</b> 48-hour case: expansion strategy for Flipkart Minutes in India's quick-commerce market.</p>
+          <p><b>A:</b> [Your role in the team]. Built the 15-city, 2-model plan (dark stores + kirana partners), modelled a 13-month payback; [a disagreement in the team and how it was resolved].</p>
+          <p><b>R:</b> Gold medal. Lesson: [e.g. pick the recommendation early and spend the rest of the time stress-testing it].</p>
+          <p class="muted">Use for: teamwork, structured thinking, "why consulting". Pair with the Indian Case Challenge (Bikaji, 500+ customer survey) for customer-research questions.</p></details>
+        <div class="memory"><b>Still missing:</b> a genuine <b>failure</b> where the outcome was bad (not "I worked too hard"). Candidates from your CV: a hypothesis at CheQ that lost, a sponsor or speaker who fell through at E-Cell, a grant or competition you didn't win. Pick one where you can name what <i>you</i> got wrong.</div>
+      </section>
+
+      <section id="map" data-nav="3 · Question → story map" data-search>
+        <div class="section-head"><div><span class="section-no">03 / MAP</span><h2>Which story answers which question</h2></div></div>
+        <table class="compare">
+          <tr><th>Question type</th><th>Best story</th><th>Backup</th></tr>
+          <tr><td>Leadership / leading a team</td><td>3 · GES '25</td><td>7 · KiFayti</td></tr>
+          <tr><td>Influencing without authority / conflict</td><td>2 · three teams at CheQ</td><td>8 · Open IIT team debate</td></tr>
+          <tr><td>Biggest achievement / impact</td><td>1 · +8% onboarding</td><td>8 · Gold medal</td></tr>
+          <tr><td>Failure / mistake</td><td>Your failure story (fill it)</td><td>5 · 500 trials</td></tr>
+          <tr><td>Working under pressure</td><td>3 · GES crisis</td><td>8 · 48-hour case</td></tr>
+          <tr><td>Analytical problem solving</td><td>6 · GP optimiser</td><td>1 · A/B tests</td></tr>
+          <tr><td>Initiative / going beyond the brief</td><td>4 · Ranchi drive</td><td>6 · optimiser</td></tr>
+          <tr><td>Dealing with ambiguity</td><td>7 · KiFayti</td><td>5 · sensor research</td></tr>
+          <tr><td>Customer focus</td><td>ICC · 500-person Bikaji survey</td><td>1 · onboarding</td></tr>
+          <tr><td>Ethics / integrity</td><td>Prepare one: a time you refused a shortcut or flagged an error</td><td>—</td></tr>
+        </table>
+      </section>
+
+      <section id="tmay" data-nav="4 · Tell me about yourself" data-search>
+        <div class="section-head"><div><span class="section-no">04 / OPENER</span><h2>Tell me about yourself: three versions</h2></div><span class="tag core">core</span></div>
+        <p>Formula: <b>Present → Past (2 proofs) → Why this role → Close</b>. 60–90 seconds. Tailor the two proofs to the job.</p>
+        <details open><summary><b>Consulting / strategy</b></summary><p>"I'm Aryan, a fourth-year dual-degree student in biotechnology at IIT Kharagpur. What ties my work together is solving messy problems with structure and numbers. Two examples: I won gold at Open IIT for a 15-city expansion plan for Flipkart Minutes, and at E-Cell I led a 76-person team to run the Global Entrepreneurship Summit for over 2,000 delegates. My research and my startup taught me to size markets and test ideas fast. Consulting lets me do that across industries, with the steep learning curve I'm looking for, which is why I'm here."</p></details>
+        <details><summary><b>Product</b></summary><p>"...I like building things people use. At CheQ, a fintech app, I ran four onboarding A/B tests and shipped two winners that lifted conversion 8%, and mapped 15 user journeys to fix friction that raised engagement 12%. I'm also co-founding KiFayti, where I'm turning a lab sensor into a ₹100 product for farmers, so I've seen product decisions from both a large app and a zero-user startup..."</p></details>
+        <details><summary><b>Finance / analytics / fintech</b></summary><p>"...I enjoy turning data into decisions. At IFSA I analysed 20+ HNI portfolios and benchmarked five startup IPOs on EV/revenue; at CheQ I worked on a credit-management app's analytics; and I built a Gaussian-process model that cut 500 experiments to about 60. This role combines the finance I've been learning with the analytics I'm best at..."</p></details>
+        <div class="memory"><b>Don't</b> walk through your CV line by line, start from school marks, or end without saying why you're in <i>this</i> room.</div>
+      </section>
+
+      <section id="tricky" data-nav="5 · Your tricky questions" data-search>
+        <div class="section-head"><div><span class="section-no">05 / HARD ONES</span><h2>The questions a biotech dual-degree student will get</h2></div><span class="tag hot">prepare word for word</span></div>
+        <details><summary><b>"You're a biotech student. Why not core / research?"</b></summary><p>Don't run down biotech. Make it a through-line: "Biotech taught me to run experiments and trust data. In my research and at KiFayti I found the part I enjoy most is deciding <i>what</i> to build and whether it can work commercially: sizing the market, the business model, the go-to-market. That's what this role is all day." Then a proof (Open IIT, CheQ).</p></details>
+        <details><summary><b>"Your CGPA is 7.91. Why not higher?"</b></summary><p>Brief, no excuses: "I chose to spend a lot of time on E-Cell, research and competitions, which is where I learned to lead and to work with real data. My grades in the courses closest to this role [Operations and Supply Chain, Entrepreneurship Essentials: EX] show what happens when I focus." Then move on.</p></details>
+        <details><summary><b>"You're co-founding a startup. Won't you leave us?"</b></summary><p>Be honest and reassuring: "KiFayti is a campus venture with my lab and co-founders; it taught me a lot, but I want to learn how great companies operate at scale before building anything of my own. That's why I'm here for [the internship / the next few years]." Never lie, but you don't need to volunteer long-term plans (UPSC, MBA) in an interview.</p></details>
+        <details><summary><b>"Why this firm and not [competitor]?"</b></summary><p>Two specific reasons: one about the work (a practice, a product, a client segment) and one about people or culture you learned from a real conversation ("When I spoke to [alum] about...") — the outreach module S6 gives you these conversations.</p></details>
+        <details><summary><b>"What's your weakness?"</b></summary><p>A real, minor-for-this-job weakness plus what you're doing about it: "I used to take on too much myself at E-Cell, which slowed the team. I now delegate by default and set a check-in rather than doing it." Avoid fake weaknesses ("perfectionism") and job-critical ones ("I'm bad with numbers" for an analyst role).</p></details>
+        <details><summary><b>"Where do you see yourself in five years?"</b></summary><p>Show ambition within the field: "Leading problems end-to-end, having gone deep in [fintech / consumer / healthcare], and helping others learn the way I'm learning now."</p></details>
+        <details><summary><b>"Tell me about a time you failed."</b></summary><p>Real failure, your mistake, what you changed, a later situation where the change worked. 70% on the learning.</p></details>
+        <details><summary><b>Stipend / salary questions</b></summary><p>For campus internships stipends are usually fixed; say "I'm comfortable with the standard offer for this role." For off-campus offers, ask for the range first; if pushed, give a researched range (Glassdoor, AmbitionBox, seniors) rather than one number.</p></details>
+      </section>
+
+      <section id="hrq" data-nav="6 · 40 HR questions" data-search>
+        <div class="section-head"><div><span class="section-no">06 / Q-BANK</span><h2>Forty common HR questions and the angle to take</h2></div></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Angle</th></tr>
+          <tr><td>Why should we hire you?</td><td>Three matches between their needs and your proofs; end with enthusiasm</td></tr>
+          <tr><td>What do you know about us?</td><td>Business model, a recent move (results, launch), one thing that excites you</td></tr>
+          <tr><td>Greatest strength?</td><td>One strength + story (structured problem solving → Story 6 or 8)</td></tr>
+          <tr><td>What do co-workers say about you?</td><td>A quote or feedback you actually received</td></tr>
+          <tr><td>Are you a team player?</td><td>Yes + Story 2 or 8; mention a time you supported someone else</td></tr>
+          <tr><td>How do you handle pressure?</td><td>Story 3 + your method (prioritise, communicate early)</td></tr>
+          <tr><td>Describe a conflict with a supervisor / teammate</td><td>Disagree on the issue, not the person; show you listened; outcome</td></tr>
+          <tr><td>What motivates you?</td><td>Learning + visible impact; tie to the role</td></tr>
+          <tr><td>Dream job?</td><td>Describe the work (problems, people), not a title that isn't this job</td></tr>
+          <tr><td>What did you learn from your internship?</td><td>One skill, one insight about how companies work</td></tr>
+          <tr><td>What have you done to improve yourself this year?</td><td>Specific: courses, a project, VIKRAM routines, reading</td></tr>
+          <tr><td>How do you prioritise?</td><td>Impact × urgency; an example of saying no</td></tr>
+          <tr><td>Tell me about a decision with incomplete information</td><td>Story 7; what you assumed and how you tested it</td></tr>
+          <tr><td>A time you went beyond what was asked</td><td>Story 4 or 6</td></tr>
+          <tr><td>How do you take criticism?</td><td>Real feedback you got and the change you made</td></tr>
+          <tr><td>A time you persuaded someone</td><td>Story 2; data + their incentives</td></tr>
+          <tr><td>Biggest disappointment?</td><td>Failure story; keep it professional</td></tr>
+          <tr><td>Management / leadership style?</td><td>Set clear owners, check in, step in when blocked; Story 3</td></tr>
+          <tr><td>Are you willing to relocate / work weekends?</td><td>Honest; usually "yes, for the right reasons"</td></tr>
+          <tr><td>How would you add value in the first 90 days?</td><td>Learn fast, deliver one small win, build relationships</td></tr>
+          <tr><td>What would you do if you disagreed with your manager's decision?</td><td>Raise it privately with data; if overruled, commit and execute</td></tr>
+          <tr><td>Tell me about a time you made a mistake with data</td><td>Own it, how you caught it, the check you now always run</td></tr>
+          <tr><td>Hobbies?</td><td>Real ones with a detail: yoga for two years, writing, history, chess</td></tr>
+          <tr><td>A book you read recently?</td><td>One you actually read; one idea and how you used it</td></tr>
+          <tr><td>What would your professor say about you?</td><td>Something Prof. Patel's lab would actually say: careful, persistent</td></tr>
+          <tr><td>Why consulting / product / finance?</td><td>Section 4 + your through-line</td></tr>
+          <tr><td>What's a trend in our industry?</td><td>One with a number: UPI vs cards, AI in consulting, q-commerce</td></tr>
+          <tr><td>How do you handle ambiguity?</td><td>Story 7; break it down, test the riskiest assumption first</td></tr>
+          <tr><td>Do you have other offers / interviews?</td><td>Honest and brief; reaffirm interest in this one</td></tr>
+          <tr><td>Anything not on your CV we should know?</td><td>One human detail that supports fit</td></tr>
+        </table>
+        <p class="muted">The 50-question list in your folder (20_SOURCES/HR_CV/HR interview basics) and "Why You? 101 Interview Questions" cover the rest; the angles above apply to all of them.</p>
+      </section>
+
+      <section id="video" data-nav="7 · AI + video rounds" data-search>
+        <div class="section-head"><div><span class="section-no">07 / NEW FORMATS</span><h2>One-way video and AI interviewers</h2></div></div>
+        <p>Large recruiters increasingly screen campus applicants with recorded one-way video (HireVue and Indian platforms) or an AI interviewer that asks follow-ups. Recruiters or an AI scoring layer review them, often at speed with transcripts, so front-loaded, clearly structured answers do best.</p>
+        <div class="grid">
+          <div class="card"><h3>Set-up</h3><p>Camera at eye level, light in front of you, plain background, wired earphones, laptop plugged in. Do the practice question twice.</p></div>
+          <div class="card"><h3>Answering</h3><p>Answer first sentence first ("My biggest achievement was lifting onboarding 8% at CheQ."), then STAR. When ~20 seconds remain, jump to the result. Look at the lens, not your face.</p></div>
+          <div class="card"><h3>Don't</h3><p>Read a script (it shows), use filler slides, or use AI tools during the recording; many firms ban it and some detect it.</p></div>
+        </div>
+      </section>
+
+      <section id="ask" data-nav="8 · Your questions" data-search>
+        <div class="section-head"><div><span class="section-no">08 / CLOSE</span><h2>Questions to ask at the end</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Good</h3><p>"What separates interns who get a return offer from those who don't?" · "What's a problem your team is working on that excites you?" · "How has AI changed how your team works in the last year?" · "What did your first six months look like?"</p></div>
+          <div class="card"><h3>Avoid</h3><p>Anything on their website. Salary, leave or work hours in the first round. "No questions."</p></div>
+          <div class="card"><h3>Close</h3><p>One line: "Thank you, this made me more excited about [specific thing]." Then a short thank-you email the same day if you have their address (check CDC rules first, see S6).</p></div>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="9 · Prep checklist" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>Checklist</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Fill every [bracket] in the eight stories with real details and numbers</label>
+          <label class="checkline"><input type="checkbox"> Write your failure story and your ethics story</label>
+          <label class="checkline"><input type="checkbox"> Record each story on your phone; cut to 90 seconds</label>
+          <label class="checkline"><input type="checkbox"> Write and memorise the three tell-me-about-yourself versions</label>
+          <label class="checkline"><input type="checkbox"> Rehearse the five tricky questions (biotech, CGPA, startup, weakness, why us)</label>
+          <label class="checkline"><input type="checkbox"> Have a friend run the six drill questions on two of your stories</label>
+          <label class="checkline"><input type="checkbox"> Do one practice one-way video (record yourself answering three questions with a 2-minute limit)</label>
+          <label class="checkline"><input type="checkbox"> For each target company: two specific "why us" reasons and three questions to ask</label>
+          <label class="checkline"><input type="checkbox"> Re-check every number in the stories against your CV (S4) so they match exactly</label>
+        </div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-s3-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-s3-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-s3-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

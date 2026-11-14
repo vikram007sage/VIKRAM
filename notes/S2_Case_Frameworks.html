@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S2 | Case Frameworks (cards + lending) — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">S2 / CASES</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#flow">1 · The 7-step flow</a><a href="#clarify">2 · Clarifying questions</a><a href="#profit">3 · Profitability</a><a href="#entry">4 · Market entry</a><a href="#growth">5 · Growth + pricing</a><a href="#ma">6 · M&amp;A + new product</a><a href="#cards">7 · Card economics</a><a href="#lending">8 · Lending economics</a><a href="#cases">9 · Solved cases</a><a href="#maths">10 · Case maths</a><a href="#synth">11 · Synthesis</a><a href="#mistakes">12 · Mistakes + practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Shared case spine · Module S2</div><h1>Case<br>Frameworks</h1><p>Consulting, product-strategy and analytics interviews all use the same case: a business problem, 25 minutes, a structure, some maths and a recommendation. This module gives you the flow, six frameworks built from first principles, the economics of credit cards and lending (with real 2026 Indian numbers), and eight solved cases.</p><div class="meta"><span class="pill"><span class=dot></span> 6 frameworks, 8 solved cases</span><span class="pill">Card + lending economics</span><span class="pill">2026 data</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What a case interview actually tests</h2></div></div>
+        <p class="lede">A case is not a quiz on frameworks. It is a 25-minute simulation of your first week on a project: can you break a messy problem into pieces, find the piece that matters, do the maths without panicking, and say what to do.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Structure</strong><span class="muted">MECE breakdown tailored to this client, not a memorised list</span></div><span class="frequency">35%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Hypothesis-led drilling</strong><span class="muted">say where you think the problem is and test it</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Maths</strong><span class="muted">fast, out loud, with a sanity check (A1 module)</span></div><span class="frequency">20%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Synthesis</strong><span class="muted">answer first, three reasons, risks, next steps</span></div><span class="frequency">20%</span></div>
+        </div>
+        <h3>Formats you will meet in 2026–27</h3>
+        <table class="compare">
+          <tr><th>Who</th><th>Format</th><th>What it means for you</th></tr>
+          <tr><td>McKinsey</td><td>Interviewer-led: the interviewer asks a fixed sequence of questions (structure → exhibit → maths → synthesis). Online screen is the <b>Solve</b> game; AI tools are banned inside it.</td><td>Answer exactly what is asked; structure every sub-question.</td></tr>
+          <tr><td>BCG, Bain, Kearney, Big 4 strategy, most Indian campus rounds</td><td>Candidate-led: you choose where to go next. BCG's first screen in many offices is <b>Casey</b>, a chatbot case ending in a recorded video recommendation.</td><td>You must propose the next step every time; silence is fatal.</td></tr>
+          <tr><td>New AI formats</td><td>McKinsey has piloted final rounds where you solve a case using its internal AI tool <b>Lilli</b>, and in late 2026 an AI-generated "client" in some North American analyst interviews; Bain said AI would enter its interviews from summer 2026.</td><td>Practise solving a case with ChatGPT open: you are judged on what you ask it and how you check its answers, not on what it writes.</td></tr>
+          <tr><td>Product / analytics firms (Amex, Capital One, fintechs, PM roles)</td><td>Business case + metric drill, often on cards, lending or payments.</td><td>Sections 8–11 of this module are written for these.</td></tr>
+        </table>
+        <div class="memory"><b>Bar:</b> the big firms say more than 85% of candidates fail the case round. Most fail on the same three things: a generic framework, no hypothesis, and a recommendation that hedges.</div>
+      </section>
+
+      <section id="flow" data-nav="1 · The 7-step flow" data-search>
+        <div class="section-head"><div><span class="section-no">01 / THE FLOW</span><h2>Every case, in seven steps</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Listen + write</b><span>Write the prompt word for word in 4 lines: client, problem, numbers, goal. Note any term you are not 100% sure of ("delinquency rate" — how exactly is it calculated?).</span></div>
+          <div class="formula-row"><b>2. Play it back</b><span>"So, a top-5 Indian card issuer has seen revenue fall 10% over two years and wants to know why and what to do. Is that right?"</span></div>
+          <div class="formula-row"><b>3. Clarify (max 3–4 questions)</b><span>Objective + timeline, the business model, geography/segment, is it only us or the industry? (Section 2 has the list.)</span></div>
+          <div class="formula-row"><b>4. Ask for 60 seconds</b><span>Then draw a tree with 3–4 branches, each with 2–3 sub-points specific to this client. Number them.</span></div>
+          <div class="formula-row"><b>5. State a hypothesis</b><span>"My hunch is the drop is volume-driven, because fees haven't changed. I'd like to start with customer numbers."</span></div>
+          <div class="formula-row"><b>6. Drill + do the maths</b><span>Ask for data, compute out loud, then say what the number <i>means</i> ("so 80% of the fall is attrition"). Update the hypothesis.</span></div>
+          <div class="formula-row"><b>7. Synthesise</b><span>Answer first, then three supporting points, then risks and next steps. 45–60 seconds. Section 13 has the template.</span></div>
+        </div>
+        <div class="grid">
+          <div class="card"><h3>MECE</h3><p>Mutually exclusive, collectively exhaustive. Revenue = price × volume is MECE. "Marketing, competition, customers" is not (they overlap and miss costs). Test: could a cause sit in two branches, or in none?</p></div>
+          <div class="card"><h3>Hypothesis-driven</h3><p>Consultants do not analyse everything. They guess the answer early, then try to prove themselves wrong. Say the guess out loud; being wrong is fine, having no guess is not.</p></div>
+          <div class="card"><h3>So-what</h3><p>After every number or exhibit, say one line: what it means for the client. "Churn tripled while acquisition is flat, so this is a retention problem, not a marketing one."</p></div>
+        </div>
+      </section>
+
+      <section id="clarify" data-nav="2 · Clarifying questions" data-search>
+        <div class="section-head"><div><span class="section-no">02 / CLARIFY</span><h2>The only clarifying questions you need</h2></div></div>
+        <table class="compare">
+          <tr><th>Bucket</th><th>Ask</th><th>Why</th></tr>
+          <tr><td>Objective</td><td>What does success look like, by when? Profit, share, growth, or survival?</td><td>Changes the recommendation (a 2-year turnaround vs a 6-month fix)</td></tr>
+          <tr><td>Business model</td><td>How does the client make money? Products, customers, channels?</td><td>You can't break down revenue you don't understand</td></tr>
+          <tr><td>Scope</td><td>Which geography, segment, product? Since when, and by how much?</td><td>Narrows the tree; "10% over 2 years" ≠ "40% last quarter"</td></tr>
+          <tr><td>Internal vs external</td><td>Is the industry seeing the same thing, or only us?</td><td>Only-us → look inside (process, product). Everyone → market, regulation, macro</td></tr>
+          <tr><td>Spidey-sense terms</td><td>"How exactly is that metric defined?"</td><td>Delinquency, churn, CAC, take rate all have several definitions</td></tr>
+        </table>
+        <div class="memory"><b>Rule:</b> three or four questions, then structure. Ten clarifying questions reads as stalling.</div>
+      </section>
+
+      <section id="profit" data-nav="3 · Profitability" data-search>
+        <div class="section-head"><div><span class="section-no">03 / FRAMEWORK 1</span><h2>Profitability: profits are down, why?</h2></div><span class="tag hot">most asked</span></div>
+        <div class="eq">Profit = Revenue − Cost = (Price × Volume) − (Fixed cost + Variable cost per unit × Volume)</div>
+        <div class="grid">
+          <div class="card"><h3>Revenue side</h3><p><b>Volume</b> = customers × purchases per customer (or market size × share). <b>Price</b> = list price − discounts; check the product mix (shift to cheaper products lowers average price without any price change).</p></div>
+          <div class="card"><h3>Cost side</h3><p><b>Variable</b>: raw material, commissions, payment fees, delivery. <b>Fixed</b>: rent, salaries, tech, depreciation. Ask which line moved, then break that line down along the value chain.</p></div>
+          <div class="card"><h3>Then go external</h3><p>Market growth, competitor moves (new entrant, price war), customer shift (UPI replacing cards), regulation (a new RBI rule), macro (rates, inflation).</p></div>
+        </div>
+        <h3>Worked numbers</h3>
+        <p>A café chain's profit fell from ₹12 cr to ₹6 cr. Revenue: ₹60 cr → ₹63 cr. Costs: ₹48 cr → ₹57 cr. Revenue rose 5%, so the problem is costs (+₹9 cr, +19%). Break costs down: rent ₹10 → 10, staff ₹14 → 15, ingredients ₹18 → 26, other ₹6 → 6. Ingredients explain ₹8 of ₹9 cr. Coffee bean prices rose ~45% → recommend hedging contracts, a menu price rise of ~6% (enough to recover ₹3–4 cr if volume holds), and a smaller cup size option.</p>
+        <div class="memory"><b>Always quantify the split:</b> "Of the ₹6 cr drop, ₹8 cr comes from ingredients, offset by ₹3 cr extra revenue." Interviewers remember candidates who size the driver before proposing fixes.</div>
+      </section>
+
+      <section id="entry" data-nav="4 · Market entry" data-search>
+        <div class="section-head"><div><span class="section-no">04 / FRAMEWORK 2</span><h2>Market entry: should we enter X?</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Market</b><span>Size (guesstimate it, S1 module), growth, profitability of incumbents, segments, regulation and licences.</span></div>
+          <div class="formula-row"><b>Competition</b><span>Who leads, their shares, how they win (price, distribution, brand), how they will react to us. Porter's five forces if the market is unusual.</span></div>
+          <div class="formula-row"><b>Client fit</b><span>Capabilities we can reuse (brand, customers, tech, distribution), what we lack, our right to win.</span></div>
+          <div class="formula-row"><b>Economics</b><span>Investment, unit economics, break-even year, payback, NPV vs alternatives.</span></div>
+          <div class="formula-row"><b>Mode + risks</b><span>Build vs buy vs partner/JV; key risks and how to test cheaply (pilot city, one segment).</span></div>
+        </div>
+        <div class="eq">Break-even volume = Fixed costs ÷ (Price − Variable cost per unit) &nbsp;·&nbsp; Payback = Investment ÷ Annual cash flow</div>
+        <p><b>Example:</b> a bank considers a gold-loan product. Fixed set-up (branch vaults, staff, tech) ₹40 cr/year. Average loan ₹80,000 at 18% yield, 9% cost of funds, 2% opex, 0.5% credit loss → ₹5,200 contribution per loan per year. Break-even book = 40 cr ÷ 5,200 ≈ 77,000 loans (~₹615 cr book). If the client's branches can source 30 loans/branch/month across 400 branches, that is 1.4 lakh loans a year: enter, starting in the south where gold-loan demand is deepest.</p>
+      </section>
+
+      <section id="growth" data-nav="5 · Growth + pricing" data-search>
+        <div class="section-head"><div><span class="section-no">05 / FRAMEWORKS 3–4</span><h2>Growth (grow revenue 2×) and pricing</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Growth: Ansoff grid</h3><p><b>Existing products × existing customers</b>: more usage, price, share. <b>New customers</b>: new segments, cities, channels. <b>New products</b>: cross-sell to existing base. <b>Both new</b>: diversify (riskiest). Size each option and rank by size × feasibility × time.</p></div>
+          <div class="card"><h3>Growth: organic vs inorganic</h3><p>Organic is slower and cheaper; acquisition is fast but you pay a premium (typically 20–40% over market price) and must integrate. Partnerships (co-branded cards are a classic) sit in between.</p></div>
+          <div class="card"><h3>Pricing: three lenses</h3><p><b>Cost-plus</b> (floor: cost + margin), <b>competitor-based</b> (where alternatives sit), <b>value-based</b> (ceiling: what the customer gains or saves). Price between floor and ceiling; then test elasticity.</p></div>
+        </div>
+        <div class="eq">Revenue change from a price rise: new revenue = (1 + p)(1 + q) − 1, where q = elasticity × p. A 10% price rise with elasticity −1.5 → (1.10)(0.85) − 1 = −6.5% revenue.</div>
+        <div class="memory"><b>Pricing trap:</b> candidates jump to "charge more". Ask first: who is the customer, what is the alternative, and how price-sensitive are they? A premium travel card can raise its fee; a lifetime-free entry card cannot.</div>
+      </section>
+
+      <section id="ma" data-nav="6 · M&amp;A + new product" data-search>
+        <div class="section-head"><div><span class="section-no">06 / FRAMEWORKS 5–6</span><h2>M&amp;A / investment and new product launch</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Should we buy X?</h3><p>1) <b>Why</b>: strategic rationale (growth, capability, customers, cost synergies). 2) <b>Target standalone</b>: market, position, financials. 3) <b>Synergies</b>: revenue (cross-sell) and cost (overlap) — realistic, with timing. 4) <b>Price</b>: valuation vs synergies; never pay away all the synergy. 5) <b>Risks</b>: integration, culture, regulation, financing. Exit options if a PE client.</p></div>
+          <div class="card"><h3>Launch a new product</h3><p>Customer need and segment size → product and differentiation → go-to-market (channel, price, promotion) → economics (CAC, payback, break-even) → risks and a pilot plan. For tech products, add a metric to watch at launch (activation, D30 retention).</p></div>
+          <div class="card"><h3>Unconventional cases</h3><p>No standard framework fits ("Why do so few women use our app?", "Reduce queues at a temple"). Use a <b>customer journey</b> (awareness → consideration → purchase → use → repeat) or a <b>value chain</b> (supply → production → distribution → sale → service) and look for the broken step.</p></div>
+        </div>
+        <h3>Operations cases</h3>
+        <p>For "reduce waiting time" or "increase output", map the process, find the bottleneck (the slowest step limits the whole line) and use Little's Law.</p>
+        <div class="eq">Little's Law: items in system = arrival rate × time in system. 120 customers/hour × 0.25 hour wait = 30 people in the queue.</div>
+      </section>
+
+      <section id="cards" data-nav="7 · Card economics" data-search>
+        <div class="section-head"><div><span class="section-no">07 / INDUSTRY 1</span><h2>How a credit card business makes money</h2></div><span class="tag hot">Amex · Capital One · SBI Card</span></div>
+        <h3>The players in every swipe</h3>
+        <table class="compare">
+          <tr><th>Player</th><th>Example</th><th>Earns</th></tr>
+          <tr><td>Cardholder</td><td>You</td><td>Rewards, interest-free credit period (up to ~50 days)</td></tr>
+          <tr><td>Issuer</td><td>HDFC Bank, SBI Card, ICICI, Axis</td><td>Interest on revolving balances, fees, most of the interchange</td></tr>
+          <tr><td>Network</td><td>Visa, Mastercard, RuPay (NPCI), Amex, Diners</td><td>Small per-transaction scheme fees; runs the rails and rules</td></tr>
+          <tr><td>Acquirer</td><td>Bank or payment aggregator that signed up the merchant (Razorpay, Pine Labs)</td><td>Part of the MDR</td></tr>
+          <tr><td>Merchant</td><td>The shop</td><td>Pays the MDR (≈1.5–2% on most credit cards) for sales and convenience</td></tr>
+        </table>
+        <p>Amex is "closed loop": it is issuer, network and acquirer at once, so it keeps the full merchant fee — and tends to charge merchants more.</p>
+        <h3>The issuer P&amp;L (memorise this tree)</h3>
+        <div class="eq">Profit = Interest income + Fee income + Interchange − Cost of funds − Credit losses − Rewards − Acquisition cost − Opex</div>
+        <div class="grid">
+          <div class="card"><h3>Revenue</h3><p><b>Interest</b> from <i>revolvers</i> (people who carry a balance; Indian rates are ~36–45% a year). <b>Fees</b>: joining/annual, late payment, forex mark-up, EMI processing, cash advance. <b>Interchange</b>: the issuer's share of the MDR on every swipe.</p></div>
+          <div class="card"><h3>Costs</h3><p><b>Cost of funds</b> (the issuer borrows to fund your credit period). <b>Credit losses</b> (unsecured, so defaults hit hard). <b>Rewards</b> (often 30–50% of interchange). <b>Acquisition</b> (sales commissions, co-brand payouts). <b>Opex</b> (servicing, collections, tech, fraud).</p></div>
+          <div class="card"><h3>Customer types</h3><p><b>Transactors</b> pay in full: low risk, earn interchange + fees only. <b>Revolvers</b> pay interest: most profitable until they default. <b>EMI users</b> sit in between. The mix drives everything.</p></div>
+        </div>
+        <h3>Real numbers: SBI Card, FY26 (largest pure-play issuer)</h3>
+        <div class="qa-grid">
+          <div><b>Portfolio yield</b>~16.5%</div><div><b>Cost of funds</b>6.4% (Q4 FY26)</div><div><b>Net interest margin</b>11.1%</div>
+          <div><b>Gross credit cost</b>7.7% of receivables</div><div><b>Cost-to-income</b>57%</div><div><b>Return on assets</b>3.6% (Q4)</div>
+          <div><b>Receivables</b>≈₹57,000 cr</div><div><b>Gross NPA</b>~2.9%</div><div><b>Revolver share</b>~23% of receivables</div>
+        </div>
+        <p class="muted">Read it like an interviewer would: an 11% margin minus an 8% credit cost leaves little room, which is why a 1-point rise in credit cost or a fall in revolvers shows up straight away in profit.</p>
+        <h3>India 2026: what is changing</h3>
+        <table class="compare">
+          <tr><th>Trend</th><th>Fact</th><th>Case implication</th></tr>
+          <tr><td>Card base still growing</td><td>12.53 crore credit cards outstanding in September 2026, against ~104 crore debit cards; HDFC Bank (~27 mn), SBI Card (~23 mn), ICICI (~20 mn) and Axis (~16 mn) lead</td><td>Huge headroom: only ~5 crore Indians hold a card</td></tr>
+          <tr><td>RuPay on UPI</td><td>RuPay credit cards linked to UPI went from ~10% to nearly 40% of credit card transaction <i>volume</i> since FY24, but only ~8% of value; RuPay's overall card share rose from ~3% to ~16%</td><td>Smaller tickets; no MDR on UPI-card payments under ₹2,000 at small merchants, so interchange per swipe falls</td></tr>
+          <tr><td>Stress in unsecured credit</td><td>Overdue card dues (91–360 days) rose sharply through FY25; RBI had raised risk weights on unsecured loans in Nov 2023; credit costs peaked in FY25–26 and have been easing</td><td>"Profits down" cases on cards almost always involve credit cost or underwriting</td></tr>
+          <tr><td>UPI eating card share of merchant payments</td><td>UPI was ~77% of the value of digital merchant payments in July 2026; cards slipped to ~18%</td><td>Threat to interchange; cards push EMI, rewards, premium travel</td></tr>
+          <tr><td>New provisioning rules</td><td>RBI's Expected Credit Loss directions take effect for commercial banks on 1 April 2027 (Stage 1/2/3, provisions before default)</td><td>Banks must provision earlier for risky cards → tighter approvals</td></tr>
+        </table>
+      </section>
+
+      <section id="lending" data-nav="8 · Lending economics" data-search>
+        <div class="section-head"><div><span class="section-no">08 / INDUSTRY 2</span><h2>How lending works (banks, NBFCs, fintechs)</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Return on assets ≈ Yield − Cost of funds − Opex − Credit cost + Fees (all as % of loan book) &nbsp;·&nbsp; ROE = ROA × Leverage (assets ÷ equity)</div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>NIM</b><span>Net interest margin = (interest earned − interest paid) ÷ average earning assets. Banks ~3–4%, cards ~11%.</span></div>
+          <div class="formula-row"><b>Cost of funds</b><span>Banks: deposits (CASA is cheapest). NBFCs: bank loans, bonds, commercial paper — costlier, so they need higher yields.</span></div>
+          <div class="formula-row"><b>Credit cost</b><span>Provisions + write-offs ÷ average loans. Expected loss = <b>PD × LGD × EAD</b> (probability of default × loss given default × exposure at default).</span></div>
+          <div class="formula-row"><b>DPD buckets</b><span>Days past due: 0 (current), 1–30 (SMA-0), 31–60 (SMA-1), 61–90 (SMA-2), 90+ = NPA. Roll rate = % of a bucket that moves to the next one in a month.</span></div>
+          <div class="formula-row"><b>Gross vs net NPA</b><span>GNPA = NPAs ÷ gross advances; NNPA subtracts provisions. Provision coverage ratio = provisions ÷ GNPA.</span></div>
+          <div class="formula-row"><b>Repo link</b><span>Most retail floating loans are linked to the RBI repo rate (external benchmark). Repo was cut to 5.25% in December 2025 and raised back to <b>5.50% on 7 October 2026</b> with a "calibrated tightening" stance, so loan rates and banks' cost of funds are rising again.</span></div>
+        </div>
+        <div class="grid">
+          <div class="card"><h3>Underwriting: the 5 Cs</h3><p><b>Character</b> (bureau score, history), <b>Capacity</b> (income; FOIR = all EMIs ÷ income, usually capped at 50–60%), <b>Capital</b> (own savings), <b>Collateral</b> (LTV = loan ÷ asset value; gold loans capped by RBI), <b>Conditions</b> (purpose, economy).</p></div>
+          <div class="card"><h3>The loan funnel</h3><p>Leads → applications → approved → disbursed → repaying → closed. Every funnel case: find the stage where conversion fell. Approval rate and turnaround time (TAT) matter as much as rates.</p></div>
+          <div class="card"><h3>Collections</h3><p>Early buckets: reminders, auto-debit retries, digital nudges. Later: calling teams, field agents, settlement, legal (SARFAESI for secured loans). RBI's fair-practice rules limit how and when agents may contact borrowers.</p></div>
+        </div>
+        <div class="memory"><b>Common interview trap:</b> "approve more loans to grow" without asking about credit quality. Growth bought with loose underwriting shows up as defaults 6–12 months later, the lag that hurt many unsecured lenders in FY25.</div>
+      </section>
+
+      <section id="cases" data-nav="9 · Solved cases" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PRACTICE</span><h2>Eight solved cases (try first, then open)</h2></div><span class="tag pyq">casebook-style</span></div>
+        <details><summary><b>Case 1 · Card issuer revenue down 10%</b> (IIMA-style, profitability)</summary>
+          <p><b>Prompt:</b> an Indian bank's credit card revenue has fallen 10% over a few years. Only this bank is affected. Assume annual fees are the only revenue.</p>
+          <p><b>Structure:</b> Revenue = annual fee × number of cardholders. Fee unchanged → cardholders fell. Cardholders = opening base + new − attrition. Acquisition is steady, attrition up sharply → retention problem. Customer journey: need → awareness → acquisition → usage (before / during / after transaction) → <b>renewal</b>.</p>
+          <p><b>Finding:</b> the bank introduced a stricter renewal process (re-submit documents, fresh bureau check) for a compliance requirement that competitors are applying more lightly. Customers find it painful and leave at renewal.</p>
+          <p><b>Recommend:</b> short term: early renewal reminders, pre-filled digital renewal, fee waiver for good customers. Long term: build fully online renewal (video KYC, auto bureau pull), check with the regulator what competitors are allowed, and win back churned high-spend customers.</p></details>
+        <details><summary><b>Case 2 · Bank profits down, suspect delinquency</b> (lending, profitability)</summary>
+          <p><b>First clarify the term:</b> delinquency rate = balances 30+ days past due ÷ total balances. Where is it measured, which products?</p>
+          <p><b>Structure:</b> Profit tree → isolate credit cost. Break delinquency by product (cards, personal loans, home), by cohort (month of origination), by channel (branch, digital partner, DSA) and by customer segment.</p>
+          <p><b>Data:</b> cards and personal loans sourced through one fintech partner since last year show 30+ DPD of 9% vs 3% for branch-sourced loans; same income bands. The partner's approval rate was 70% vs 40% for branches.</p>
+          <p><b>So what:</b> the partner channel loosened underwriting (or has fraud). <b>Recommend:</b> tighten the partner's credit policy (use the bank's own scorecard, cap FOIR), add early-warning triggers, step up collections on the bad cohorts, renegotiate the partner contract with a first-loss guarantee (FLDG, allowed by RBI up to 5% of the portfolio for digital lending).</p></details>
+        <details><summary><b>Case 3 · Home loan book flat for 9 months</b> (funnel)</summary>
+          <p><b>Prompt:</b> an affordable housing lender (₹10–15 lakh tickets) grew to a ₹1,500 cr book, then stalled.</p>
+          <p><b>Structure:</b> Book change = disbursements − repayments − prepayments. Check prepayments first (falling rates trigger balance transfers to banks). Then disbursements = leads × application rate × approval rate × disbursal rate × ticket size.</p>
+          <p><b>Finding:</b> leads steady, approval rate down from 60% to 40% after a new centralised credit approval process; TAT rose from 7 to 21 days and customers went to competitors.</p>
+          <p><b>Recommend:</b> regional approval authority for standard cases, digital document collection, a TAT target, keep central review only for exceptions.</p></details>
+        <details><summary><b>Case 4 · Should a fintech launch a RuPay-on-UPI credit card?</b> (new product)</summary>
+          <p><b>Need:</b> young salaried users already pay by UPI QR; a card that works on QR gives them credit + rewards at the same scan.</p>
+          <p><b>Economics per user/year (assumed):</b> spend ₹1.2 lakh; interchange ≈0.5% blended (no MDR on small UPI tickets) = ₹600; 25% revolve ₹20,000 avg at 36% → ₹1,800 per revolver, ₹450 per user; fees ₹300. Revenue ≈ ₹1,350. Costs: rewards ₹400, credit loss 4% of ₹15,000 avg balance = ₹600, servicing ₹150, funding (via partner bank) ₹250. Contribution ≈ –₹50 before acquisition: <b>loss-making unless revolve rate or ticket size rises</b>.</p>
+          <p><b>Recommend:</b> launch only with a bank partner, target users with existing bureau history, keep rewards on QR modest, push EMI conversion on big purchases, and track 90-day activation and revolve rate as the go/no-go metrics.</p></details>
+        <details><summary><b>Case 5 · Gold-loan market entry for a private bank</b> (entry)</summary>
+          <p><b>Market:</b> gold loans have been among the fastest-growing secured retail segments as gold prices rose; south India dominates; leaders are specialised NBFCs and large banks.</p>
+          <p><b>Right to win:</b> existing branches, lower cost of funds than NBFCs (deposits), existing customers who hold gold.</p>
+          <p><b>Gaps:</b> valuation skills, vault security, fast disbursal (NBFCs disburse in ~30 minutes).</p>
+          <p><b>Economics:</b> see break-even in section 4. <b>Recommend:</b> enter via 100 southern branches first, train assayers, match 30-minute disbursal, price 1–2 points below NBFCs using the funding advantage; watch LTV discipline (RBI caps it) and gold-price swings.</p></details>
+        <details><summary><b>Case 6 · Reduce cost of a retail bank branch network by 20%</b> (cost)</summary>
+          <p><b>Structure:</b> Bank cost = interest + provisions + operating cost. Opex = staff + premises + tech + other. Map branch activities: cash, account opening, loans, service requests.</p>
+          <p><b>Finding:</b> 60% of branch transactions are routine (passbook, cash deposit, address change) that digital channels can handle; 30% of branches are within 1 km of another.</p>
+          <p><b>Recommend:</b> merge overlapping branches, cash recyclers and self-service kiosks, move service requests to the app/WhatsApp banking, redeploy staff to sales. Quantify: closing 15% of branches at ₹1.2 cr opex each saves X; protect deposits by keeping ATMs and relationship managers.</p></details>
+        <details><summary><b>Case 7 · Card spends falling at a premium card</b> (Amex-style)</summary>
+          <p><b>Structure:</b> Spend = active cards × spend per active card. Active cards = cards in force × activity rate. Spend per card = transactions × ticket size, by category (travel, dining, online, fuel).</p>
+          <p><b>Finding:</b> activity steady; travel spend down 30% after a competitor launched a card with better airline miles transfer; customers moved their travel spend, kept everyday spend.</p>
+          <p><b>Recommend:</b> new airline/hotel partners, accelerated rewards on travel for 6 months for top-decile spenders, retention calls before annual fee renewal. Measure: share of wallet in travel.</p></details>
+        <details><summary><b>Case 8 · Collections: 30+ DPD rising in a personal-loan book</b> (analytics)</summary>
+          <p><b>Structure:</b> roll-rate analysis: % moving current → 1–30 → 31–60 → 61–90 → 90+. Find which roll worsened. Segment by vintage, channel, salary-account vs non-salary, ticket size.</p>
+          <p><b>Finding:</b> current → 1–30 roll unchanged; 1–30 → 31–60 roll doubled after the bank cut its early-bucket calling team to save cost.</p>
+          <p><b>Recommend:</b> restore early-bucket contact (cheapest bucket to cure), add UPI AutoPay/e-mandate retries on salary day, use a propensity-to-pay model to prioritise calls. Show the maths: each 1% of book cured early saves ~LGD × 1% of book in losses.</p></details>
+      </section>
+
+      <section id="maths" data-nav="10 · Case maths" data-search>
+        <div class="section-head"><div><span class="section-no">10 / MATHS</span><h2>The numbers that come up in every case</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Growth</b><span>CAGR = (End ÷ Start)^(1/years) − 1. Rule of 72: doubling time ≈ 72 ÷ growth %.</span></div>
+          <div class="formula-row"><b>Margins</b><span>Gross margin = (Revenue − COGS) ÷ Revenue; contribution margin = (Price − Variable cost) ÷ Price.</span></div>
+          <div class="formula-row"><b>Unit economics</b><span>LTV = monthly margin per user × average lifetime (months) = margin ÷ monthly churn. Healthy: LTV ÷ CAC ≥ 3, CAC payback &lt; 12–18 months.</span></div>
+          <div class="formula-row"><b>NPV</b><span>NPV = Σ CF<sub>t</sub> ÷ (1 + r)<sup>t</sup> − Investment. Perpetuity = CF ÷ r; growing perpetuity = CF ÷ (r − g).</span></div>
+          <div class="formula-row"><b>Market share</b><span>Relative share = our share ÷ largest competitor's share.</span></div>
+          <div class="formula-row"><b>Percent vs points</b><span>NPA rising from 2% to 3% is +1 percentage point, or +50%. Say which one you mean.</span></div>
+        </div>
+        <details><summary>Drill: a card costs ₹2,500 to acquire and earns ₹150 a month; 2% of customers leave each month. Worth it?</summary><p>Lifetime = 1 ÷ 0.02 = 50 months; LTV = 150 × 50 = ₹7,500 (undiscounted). LTV/CAC = 3.0: borderline healthy. Payback = 2,500 ÷ 150 ≈ 17 months.</p></details>
+        <details><summary>Drill: a ₹1,000 cr loan book, PD 3%, LGD 60%. Expected loss?</summary><p>EL = 1,000 × 0.03 × 0.60 = ₹18 cr, i.e. 1.8% credit cost. If yield 14%, cost of funds 7.5%, opex 2.5%, ROA ≈ 14 − 7.5 − 2.5 − 1.8 = 2.2% before tax.</p></details>
+      </section>
+
+      <section id="synth" data-nav="11 · Synthesis" data-search>
+        <div class="section-head"><div><span class="section-no">11 / CLOSE</span><h2>Ending the case well</h2></div><span class="tag core">core</span></div>
+        <div class="card accent"><p><b>Template (45–60 s):</b> "<i>Recommendation:</i> the client should X. <i>Three reasons:</i> first..., second..., third... (each with a number). <i>Risks:</i> the main risk is Y, which we'd mitigate by Z. <i>Next steps:</i> validate A with B data in the next two weeks."</p></div>
+        <div class="grid">
+          <div class="card"><h3>Do</h3><p>Answer first. Use the numbers you computed. Commit to one recommendation. Mention one risk. Stand up (literally, in a virtual interview, look at the camera).</p></div>
+          <div class="card"><h3>Don't</h3><p>Recap your whole analysis in order. Say "it depends". Add a new idea you never tested. List seven recommendations.</p></div>
+          <div class="card"><h3>If you got stuck</h3><p>Say so calmly: "Let me step back to the objective." Re-read your tree, pick the next branch, and state a new hypothesis. Recovering well scores better than never stumbling.</p></div>
+        </div>
+      </section>
+
+      <section id="mistakes" data-nav="12 · Mistakes + practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">12 / PLAN</span><h2>Mistakes that sink candidates, and a 3-week plan</h2></div></div>
+        <table class="compare">
+          <tr><th>Mistake</th><th>Fix</th></tr>
+          <tr><td>Reciting "4P/4C/Porter" for every case</td><td>Build from the client's equation (revenue = price × volume) and name client-specific buckets</td></tr>
+          <tr><td>No hypothesis</td><td>Say "my hunch is..." within the first two minutes</td></tr>
+          <tr><td>Silent maths</td><td>Narrate: "₹120 cr × 15% is ₹18 cr"; round, then check order of magnitude</td></tr>
+          <tr><td>Missing the "so what"</td><td>After each exhibit, one sentence on what it means</td></tr>
+          <tr><td>Using AI to answer in an AI-assisted round</td><td>Use it to fetch data or check maths; always verify and explain why you trust the number</td></tr>
+        </table>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Week 1: read sections 1–6; solve 4 profitability cases aloud (IITB casebook cases 8–15, IIMA prep book)</label>
+          <label class="checkline"><input type="checkbox"> Week 1: 10 minutes of case maths daily (A1 drills)</label>
+          <label class="checkline"><input type="checkbox"> Week 2: sections 7–8; explain the card issuer P&amp;L from memory in 2 minutes</label>
+          <label class="checkline"><input type="checkbox"> Week 2: solve cases 1–8 in this module without opening the answers</label>
+          <label class="checkline"><input type="checkbox"> Week 2: read one bank/card earnings summary (SBI Card, HDFC Bank) and note yield, NIM, credit cost</label>
+          <label class="checkline"><input type="checkbox"> Week 3: 6 live mock cases with friends (2 interviewer-led, 4 candidate-led), record them</label>
+          <label class="checkline"><input type="checkbox"> Week 3: 2 cases solved with ChatGPT open in 25 minutes, then critique how you used it</label>
+          <label class="checkline"><input type="checkbox"> Week 3: one market-entry and one M&amp;A case from the Bridgeway or IIM-B books</label>
+        </div>
+        <div class="memory"><b>Your folder:</b> 20_SOURCES/PRODUCT_CONSULTING has the IITB casebook (32 cases), IIMA Prep Book 2023–24 (BFSI cases: retail bank, home loan, card company, commercial vehicle loans), IIM-B case book, the Bridgeway guide and "Models for Case Solving". Use them for volume once this module's structures are second nature.</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-s2-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-s2-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-s2-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

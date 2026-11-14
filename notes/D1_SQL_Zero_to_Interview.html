@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>D1 | SQL: zero to interview — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">D1 / SQL</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#order">1 · How a query runs</a><a href="#basics">2 · Basics + aggregation</a><a href="#joins">3 · Joins</a><a href="#case">4 · CASE, NULL, subqueries, CTEs</a><a href="#windows">5 · Window functions</a><a href="#patterns">6 · Nine interview patterns</a><a href="#dates">7 · Dates</a><a href="#perf">8 · Performance + data quality</a><a href="#bank">9 · Question bank</a><a href="#plan">10 · 14-day plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Data + AI track · Module D1</div><h1>SQL: zero<br>to interview</h1><p>Every analyst, decision-science, product and fintech OA has a SQL round. This module takes you from SELECT to window functions and the nine patterns that cover almost every interview question, all on one credit-card dataset. Every query here was run and checked.</p><div class="meta"><span class="pill"><span class=dot></span> 22 tested queries</span><span class="pill">9 interview patterns</span><span class="pill">25-question bank</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What SQL rounds test</h2></div></div>
+        <p class="lede">You will get a schema of 2–4 tables and 2–5 questions in 30–45 minutes, usually on HackerRank, CoderPad or a shared doc. Correctness matters, but interviewers also watch whether you clarify the question, handle NULLs and duplicates, and explain your logic.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>JOIN + GROUP BY + HAVING</strong><span class="muted">every single test</span></div><span class="frequency">100%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Window functions</strong><span class="muted">ROW_NUMBER, RANK, LAG, running SUM</span></div><span class="frequency">~80%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>CTEs + CASE WHEN</strong><span class="muted">readable multi-step logic, conditional counts</span></div><span class="frequency">~70%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Dates</strong><span class="muted">month buckets, retention, gaps between events</span></div><span class="frequency">~60%</span></div>
+        </div>
+        <h3>The dataset used throughout</h3>
+        <table class="compare">
+          <tr><th>Table</th><th>Columns</th></tr>
+          <tr><td><b>customers</b></td><td>customer_id, name, city, signup_date, income, segment</td></tr>
+          <tr><td><b>cards</b></td><td>card_id, customer_id, product, credit_limit, open_date, status</td></tr>
+          <tr><td><b>txns</b></td><td>txn_id, card_id, txn_date, amount, merchant_category, channel (POS / online / UPI)</td></tr>
+          <tr><td><b>payments</b></td><td>payment_id, card_id, due_date, paid_date (NULL if unpaid), amount_due, amount_paid</td></tr>
+        </table>
+        <div class="memory"><b>Practise on real engines:</b> the queries are written in standard SQL and tested on SQLite. Notes in section 8 show the few things that differ in MySQL, PostgreSQL, BigQuery and Snowflake.</div>
+      </section>
+
+      <section id="order" data-nav="1 · How a query runs" data-search>
+        <div class="section-head"><div><span class="section-no">01 / MENTAL MODEL</span><h2>Written order vs execution order</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Written: SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT<br>Executed: FROM / JOIN → WHERE → GROUP BY → HAVING → SELECT (window functions here) → DISTINCT → ORDER BY → LIMIT</div>
+        <div class="grid">
+          <div class="card"><h3>Why it matters</h3><p>You can't use a SELECT alias in WHERE (WHERE runs first). You can't filter on a window function in WHERE either: wrap it in a subquery or CTE. HAVING filters groups, WHERE filters rows.</p></div>
+          <div class="card"><h3>Grain</h3><p>Before writing, say the grain of the output: "one row per customer per month". Most wrong answers come from joining tables at different grains and double-counting.</p></div>
+          <div class="card"><h3>Talk while you type</h3><p>"I'll join cards to txns on card_id, group by customer, and use LEFT JOIN so customers with no spend still appear." Interviewers give credit for reasoning even if a comma is off.</p></div>
+        </div>
+      </section>
+
+      <section id="basics" data-nav="2 · Basics + aggregation" data-search>
+        <div class="section-head"><div><span class="section-no">02 / BASICS</span><h2>SELECT, WHERE, GROUP BY, HAVING</h2></div></div>
+        <pre class="eq">-- customers per city
+SELECT city, COUNT(*) AS customers
+FROM customers
+GROUP BY city
+ORDER BY customers DESC;
+
+-- categories with more than ₹5 lakh spend
+SELECT merchant_category,
+       COUNT(*)              AS n,
+       ROUND(SUM(amount), 0) AS spend,
+       ROUND(AVG(amount), 0) AS avg_ticket
+FROM txns
+GROUP BY merchant_category
+HAVING SUM(amount) &gt; 500000
+ORDER BY spend DESC;</pre>
+        <div class="formula-list card">
+          <div class="formula-row"><b>COUNT(*)</b><span>counts rows; <b>COUNT(col)</b> skips NULLs; <b>COUNT(DISTINCT col)</b> counts unique values.</span></div>
+          <div class="formula-row"><b>Filters</b><span>IN (...), BETWEEN a AND b (inclusive), LIKE 'Mum%', IS NULL / IS NOT NULL (never = NULL).</span></div>
+          <div class="formula-row"><b>Integer division</b><span>In many engines 7/2 = 3. Multiply by 100.0 or CAST to get a decimal percentage.</span></div>
+          <div class="formula-row"><b>Every non-aggregated column</b><span>in SELECT must be in GROUP BY (MySQL lets you break this; don't).</span></div>
+        </div>
+      </section>
+
+      <section id="joins" data-nav="3 · Joins" data-search>
+        <div class="section-head"><div><span class="section-no">03 / JOINS</span><h2>Joins, and the two bugs they cause</h2></div><span class="tag hot">most tested</span></div>
+        <table class="compare">
+          <tr><th>Join</th><th>Keeps</th><th>Use for</th></tr>
+          <tr><td>INNER JOIN</td><td>only matching rows</td><td>"customers with transactions"</td></tr>
+          <tr><td>LEFT JOIN</td><td>all of the left table; NULLs where no match</td><td>"all customers, including those with zero spend"; finding missing records</td></tr>
+          <tr><td>FULL OUTER JOIN</td><td>everything from both</td><td>reconciling two systems</td></tr>
+          <tr><td>CROSS JOIN</td><td>every combination</td><td>building a date × product grid</td></tr>
+          <tr><td>Self join</td><td>table joined to itself</td><td>duplicates, employee–manager, consecutive events</td></tr>
+        </table>
+        <pre class="eq">-- top 5 customers by spend (customer → cards → txns)
+SELECT c.customer_id, c.name, ROUND(SUM(t.amount), 0) AS spend
+FROM customers c
+JOIN cards k ON k.customer_id = c.customer_id
+JOIN txns  t ON t.card_id     = k.card_id
+GROUP BY c.customer_id, c.name
+ORDER BY spend DESC
+LIMIT 5;
+
+-- customers who never transacted (anti-join)
+SELECT c.customer_id, c.name
+FROM customers c
+LEFT JOIN cards k ON k.customer_id = c.customer_id
+LEFT JOIN txns  t ON t.card_id     = k.card_id
+WHERE t.txn_id IS NULL
+GROUP BY c.customer_id, c.name;</pre>
+        <div class="grid">
+          <div class="card"><h3>Bug 1: fan-out</h3><p>Joining customers to cards (one-to-many) and then to payments <i>and</i> txns multiplies rows: each txn repeats for every payment. Aggregate each child table in its own CTE first, then join the summaries.</p></div>
+          <div class="card"><h3>Bug 2: LEFT JOIN turned INNER</h3><p>A WHERE condition on the right table (<code>WHERE t.channel = 'UPI'</code>) removes the NULL rows. Put the condition in the ON clause instead: <code>LEFT JOIN txns t ON ... AND t.channel = 'UPI'</code>.</p></div>
+          <div class="card"><h3>Duplicate keys</h3><p>Always ask: is the join key unique on at least one side? If both sides have duplicates you get a many-to-many explosion.</p></div>
+        </div>
+      </section>
+
+      <section id="case" data-nav="4 · CASE, NULL, subqueries, CTEs" data-search>
+        <div class="section-head"><div><span class="section-no">04 / LOGIC</span><h2>CASE WHEN, NULLs, subqueries and CTEs</h2></div></div>
+        <pre class="eq">-- late-or-missed payment rate and revolve rate in one pass
+SELECT
+  ROUND(100.0 * SUM(CASE WHEN paid_date IS NULL OR paid_date &gt; due_date THEN 1 ELSE 0 END) / COUNT(*), 1) AS late_or_missed_pct,
+  ROUND(100.0 * SUM(CASE WHEN amount_paid &lt; amount_due THEN 1 ELSE 0 END) / COUNT(*), 1)                AS revolve_pct
+FROM payments;
+
+-- pivot: spend by channel × category
+SELECT channel,
+       SUM(CASE WHEN merchant_category = 'travel'  THEN amount END) AS travel,
+       SUM(CASE WHEN merchant_category = 'grocery' THEN amount END) AS grocery,
+       SUM(CASE WHEN merchant_category = 'dining'  THEN amount END) AS dining
+FROM txns
+GROUP BY channel;
+
+-- customers earning above average (scalar subquery)
+SELECT customer_id, name, income
+FROM customers
+WHERE income &gt; (SELECT AVG(income) FROM customers);</pre>
+        <div class="formula-list card">
+          <div class="formula-row"><b>NULL logic</b><span>NULL = NULL is not true. NULL + 5 is NULL. AVG ignores NULLs (so the denominator shrinks). COALESCE(x, 0) replaces NULL.</span></div>
+          <div class="formula-row"><b>CTE</b><span><code>WITH name AS (SELECT ...) SELECT ... FROM name</code>. Use one CTE per logical step; name them by what they hold (monthly_spend, first_txn).</span></div>
+          <div class="formula-row"><b>EXISTS vs IN</b><span>NOT IN breaks if the subquery returns any NULL (returns nothing). Prefer NOT EXISTS or a LEFT JOIN anti-join.</span></div>
+          <div class="formula-row"><b>UNION vs UNION ALL</b><span>UNION removes duplicates (slower); UNION ALL keeps them. Default to UNION ALL unless you need distinct rows.</span></div>
+        </div>
+      </section>
+
+      <section id="windows" data-nav="5 · Window functions" data-search>
+        <div class="section-head"><div><span class="section-no">05 / WINDOWS</span><h2>Window functions: the topic that separates candidates</h2></div><span class="tag hot">must</span></div>
+        <div class="eq">function() OVER (PARTITION BY group ORDER BY sort ROWS BETWEEN ... AND ...)</div>
+        <p>A window function computes over a set of rows related to the current row <b>without collapsing them</b> (unlike GROUP BY).</p>
+        <table class="compare">
+          <tr><th>Function</th><th>Ties 100, 90, 90, 80 →</th><th>Use</th></tr>
+          <tr><td>ROW_NUMBER()</td><td>1, 2, 3, 4</td><td>pick exactly one row per group (latest, first, dedupe)</td></tr>
+          <tr><td>RANK()</td><td>1, 2, 2, 4</td><td>competition ranking with gaps</td></tr>
+          <tr><td>DENSE_RANK()</td><td>1, 2, 2, 3</td><td>"Nth highest" with ties counted once</td></tr>
+          <tr><td>LAG / LEAD(col, n)</td><td colspan="2">value n rows before / after: month-over-month change, time between events</td></tr>
+          <tr><td>SUM / AVG OVER</td><td colspan="2">running totals, moving averages, share of total</td></tr>
+          <tr><td>NTILE(n)</td><td colspan="2">split into quartiles / deciles</td></tr>
+          <tr><td>FIRST_VALUE / LAST_VALUE</td><td colspan="2">first or last value in the window (LAST_VALUE needs a full frame)</td></tr>
+        </table>
+        <pre class="eq">-- month-over-month spend growth
+WITH m AS (
+  SELECT strftime('%Y-%m', txn_date) AS month, SUM(amount) AS spend
+  FROM txns GROUP BY month
+)
+SELECT month, ROUND(spend, 0) AS spend,
+       ROUND(100.0 * (spend - LAG(spend) OVER (ORDER BY month))
+             / LAG(spend) OVER (ORDER BY month), 1) AS mom_pct
+FROM m ORDER BY month;
+
+-- running total and 3-transaction moving average per card
+SELECT card_id, txn_date, amount,
+       SUM(amount) OVER (PARTITION BY card_id ORDER BY txn_date, txn_id
+                         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total,
+       AVG(amount) OVER (PARTITION BY card_id ORDER BY txn_date
+                         ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)         AS moving_avg_3
+FROM txns;</pre>
+        <div class="memory"><b>Frame default trap:</b> with ORDER BY and no frame, most engines use RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, which treats tied dates as one block. Write ROWS explicitly and add a tie-breaker (txn_id) to ORDER BY.</div>
+      </section>
+
+      <section id="patterns" data-nav="6 · Nine interview patterns" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PATTERNS</span><h2>Nine patterns that answer most questions</h2></div><span class="tag core">core</span></div>
+        <details><summary><b>1 · Top N per group</b> (top 2 spenders in each city)</summary><pre class="eq">WITH s AS (
+  SELECT c.city, c.customer_id, SUM(t.amount) AS spend
+  FROM customers c JOIN cards k USING (customer_id) JOIN txns t USING (card_id)
+  GROUP BY c.city, c.customer_id
+)
+SELECT city, customer_id, spend, rnk
+FROM (SELECT *, DENSE_RANK() OVER (PARTITION BY city ORDER BY spend DESC) AS rnk FROM s)
+WHERE rnk &lt;= 2
+ORDER BY city, rnk;</pre></details>
+        <details><summary><b>2 · Nth highest</b> (second-largest transaction per card)</summary><pre class="eq">WITH ranked AS (
+  SELECT card_id, amount, ROW_NUMBER() OVER (PARTITION BY card_id ORDER BY amount DESC) AS r
+  FROM txns
+)
+SELECT card_id, amount AS second_highest FROM ranked WHERE r = 2;</pre><p>Use DENSE_RANK if "second highest distinct value" is meant. Clarify which.</p></details>
+        <details><summary><b>3 · First / latest record</b> (first transaction of each card)</summary><pre class="eq">SELECT card_id, txn_date
+FROM (SELECT card_id, txn_date,
+             ROW_NUMBER() OVER (PARTITION BY card_id ORDER BY txn_date, txn_id) AS rn
+      FROM txns)
+WHERE rn = 1;</pre></details>
+        <details><summary><b>4 · Period-over-period change</b></summary><p>LAG on a monthly aggregate (section 5). For year-over-year on monthly data, use LAG(spend, 12).</p></details>
+        <details><summary><b>5 · Running total / share of total</b></summary><pre class="eq">SELECT merchant_category, SUM(amount) AS spend,
+       ROUND(100.0 * SUM(amount) / SUM(SUM(amount)) OVER (), 1) AS share_pct
+FROM txns GROUP BY merchant_category;</pre><p><code>SUM(SUM(amount)) OVER ()</code> = a window over the grouped result: the grand total.</p></details>
+        <details><summary><b>6 · Retention cohort</b> (of customers who first spent in month M, how many spent in M+1?)</summary><pre class="eq">WITH first AS (
+  SELECT k.customer_id, MIN(strftime('%Y-%m', t.txn_date)) AS cohort
+  FROM cards k JOIN txns t USING (card_id) GROUP BY k.customer_id
+), act AS (
+  SELECT DISTINCT k.customer_id, strftime('%Y-%m', t.txn_date) AS month
+  FROM cards k JOIN txns t USING (card_id)
+)
+SELECT f.cohort,
+       COUNT(DISTINCT f.customer_id) AS size,
+       COUNT(DISTINCT CASE WHEN a.month = strftime('%Y-%m', date(f.cohort || '-01', '+1 month'))
+                           THEN a.customer_id END) AS active_next_month
+FROM first f LEFT JOIN act a USING (customer_id)
+GROUP BY f.cohort ORDER BY f.cohort;</pre></details>
+        <details><summary><b>7 · Gaps and islands</b> (longest streak of consecutive spending days)</summary><pre class="eq">WITH d AS (SELECT DISTINCT card_id, date(txn_date) AS d FROM txns),
+g AS (
+  SELECT card_id, d,
+         julianday(d) - ROW_NUMBER() OVER (PARTITION BY card_id ORDER BY d) AS grp
+  FROM d
+)
+SELECT card_id, MIN(d) AS start, MAX(d) AS finish, COUNT(*) AS days
+FROM g GROUP BY card_id, grp
+HAVING COUNT(*) &gt;= 2
+ORDER BY days DESC;</pre><p>The trick: date minus row number is constant within a run of consecutive days.</p></details>
+        <details><summary><b>8 · Duplicates</b> (same card, amount and date twice: possible double charge)</summary><pre class="eq">SELECT a.card_id, a.txn_id AS t1, b.txn_id AS t2, a.amount, a.txn_date
+FROM txns a
+JOIN txns b ON a.card_id = b.card_id AND a.amount = b.amount
+           AND a.txn_date = b.txn_date AND a.txn_id &lt; b.txn_id;</pre><p>To delete duplicates, keep ROW_NUMBER() = 1 per key.</p></details>
+        <details><summary><b>9 · Ratio / conditional aggregation</b> (UPI share of spend by city)</summary><pre class="eq">SELECT c.city,
+       ROUND(100.0 * SUM(CASE WHEN t.channel = 'UPI' THEN t.amount ELSE 0 END) / SUM(t.amount), 1) AS upi_share_pct
+FROM customers c JOIN cards k USING (customer_id) JOIN txns t USING (card_id)
+GROUP BY c.city ORDER BY upi_share_pct DESC;</pre></details>
+      </section>
+
+      <section id="dates" data-nav="7 · Dates" data-search>
+        <div class="section-head"><div><span class="section-no">07 / DATES</span><h2>Dates: the part that changes by engine</h2></div></div>
+        <table class="compare">
+          <tr><th>Task</th><th>PostgreSQL / Snowflake</th><th>MySQL</th><th>BigQuery</th><th>SQLite</th></tr>
+          <tr><td>Month bucket</td><td>DATE_TRUNC('month', d)</td><td>DATE_FORMAT(d, '%Y-%m-01')</td><td>DATE_TRUNC(d, MONTH)</td><td>strftime('%Y-%m', d)</td></tr>
+          <tr><td>Add 30 days</td><td>d + INTERVAL '30 days'</td><td>DATE_ADD(d, INTERVAL 30 DAY)</td><td>DATE_ADD(d, INTERVAL 30 DAY)</td><td>date(d, '+30 days')</td></tr>
+          <tr><td>Days between</td><td>d2 - d1 (Postgres); DATEDIFF('day', d1, d2) (Snowflake)</td><td>DATEDIFF(d2, d1)</td><td>DATE_DIFF(d2, d1, DAY)</td><td>julianday(d2) - julianday(d1)</td></tr>
+          <tr><td>Extract</td><td>EXTRACT(DOW FROM d)</td><td>DAYOFWEEK(d)</td><td>EXTRACT(DAYOFWEEK FROM d)</td><td>strftime('%w', d)</td></tr>
+        </table>
+        <div class="memory"><b>In an interview:</b> say "I'll write DATE_TRUNC; in MySQL it would be DATE_FORMAT." Nobody fails you for dialect if you name it.</div>
+      </section>
+
+      <section id="perf" data-nav="8 · Performance + data quality" data-search>
+        <div class="section-head"><div><span class="section-no">08 / BEYOND CORRECT</span><h2>Performance, indexes and checking your own answer</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Indexes</h3><p>An index is a sorted lookup on a column (like a book index). It speeds WHERE, JOIN and ORDER BY on that column but slows inserts. Functions on an indexed column (<code>WHERE YEAR(d) = 2026</code>) stop the index being used; write a range instead (<code>d &gt;= '2026-01-01' AND d &lt; '2027-01-01'</code>).</p></div>
+          <div class="card"><h3>Big-data engines</h3><p>BigQuery and Snowflake charge or slow down by data scanned. Select only needed columns (never SELECT * on a big table), filter on the partition column (usually a date), and aggregate before joining.</p></div>
+          <div class="card"><h3>Sanity checks</h3><p>Count rows before and after each join. Check for NULLs in join keys. Compare a total to a known figure. Look at 5 sample rows. Say these checks out loud in an interview.</p></div>
+        </div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Normalisation</b><span>Split data so each fact lives once (customers vs cards vs txns). Analytics warehouses often denormalise into a wide fact table plus dimension tables (star schema).</span></div>
+          <div class="formula-row"><b>Primary / foreign key</b><span>card_id is the primary key of cards and a foreign key in txns.</span></div>
+          <div class="formula-row"><b>OLTP vs OLAP</b><span>Transaction systems (fast writes, row stores like MySQL/Postgres) vs analytics warehouses (big scans, column stores like BigQuery, Snowflake, Redshift).</span></div>
+          <div class="formula-row"><b>Using AI</b><span>LLMs write decent first drafts of SQL, so interviews now probe whether you can spot when a query is wrong: fan-out, NULL handling, wrong grain. Learn to read SQL critically, not just write it.</span></div>
+        </div>
+      </section>
+
+      <section id="bank" data-nav="9 · Question bank" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PRACTICE</span><h2>25 interview questions on this dataset</h2></div><span class="tag pyq">try before opening</span></div>
+        <div class="qa-grid">
+          <div><b>Q1</b>Number of active cards per product</div><div><b>Q2</b>Average ticket size by channel</div><div><b>Q3</b>Customers with more than one card</div>
+          <div><b>Q4</b>Cards with no transactions in June</div><div><b>Q5</b>Monthly spend and MoM growth</div><div><b>Q6</b>Top 3 categories per city by spend</div>
+          <div><b>Q7</b>Share of spend from top 10% of customers</div><div><b>Q8</b>Each customer's first and last transaction date</div><div><b>Q9</b>Average days between transactions per card</div>
+          <div><b>Q10</b>Credit utilisation = max bill ÷ limit; list cards above 50%</div><div><b>Q11</b>Customers who paid late in 2+ consecutive months</div><div><b>Q12</b>Second-highest transaction per card</div>
+          <div><b>Q13</b>Month-1 retention by signup cohort</div><div><b>Q14</b>Percentage of payments that were partial (revolvers)</div><div><b>Q15</b>Cities where UPI share of spend &gt; 40%</div>
+          <div><b>Q16</b>Running total of spend per card</div><div><b>Q17</b>Detect possible duplicate charges</div><div><b>Q18</b>Customers whose spend fell 50%+ from Q1 to Q2</div>
+          <div><b>Q19</b>Rank products by average spend per active card</div><div><b>Q20</b>Longest streak of consecutive spending days</div><div><b>Q21</b>Median transaction amount (no MEDIAN function)</div>
+          <div><b>Q22</b>Percentage of customers who used all three channels</div><div><b>Q23</b>Category mix (% of spend) per segment</div><div><b>Q24</b>Cards whose first transaction was over ₹10,000</div>
+          <div><b>Q25</b>For each month, number of new vs returning spenders</div>
+        </div>
+        <details><summary>Answers to the hardest five (Q7, Q11, Q18, Q21, Q25)</summary>
+<pre class="eq">-- Q7 share of spend from top 10% of customers
+WITH s AS (SELECT k.customer_id, SUM(t.amount) AS spend
+           FROM cards k JOIN txns t USING (card_id) GROUP BY k.customer_id),
+d AS (SELECT *, NTILE(10) OVER (ORDER BY spend DESC) AS decile FROM s)
+SELECT ROUND(100.0 * SUM(CASE WHEN decile = 1 THEN spend END) / SUM(spend), 1) FROM d;
+
+-- Q11 late in two consecutive months
+WITH l AS (SELECT card_id, due_date,
+                  CASE WHEN paid_date IS NULL OR paid_date &gt; due_date THEN 1 ELSE 0 END AS late
+           FROM payments),
+x AS (SELECT *, LAG(late) OVER (PARTITION BY card_id ORDER BY due_date) AS prev_late FROM l)
+SELECT DISTINCT card_id FROM x WHERE late = 1 AND prev_late = 1;
+
+-- Q18 spend fell 50%+ from Q1 to Q2 2026
+WITH q AS (SELECT k.customer_id,
+             SUM(CASE WHEN t.txn_date &lt; '2026-04-01' THEN amount ELSE 0 END) AS q1,
+             SUM(CASE WHEN t.txn_date &gt;= '2026-04-01' THEN amount ELSE 0 END) AS q2
+           FROM cards k JOIN txns t USING (card_id) GROUP BY k.customer_id)
+SELECT customer_id, q1, q2 FROM q WHERE q1 &gt; 0 AND q2 &lt;= 0.5 * q1;
+
+-- Q21 median without a MEDIAN function
+WITH o AS (SELECT amount, ROW_NUMBER() OVER (ORDER BY amount) AS rn, COUNT(*) OVER () AS n FROM txns)
+SELECT AVG(amount) FROM o WHERE rn IN ((n + 1) / 2, (n + 2) / 2);
+
+-- Q25 new vs returning spenders per month
+WITH m AS (SELECT DISTINCT k.customer_id, strftime('%Y-%m', t.txn_date) AS month
+           FROM cards k JOIN txns t USING (card_id)),
+f AS (SELECT customer_id, MIN(month) AS first_month FROM m GROUP BY customer_id)
+SELECT m.month,
+       SUM(CASE WHEN m.month = f.first_month THEN 1 ELSE 0 END) AS new_spenders,
+       SUM(CASE WHEN m.month &gt; f.first_month THEN 1 ELSE 0 END) AS returning_spenders
+FROM m JOIN f USING (customer_id) GROUP BY m.month ORDER BY m.month;</pre></details>
+      </section>
+
+      <section id="plan" data-nav="10 · 14-day plan" data-search>
+        <div class="section-head"><div><span class="section-no">10 / PLAN</span><h2>Two weeks to interview-ready</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Days 1–2: SQLBolt lessons 1–12 (free, browser) + sections 1–2 here</label>
+          <label class="checkline"><input type="checkbox"> Days 3–4: joins and the two join bugs; 10 easy problems on LeetCode "SQL 50"</label>
+          <label class="checkline"><input type="checkbox"> Days 5–6: CASE, CTEs, subqueries; 10 medium problems</label>
+          <label class="checkline"><input type="checkbox"> Days 7–9: window functions; DataLemur free questions (company-tagged: Amex, Visa, PayPal)</label>
+          <label class="checkline"><input type="checkbox"> Day 10: dates in your target company's engine (BigQuery or Snowflake are common)</label>
+          <label class="checkline"><input type="checkbox"> Days 11–12: the nine patterns from memory; Q1–Q25 above</label>
+          <label class="checkline"><input type="checkbox"> Day 13: two timed mock tests (45 min, 4 questions) on HackerRank or StrataScratch</label>
+          <label class="checkline"><input type="checkbox"> Day 14: explain three of your queries out loud as if to an interviewer</label>
+        </div>
+        <div class="memory"><b>Setup:</b> install DB Browser for SQLite or use an online Postgres playground (e.g. DB Fiddle), create these four tables and insert 20 rows each. Typing the schema yourself is part of learning it.</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-d1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-d1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-d1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

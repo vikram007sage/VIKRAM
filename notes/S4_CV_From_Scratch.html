@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S4 | CV from scratch (internship + CDC) — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">S4 / CV</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#formula">1 · The bullet formula</a><a href="#cdc">2 · KGP CDC format</a><a href="#audit">3 · Your CV, line by line</a><a href="#tailor">4 · Tailoring by lane</a><a href="#offcampus">5 · Off-campus + ATS</a><a href="#linkedin">6 · LinkedIn + portfolio</a><a href="#plan">7 · Checklist</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Shared case spine · Module S4</div><h1>CV from<br>scratch</h1><p>A recruiter spends seconds on a first pass of your CV, then an interviewer spends 30 minutes asking about every line. This module covers the bullet formula, the KGP CDC format, an off-campus version that survives applicant-tracking software, lane-specific tailoring, and a line-by-line audit of your June 2026 CV.</p><div class="meta"><span class="pill"><span class=dot></span> Line-by-line audit</span><span class="pill">Bullet formula + verbs</span><span class="pill">CDC + off-campus versions</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Two readers, two jobs</h2></div></div>
+        <p class="lede">Your CV has to pass a fast screen (a recruiter or software scanning for signals) and then survive a slow read (an interviewer picking lines to drill). Every line must be impressive at a glance and defensible for five minutes.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Results with numbers</strong><span class="muted">what changed because of you, measured</span></div><span class="frequency">every bullet</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Relevance to the lane</strong><span class="muted">consulting, product, analytics, finance read different lines</span></div><span class="frequency">per application</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Clarity</strong><span class="muted">no jargon the reader has to decode</span></div><span class="frequency">every line</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Verified + consistent</strong><span class="muted">CDC proof uploaded; matches LinkedIn and your stories (S3)</span></div><span class="frequency">before each season</span></div>
+        </div>
+      </section>
+
+      <section id="formula" data-nav="1 · The bullet formula" data-search>
+        <div class="section-head"><div><span class="section-no">01 / FORMULA</span><h2>One bullet = verb + what + how + result</h2></div><span class="tag core">core</span></div>
+        <div class="eq">[Strong verb] [what you did] by [how / method / tool], [result with a number] (+ context that makes the number meaningful)</div>
+        <table class="compare">
+          <tr><th>Weak</th><th>Strong</th></tr>
+          <tr><td>Worked on onboarding improvements for the app</td><td>Lifted onboarding conversion 8% by A/B testing 4 UX hypotheses and shipping the 2 significant winners</td></tr>
+          <tr><td>Responsible for event logistics</td><td>Led a 76-member team to run GES '25 for 2,000+ delegates and 35+ CXO speakers</td></tr>
+          <tr><td>Did market research on fintech</td><td>Wrote 4 sector reports (AI, fintech, climate-tech, cyber) used in advisory for 20+ HNI portfolios</td></tr>
+        </table>
+        <div class="grid">
+          <div class="card"><h3>Number types</h3><p>% change (conversion +8%), scale (2,000 delegates, 76 people), money (₹ saved/raised), time (500 → 60 experiments, 7 → 3 days), rank (Gold, top 3 of 400 teams), count (20+ portfolios).</p></div>
+          <div class="card"><h3>Verbs by lane</h3><p><b>Consulting:</b> structured, recommended, sized, prioritised. <b>Product:</b> shipped, launched, A/B tested, diagnosed. <b>Analytics:</b> modelled, forecast, automated, built. <b>Finance:</b> valued, benchmarked, analysed. <b>Leadership:</b> led, negotiated, mobilised.</p></div>
+          <div class="card"><h3>Banned words</h3><p>"Responsible for", "helped", "worked on", "various", "key", "robust", "leveraged", "synergies", "impactful", "in parallel". If a word adds no information, delete it.</p></div>
+        </div>
+        <div class="memory"><b>The "so what" test:</b> read a bullet and ask "so what?". If the answer isn't already in the bullet, add it. "Mapped 15 user journeys" → so what? → "...and fixed 10 friction points, raising engagement 12%".</div>
+      </section>
+
+      <section id="cdc" data-nav="2 · KGP CDC format" data-search>
+        <div class="section-head"><div><span class="section-no">02 / ON CAMPUS</span><h2>The CDC CV</h2></div></div>
+        <p>On campus your CV is generated from your ERP profile in a fixed one-page template. You don't choose fonts or layout, so content and ordering are everything. Unverified points print with the stamp "Self declared by the student, CDC could not verify the relevant documents". Recruiters notice it.</p>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Verify</b><span>Upload proof (offer letter, completion certificate, certificate of merit, event letter) for every point well before the season. Chase pending verifications; check what your CDC/department coordinators say is accepted.</span></div>
+          <div class="formula-row"><b>Order</b><span>Within each section, put the most relevant entry first for the lane you are applying to; most CDC systems allow several CV versions — make one per lane (consulting, product, analytics/finance).</span></div>
+          <div class="formula-row"><b>Character limits</b><span>The template caps line length; your current bullets already run to the edge. Write to ~150 characters and read the generated PDF, not the form.</span></div>
+          <div class="formula-row"><b>Consistency</b><span>Dates, titles and numbers must match LinkedIn, the off-campus CV and what you say in interviews.</span></div>
+          <div class="formula-row"><b>Rules</b><span>CDC internship undertakings bar reneging on an accepted offer and require you to report offers; read them before applying off-campus too.</span></div>
+        </div>
+      </section>
+
+      <section id="audit" data-nav="3 · Your CV, line by line" data-search>
+        <div class="section-head"><div><span class="section-no">03 / AUDIT</span><h2>Line-by-line audit of your June 2026 CV</h2></div><span class="tag hot">act on these</span></div>
+        <p>Overall: strong for a third-year — two real internships, a startup, leadership at scale, a gold medal, and almost every bullet has a number. The fixes are about clarity, defensibility and cutting filler.</p>
+        <table class="compare">
+          <tr><th>Line</th><th>Issue</th><th>Suggested rewrite</th></tr>
+          <tr><td>Research intern summary: "...working on projects that create a long-lasting impact for the nation"</td><td>Fluffy; uses space without information</td><td>"Building laser-induced graphene (LIG) electrochemical sensors for boron detection in soil and water"</td></tr>
+          <tr><td>"...targeting 0.02 mg/L LOD across soil and water"</td><td>"Targeting" means not achieved; interviewers will ask the current LOD</td><td>State what you reached: "achieved X mg/L LOD (target 0.02 mg/L)" or "currently validating..."</td></tr>
+          <tr><td>CheQ: "shipping 2 statistically winning key variants into production"</td><td>"key" adds nothing; "statistically winning" is clunky</td><td>"Lifted onboarding conversion 8% by A/B testing 4 UX hypotheses and shipping the 2 significant winners"</td></tr>
+          <tr><td>CheQ: "Accelerated experimentation velocity 25%"</td><td>Velocity is undefined</td><td>"Raised experiments shipped per sprint 25% by aligning design, engineering and analytics on one sprint, QA and release cadence"</td></tr>
+          <tr><td>Oister: "surfacing capital flow shifts, and GTM signals for HNI portfolio advisory"</td><td>Jargon; hard to picture</td><td>"Wrote 4 sector reports (AI, fintech, climate-tech, cyber) used in advisory for HNI clients"</td></tr>
+          <tr><td>Oister: "...15+ cross-sector deals in parallel, mapping capital rotation trends and 5 structural M&amp;A synergy patterns"</td><td>"In parallel", "structural", "synergy patterns" invite tough questions you may not want</td><td>"Analysed 20+ HNI portfolios and 15+ deals across sectors, identifying [concrete finding, e.g. over-concentration in X]"</td></tr>
+          <tr><td>KiFayti summary: "...for India's 600M farmers"</td><td>Inflated: India has roughly 146 million farm holdings (Agriculture Census); 600 million is closer to the number of people who depend on farming</td><td>"for India's ~146M farm holdings" or drop the number</td></tr>
+          <tr><td>KiFayti: "Authored 5L IIT KGP grant application ... 100 Cr FY30 revenue thesis"</td><td>Outcome missing; a ₹100 cr revenue claim is a magnet for hostile questions</td><td>Add result ("awarded ₹5L" / "shortlisted"). Keep the ₹100 cr thesis only if you can walk through its assumptions in 2 minutes</td></tr>
+          <tr><td>E-Cell summary + bullets</td><td>"across the country" appears twice</td><td>Keep it in one place</td></tr>
+          <tr><td>Tourist prediction: "0.989 R achieved"</td><td>R or R²? Out-of-sample?</td><td>"R² 0.989 on rolling out-of-sample forecasts" (only if true); otherwise state MAPE</td></tr>
+          <tr><td>No skills / tools line</td><td>Analytics and product shortlists scan for tools</td><td>Add, if true: Python (pandas, scikit-learn), SQL, Excel, Streamlit, Supabase, Figma, A/B testing tools</td></tr>
+          <tr><td>Extra-curricular: "developed physical discipline and mental clarity alongside the day-to-day hustle"</td><td>Filler</td><td>"Practised yoga for 2 years under NSO"</td></tr>
+        </table>
+        <div class="memory"><b>Defensibility check:</b> for each number, write one line of evidence (dashboard, report, certificate, lab notebook). If you can't, soften the claim. Your stories in S3 must use exactly the same numbers.</div>
+      </section>
+
+      <section id="tailor" data-nav="4 · Tailoring by lane" data-search>
+        <div class="section-head"><div><span class="section-no">04 / VERSIONS</span><h2>One CV per lane</h2></div></div>
+        <table class="compare">
+          <tr><th>Lane</th><th>Lead with</th><th>Push down / trim</th></tr>
+          <tr><td>Consulting / strategy</td><td>Open IIT gold, ICC finalist, E-Cell leadership, KiFayti sizing + GTM</td><td>Lab technique detail (Raman, CV runs)</td></tr>
+          <tr><td>Product</td><td>CheQ (A/B tests, journeys, sprint alignment), KiFayti product, GP optimiser as a product used by a lab</td><td>Oister portfolio detail</td></tr>
+          <tr><td>Analytics / decision science / fintech</td><td>CheQ analytics, GP optimiser, SARIMA forecast, SQL/Python line</td><td>Event logistics</td></tr>
+          <tr><td>Finance / VC</td><td>Oister (valuation, IPO benchmarking), KiFayti grant + projections, case wins</td><td>UX journey detail</td></tr>
+          <tr><td>AI / ML</td><td>GP surrogate + transfer learning, deployment, DL coursework</td><td>Event and outreach detail</td></tr>
+        </table>
+      </section>
+
+      <section id="offcampus" data-nav="5 · Off-campus + ATS" data-search>
+        <div class="section-head"><div><span class="section-no">05 / OFF CAMPUS</span><h2>The off-campus CV and applicant-tracking systems</h2></div></div>
+        <p>For cold emails, referrals and careers-page applications (S6), keep your own one-page CV in Word or LaTeX (Overleaf). Large companies parse it with applicant-tracking software that extracts text and matches keywords before any human reads it.</p>
+        <div class="grid">
+          <div class="card"><h3>Make it parseable</h3><p>Single column, standard headings (Education, Experience, Projects, Leadership, Skills), real text not images, no tables for layout, PDF exported from Word/LaTeX. Test: copy-paste the PDF into a text editor; if the order scrambles, so will the parser.</p></div>
+          <div class="card"><h3>Keywords</h3><p>Mirror the exact words in the job description where they are true ("A/B testing", "SQL", "market sizing", "financial modelling"). Don't paste invisible keywords; recruiters see the parsed text.</p></div>
+          <div class="card"><h3>Header</h3><p>Name, phone, email, LinkedIn, GitHub/portfolio (VIKRAM's PRD is a product portfolio piece). No photo, no date of birth, no roll number on the off-campus version.</p></div>
+        </div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>File name</b><span>Aryan_Rajak_IITKGP_Product.pdf, not CV_final_v7.pdf.</span></div>
+          <div class="formula-row"><b>Length</b><span>One page. Always.</span></div>
+          <div class="formula-row"><b>Using AI</b><span>Fine for tightening wording; never let it add numbers or skills you don't have. Recruiters increasingly spot generic AI phrasing ("spearheaded", "leveraged", "drove impactful outcomes").</span></div>
+        </div>
+      </section>
+
+      <section id="linkedin" data-nav="6 · LinkedIn + portfolio" data-search>
+        <div class="section-head"><div><span class="section-no">06 / ONLINE</span><h2>LinkedIn and a portfolio that back the CV up</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>LinkedIn</h3><p>Headline: "Dual degree @ IIT Kharagpur · Product &amp; strategy · Ex-CheQ PM intern · Co-founder, KiFayti". About: 3 lines on your through-line. Experience bullets = CV bullets. Featured: Open IIT deck, KiFayti one-pager, VIKRAM.</p></div>
+          <div class="card"><h3>Portfolio pieces</h3><p>VIKRAM's PRD and live app (product), the GP optimiser on Streamlit (analytics/AI), a 2-page Open IIT case summary (consulting), one investment memo (finance, F4 module).</p></div>
+          <div class="card"><h3>GitHub</h3><p>Pin 2–3 repos with a clear README (problem, approach, result, how to run). Keep personal data and API keys out of public repos.</p></div>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="7 · Checklist" data-search>
+        <div class="section-head"><div><span class="section-no">07 / PLAN</span><h2>Before every application season</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Apply the twelve audit fixes in section 3 to the ERP profile</label>
+          <label class="checkline"><input type="checkbox"> Upload proof for every point and clear the "self declared" stamps</label>
+          <label class="checkline"><input type="checkbox"> Build lane versions: consulting, product, analytics/fintech, finance</label>
+          <label class="checkline"><input type="checkbox"> Write one evidence line per number and keep it with your story bank (S3)</label>
+          <label class="checkline"><input type="checkbox"> Make the off-campus one-page CV in Word or Overleaf and run the copy-paste parse test</label>
+          <label class="checkline"><input type="checkbox"> Update LinkedIn to match exactly</label>
+          <label class="checkline"><input type="checkbox"> Ask two seniors in your target lanes for a 10-minute CV read</label>
+          <label class="checkline"><input type="checkbox"> Read the generated PDF aloud once; fix anything you'd hesitate to explain</label>
+        </div>
+        <div class="memory"><b>Your folder:</b> 20_SOURCES/HR_CV has two sample KGP CVs, old formats and the Vault guide to resumes; 00_START_HERE has your current CV PDF.</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-s4-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-s4-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-s4-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>
