@@ -1,0 +1,160 @@
+<!--META D3 | Statistics + A/B testing | D3 / STATS | Data + AI track · Module D3 | Statistics +<br>A/B testing | Product, analytics and decision-science interviews test whether you can tell signal from noise: design an experiment, size it, read the result and spot the traps. This module covers the statistics you need, the full A/B testing workflow, modern techniques (CUPED, sequential tests) and fifteen interview questions. Every number was computed in Python (scipy). | Sample-size + power maths; 10 experiment traps; 15 interview Qs -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What gets tested</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>A/B test design + reading</strong><span class="muted">metrics, sample size, p-values, confidence intervals, decision</span></div><span class="frequency">product + analytics: always</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Experiment traps</strong><span class="muted">peeking, sample-ratio mismatch, novelty, network effects, many metrics</span></div><span class="frequency">very high</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Core statistics</strong><span class="muted">distributions, CLT, hypothesis tests, regression basics</span></div><span class="frequency">high</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Probability puzzles</strong><span class="muted">Bayes, conditional probability (A4 module)</span></div><span class="frequency">quant / DS roles</span></div>
+        </div>
+        <div class="memory"><b>Your edge:</b> you ran real A/B tests at CheQ (4 hypotheses, 2 winners, +8% onboarding). Every concept here can be told through that story (S3 Story 1). Know its sample size, duration and metric before any product interview.</div>
+      </section>
+
+      <section id="describe" data-nav="1 · Describing data" data-search>
+        <div class="section-head"><div><span class="section-no">01 / DESCRIBE</span><h2>Describing data</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Mean vs median</b><span>Spend, income and order values are right-skewed: a few huge values pull the mean up. In the D1 card data the mean transaction is ~₹4,000 but the median is ~₹1,760. Report the median for "typical", the mean for totals.</span></div>
+          <div class="formula-row"><b>Variance, SD</b><span>SD = average distance from the mean. Coefficient of variation = SD ÷ mean (compare spread across scales).</span></div>
+          <div class="formula-row"><b>Percentiles</b><span>p50, p90, p99 for latency, spend, loan size. Interquartile range = p75 − p25; outliers often defined as beyond 1.5 × IQR.</span></div>
+          <div class="formula-row"><b>Correlation</b><span>Pearson r measures linear association (−1 to 1). Correlation ≠ causation: ice-cream sales and drownings both rise in summer.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Distribution</th><th>Shape / use</th></tr>
+          <tr><td>Normal</td><td>Symmetric; 68–95–99.7% within 1–2–3 SD. Sample means are approximately normal (CLT).</td></tr>
+          <tr><td>Binomial</td><td>Number of successes in n trials (conversions out of visitors). Mean np, variance np(1−p).</td></tr>
+          <tr><td>Poisson</td><td>Counts per interval (transactions per minute, fraud alerts per day). Mean = variance = λ.</td></tr>
+          <tr><td>Exponential</td><td>Time between events (time to next purchase).</td></tr>
+          <tr><td>Log-normal / power law</td><td>Spend, income, city sizes, app downloads: long right tails.</td></tr>
+        </table>
+      </section>
+
+      <section id="infer" data-nav="2 · Inference" data-search>
+        <div class="section-head"><div><span class="section-no">02 / INFERENCE</span><h2>From sample to population</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Standard error of a mean = s ÷ √n &nbsp;·&nbsp; of a proportion = √(p(1−p) ÷ n) &nbsp;·&nbsp; 95% CI = estimate ± 1.96 × SE</div>
+        <div class="grid">
+          <div class="card"><h3>Central Limit Theorem</h3><p>Whatever the shape of the data, the average of a large enough sample is approximately normal, centred on the true mean, with spread s/√n. This is why we can run z- and t-tests on skewed spend data with big samples.</p></div>
+          <div class="card"><h3>Confidence interval</h3><p>Card data: mean ₹4,000, SD ₹4,900, n = 616 → 95% CI ≈ ₹3,610 – ₹4,390. Meaning: if we repeated the sampling many times, 95% of such intervals would contain the true mean (not "95% chance the mean is in here").</p></div>
+          <div class="card"><h3>Margin of error</h3><p>A survey of 400 people at p = 50% has a margin of error of about ±4.9 points. Quadrupling n halves it.</p></div>
+        </div>
+        <h3>Hypothesis testing</h3>
+        <div class="formula-list card">
+          <div class="formula-row"><b>H₀ / H₁</b><span>Null: no difference. Alternative: there is one (two-sided unless you have a strong reason).</span></div>
+          <div class="formula-row"><b>p-value</b><span>If H₀ were true, the probability of seeing a result at least this extreme. Not the probability H₀ is true, and not the size of the effect.</span></div>
+          <div class="formula-row"><b>α (significance)</b><span>The false-positive rate you accept, usually 5%. Reject H₀ if p &lt; α.</span></div>
+          <div class="formula-row"><b>Type I / II</b><span>Type I = false positive (ship a dud). Type II = false negative (miss a winner). Power = 1 − P(Type II), usually 80%.</span></div>
+          <div class="formula-row"><b>Practical vs statistical</b><span>With millions of users, a 0.01% lift can be "significant" and worthless. Always ask whether the effect is big enough to matter.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Question</th><th>Test</th></tr>
+          <tr><td>Two conversion rates</td><td>Two-proportion z-test (or chi-square)</td></tr>
+          <tr><td>Two means (spend per user)</td><td>Welch's t-test (doesn't assume equal variances)</td></tr>
+          <tr><td>Same users before/after</td><td>Paired t-test</td></tr>
+          <tr><td>3+ groups</td><td>ANOVA, then pairwise tests with correction</td></tr>
+          <tr><td>Categorical association / observed vs expected counts</td><td>Chi-square</td></tr>
+          <tr><td>Very skewed data, small n</td><td>Mann–Whitney U, or bootstrap the difference</td></tr>
+        </table>
+      </section>
+
+      <section id="ab" data-nav="3 · A/B test workflow" data-search>
+        <div class="section-head"><div><span class="section-no">03 / EXPERIMENTS</span><h2>The A/B test workflow, end to end</h2></div><span class="tag hot">most asked</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Hypothesis</b><span>"Showing why we need PAN on the KYC screen will raise onboarding completion, because users drop when asked for sensitive data without context."</span></div>
+          <div class="formula-row"><b>2. Metrics</b><span><b>Primary</b> (one: onboarding completion rate). <b>Secondary</b> (time to complete, day-7 activation). <b>Guardrails</b> (fraud rate, support tickets, app crashes) that must not get worse.</span></div>
+          <div class="formula-row"><b>3. Unit + population</b><span>Randomise by user (not session) so one person always sees the same variant. Decide who is eligible (new users on Android?).</span></div>
+          <div class="formula-row"><b>4. Size it</b><span>Baseline rate, minimum detectable effect (MDE), α, power → users per arm → duration (section 4). Run at least one full week to cover weekday cycles.</span></div>
+          <div class="formula-row"><b>5. Run + check</b><span>Sample-ratio check on day 1–2, monitor guardrails, don't stop early on a good-looking p-value.</span></div>
+          <div class="formula-row"><b>6. Analyse</b><span>Effect size, confidence interval, p-value; segments only if planned in advance.</span></div>
+          <div class="formula-row"><b>7. Decide</b><span>Ship, iterate or kill, weighing effect size, guardrails, cost and risk. Write it up.</span></div>
+        </div>
+        <h3>Reading a result (worked)</h3>
+        <p>Control: 1,000 of 10,000 users converted (10.0%). Treatment: 1,100 of 10,000 (11.0%). Pooled two-proportion z = 2.31, p = 0.021. 95% CI for the lift: +0.15 to +1.85 percentage points. <b>Read it as:</b> a 1-point (10% relative) lift, statistically significant at 5%, but the interval is wide — the true lift could be as small as 0.15 points. If shipping is cheap and guardrails are fine, ship; if it's costly, consider a longer test.</p>
+      </section>
+
+      <section id="size" data-nav="4 · Sample size + power" data-search>
+        <div class="section-head"><div><span class="section-no">04 / SIZING</span><h2>How many users do you need?</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Rule of thumb (α = 5%, power = 80%): n per arm ≈ 16 × p(1 − p) ÷ δ² &nbsp;(δ = absolute MDE)<br>For means: n per arm ≈ 16 × σ² ÷ δ²</div>
+        <table class="compare">
+          <tr><th>Baseline</th><th>Want to detect</th><th>Users per arm (exact)</th></tr>
+          <tr><td>10% conversion</td><td>10% → 11% (+1 pt, 10% relative)</td><td>≈ 14,750 (rule of thumb: 14,400)</td></tr>
+          <tr><td>10% conversion</td><td>10% → 12% (+2 pts)</td><td>≈ 3,840 (halving δ quadruples n)</td></tr>
+          <tr><td>Spend per user ₹120, SD ₹400</td><td>+₹6 (5% lift)</td><td>≈ 69,800 — revenue metrics are noisy</td></tr>
+        </table>
+        <div class="grid">
+          <div class="card"><h3>Underpowered tests</h3><p>With only 5,000 users per arm, the chance of detecting a true 10% → 11% lift is about 37%. Most "no result" tests at startups are simply too small.</p></div>
+          <div class="card"><h3>Duration</h3><p>Days = (n per arm × number of arms) ÷ eligible daily users. Round up to whole weeks; cap at ~4–6 weeks (cookie churn, seasonality).</p></div>
+          <div class="card"><h3>Choosing the MDE</h3><p>The smallest lift that would change the decision (pays for the engineering, beats the opportunity cost). Not "whatever we can detect".</p></div>
+        </div>
+      </section>
+
+      <section id="traps" data-nav="5 · Ten traps" data-search>
+        <div class="section-head"><div><span class="section-no">05 / TRAPS</span><h2>Ten ways experiments lie</h2></div><span class="tag hot">interview gold</span></div>
+        <table class="compare">
+          <tr><th>Trap</th><th>What happens</th><th>Fix</th></tr>
+          <tr><td>Peeking</td><td>Checking daily and stopping when p &lt; 0.05 inflates false positives far above 5%</td><td>Fix duration in advance, or use sequential tests (section 6)</td></tr>
+          <tr><td>Sample-ratio mismatch (SRM)</td><td>A 50/50 split comes out 10,200 vs 9,800 (chi-square p ≈ 0.005): assignment or logging is broken</td><td>Check SRM first; don't trust any result until fixed</td></tr>
+          <tr><td>Many metrics</td><td>Test 20 metrics at 5%: 64% chance at least one is "significant" by luck</td><td>One primary metric; Bonferroni/FDR for the rest</td></tr>
+          <tr><td>Post-hoc segments</td><td>"It worked for iOS users in Pune on Tuesdays"</td><td>Pre-register segments; treat others as hypotheses for a new test</td></tr>
+          <tr><td>Novelty / primacy</td><td>New UI gets clicks because it's new (or loses because people resist change)</td><td>Run longer; look at the effect over time and on new users only</td></tr>
+          <tr><td>Network effects / interference</td><td>Treated users affect control (referrals, marketplaces, UPI payments between friends)</td><td>Cluster randomisation (by city/college), switchback tests</td></tr>
+          <tr><td>Wrong unit</td><td>Randomise by session, analyse by user: one user sees both</td><td>Randomisation unit = analysis unit</td></tr>
+          <tr><td>Simpson's paradox</td><td>Treatment wins in every segment but loses overall, because the mix differs</td><td>Check balance; stratify</td></tr>
+          <tr><td>Survivorship / selection</td><td>Analysing only users who completed onboarding</td><td>Analyse everyone assigned (intention-to-treat)</td></tr>
+          <tr><td>Short-term metric, long-term harm</td><td>Aggressive card offers lift sign-ups, then defaults rise in 6 months</td><td>Guardrails + long-term holdout group</td></tr>
+        </table>
+      </section>
+
+      <section id="modern" data-nav="6 · Modern techniques" data-search>
+        <div class="section-head"><div><span class="section-no">06 / ADVANCED</span><h2>Techniques big tech uses (know the idea)</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>CUPED</h3><p>Use each user's pre-experiment value of the metric as a covariate to remove noise. If the correlation with the pre-period is 0.5, variance falls by 25% (1 − ρ²) — like getting a third more users for free.</p></div>
+          <div class="card"><h3>Sequential testing</h3><p>Methods that let you look at results continuously while keeping the false-positive rate honest ("always-valid" p-values, alpha-spending). Common in modern experimentation platforms.</p></div>
+          <div class="card"><h3>Bayesian A/B</h3><p>Reports "probability treatment is better" and expected loss instead of a p-value; easier for business audiences, same data. Priors matter for small samples.</p></div>
+          <div class="card"><h3>Multi-armed bandits</h3><p>Shift traffic toward the winning variant as you learn. Good for short-lived choices (headlines, offers); worse for learning precise effects.</p></div>
+          <div class="card"><h3>Quasi-experiments</h3><p>When you can't randomise: difference-in-differences (compare change in a treated city vs a control city), regression discontinuity (users just above vs below a credit-score cut-off), synthetic control.</p></div>
+          <div class="card"><h3>Heterogeneous effects</h3><p>Uplift models estimate who responds to a treatment (who needs a retention offer), not just whether it works on average.</p></div>
+        </div>
+      </section>
+
+      <section id="regression" data-nav="7 · Regression + Bayes" data-search>
+        <div class="section-head"><div><span class="section-no">07 / MODELS</span><h2>Regression and Bayes in two minutes each</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Linear regression</b><span>y = β₀ + β₁x₁ + … + ε. β₁ = change in y for one unit of x₁, holding the others fixed. R² = share of variance explained (not proof the model is right).</span></div>
+          <div class="formula-row"><b>Logistic regression</b><span>Models the log-odds of a yes/no outcome (default, churn). exp(β) = odds ratio. The workhorse of credit scorecards.</span></div>
+          <div class="formula-row"><b>Assumptions to mention</b><span>Linearity, independent errors, constant variance, no strong multicollinearity; check residual plots.</span></div>
+          <div class="formula-row"><b>Omitted-variable bias</b><span>Leaving out a driver that correlates with x biases β. Why observational "users who used feature X spend more" ≠ "feature X causes spend".</span></div>
+          <div class="formula-row"><b>Bayes' rule</b><span>P(A|B) = P(B|A) P(A) ÷ P(B). Fraud example: 1% of transactions are fraud; the model flags 90% of fraud and 5% of genuine ones. P(fraud | flagged) = 0.9 × 0.01 ÷ (0.9 × 0.01 + 0.05 × 0.99) ≈ <b>15%</b>. Base rates dominate.</span></div>
+        </div>
+      </section>
+
+      <section id="bank" data-nav="8 · Interview questions" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PRACTICE</span><h2>Fifteen interview questions</h2></div><span class="tag pyq">answer, then open</span></div>
+        <details><summary>1 · Explain a p-value to a non-technical manager.</summary><p>"If the change really did nothing, how surprising would this result be? A p-value of 0.02 means we'd see a difference this big only 2% of the time by luck. It doesn't tell us how big or valuable the effect is."</p></details>
+        <details><summary>2 · Your test shows +3% conversion with p = 0.04 on day 3 of a planned 14-day test. Ship?</summary><p>No. Early stopping on a good p-value inflates false positives; early days are also skewed by novelty and weekday mix. Finish the planned duration (or use a sequential method designed for early looks), check guardrails and SRM.</p></details>
+        <details><summary>3 · Treatment has 52% of users instead of 50%. Does it matter?</summary><p>Depends on n. With 20,000 users, 10,400 vs 9,600 is a severe SRM (p &lt; 0.001): a bug in assignment, redirects, or logging (e.g. treatment page crashes for some users who then aren't logged). Investigate before reading any metric.</p></details>
+        <details><summary>4 · How would you test a new rewards offer for a credit card?</summary><p>Randomise eligible cardholders; primary metric: spend per active card over 8 weeks; secondary: activation, transactions; guardrails: rewards cost per ₹ spend, delinquency, complaints. Hold out a long-term control to measure whether spend stays after the offer ends. Size on spend variance (noisy), consider CUPED with pre-period spend.</p></details>
+        <details><summary>5 · You can't randomise (a regulation applies to all users on one date). How do you measure the impact?</summary><p>Difference-in-differences against a comparable unaffected group, interrupted time series with seasonality controls, or synthetic control; state the assumptions (parallel trends).</p></details>
+        <details><summary>6 · Test wins on mobile and desktop separately but loses overall. How?</summary><p>Simpson's paradox: treatment got a higher share of the lower-converting segment (or the segments' sizes changed). Check randomisation balance by segment.</p></details>
+        <details><summary>7 · A metric moved 2% after a launch. Is it real?</summary><p>Compare with historical week-to-week variation (what's normal noise?), check for seasonality, data issues, concurrent launches; ideally a holdout. Then decompose (P2 root-cause module).</p></details>
+        <details><summary>8 · What's the difference between statistical and practical significance?</summary><p>Statistical: unlikely to be chance. Practical: big enough to matter for the business. Large samples make tiny effects significant.</p></details>
+        <details><summary>9 · How many users for 20% → 22% conversion?</summary><p>16 × 0.2 × 0.8 ÷ 0.02² = 6,400 per arm (rule of thumb).</p></details>
+        <details><summary>10 · Mean or median for average order value? Why?</summary><p>Report both: median for the typical customer, mean for revenue (it's what multiplies by orders). Skewed data makes the mean sensitive to a few whales; for tests on means, consider capping (winsorising) extreme values.</p></details>
+        <details><summary>11 · What is power and why do small companies struggle with it?</summary><p>The chance of detecting a real effect of a given size. Small user bases mean either long tests or only being able to detect big effects; use bigger changes, CUPED, or more sensitive metrics.</p></details>
+        <details><summary>12 · Why randomise by user rather than page view?</summary><p>So each user has one consistent experience and observations are independent; analysing per page view would overstate sample size and understate variance.</p></details>
+        <details><summary>13 · A fraud model flags 2% of transactions. Precision 30%, recall 80%. Explain.</summary><p>Of flagged transactions, 30% are truly fraud (70% are false alarms that annoy customers). Of all fraud, the model catches 80%. The trade-off is set by the threshold; business cost of each error decides it (M1 module).</p></details>
+        <details><summary>14 · Correlation between using the app's budgeting tool and lower delinquency. Should we push the tool to everyone?</summary><p>Not on that evidence: careful, organised people may both use the tool and repay well (selection). Run a randomised encouragement test (nudge a random half to try it) and compare delinquency.</p></details>
+        <details><summary>15 · Walk me through an A/B test you ran.</summary><p>Your CheQ story (S3 Story 1) in this order: hypothesis, primary metric and guardrails, sample size and duration, result with CI, decision, what you learned. Know every number.</p></details>
+      </section>
+
+      <section id="plan" data-nav="9 · Plan" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>Ten-day plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Days 1–2: sections 1–2; Khan Academy statistics (inference unit) for any gaps</label>
+          <label class="checkline"><input type="checkbox"> Days 3–4: sections 3–4; compute the three sample sizes in the table yourself in Python</label>
+          <label class="checkline"><input type="checkbox"> Day 5: section 5 — explain each trap with an example from cards, UPI or onboarding</label>
+          <label class="checkline"><input type="checkbox"> Day 6: section 6 — one-paragraph explanation of CUPED and sequential testing</label>
+          <label class="checkline"><input type="checkbox"> Day 7: section 7; run a logistic regression on a Kaggle credit-default dataset</label>
+          <label class="checkline"><input type="checkbox"> Days 8–9: the 15 questions aloud; record yourself on 3</label>
+          <label class="checkline"><input type="checkbox"> Day 10: write your CheQ A/B test as a one-page experiment report (hypothesis → decision)</label>
+        </div>
+        <div class="memory"><b>Further reading (free):</b> "Trustworthy Online Controlled Experiments" (Kohavi, Tang, Xu) is the standard book; Evan Miller's online sample-size calculator; your folder's Amplitude product-analytics playbook (20_SOURCES/PRODUCT_CONSULTING/Product).</div>
+      </section>

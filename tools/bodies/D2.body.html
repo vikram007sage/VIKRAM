@@ -1,0 +1,228 @@
+<!--META D2 | Python + pandas for analysts | D2 / PANDAS | Data + AI track · Module D2 | Python +<br>pandas for analysts | Analytics take-homes, decision-science interviews and most data roles expect you to load messy data, clean it, aggregate it and explain what you found, usually in pandas. This module covers the Python you need, pandas 3 (released January 2026) from loading to cohorts, and the patterns interviewers ask for, on the same credit-card data as D1. Every snippet was run on pandas 3.0. | Tested on pandas 3.0; SQL ↔ pandas map; Take-home playbook -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What "Python for analysts" means in interviews</h2></div></div>
+        <p class="lede">Three formats: (1) a live coding round on basic Python (loops, dicts, functions), (2) a live pandas round ("here's a CSV, find the top categories by month"), and (3) a take-home: a dataset and 2–5 days to send a notebook and a short deck. You need to be fluent, not clever.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Load, inspect, clean</strong><span class="muted">dtypes, NaN, duplicates, dates, text</span></div><span class="frequency">every task</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>groupby / agg / merge</strong><span class="muted">the pandas versions of GROUP BY and JOIN</span></div><span class="frequency">every task</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Time series + windows</strong><span class="muted">resample, shift, cumsum, rolling, cohorts</span></div><span class="frequency">most tasks</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Explaining</strong><span class="muted">one clear chart and three sentences per finding</span></div><span class="frequency">every take-home</span></div>
+        </div>
+        <div class="memory"><b>Setup:</b> Google Colab (nothing to install) or VS Code + Jupyter. Load the four D1 tables as CSVs (customers, cards, txns, payments) and type every snippet yourself.</div>
+      </section>
+
+      <section id="python" data-nav="1 · Python essentials" data-search>
+        <div class="section-head"><div><span class="section-no">01 / PYTHON</span><h2>The Python you actually need</h2></div></div>
+        <pre class="eq"># counting with a dict: most common category
+from collections import Counter
+cats = ["fuel", "travel", "fuel", "dining", "fuel"]
+Counter(cats).most_common(1)          # [('fuel', 3)]
+
+# comprehension + condition
+big = [a for a in [300, 12000, 800, 15000] if a &gt; 10000]   # [12000, 15000]
+
+# function with a default argument and an f-string
+def emi(principal, annual_rate, months=12):
+    r = annual_rate / 12
+    return principal * r * (1 + r) ** months / ((1 + r) ** months - 1)
+
+print(f"EMI on ₹1,00,000 at 14% for 12 months: ₹{emi(100000, 0.14):,.0f}")   # ₹8,979</pre>
+        <div class="grid">
+          <div class="card"><h3>Data structures</h3><p><b>list</b> (ordered, mutable), <b>tuple</b> (immutable), <b>dict</b> (key → value, fast lookup), <b>set</b> (unique items, fast membership). Most interview "Python" questions are solved with a dict or a set.</p></div>
+          <div class="card"><h3>Classic live questions</h3><p>Count word frequencies; find duplicates in a list; two-sum with a dict; reverse a string; merge two sorted lists; compute a moving average without pandas; parse a date string.</p></div>
+          <div class="card"><h3>Habits that score</h3><p>Name variables by meaning (<code>monthly_spend</code>, not <code>x</code>). Test on a tiny input first. Say the time complexity if asked (a dict lookup is O(1), a nested loop O(n²)).</p></div>
+        </div>
+      </section>
+
+      <section id="load" data-nav="2 · Load + inspect" data-search>
+        <div class="section-head"><div><span class="section-no">02 / FIRST LOOK</span><h2>Load and inspect before you touch anything</h2></div><span class="tag core">core</span></div>
+        <pre class="eq">import pandas as pd, numpy as np
+
+txns      = pd.read_csv("txns.csv", parse_dates=["txn_date"])
+cards     = pd.read_csv("cards.csv")
+customers = pd.read_csv("customers.csv")
+payments  = pd.read_csv("payments.csv", parse_dates=["due_date", "paid_date"])
+
+txns.shape              # (rows, columns)
+txns.dtypes             # check dates are datetime, text is str, numbers are numeric
+txns.head()
+txns.describe()         # count, mean, std, min, quartiles, max
+txns.isna().sum()       # missing values per column
+txns["channel"].value_counts(normalize=True)</pre>
+        <div class="formula-list card">
+          <div class="formula-row"><b>pandas 3 (Jan 2026)</b><span>Text columns now load as a dedicated <code>str</code> dtype instead of <code>object</code>; Copy-on-Write is the only mode, so anything you slice behaves like a copy (section 7).</span></div>
+          <div class="formula-row"><b>Five questions</b><span>How many rows? What does one row represent (the grain)? Which columns have NaN, and why? Any duplicate IDs? Do dates and amounts look sane (negative amounts, future dates)?</span></div>
+          <div class="formula-row"><b>Write it down</b><span>In a take-home, the first markdown cell lists these checks and what you found. Reviewers look for it.</span></div>
+        </div>
+      </section>
+
+      <section id="core" data-nav="3 · Filter, group, merge" data-search>
+        <div class="section-head"><div><span class="section-no">03 / CORE</span><h2>Filter, group and merge</h2></div><span class="tag hot">most tested</span></div>
+        <pre class="eq"># filter: always wrap each condition in brackets; use &amp; | ~, not and/or
+big = txns[(txns["amount"] &gt; 10000) &amp; (txns["channel"] == "UPI")]
+big = txns.query("amount &gt; 10000 and channel == 'UPI'")     # same thing
+
+# group + named aggregation (GROUP BY)
+cat = (txns.groupby("merchant_category")
+           .agg(n=("txn_id", "count"), spend=("amount", "sum"), avg_ticket=("amount", "mean"))
+           .sort_values("spend", ascending=False))
+
+# merge (JOIN): say how= explicitly and check the row count after
+df = (txns.merge(cards[["card_id", "customer_id", "product"]], on="card_id", how="left")
+          .merge(customers[["customer_id", "city", "segment"]], on="customer_id", how="left"))
+assert len(df) == len(txns)          # a left join must not add rows
+
+top5 = df.groupby("customer_id", as_index=False)["amount"].sum().nlargest(5, "amount")</pre>
+        <table class="compare">
+          <tr><th>SQL</th><th>pandas</th></tr>
+          <tr><td>WHERE</td><td><code>df[cond]</code>, <code>df.query()</code></td></tr>
+          <tr><td>GROUP BY + aggregates</td><td><code>groupby().agg(name=(col, func))</code></td></tr>
+          <tr><td>HAVING</td><td>filter the aggregated frame</td></tr>
+          <tr><td>JOIN</td><td><code>merge(on=, how=)</code> — <code>validate="many_to_one"</code> catches fan-out</td></tr>
+          <tr><td>ORDER BY / LIMIT</td><td><code>sort_values()</code>, <code>head()</code>, <code>nlargest()</code></td></tr>
+          <tr><td>CASE WHEN</td><td><code>np.where()</code>, <code>np.select()</code>, <code>pd.cut()</code></td></tr>
+          <tr><td>window functions</td><td><code>groupby().transform()</code>, <code>.rank()</code>, <code>.shift()</code>, <code>.cumsum()</code>, <code>.rolling()</code></td></tr>
+          <tr><td>UNION ALL</td><td><code>pd.concat([a, b])</code></td></tr>
+        </table>
+      </section>
+
+      <section id="windows" data-nav="4 · Windows + time" data-search>
+        <div class="section-head"><div><span class="section-no">04 / TIME</span><h2>Window-style operations and time series</h2></div></div>
+        <pre class="eq"># monthly spend and month-over-month growth
+monthly = txns.set_index("txn_date").resample("MS")["amount"].sum()
+monthly.pct_change().mul(100).round(1)
+
+# customer total on every row, then rank within city (like SUM() OVER, DENSE_RANK)
+df["cust_spend"]   = df.groupby("customer_id")["amount"].transform("sum")
+df["rank_in_city"] = df.groupby("city")["cust_spend"].rank(method="dense", ascending=False)
+
+# running total and gap between transactions per card (like LAG)
+txns = txns.sort_values(["card_id", "txn_date", "txn_id"])
+txns["running_total"]   = txns.groupby("card_id")["amount"].cumsum()
+txns["prev_date"]       = txns.groupby("card_id")["txn_date"].shift(1)
+txns["days_since_prev"] = (txns["txn_date"] - txns["prev_date"]).dt.days
+
+# 7-day rolling average of daily spend
+daily = txns.set_index("txn_date")["amount"].resample("D").sum()
+daily.rolling(7).mean()</pre>
+        <div class="memory"><b>transform vs agg:</b> <code>agg</code> returns one row per group; <code>transform</code> returns a value for every original row (same length as the input) — that is what you need to add a group total or rank back onto the data.</div>
+      </section>
+
+      <section id="reshape" data-nav="5 · Reshape" data-search>
+        <div class="section-head"><div><span class="section-no">05 / RESHAPE</span><h2>Pivot, crosstab, melt, bins</h2></div></div>
+        <pre class="eq"># channel × category spend (wide)
+pv = df.pivot_table(index="channel", columns="merchant_category",
+                    values="amount", aggfunc="sum", fill_value=0)
+
+# share of each channel within each segment (rows sum to 1)
+pd.crosstab(df["segment"], df["channel"], normalize="index")
+
+# wide → long (for plotting or loading into a database)
+long = pv.reset_index().melt(id_vars="channel", var_name="category", value_name="spend")
+
+# conditional columns
+df["size"] = np.where(df["amount"] &gt;= 5000, "large", "small")
+df["band"] = pd.cut(df["amount"], bins=[0, 1000, 5000, 20000, np.inf],
+                    labels=["&lt;1k", "1-5k", "5-20k", "20k+"])</pre>
+      </section>
+
+      <section id="clean" data-nav="6 · Cleaning" data-search>
+        <div class="section-head"><div><span class="section-no">06 / CLEAN</span><h2>Cleaning messy data</h2></div><span class="tag core">take-homes live here</span></div>
+        <table class="compare">
+          <tr><th>Problem</th><th>Fix</th><th>Say in the write-up</th></tr>
+          <tr><td>Missing values</td><td><code>isna()</code>; drop, fill (<code>fillna</code>), or keep as a category</td><td>Why they're missing (unpaid bill ≠ bad data)</td></tr>
+          <tr><td>Duplicates</td><td><code>duplicated(subset=[...], keep=False)</code>, <code>drop_duplicates()</code></td><td>How many and which key you used</td></tr>
+          <tr><td>Text mess ("mumbai ", "Mumbai")</td><td><code>.str.strip().str.title()</code>, <code>.replace({...})</code></td><td>Mapping table you applied</td></tr>
+          <tr><td>Dates as text</td><td><code>pd.to_datetime(col, format="%Y-%m-%d", errors="coerce")</code></td><td>Rows that failed to parse</td></tr>
+          <tr><td>Numbers as text ("₹1,200")</td><td><code>.str.replace(r"[₹,]", "", regex=True).astype(float)</code></td><td>—</td></tr>
+          <tr><td>Outliers</td><td>Check with <code>quantile([.01, .99])</code>, box plot; cap or flag, don't silently delete</td><td>Your rule and how results change</td></tr>
+        </table>
+        <pre class="eq"># flags on the payments table
+payments["late"]     = payments["paid_date"].isna() | (payments["paid_date"] &gt; payments["due_date"])
+payments["revolver"] = payments["amount_paid"] &lt; payments["amount_due"]
+payments[["late", "revolver"]].mean()        # share of bills late / partly paid</pre>
+      </section>
+
+      <section id="cow" data-nav="7 · pandas 3 gotchas" data-search>
+        <div class="section-head"><div><span class="section-no">07 / GOTCHAS</span><h2>Copy-on-Write and other traps</h2></div></div>
+        <pre class="eq">sub = df[df["amount"] &gt; 10000]
+sub["flag"] = True          # pandas 3: changes only sub, never df (old versions warned)
+
+df.loc[df["amount"] &gt; 10000, "flag"] = True    # the right way to change df itself</pre>
+        <div class="grid">
+          <div class="card"><h3>Chained assignment</h3><p><code>df[df.x &gt; 0]["y"] = 1</code> never changes df in pandas 3. Use one <code>.loc[row_cond, col]</code>.</p></div>
+          <div class="card"><h3>Loops</h3><p>Avoid <code>iterrows()</code> and row-wise <code>apply</code> on big data; vectorised column maths is 10–100× faster. Use <code>np.where</code>/<code>np.select</code> for conditions.</p></div>
+          <div class="card"><h3>Integer + NaN</h3><p>A column of ints with a missing value becomes float. Use nullable <code>"Int64"</code> if it matters.</p></div>
+        </div>
+        <div class="memory"><b>Beyond pandas:</b> Polars (fast, lazy) and DuckDB (SQL directly on CSV/Parquet files) are increasingly used for large data. Knowing they exist and why is enough for most analyst interviews.</div>
+      </section>
+
+      <section id="patterns" data-nav="8 · Analyst patterns" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PATTERNS</span><h2>Three analyses you will be asked for</h2></div><span class="tag hot">must</span></div>
+        <details open><summary><b>Cohort retention table</b></summary><pre class="eq">act = df.assign(month=df["txn_date"].dt.to_period("M"))[["customer_id", "month"]].drop_duplicates()
+act["cohort"] = act.groupby("customer_id")["month"].transform("min")
+act["age"]    = (act["month"] - act["cohort"]).apply(lambda x: x.n)     # months since first spend
+ret     = act.pivot_table(index="cohort", columns="age", values="customer_id", aggfunc="nunique")
+ret_pct = ret.div(ret[0], axis=0).round(2)                              # each row starts at 1.0</pre></details>
+        <details><summary><b>RFM segmentation</b> (recency, frequency, monetary)</summary><pre class="eq">snap = txns["txn_date"].max() + pd.Timedelta(days=1)
+rfm = (df.groupby("customer_id")
+         .agg(recency=("txn_date", lambda s: (snap - s.max()).days),
+              frequency=("txn_id", "count"),
+              monetary=("amount", "sum")))
+rfm["R"] = pd.qcut(rfm["recency"], 4, labels=[4, 3, 2, 1]).astype(int)       # recent = high
+rfm["F"] = pd.qcut(rfm["frequency"].rank(method="first"), 4, labels=[1, 2, 3, 4]).astype(int)
+rfm["M"] = pd.qcut(rfm["monetary"], 4, labels=[1, 2, 3, 4]).astype(int)
+rfm["score"] = rfm[["R", "F", "M"]].sum(axis=1)                              # 3–12</pre><p>Use: target "high M, low R" (big spenders going quiet) with retention offers.</p></details>
+        <details><summary><b>Funnel conversion</b></summary><pre class="eq">funnel = pd.Series({"applied": 10000, "approved": 4200, "card_issued": 3900, "first_spend_30d": 2700})
+conv = (funnel / funnel.shift(1)).round(3)     # step conversion
+overall = funnel / funnel.iloc[0]              # vs top of funnel</pre></details>
+      </section>
+
+      <section id="viz" data-nav="9 · Charts that land" data-search>
+        <div class="section-head"><div><span class="section-no">09 / CHARTS</span><h2>One chart per finding</h2></div></div>
+        <pre class="eq">import matplotlib.pyplot as plt
+ax = monthly.plot(kind="line", marker="o", title="Card spend by month (₹)")
+ax.set_xlabel(""); ax.set_ylabel("₹"); plt.tight_layout(); plt.savefig("spend.png", dpi=150)</pre>
+        <table class="compare">
+          <tr><th>Message</th><th>Chart</th></tr>
+          <tr><td>Change over time</td><td>Line</td></tr>
+          <tr><td>Compare categories</td><td>Horizontal bar, sorted</td></tr>
+          <tr><td>Part of a whole</td><td>Stacked bar (avoid pies with &gt;3 slices)</td></tr>
+          <tr><td>Distribution</td><td>Histogram or box plot</td></tr>
+          <tr><td>Relationship</td><td>Scatter</td></tr>
+          <tr><td>Cohorts</td><td>Heatmap of the retention table</td></tr>
+        </table>
+        <div class="memory"><b>Title = the finding:</b> "UPI share of spend doubled in Delhi" beats "UPI share by city". Label axes with units, remove clutter, highlight the one bar that matters.</div>
+      </section>
+
+      <section id="takehome" data-nav="10 · Take-home playbook" data-search>
+        <div class="section-head"><div><span class="section-no">10 / TAKE-HOME</span><h2>How to win a take-home assignment</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Restate the ask</b><span>One markdown cell: business question, what decision it informs, assumptions.</span></div>
+          <div class="formula-row"><b>2. Data checks</b><span>Grain, rows, NaN, duplicates, date range, oddities — and what you did about each.</span></div>
+          <div class="formula-row"><b>3. Answer first</b><span>An executive summary of 3–5 bullets at the top, each with a number.</span></div>
+          <div class="formula-row"><b>4. Analysis</b><span>One section per question: code, one chart, three sentences (what, so what, now what).</span></div>
+          <div class="formula-row"><b>5. Recommend</b><span>Specific actions, the expected impact, and how you'd measure it (D3: A/B test).</span></div>
+          <div class="formula-row"><b>6. Limits + next steps</b><span>What the data can't tell you and what you'd collect next.</span></div>
+          <div class="formula-row"><b>7. Hygiene</b><span>Restart kernel and run all before sending; no hard-coded paths; a short README; 5-slide deck if asked.</span></div>
+        </div>
+        <div class="memory"><b>AI use:</b> many firms now allow AI help on take-homes but expect you to explain every line in the follow-up interview. Treat generated code as a draft you must check (joins, NaN, grain).</div>
+      </section>
+
+      <section id="bank" data-nav="11 · Practice set" data-search>
+        <div class="section-head"><div><span class="section-no">11 / PRACTICE</span><h2>Practice set</h2></div><span class="tag pyq">do in Colab</span></div>
+        <div class="qa-grid">
+          <div><b>P1</b>Share of spend by channel, by month</div><div><b>P2</b>Top 3 categories per segment</div><div><b>P3</b>Average days between transactions per card</div>
+          <div><b>P4</b>Customers whose spend fell 50% Q1 → Q2</div><div><b>P5</b>Late-payment rate by credit-limit band</div><div><b>P6</b>Cohort retention heatmap</div>
+          <div><b>P7</b>RFM segments and their size</div><div><b>P8</b>Detect possible duplicate charges</div><div><b>P9</b>Utilisation (max bill ÷ limit) distribution</div>
+          <div><b>P10</b>Write a function that returns any customer's monthly summary</div><div><b>P11</b>Rewrite D1's Q1–Q10 in pandas</div><div><b>P12</b>A 1-page memo: "Where should the card team focus next quarter?"</div>
+        </div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Week 1: sections 1–6; Kaggle "Pandas" micro-course (free, ~4 hours)</label>
+          <label class="checkline"><input type="checkbox"> Week 1: P1–P5</label>
+          <label class="checkline"><input type="checkbox"> Week 2: sections 7–10; P6–P10</label>
+          <label class="checkline"><input type="checkbox"> Week 2: one full take-home on a public dataset (Kaggle credit-card default or a UPI/payments dataset) with a 5-slide summary</label>
+          <label class="checkline"><input type="checkbox"> Put the best take-home on GitHub with a README (S4 portfolio)</label>
+        </div>
+        <div class="memory"><b>Your folder:</b> 20_SOURCES/AI_ML has Andrew Ng's lab notebooks (numpy, pandas, matplotlib in context) and your ML/DL master notes; D3 (statistics + A/B tests) builds on this module.</div>
+      </section>

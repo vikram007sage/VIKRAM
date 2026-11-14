@@ -1,0 +1,139 @@
+<!--META S5 | Business + unit economics | S5 / BUSINESS | Shared case spine · Module S5 | Business +<br>unit economics | Consulting, product, VC and strategy interviews all ask "does this business make money, and will it keep making money?". This module covers how the main business models earn, unit economics from per-order P&amp;Ls to LTV/CAC and SaaS metrics, moats, and live Indian examples (quick commerce, PhonePe, card issuers) with their latest numbers. | 8 business models; Per-order P&amp;L maths; 2026 Indian examples -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Why this module exists</h2></div></div>
+        <p class="lede">Frameworks tell you where to look; unit economics tell you whether a business works. If you can draw the P&amp;L of one order, one customer and one store, you can answer almost any "should they expand / raise prices / enter this market?" question.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Per-unit P&amp;L</strong><span class="muted">order, customer, store, loan, card</span></div><span class="frequency">every case</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>LTV, CAC, payback</strong><span class="muted">is growth worth paying for?</span></div><span class="frequency">product, VC, consulting</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Business model fluency</strong><span class="muted">GMV vs revenue, take rate, contribution margins</span></div><span class="frequency">startups, PE/VC</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Moats</strong><span class="muted">why profits last (or don't)</span></div><span class="frequency">strategy + investing</span></div>
+        </div>
+      </section>
+
+      <section id="vocab" data-nav="1 · Vocabulary" data-search>
+        <div class="section-head"><div><span class="section-no">01 / WORDS</span><h2>The words that trip people up</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Term</th><th>Meaning</th><th>Example</th></tr>
+          <tr><td>GMV / GOV</td><td>Gross value of goods sold through the platform, before discounts and returns</td><td>₹600 basket on a q-commerce app</td></tr>
+          <tr><td>NOV</td><td>Net order value: GOV minus discounts/cancellations (Eternal reports Blinkit on NOV)</td><td>—</td></tr>
+          <tr><td>Take rate</td><td>Platform revenue ÷ GMV</td><td>Food delivery commission + fees ≈ 20–25% of order value</td></tr>
+          <tr><td>Contribution margin</td><td>Revenue minus all variable costs of one more unit</td><td>Order revenue − delivery − packaging − payment fees − discounts</td></tr>
+          <tr><td>C1 / C2 / C3</td><td>Startup shorthand: C1 after direct costs, C2 after delivery/fulfilment, C3 after marketing</td><td>—</td></tr>
+          <tr><td>Adjusted EBITDA</td><td>EBITDA excluding stock-based compensation and one-offs (and usually lease costs treated as rent)</td><td>How Eternal and Swiggy report segment profit</td></tr>
+          <tr><td>Burn / runway</td><td>Monthly cash loss / months until cash runs out</td><td>₹300 cr cash ÷ ₹25 cr burn = 12 months</td></tr>
+          <tr><td>Operating leverage</td><td>High fixed, low variable costs: profit grows faster than revenue once fixed costs are covered</td><td>Dark stores, software, networks</td></tr>
+        </table>
+      </section>
+
+      <section id="models" data-nav="2 · Eight business models" data-search>
+        <div class="section-head"><div><span class="section-no">02 / MODELS</span><h2>How eight business models make money</h2></div></div>
+        <table class="compare">
+          <tr><th>Model</th><th>Revenue</th><th>Key metrics</th><th>Indian examples</th></tr>
+          <tr><td>Marketplace</td><td>Commission/take rate + ads + fees</td><td>GMV, take rate, liquidity (match rate), repeat</td><td>Swiggy, Zomato, Meesho, Urban Company</td></tr>
+          <tr><td>Inventory e-commerce / q-commerce</td><td>Retail margin + ads + delivery fees</td><td>AOV, orders/store/day, contribution/order, inventory turns</td><td>Blinkit, Zepto, Instamart (moving to inventory-led)</td></tr>
+          <tr><td>Subscription / SaaS</td><td>Recurring fees</td><td>ARR, net revenue retention, churn, CAC payback</td><td>Freshworks, Zoho, JioHotstar</td></tr>
+          <tr><td>Payments</td><td>MDR share, float, value-added services</td><td>TPV, take rate (often &lt;0.2%), merchant count</td><td>Razorpay, PhonePe, Pine Labs</td></tr>
+          <tr><td>Lending / cards</td><td>Interest (NIM) + fees</td><td>Book size, NIM, credit cost, ROA (S2, B1)</td><td>Bajaj Finance, SBI Card, KreditBee</td></tr>
+          <tr><td>Ads / attention</td><td>CPM / CPC</td><td>DAU, time spent, ad load, ARPU</td><td>Google, Meta, ShareChat, retail-media on q-commerce</td></tr>
+          <tr><td>D2C brand</td><td>Product margin</td><td>Gross margin, CAC, repeat rate, contribution after marketing</td><td>boAt, Mamaearth (Honasa), Lenskart</td></tr>
+          <tr><td>Freemium / super-app</td><td>Free core, monetise adjacent products</td><td>Users, cross-sell conversion, revenue per user</td><td>PhonePe: free UPI, earns from lending, insurance, broking, merchant devices</td></tr>
+        </table>
+        <div class="memory"><b>Rule:</b> before any calculation, ask "Is GMV our revenue?" For a marketplace it isn't — only the take rate is. For inventory-led q-commerce, the whole basket is revenue but so is the cost of goods.</div>
+      </section>
+
+      <section id="order" data-nav="3 · Per-order P&amp;L" data-search>
+        <div class="section-head"><div><span class="section-no">03 / PER ORDER</span><h2>The P&amp;L of one quick-commerce order</h2></div><span class="tag hot">practise this</span></div>
+        <p>Illustrative numbers for an inventory-led q-commerce order (your Open IIT case territory):</p>
+        <table class="compare">
+          <tr><th>Line</th><th>₹ per order</th><th>Note</th></tr>
+          <tr><td>Average order value</td><td>600</td><td>Basket value paid by customer (before discounts)</td></tr>
+          <tr><td>Gross retail margin (~18%)</td><td>+108</td><td>Buy at 492, sell at 600</td></tr>
+          <tr><td>Ad income from brands (~3%)</td><td>+18</td><td>Sponsored listings: the fastest-growing profit pool</td></tr>
+          <tr><td>Customer fees (delivery, handling, platform)</td><td>+15</td><td>—</td></tr>
+          <tr><td><b>Revenue per order</b></td><td><b>141</b></td><td>≈ 23.5% of AOV</td></tr>
+          <tr><td>Last-mile delivery</td><td>−45</td><td>Rider pay per order; falls with order density</td></tr>
+          <tr><td>Dark-store picking + packing</td><td>−20</td><td>Labour + packaging</td></tr>
+          <tr><td>Discounts</td><td>−30</td><td>Competition-driven</td></tr>
+          <tr><td>Payment gateway + wastage</td><td>−12</td><td>Fresh produce spoils</td></tr>
+          <tr><td><b>Contribution per order</b></td><td><b>+34</b></td><td>≈ 5.7% of AOV</td></tr>
+          <tr><td>Store rent + fixed staff per order</td><td>−25</td><td>₹6 lakh/month store at 800 orders/day</td></tr>
+          <tr><td><b>Store-level EBITDA</b></td><td><b>+9</b></td><td>Before corporate costs, tech, marketing</td></tr>
+        </table>
+        <div class="eq">Store breakeven orders/day = fixed cost per day ÷ contribution per order = (₹6,00,000 ÷ 30) ÷ ₹34 ≈ 590 orders/day</div>
+        <div class="grid">
+          <div class="card"><h3>Levers</h3><p>AOV up (bigger baskets, electronics, pharmacy), ad income up, discounts down, delivery cost down via density (more orders per rider-hour), wastage down via better forecasting.</p></div>
+          <div class="card"><h3>Why new stores lose money</h3><p>A new dark store runs at 200–300 orders/day for months: fixed costs dominate. So a chain opening stores fast shows worse margins even if mature stores are profitable.</p></div>
+          <div class="card"><h3>Reality check (Q2 FY27)</h3><p>Blinkit reported positive adjusted EBITDA of ₹184 crore in July–September 2026; Swiggy's Instamart lost ₹895 crore with contribution margin at −1.0% of GOV after briefly touching break-even in Q1. Zepto's IPO was deferred amid valuation concerns. Scale and density decide who wins.</p></div>
+        </div>
+      </section>
+
+      <section id="ltv" data-nav="4 · LTV, CAC, payback" data-search>
+        <div class="section-head"><div><span class="section-no">04 / CUSTOMER</span><h2>Customer economics</h2></div><span class="tag core">core</span></div>
+        <div class="eq">LTV = Average monthly contribution per customer × Gross-margin-adjusted lifetime = m ÷ churn (monthly)<br>Discounted: LTV = m × (1 + d) ÷ (d + churn) &nbsp;·&nbsp; CAC = Sales + marketing spend ÷ new customers &nbsp;·&nbsp; Payback = CAC ÷ m</div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Healthy</b><span>LTV ÷ CAC ≥ 3 and CAC payback under 12–18 months (consumer) or 12–24 months (B2B SaaS).</span></div>
+          <div class="formula-row"><b>Use contribution, not revenue</b><span>LTV on revenue makes every business look great. A ₹600 order earning ₹34 contribution is a ₹34 customer-month, not ₹600.</span></div>
+          <div class="formula-row"><b>Blended vs paid CAC</b><span>Blended includes free/organic sign-ups and flatters the number; ask for paid-channel CAC.</span></div>
+          <div class="formula-row"><b>Cohorts beat averages</b><span>Track each month's sign-ups: retention curves that flatten (some users stay for years) are worth far more than ones that decay to zero.</span></div>
+        </div>
+        <details><summary>Drill: subscription app, ₹199/month, 70% gross margin, 6% monthly churn, CAC ₹900.</summary><p>Contribution m = ₹139/month. Lifetime = 1/0.06 ≈ 16.7 months. LTV ≈ ₹2,320. LTV/CAC ≈ 2.6 (below 3). Payback = 900/139 ≈ 6.5 months (fine). Fix: reduce churn (annual plans, onboarding) rather than cut CAC; at 4% churn LTV ≈ ₹3,480 (LTV/CAC 3.9).</p></details>
+        <details><summary>Drill: card customer, CAC ₹3,000, contribution ₹2,400/year, 15% annual attrition, 12% discount rate.</summary><p>LTV ≈ 2,400 × 1.12 ÷ (0.12 + 0.15) ≈ ₹9,950. LTV/CAC ≈ 3.3. Payback ≈ 15 months. Sensitivity: if credit losses rise and contribution falls to ₹1,600, LTV/CAC ≈ 2.2.</p></details>
+      </section>
+
+      <section id="saas" data-nav="5 · SaaS + subscription" data-search>
+        <div class="section-head"><div><span class="section-no">05 / SAAS</span><h2>SaaS and subscription metrics</h2></div></div>
+        <table class="compare">
+          <tr><th>Metric</th><th>Formula</th><th>Good</th></tr>
+          <tr><td>ARR</td><td>MRR × 12</td><td>—</td></tr>
+          <tr><td>Net revenue retention (NRR)</td><td>(Start ARR + expansion − contraction − churn) ÷ start ARR, same cohort</td><td>&gt;110% B2B; &gt;120% best-in-class</td></tr>
+          <tr><td>Gross revenue retention</td><td>Same but excluding expansion</td><td>&gt;90%</td></tr>
+          <tr><td>Magic number</td><td>Net new ARR (quarter) ÷ prior-quarter S&amp;M spend</td><td>&gt;0.75</td></tr>
+          <tr><td>Burn multiple</td><td>Net burn ÷ net new ARR</td><td>&lt;1.5 good; &gt;3 worrying</td></tr>
+          <tr><td>Rule of 40</td><td>Revenue growth % + profit (EBITDA or FCF) margin %</td><td>≥40%</td></tr>
+        </table>
+        <div class="memory"><b>Why NRR matters most:</b> above 100% the business grows even if it signs no new customers. Investors pay far higher revenue multiples for it.</div>
+      </section>
+
+      <section id="moats" data-nav="6 · Moats" data-search>
+        <div class="section-head"><div><span class="section-no">06 / STRATEGY</span><h2>Why profits last: moats</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Network effects</h3><p>Each user makes the product better for others: UPI apps (more payees), marketplaces (more buyers ↔ sellers). Two-sided networks need both sides; start with the harder side.</p></div>
+          <div class="card"><h3>Scale economies</h3><p>Fixed costs spread over more units: dark-store density, card processing, cloud. Leader's cost per unit falls faster than challengers'.</p></div>
+          <div class="card"><h3>Switching costs</h3><p>Pain of leaving: bank salary accounts, enterprise software, card reward balances.</p></div>
+          <div class="card"><h3>Brand + trust</h3><p>Amex, HDFC Bank, Tata: customers pay more or choose by default.</p></div>
+          <div class="card"><h3>Proprietary data / tech</h3><p>Underwriting data, recommendation models; durable only if it compounds with use.</p></div>
+          <div class="card"><h3>Regulation / licences</h3><p>Banking licences, RuPay's exclusive UPI credit linkage (S2 §7) — moats granted by rules can also be removed by rules.</p></div>
+        </div>
+        <div class="memory"><b>Porter's five forces</b> (rivalry, new entrants, substitutes, buyer power, supplier power) explains industry profitability; <b>Hamilton Helmer's 7 Powers</b> (scale, network, counter-positioning, switching costs, branding, cornered resource, process) explains a firm's edge. Use one, not both, in a case.</div>
+      </section>
+
+      <section id="examples" data-nav="7 · Live Indian examples" data-search>
+        <div class="section-head"><div><span class="section-no">07 / EXAMPLES</span><h2>Business models you should be able to explain</h2></div></div>
+        <details open><summary><b>PhonePe: how does a free app make money?</b></summary><p>UPI payments earn almost nothing (zero MDR for most merchant payments until NPCI's limited MDR framework from October 2026). PhonePe holds roughly half of UPI volume and monetises the user base through merchant soundboxes and payment gateway, lending distribution, insurance, stockbroking (Share.Market) and ads. Its IPO received SEBI approval in January 2026 but was paused in March 2026 amid market volatility, with reported valuation targets falling from ~$15 billion to $9–10.5 billion — a reminder that public markets price profits, not users.</p></details>
+        <details><summary><b>Eternal (Zomato + Blinkit) vs Swiggy</b></summary><p>Both run food delivery (profitable, ~₹3–6 of adjusted EBITDA per ₹100 of orders) and quick commerce. Blinkit scaled faster with more dark stores (target 3,500+ by March 2027) and turned adjusted-EBITDA positive; Instamart is still loss-making. The lesson: in density businesses, the leader's unit economics improve with scale while followers subsidise growth.</p></details>
+        <details><summary><b>SBI Card: a pure-play card issuer</b></summary><p>Revenue from interest (revolvers), fees and interchange; costs are funding, credit losses, rewards and opex. FY26: NIM ~11%, gross credit cost ~7.7%, ROA ~3.2–3.6%. The business is very sensitive to credit cost and cost of funds (B1).</p></details>
+        <details><summary><b>Your own: KiFayti</b></summary><p>Sell a sensor test at under ₹100 vs a ₹2,000 lab test. Ask yourself the investor questions: who pays (farmer, FPO, government, agri-input company)? Cost per test at scale? Sales cost per customer in rural India? Repeat frequency? This is exactly how an interviewer will probe it (S3 Story 7).</p></details>
+      </section>
+
+      <section id="questions" data-nav="8 · Practice questions" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PRACTICE</span><h2>Practice questions</h2></div><span class="tag pyq">solve on paper</span></div>
+        <details><summary>A food-delivery app has AOV ₹450, take rate 22%, delivery cost ₹55, discounts ₹20, payment cost 2% of AOV. Contribution per order?</summary><p>Revenue 0.22 × 450 = ₹99. Costs 55 + 20 + 9 = ₹84. Contribution = ₹15 (3.3% of AOV). A ₹5 rise in delivery cost wipes out a third of it.</p></details>
+        <details><summary>A dark store costs ₹5 lakh/month fixed; contribution ₹30/order. Orders/day to break even?</summary><p>₹5,00,000 ÷ 30 days ≈ ₹16,700/day ÷ 30 ≈ 556 orders/day.</p></details>
+        <details><summary>A SaaS firm starts the year with ₹100 cr ARR from 200 customers; expansion ₹25 cr, downgrades ₹5 cr, churn ₹8 cr. NRR? GRR?</summary><p>NRR = (100 + 25 − 5 − 8) ÷ 100 = 112%. GRR = (100 − 5 − 8) ÷ 100 = 87% (below the 90% bar: churn needs attention).</p></details>
+        <details><summary>Should a D2C brand with 40% gross margin, ₹800 AOV, ₹600 CAC and 1.5 orders/customer/year over 3 years keep scaling paid ads?</summary><p>Lifetime orders 4.5 × ₹800 × 40% = ₹1,440 gross profit; minus fulfilment/returns (say ₹100/order = ₹450) → ₹990 contribution. LTV/CAC ≈ 1.65: no; fix repeat rate and AOV or move to cheaper channels (marketplaces, offline) first.</p></details>
+        <details><summary>Why do quick-commerce firms push electronics and pharmacy?</summary><p>Higher AOV spreads the fixed delivery cost; higher margin categories; differentiation. Risks: inventory cost, returns, regulation (pharmacy).</p></details>
+        <details><summary>GMV grew 40% but revenue grew 10%. What happened?</summary><p>Take rate fell: more discounts netted from revenue, mix shift to lower-commission categories, competitive cuts in commission, or more first-party sales recorded differently. Ask for the bridge.</p></details>
+      </section>
+
+      <section id="plan" data-nav="9 · Plan" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>Checklist</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Rebuild the per-order P&amp;L in section 3 from memory in Excel and run three what-ifs</label>
+          <label class="checkline"><input type="checkbox"> Do all six practice questions on paper, timed</label>
+          <label class="checkline"><input type="checkbox"> Read one Eternal and one Swiggy shareholder letter (quarterly) and note contribution and adjusted EBITDA per segment</label>
+          <label class="checkline"><input type="checkbox"> Write a 1-page business-model teardown of PhonePe or CRED</label>
+          <label class="checkline"><input type="checkbox"> Compute KiFayti's unit economics with honest assumptions</label>
+          <label class="checkline"><input type="checkbox"> Revisit your Open IIT Flipkart Minutes model: is the 13-month payback consistent with this module's maths?</label>
+        </div>
+        <div class="memory"><b>Next:</b> F1 (accounting and the three statements) explains how these unit economics show up in the income statement, balance sheet and cash flow; F2 values them.</div>
+      </section>

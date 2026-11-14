@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>D2 | Python + pandas for analysts — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">D2 / PANDAS</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#python">1 · Python essentials</a><a href="#load">2 · Load + inspect</a><a href="#core">3 · Filter, group, merge</a><a href="#windows">4 · Windows + time</a><a href="#reshape">5 · Reshape</a><a href="#clean">6 · Cleaning</a><a href="#cow">7 · pandas 3 gotchas</a><a href="#patterns">8 · Analyst patterns</a><a href="#viz">9 · Charts that land</a><a href="#takehome">10 · Take-home playbook</a><a href="#bank">11 · Practice set</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Data + AI track · Module D2</div><h1>Python +<br>pandas for analysts</h1><p>Analytics take-homes, decision-science interviews and most data roles expect you to load messy data, clean it, aggregate it and explain what you found, usually in pandas. This module covers the Python you need, pandas 3 (released January 2026) from loading to cohorts, and the patterns interviewers ask for, on the same credit-card data as D1. Every snippet was run on pandas 3.0.</p><div class="meta"><span class="pill"><span class=dot></span> Tested on pandas 3.0</span><span class="pill">SQL ↔ pandas map</span><span class="pill">Take-home playbook</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What "Python for analysts" means in interviews</h2></div></div>
+        <p class="lede">Three formats: (1) a live coding round on basic Python (loops, dicts, functions), (2) a live pandas round ("here's a CSV, find the top categories by month"), and (3) a take-home: a dataset and 2–5 days to send a notebook and a short deck. You need to be fluent, not clever.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Load, inspect, clean</strong><span class="muted">dtypes, NaN, duplicates, dates, text</span></div><span class="frequency">every task</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>groupby / agg / merge</strong><span class="muted">the pandas versions of GROUP BY and JOIN</span></div><span class="frequency">every task</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Time series + windows</strong><span class="muted">resample, shift, cumsum, rolling, cohorts</span></div><span class="frequency">most tasks</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Explaining</strong><span class="muted">one clear chart and three sentences per finding</span></div><span class="frequency">every take-home</span></div>
+        </div>
+        <div class="memory"><b>Setup:</b> Google Colab (nothing to install) or VS Code + Jupyter. Load the four D1 tables as CSVs (customers, cards, txns, payments) and type every snippet yourself.</div>
+      </section>
+
+      <section id="python" data-nav="1 · Python essentials" data-search>
+        <div class="section-head"><div><span class="section-no">01 / PYTHON</span><h2>The Python you actually need</h2></div></div>
+        <pre class="eq"># counting with a dict: most common category
+from collections import Counter
+cats = ["fuel", "travel", "fuel", "dining", "fuel"]
+Counter(cats).most_common(1)          # [('fuel', 3)]
+
+# comprehension + condition
+big = [a for a in [300, 12000, 800, 15000] if a &gt; 10000]   # [12000, 15000]
+
+# function with a default argument and an f-string
+def emi(principal, annual_rate, months=12):
+    r = annual_rate / 12
+    return principal * r * (1 + r) ** months / ((1 + r) ** months - 1)
+
+print(f"EMI on ₹1,00,000 at 14% for 12 months: ₹{emi(100000, 0.14):,.0f}")   # ₹8,979</pre>
+        <div class="grid">
+          <div class="card"><h3>Data structures</h3><p><b>list</b> (ordered, mutable), <b>tuple</b> (immutable), <b>dict</b> (key → value, fast lookup), <b>set</b> (unique items, fast membership). Most interview "Python" questions are solved with a dict or a set.</p></div>
+          <div class="card"><h3>Classic live questions</h3><p>Count word frequencies; find duplicates in a list; two-sum with a dict; reverse a string; merge two sorted lists; compute a moving average without pandas; parse a date string.</p></div>
+          <div class="card"><h3>Habits that score</h3><p>Name variables by meaning (<code>monthly_spend</code>, not <code>x</code>). Test on a tiny input first. Say the time complexity if asked (a dict lookup is O(1), a nested loop O(n²)).</p></div>
+        </div>
+      </section>
+
+      <section id="load" data-nav="2 · Load + inspect" data-search>
+        <div class="section-head"><div><span class="section-no">02 / FIRST LOOK</span><h2>Load and inspect before you touch anything</h2></div><span class="tag core">core</span></div>
+        <pre class="eq">import pandas as pd, numpy as np
+
+txns      = pd.read_csv("txns.csv", parse_dates=["txn_date"])
+cards     = pd.read_csv("cards.csv")
+customers = pd.read_csv("customers.csv")
+payments  = pd.read_csv("payments.csv", parse_dates=["due_date", "paid_date"])
+
+txns.shape              # (rows, columns)
+txns.dtypes             # check dates are datetime, text is str, numbers are numeric
+txns.head()
+txns.describe()         # count, mean, std, min, quartiles, max
+txns.isna().sum()       # missing values per column
+txns["channel"].value_counts(normalize=True)</pre>
+        <div class="formula-list card">
+          <div class="formula-row"><b>pandas 3 (Jan 2026)</b><span>Text columns now load as a dedicated <code>str</code> dtype instead of <code>object</code>; Copy-on-Write is the only mode, so anything you slice behaves like a copy (section 7).</span></div>
+          <div class="formula-row"><b>Five questions</b><span>How many rows? What does one row represent (the grain)? Which columns have NaN, and why? Any duplicate IDs? Do dates and amounts look sane (negative amounts, future dates)?</span></div>
+          <div class="formula-row"><b>Write it down</b><span>In a take-home, the first markdown cell lists these checks and what you found. Reviewers look for it.</span></div>
+        </div>
+      </section>
+
+      <section id="core" data-nav="3 · Filter, group, merge" data-search>
+        <div class="section-head"><div><span class="section-no">03 / CORE</span><h2>Filter, group and merge</h2></div><span class="tag hot">most tested</span></div>
+        <pre class="eq"># filter: always wrap each condition in brackets; use &amp; | ~, not and/or
+big = txns[(txns["amount"] &gt; 10000) &amp; (txns["channel"] == "UPI")]
+big = txns.query("amount &gt; 10000 and channel == 'UPI'")     # same thing
+
+# group + named aggregation (GROUP BY)
+cat = (txns.groupby("merchant_category")
+           .agg(n=("txn_id", "count"), spend=("amount", "sum"), avg_ticket=("amount", "mean"))
+           .sort_values("spend", ascending=False))
+
+# merge (JOIN): say how= explicitly and check the row count after
+df = (txns.merge(cards[["card_id", "customer_id", "product"]], on="card_id", how="left")
+          .merge(customers[["customer_id", "city", "segment"]], on="customer_id", how="left"))
+assert len(df) == len(txns)          # a left join must not add rows
+
+top5 = df.groupby("customer_id", as_index=False)["amount"].sum().nlargest(5, "amount")</pre>
+        <table class="compare">
+          <tr><th>SQL</th><th>pandas</th></tr>
+          <tr><td>WHERE</td><td><code>df[cond]</code>, <code>df.query()</code></td></tr>
+          <tr><td>GROUP BY + aggregates</td><td><code>groupby().agg(name=(col, func))</code></td></tr>
+          <tr><td>HAVING</td><td>filter the aggregated frame</td></tr>
+          <tr><td>JOIN</td><td><code>merge(on=, how=)</code> — <code>validate="many_to_one"</code> catches fan-out</td></tr>
+          <tr><td>ORDER BY / LIMIT</td><td><code>sort_values()</code>, <code>head()</code>, <code>nlargest()</code></td></tr>
+          <tr><td>CASE WHEN</td><td><code>np.where()</code>, <code>np.select()</code>, <code>pd.cut()</code></td></tr>
+          <tr><td>window functions</td><td><code>groupby().transform()</code>, <code>.rank()</code>, <code>.shift()</code>, <code>.cumsum()</code>, <code>.rolling()</code></td></tr>
+          <tr><td>UNION ALL</td><td><code>pd.concat([a, b])</code></td></tr>
+        </table>
+      </section>
+
+      <section id="windows" data-nav="4 · Windows + time" data-search>
+        <div class="section-head"><div><span class="section-no">04 / TIME</span><h2>Window-style operations and time series</h2></div></div>
+        <pre class="eq"># monthly spend and month-over-month growth
+monthly = txns.set_index("txn_date").resample("MS")["amount"].sum()
+monthly.pct_change().mul(100).round(1)
+
+# customer total on every row, then rank within city (like SUM() OVER, DENSE_RANK)
+df["cust_spend"]   = df.groupby("customer_id")["amount"].transform("sum")
+df["rank_in_city"] = df.groupby("city")["cust_spend"].rank(method="dense", ascending=False)
+
+# running total and gap between transactions per card (like LAG)
+txns = txns.sort_values(["card_id", "txn_date", "txn_id"])
+txns["running_total"]   = txns.groupby("card_id")["amount"].cumsum()
+txns["prev_date"]       = txns.groupby("card_id")["txn_date"].shift(1)
+txns["days_since_prev"] = (txns["txn_date"] - txns["prev_date"]).dt.days
+
+# 7-day rolling average of daily spend
+daily = txns.set_index("txn_date")["amount"].resample("D").sum()
+daily.rolling(7).mean()</pre>
+        <div class="memory"><b>transform vs agg:</b> <code>agg</code> returns one row per group; <code>transform</code> returns a value for every original row (same length as the input) — that is what you need to add a group total or rank back onto the data.</div>
+      </section>
+
+      <section id="reshape" data-nav="5 · Reshape" data-search>
+        <div class="section-head"><div><span class="section-no">05 / RESHAPE</span><h2>Pivot, crosstab, melt, bins</h2></div></div>
+        <pre class="eq"># channel × category spend (wide)
+pv = df.pivot_table(index="channel", columns="merchant_category",
+                    values="amount", aggfunc="sum", fill_value=0)
+
+# share of each channel within each segment (rows sum to 1)
+pd.crosstab(df["segment"], df["channel"], normalize="index")
+
+# wide → long (for plotting or loading into a database)
+long = pv.reset_index().melt(id_vars="channel", var_name="category", value_name="spend")
+
+# conditional columns
+df["size"] = np.where(df["amount"] &gt;= 5000, "large", "small")
+df["band"] = pd.cut(df["amount"], bins=[0, 1000, 5000, 20000, np.inf],
+                    labels=["&lt;1k", "1-5k", "5-20k", "20k+"])</pre>
+      </section>
+
+      <section id="clean" data-nav="6 · Cleaning" data-search>
+        <div class="section-head"><div><span class="section-no">06 / CLEAN</span><h2>Cleaning messy data</h2></div><span class="tag core">take-homes live here</span></div>
+        <table class="compare">
+          <tr><th>Problem</th><th>Fix</th><th>Say in the write-up</th></tr>
+          <tr><td>Missing values</td><td><code>isna()</code>; drop, fill (<code>fillna</code>), or keep as a category</td><td>Why they're missing (unpaid bill ≠ bad data)</td></tr>
+          <tr><td>Duplicates</td><td><code>duplicated(subset=[...], keep=False)</code>, <code>drop_duplicates()</code></td><td>How many and which key you used</td></tr>
+          <tr><td>Text mess ("mumbai ", "Mumbai")</td><td><code>.str.strip().str.title()</code>, <code>.replace({...})</code></td><td>Mapping table you applied</td></tr>
+          <tr><td>Dates as text</td><td><code>pd.to_datetime(col, format="%Y-%m-%d", errors="coerce")</code></td><td>Rows that failed to parse</td></tr>
+          <tr><td>Numbers as text ("₹1,200")</td><td><code>.str.replace(r"[₹,]", "", regex=True).astype(float)</code></td><td>—</td></tr>
+          <tr><td>Outliers</td><td>Check with <code>quantile([.01, .99])</code>, box plot; cap or flag, don't silently delete</td><td>Your rule and how results change</td></tr>
+        </table>
+        <pre class="eq"># flags on the payments table
+payments["late"]     = payments["paid_date"].isna() | (payments["paid_date"] &gt; payments["due_date"])
+payments["revolver"] = payments["amount_paid"] &lt; payments["amount_due"]
+payments[["late", "revolver"]].mean()        # share of bills late / partly paid</pre>
+      </section>
+
+      <section id="cow" data-nav="7 · pandas 3 gotchas" data-search>
+        <div class="section-head"><div><span class="section-no">07 / GOTCHAS</span><h2>Copy-on-Write and other traps</h2></div></div>
+        <pre class="eq">sub = df[df["amount"] &gt; 10000]
+sub["flag"] = True          # pandas 3: changes only sub, never df (old versions warned)
+
+df.loc[df["amount"] &gt; 10000, "flag"] = True    # the right way to change df itself</pre>
+        <div class="grid">
+          <div class="card"><h3>Chained assignment</h3><p><code>df[df.x &gt; 0]["y"] = 1</code> never changes df in pandas 3. Use one <code>.loc[row_cond, col]</code>.</p></div>
+          <div class="card"><h3>Loops</h3><p>Avoid <code>iterrows()</code> and row-wise <code>apply</code> on big data; vectorised column maths is 10–100× faster. Use <code>np.where</code>/<code>np.select</code> for conditions.</p></div>
+          <div class="card"><h3>Integer + NaN</h3><p>A column of ints with a missing value becomes float. Use nullable <code>"Int64"</code> if it matters.</p></div>
+        </div>
+        <div class="memory"><b>Beyond pandas:</b> Polars (fast, lazy) and DuckDB (SQL directly on CSV/Parquet files) are increasingly used for large data. Knowing they exist and why is enough for most analyst interviews.</div>
+      </section>
+
+      <section id="patterns" data-nav="8 · Analyst patterns" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PATTERNS</span><h2>Three analyses you will be asked for</h2></div><span class="tag hot">must</span></div>
+        <details open><summary><b>Cohort retention table</b></summary><pre class="eq">act = df.assign(month=df["txn_date"].dt.to_period("M"))[["customer_id", "month"]].drop_duplicates()
+act["cohort"] = act.groupby("customer_id")["month"].transform("min")
+act["age"]    = (act["month"] - act["cohort"]).apply(lambda x: x.n)     # months since first spend
+ret     = act.pivot_table(index="cohort", columns="age", values="customer_id", aggfunc="nunique")
+ret_pct = ret.div(ret[0], axis=0).round(2)                              # each row starts at 1.0</pre></details>
+        <details><summary><b>RFM segmentation</b> (recency, frequency, monetary)</summary><pre class="eq">snap = txns["txn_date"].max() + pd.Timedelta(days=1)
+rfm = (df.groupby("customer_id")
+         .agg(recency=("txn_date", lambda s: (snap - s.max()).days),
+              frequency=("txn_id", "count"),
+              monetary=("amount", "sum")))
+rfm["R"] = pd.qcut(rfm["recency"], 4, labels=[4, 3, 2, 1]).astype(int)       # recent = high
+rfm["F"] = pd.qcut(rfm["frequency"].rank(method="first"), 4, labels=[1, 2, 3, 4]).astype(int)
+rfm["M"] = pd.qcut(rfm["monetary"], 4, labels=[1, 2, 3, 4]).astype(int)
+rfm["score"] = rfm[["R", "F", "M"]].sum(axis=1)                              # 3–12</pre><p>Use: target "high M, low R" (big spenders going quiet) with retention offers.</p></details>
+        <details><summary><b>Funnel conversion</b></summary><pre class="eq">funnel = pd.Series({"applied": 10000, "approved": 4200, "card_issued": 3900, "first_spend_30d": 2700})
+conv = (funnel / funnel.shift(1)).round(3)     # step conversion
+overall = funnel / funnel.iloc[0]              # vs top of funnel</pre></details>
+      </section>
+
+      <section id="viz" data-nav="9 · Charts that land" data-search>
+        <div class="section-head"><div><span class="section-no">09 / CHARTS</span><h2>One chart per finding</h2></div></div>
+        <pre class="eq">import matplotlib.pyplot as plt
+ax = monthly.plot(kind="line", marker="o", title="Card spend by month (₹)")
+ax.set_xlabel(""); ax.set_ylabel("₹"); plt.tight_layout(); plt.savefig("spend.png", dpi=150)</pre>
+        <table class="compare">
+          <tr><th>Message</th><th>Chart</th></tr>
+          <tr><td>Change over time</td><td>Line</td></tr>
+          <tr><td>Compare categories</td><td>Horizontal bar, sorted</td></tr>
+          <tr><td>Part of a whole</td><td>Stacked bar (avoid pies with &gt;3 slices)</td></tr>
+          <tr><td>Distribution</td><td>Histogram or box plot</td></tr>
+          <tr><td>Relationship</td><td>Scatter</td></tr>
+          <tr><td>Cohorts</td><td>Heatmap of the retention table</td></tr>
+        </table>
+        <div class="memory"><b>Title = the finding:</b> "UPI share of spend doubled in Delhi" beats "UPI share by city". Label axes with units, remove clutter, highlight the one bar that matters.</div>
+      </section>
+
+      <section id="takehome" data-nav="10 · Take-home playbook" data-search>
+        <div class="section-head"><div><span class="section-no">10 / TAKE-HOME</span><h2>How to win a take-home assignment</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Restate the ask</b><span>One markdown cell: business question, what decision it informs, assumptions.</span></div>
+          <div class="formula-row"><b>2. Data checks</b><span>Grain, rows, NaN, duplicates, date range, oddities — and what you did about each.</span></div>
+          <div class="formula-row"><b>3. Answer first</b><span>An executive summary of 3–5 bullets at the top, each with a number.</span></div>
+          <div class="formula-row"><b>4. Analysis</b><span>One section per question: code, one chart, three sentences (what, so what, now what).</span></div>
+          <div class="formula-row"><b>5. Recommend</b><span>Specific actions, the expected impact, and how you'd measure it (D3: A/B test).</span></div>
+          <div class="formula-row"><b>6. Limits + next steps</b><span>What the data can't tell you and what you'd collect next.</span></div>
+          <div class="formula-row"><b>7. Hygiene</b><span>Restart kernel and run all before sending; no hard-coded paths; a short README; 5-slide deck if asked.</span></div>
+        </div>
+        <div class="memory"><b>AI use:</b> many firms now allow AI help on take-homes but expect you to explain every line in the follow-up interview. Treat generated code as a draft you must check (joins, NaN, grain).</div>
+      </section>
+
+      <section id="bank" data-nav="11 · Practice set" data-search>
+        <div class="section-head"><div><span class="section-no">11 / PRACTICE</span><h2>Practice set</h2></div><span class="tag pyq">do in Colab</span></div>
+        <div class="qa-grid">
+          <div><b>P1</b>Share of spend by channel, by month</div><div><b>P2</b>Top 3 categories per segment</div><div><b>P3</b>Average days between transactions per card</div>
+          <div><b>P4</b>Customers whose spend fell 50% Q1 → Q2</div><div><b>P5</b>Late-payment rate by credit-limit band</div><div><b>P6</b>Cohort retention heatmap</div>
+          <div><b>P7</b>RFM segments and their size</div><div><b>P8</b>Detect possible duplicate charges</div><div><b>P9</b>Utilisation (max bill ÷ limit) distribution</div>
+          <div><b>P10</b>Write a function that returns any customer's monthly summary</div><div><b>P11</b>Rewrite D1's Q1–Q10 in pandas</div><div><b>P12</b>A 1-page memo: "Where should the card team focus next quarter?"</div>
+        </div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Week 1: sections 1–6; Kaggle "Pandas" micro-course (free, ~4 hours)</label>
+          <label class="checkline"><input type="checkbox"> Week 1: P1–P5</label>
+          <label class="checkline"><input type="checkbox"> Week 2: sections 7–10; P6–P10</label>
+          <label class="checkline"><input type="checkbox"> Week 2: one full take-home on a public dataset (Kaggle credit-card default or a UPI/payments dataset) with a 5-slide summary</label>
+          <label class="checkline"><input type="checkbox"> Put the best take-home on GitHub with a README (S4 portfolio)</label>
+        </div>
+        <div class="memory"><b>Your folder:</b> 20_SOURCES/AI_ML has Andrew Ng's lab notebooks (numpy, pandas, matplotlib in context) and your ML/DL master notes; D3 (statistics + A/B tests) builds on this module.</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-d2-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-d2-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-d2-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>
