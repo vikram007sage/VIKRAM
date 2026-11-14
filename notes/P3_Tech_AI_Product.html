@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P3 | Tech + AI product — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">P3 / TECH PRODUCT</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#web">1 · How the web works</a><a href="#scale">2 · Scaling + reliability</a><a href="#pay">3 · Payments rails</a><a href="#ai">4 · AI features</a><a href="#qs">5 · Interview questions</a><a href="#plan">6 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Product track · Module P3</div><h1>Tech understanding<br>+ AI product</h1><p>PM and product-consulting interviews now include a technical round: "what happens when you type a URL?", "how would you scale this?", "how does an LLM feature work and what would it cost?". You don't need to code, but you must reason about systems, trade-offs and AI the way an engineer would respect. This module covers the web stack, APIs, databases, scaling, payments rails, and how to build, price and measure AI features in 2026.</p><div class="meta"><span class="pill"><span class=dot></span> System basics for PMs</span><span class="pill">UPI + card rails</span><span class="pill">AI feature cost maths</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What "technical" means for a PM</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Explain how things work</strong><span class="muted">client–server, APIs, databases, caching, how an app talks to a backend</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Reason about trade-offs</strong><span class="muted">speed vs cost vs reliability; build vs buy; consistency vs availability</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>AI product judgment</strong><span class="muted">when to use a model, which kind, how to evaluate and what it costs</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Work with engineers</strong><span class="muted">estimating, scoping MVPs, technical debt, incidents</span></div><span class="frequency">10%</span></div>
+        </div>
+        <div class="memory"><b>Note:</b> Google removed its standalone PM technical interview in its 2026 process but probes technical depth inside product design rounds. Indian fintech and SaaS roles still ask direct technical questions.</div>
+      </section>
+
+      <section id="web" data-nav="1 · How the web works" data-search>
+        <div class="section-head"><div><span class="section-no">01 / WEB</span><h2>What happens when you open an app or URL</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>DNS</b><span>The domain name is looked up to find the server's IP address (cached by browser, OS, ISP).</span></div>
+          <div class="formula-row"><b>Connection</b><span>TCP connection + TLS handshake (HTTPS encryption with certificates).</span></div>
+          <div class="formula-row"><b>CDN</b><span>Static files (images, scripts) often served from a nearby content delivery network edge.</span></div>
+          <div class="formula-row"><b>Load balancer → app servers</b><span>Request routed to one of many servers running the backend code.</span></div>
+          <div class="formula-row"><b>Cache → database</b><span>Server checks a cache (e.g. Redis) and then the database; builds a response.</span></div>
+          <div class="formula-row"><b>Response</b><span>JSON (for an app) or HTML; the client renders it. Each step adds latency — users notice above ~100–300 ms for interactions.</span></div>
+        </div>
+        <div class="grid">
+          <div class="card"><h3>APIs</h3><p>A contract for how software talks: REST (resources + HTTP verbs GET/POST/PUT/DELETE, JSON), GraphQL (client asks for exactly the fields it needs), webhooks (server calls you when something happens, e.g. payment success). Status codes: 200 OK, 400 bad request, 401 unauthorised, 404 not found, 429 rate-limited, 500 server error.</p></div>
+          <div class="card"><h3>Databases</h3><p>SQL/relational (Postgres, MySQL): structured, transactions, strong consistency — payments, orders. NoSQL (MongoDB, DynamoDB, Cassandra): flexible schema, horizontal scale — feeds, logs, catalogues. Vector databases: similarity search over embeddings (M3).</p></div>
+          <div class="card"><h3>Front end vs back end</h3><p>Front end: what users see (web, Android, iOS, or cross-platform like React Native/Flutter). Back end: business logic, data, integrations. Native apps need app-store releases; web and server changes ship instantly — this affects how fast you can experiment.</p></div>
+        </div>
+      </section>
+
+      <section id="scale" data-nav="2 · Scaling + reliability" data-search>
+        <div class="section-head"><div><span class="section-no">02 / SCALE</span><h2>Scaling, reliability and trade-offs</h2></div></div>
+        <table class="compare">
+          <tr><th>Concept</th><th>Plain meaning</th><th>Product example</th></tr>
+          <tr><td>Vertical vs horizontal scaling</td><td>Bigger machine vs more machines</td><td>Flash sale on an e-commerce app: add servers automatically</td></tr>
+          <tr><td>Caching</td><td>Keep frequent answers in fast memory</td><td>Restaurant menu cached; live order status not</td></tr>
+          <tr><td>Queues (Kafka, SQS)</td><td>Process work later, smooth spikes</td><td>Send order-confirmation SMS asynchronously</td></tr>
+          <tr><td>Microservices vs monolith</td><td>Many small services vs one codebase</td><td>Microservices let teams ship independently but add complexity</td></tr>
+          <tr><td>CAP trade-off</td><td>During a network split, choose consistency or availability</td><td>Bank balance: consistency; social feed: availability</td></tr>
+          <tr><td>Idempotency</td><td>Repeating a request has the same effect as once</td><td>Payment retry must not charge twice</td></tr>
+          <tr><td>SLA / SLO, uptime</td><td>99.9% ≈ 8.8 hours down a year; 99.99% ≈ 53 minutes</td><td>Payments need higher uptime than a blog</td></tr>
+          <tr><td>Rate limiting</td><td>Cap requests per user/time</td><td>Prevent OTP abuse</td></tr>
+        </table>
+        <details><summary><b>Practice: "Design the backend for a flash sale of 1 lakh phones in 1 minute"</b></summary><p>Virtual waiting room/queue, inventory held in a fast in-memory store with atomic decrements, reservation with a timer before payment, idempotent payment calls, CDN for static pages, auto-scaling, bot protection (captcha, rate limits). Metrics: successful orders, time to purchase, error rate, oversell count (must be 0).</p></details>
+      </section>
+
+      <section id="pay" data-nav="3 · Payments rails" data-search>
+        <div class="section-head"><div><span class="section-no">03 / PAYMENTS</span><h2>How UPI and card payments flow</h2></div><span class="tag hot">fintech</span></div>
+        <div class="grid">
+          <div class="card"><h3>UPI</h3><p>Payer app (PSP, e.g. PhonePe/GPay) → payer's PSP bank → NPCI UPI switch → payee's bank → credit; confirmation back through the chain, usually in seconds. Uses a virtual payment address (VPA); authorised with UPI PIN. Zero merchant discount rate for most person-to-merchant UPI. Failures often come from a bank's server being down — success rates are tracked per bank.</p></div>
+          <div class="card"><h3>Cards</h3><p>Customer → merchant → acquirer (merchant's bank / payment aggregator like Razorpay) → card network (Visa, Mastercard, RuPay) → issuer (customer's bank) approves → settlement later (T+1). The merchant pays the MDR, split among issuer (interchange), network and acquirer. RBI rules: card tokenisation (no storing card numbers), additional factor of authentication for domestic online payments.</p></div>
+          <div class="card"><h3>RuPay credit on UPI</h3><p>RuPay credit cards can be linked to UPI, bringing credit to QR payments. Small-value merchants typically pay no MDR on small transactions; issuers earn interchange on larger ones. Important for card growth among young users (B1).</p></div>
+        </div>
+      </section>
+
+      <section id="ai" data-nav="4 · AI features" data-search>
+        <div class="section-head"><div><span class="section-no">04 / AI</span><h2>Building AI features as a PM</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Approach</th><th>When</th><th>Trade-off</th></tr>
+          <tr><td>Prompting a hosted LLM via API</td><td>First version of most features</td><td>Fast to build; per-call cost; data leaves your system (check terms)</td></tr>
+          <tr><td>RAG (retrieval + LLM)</td><td>Answers must use your documents/data (FAQs, policies, product catalogue)</td><td>Quality depends on retrieval; easier to update than fine-tuning (M3)</td></tr>
+          <tr><td>Tools / agents (function calling, MCP)</td><td>The model must act: check order status, book, file a ticket</td><td>More powerful, more risk; needs permissions and human approval for sensitive actions</td></tr>
+          <tr><td>Fine-tuning a model</td><td>Consistent style/format at scale, a narrow task, or cost reduction with a small model</td><td>Needs good labelled data; harder to update</td></tr>
+          <tr><td>Classical ML</td><td>Prediction on structured data: fraud, credit risk, churn, ranking</td><td>Cheaper, explainable, well understood (M1)</td></tr>
+          <tr><td>Rules</td><td>Clear logic, compliance</td><td>Brittle but predictable</td></tr>
+        </table>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Cost maths</b><span>Cost per call = (input tokens × input price + output tokens × output price) ÷ 1,000,000. Example: a support bot uses 3,000 input + 400 output tokens per answer at $2/$10 per million → $0.006 + $0.004 = $0.010 ≈ ₹0.85. At 1 lakh chats/day ≈ ₹85,000/day. A smaller model at a tenth the price, or caching, may make the feature profitable.</span></div>
+          <div class="formula-row"><b>Latency</b><span>Time to first token and total time; stream responses; use small models for simple steps.</span></div>
+          <div class="formula-row"><b>Quality</b><span>Build an eval set before launch (100–500 real examples with expected answers); measure accuracy, hallucination rate, refusal rate; online: resolution rate, escalation to human, CSAT (M3).</span></div>
+          <div class="formula-row"><b>Risks</b><span>Hallucination, prompt injection (malicious text in documents or web pages instructing the model), data privacy (India's DPDP Act), bias, over-reliance; mitigate with grounding, permission limits, human review, logging.</span></div>
+        </div>
+        <div class="memory"><b>2026 context:</b> frontier models from OpenAI, Google, Anthropic and others release every few weeks; open-weight models (Qwen, DeepSeek, Llama, Kimi and others) are competitive for many tasks. Agents connect to tools through standards such as the Model Context Protocol (MCP, created by Anthropic in Nov 2024 and since adopted by OpenAI, Google and Microsoft; ~97 million monthly SDK downloads by March 2026) and agent-to-agent protocols such as Google's A2A. Say "I'd pick the model by evaluating 2–3 on our own eval set for quality, cost and latency" rather than naming a favourite.</div>
+      </section>
+
+      <section id="qs" data-nav="5 · Interview questions" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PRACTICE</span><h2>Questions to prepare</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Key points</th></tr>
+          <tr><td>What happens when you type swiggy.com?</td><td>Section 1 chain</td></tr>
+          <tr><td>Explain an API to a 10-year-old.</td><td>A waiter: takes your order to the kitchen, brings back food; you don't enter the kitchen</td></tr>
+          <tr><td>SQL vs NoSQL for an order system?</td><td>SQL for orders/payments (transactions); NoSQL for activity feeds</td></tr>
+          <tr><td>The app is slow. How do you investigate?</td><td>Where: client, network, server, database; which screens; recent release; metrics p50/p95 latency</td></tr>
+          <tr><td>How does UPI work?</td><td>Section 3</td></tr>
+          <tr><td>Why do payments fail?</td><td>Bank down, wrong PIN, limits, network timeouts, risk declines; retries need idempotency</td></tr>
+          <tr><td>Build vs buy for KYC?</td><td>Buy (regulated, vendors exist); build only core differentiators</td></tr>
+          <tr><td>Design an AI support bot for a bank.</td><td>RAG on policies, tools for account info with authentication, escalation, evals, guardrails on advice</td></tr>
+          <tr><td>How would you reduce LLM costs?</td><td>Smaller models, caching, shorter prompts, batching, route only hard queries to big models</td></tr>
+          <tr><td>How do you know the AI feature works?</td><td>Offline evals + online A/B (P2) on task success, not just usage</td></tr>
+          <tr><td>What is technical debt and when do you allow it?</td><td>Shortcuts that cost later; accept for experiments, repay before scaling</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="6 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Explain the URL chain and an API aloud in 2 minutes each</label>
+          <label class="checkline"><input type="checkbox"> Draw the UPI and card flows from memory</label>
+          <label class="checkline"><input type="checkbox"> Do the flash-sale design and one AI feature design (cost + evals)</label>
+          <label class="checkline"><input type="checkbox"> Read the "ML for Product Managers" file in your folder</label>
+          <label class="checkline"><input type="checkbox"> Build one small AI feature yourself (e.g. a notes Q&amp;A for VIKRAM) and measure its cost per query</label>
+        </div>
+        <div class="memory">Pair with M2 (how LLMs work) and M3 (RAG, agents, evals). Next in Product: P4 (deck, PRD, teardown).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-p3-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-p3-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-p3-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

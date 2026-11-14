@@ -1,0 +1,160 @@
+<!--META M2 | LLM internals | M2 / LLMS | AI/ML track · Module M2 | LLM internals<br> | GenAI internships and AI-product roles now ask "explain attention", "why does temperature change outputs?", "how is a chat model trained?" and "why is long context expensive?". This module builds the transformer from tokens to output with small worked numbers, then covers pre-training, instruction tuning and preference training, reasoning models, inference cost, fine-tuning with LoRA and quantisation, and 30 interview questions. | Attention by hand; training pipeline; inference + KV-cache maths -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>The one-paragraph picture</h2></div></div>
+        <p class="lede">A large language model is a transformer network trained to predict the next token. Text is split into tokens, each token becomes a vector, stacked attention and feed-forward layers mix information across positions, and the final layer gives a probability for every token in the vocabulary. Generating text is sampling one token at a time and feeding it back in. Chat behaviour comes from further training on instructions and human (or AI) preferences.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Tokens, embeddings, attention</strong><span class="muted">the mechanics; asked in every GenAI interview</span></div><span class="frequency">35%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Training pipeline</strong><span class="muted">pre-training → SFT → RLHF/DPO → reasoning RL</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Inference</strong><span class="muted">decoding, temperature, KV cache, cost, latency</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Adapting models</strong><span class="muted">prompting vs RAG vs fine-tuning; LoRA; quantisation</span></div><span class="frequency">15%</span></div>
+        </div>
+        <div class="memory"><b>From your own notes:</b> the attention formula, model families (BERT / GPT / T5) and the RAG pipeline are already in your ML and Deep Learning master notes (Course 5 on sequence models). This module goes one level deeper.</div>
+      </section>
+
+      <section id="tokens" data-nav="1 · Tokens + embeddings" data-search>
+        <div class="section-head"><div><span class="section-no">01 / INPUT</span><h2>Tokens and embeddings</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Tokenisation</b><span>Text → sub-word pieces using byte-pair encoding (BPE) or similar. In English ~1 token ≈ ¾ of a word; Hindi and other Indic scripts often need more tokens per word with many tokenisers, so the same text costs more and fills context faster (a reason Indic-first models such as Sarvam's focus on tokenisers).</span></div>
+          <div class="formula-row"><b>Vocabulary</b><span>Typically 32k–200k tokens. The final layer outputs one score (logit) per vocabulary token.</span></div>
+          <div class="formula-row"><b>Embedding</b><span>Each token id looks up a learned vector (e.g. 4,096 numbers). Similar meanings end up close together.</span></div>
+          <div class="formula-row"><b>Position</b><span>Attention has no sense of order by itself, so position is added: original sinusoidal encodings, learned positions, or today's common rotary embeddings (RoPE), which rotate query/key vectors by position and extend better to long context.</span></div>
+        </div>
+      </section>
+
+      <section id="attention" data-nav="2 · Attention by hand" data-search>
+        <div class="section-head"><div><span class="section-no">02 / ATTENTION</span><h2>Self-attention, worked by hand</h2></div><span class="tag hot">most asked</span></div>
+        <div class="eq">Attention(Q, K, V) = softmax(Q K<sup>T</sup> ÷ √d<sub>k</sub>) V</div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Q, K, V</b><span>Each token's vector is multiplied by three learned matrices: query (what I'm looking for), key (what I contain), value (what I pass on).</span></div>
+          <div class="formula-row"><b>Scores</b><span>Dot product of a query with every key = relevance; divide by √d<sub>k</sub> so large dimensions don't push softmax to extremes.</span></div>
+          <div class="formula-row"><b>Weights</b><span>Softmax turns scores into weights summing to 1.</span></div>
+          <div class="formula-row"><b>Output</b><span>Weighted sum of value vectors.</span></div>
+          <div class="formula-row"><b>Causal mask</b><span>In a decoder (GPT-style), each token can only attend to itself and earlier tokens — that's what makes next-token prediction honest.</span></div>
+        </div>
+        <details><summary><b>Tiny example (3 tokens, d = 2, no mask)</b></summary>
+          <p>Q = K = [[1,0],[0,1],[1,1]]; V = [[1,2],[3,4],[5,6]]. For token 1: scores with keys = [1, 0, 1] ÷ √2 → softmax ≈ [0.40, 0.20, 0.40] → output ≈ 0.40·[1,2] + 0.20·[3,4] + 0.40·[5,6] = [3.0, 4.0]. Token 3 (query [1,1]) scores [1,1,2] ÷ √2 → weights ≈ [0.25, 0.25, 0.50] → output ≈ [3.51, 4.51]: it attends most to itself because its key matches best.</p></details>
+        <div class="grid">
+          <div class="card"><h3>Multi-head</h3><p>Several attention operations in parallel with different Q/K/V projections (one head may track syntax, another coreference); outputs concatenated and projected.</p></div>
+          <div class="card"><h3>Efficient variants</h3><p>Grouped-query attention (GQA) shares keys/values across heads to shrink memory; FlashAttention computes the same result with less memory traffic; sliding-window and sparse attention for long context.</p></div>
+          <div class="card"><h3>Cost</h3><p>Attention over n tokens costs O(n²) compute per layer — doubling context roughly quadruples attention cost, one reason long context is expensive.</p></div>
+        </div>
+      </section>
+
+      <section id="block" data-nav="3 · The transformer block" data-search>
+        <div class="section-head"><div><span class="section-no">03 / ARCHITECTURE</span><h2>The transformer block and model families</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Block</b><span>x → LayerNorm → multi-head attention → add residual → LayerNorm → feed-forward network (expand ~4×, non-linearity such as SwiGLU, project back) → add residual. Stack 30–100+ blocks.</span></div>
+          <div class="formula-row"><b>Residual connections</b><span>Let gradients flow through deep stacks; each block adds a refinement.</span></div>
+          <div class="formula-row"><b>Output</b><span>Final vector × vocabulary matrix → logits → softmax → next-token probabilities.</span></div>
+          <div class="formula-row"><b>Mixture of experts (MoE)</b><span>Feed-forward layer split into many "experts"; a router sends each token to a few. Total parameters large, active parameters per token small — much of today's frontier and open-weight models (e.g. DeepSeek, Qwen, Kimi) use MoE.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Family</th><th>Examples</th><th>Use</th></tr>
+          <tr><td>Encoder-only</td><td>BERT, RoBERTa</td><td>Classification, embeddings, search</td></tr>
+          <tr><td>Decoder-only</td><td>GPT, Claude, Gemini, Llama, Qwen, DeepSeek</td><td>Generation, chat, reasoning — the dominant design</td></tr>
+          <tr><td>Encoder–decoder</td><td>T5, original Transformer</td><td>Translation, summarisation</td></tr>
+          <tr><td>Multimodal</td><td>Vision encoder + LLM, or natively multimodal</td><td>Images, audio, video inputs</td></tr>
+        </table>
+      </section>
+
+      <section id="training" data-nav="4 · Training pipeline" data-search>
+        <div class="section-head"><div><span class="section-no">04 / TRAINING</span><h2>How a chat model is trained</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Pre-training</b><span>Next-token prediction (cross-entropy loss) on trillions of tokens of web, books, code. Compute ≈ 6 × parameters × tokens FLOPs: a 7-billion-parameter model on 2 trillion tokens ≈ 8.4 × 10²² FLOPs. Scaling laws: loss falls predictably with more compute; "Chinchilla" suggests ~20 tokens per parameter for compute-optimal training, though modern models train far longer to make smaller models stronger.</span></div>
+          <div class="formula-row"><b>2. Supervised fine-tuning (SFT)</b><span>Train on (instruction, good response) pairs so the model follows instructions and chats.</span></div>
+          <div class="formula-row"><b>3. Preference training</b><span>RLHF: humans rank responses → train a reward model → optimise the policy with RL (PPO) while staying close to the SFT model (KL penalty). DPO: skips the reward model, trains directly on preferred vs rejected pairs. RLAIF / constitutional methods use AI feedback guided by written principles.</span></div>
+          <div class="formula-row"><b>4. Reasoning RL</b><span>Since 2024–25, models are trained with reinforcement learning on tasks with checkable answers (maths, code, tests) to produce long chains of thought before answering ("reasoning" or "thinking" models). Spending more tokens thinking at inference ("test-time compute") improves hard-problem accuracy.</span></div>
+          <div class="formula-row"><b>5. Safety + evaluation</b><span>Red-teaming, refusal training, benchmark and capability evaluations before release.</span></div>
+        </div>
+        <div class="memory"><b>Interview line:</b> "Pre-training gives knowledge and language; fine-tuning gives behaviour; preference and reasoning RL give helpfulness and problem-solving."</div>
+      </section>
+
+      <section id="inference" data-nav="5 · Inference + decoding" data-search>
+        <div class="section-head"><div><span class="section-no">05 / INFERENCE</span><h2>Decoding, cost and the KV cache</h2></div><span class="tag hot">practical</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Greedy</b><span>Always pick the most likely token: deterministic, can be repetitive.</span></div>
+          <div class="formula-row"><b>Temperature</b><span>Divide logits by T before softmax. Logits [2, 1, 0]: T = 0.5 → [0.87, 0.12, 0.02]; T = 1 → [0.67, 0.24, 0.09]; T = 2 → [0.51, 0.31, 0.19]. Low T = focused, high T = varied.</span></div>
+          <div class="formula-row"><b>Top-k / top-p</b><span>Sample only from the k most likely tokens, or the smallest set whose probabilities sum to p (nucleus sampling).</span></div>
+          <div class="formula-row"><b>Prefill vs decode</b><span>Prefill processes the whole prompt in parallel (fast per token); decode generates one token at a time (slower) — that's why output tokens cost more than input tokens.</span></div>
+          <div class="formula-row"><b>KV cache</b><span>Keys and values of previous tokens are stored so they aren't recomputed. Memory per token ≈ 2 × layers × hidden size × bytes: for 32 layers, 4,096 hidden, 16-bit → ~0.5 MB per token, ~4 GB for 8,000 tokens (GQA reduces this a lot). Long context is memory-hungry.</span></div>
+          <div class="formula-row"><b>Speed tricks</b><span>Batching, speculative decoding (a small model drafts, big model verifies), prompt caching (reuse a repeated system prompt), quantisation, distillation into smaller models.</span></div>
+        </div>
+      </section>
+
+      <section id="adapt" data-nav="6 · Fine-tuning + quantisation" data-search>
+        <div class="section-head"><div><span class="section-no">06 / ADAPTING</span><h2>Prompting, fine-tuning, LoRA and quantisation</h2></div></div>
+        <table class="compare">
+          <tr><th>Method</th><th>What changes</th><th>When</th></tr>
+          <tr><td>Prompting / few-shot</td><td>Nothing in the model</td><td>Always try first</td></tr>
+          <tr><td>RAG</td><td>Context given at query time</td><td>Knowledge that changes or is private (M3)</td></tr>
+          <tr><td>Full fine-tuning</td><td>All weights</td><td>Rarely, for big shifts; expensive</td></tr>
+          <tr><td>LoRA / QLoRA</td><td>Small low-rank matrices added to weight layers (W + BA, rank 8–64); QLoRA does this on a 4-bit model</td><td>Style, format, narrow tasks on a budget; one GPU can tune a 7B model</td></tr>
+          <tr><td>Distillation</td><td>Train a small model on a big model's outputs</td><td>Cheaper, faster production model</td></tr>
+        </table>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Quantisation</b><span>Store weights in fewer bits. 7B parameters: 16-bit ≈ 14 GB, 8-bit ≈ 7 GB, 4-bit ≈ 3.5 GB — fits on a laptop GPU, small quality loss.</span></div>
+          <div class="formula-row"><b>Why LoRA works</b><span>The change needed for a task is approximately low-rank; training ~0.1–1% of parameters gets most of the benefit.</span></div>
+        </div>
+      </section>
+
+      <section id="limits" data-nav="7 · Limits + safety" data-search>
+        <div class="section-head"><div><span class="section-no">07 / LIMITS</span><h2>Why models fail</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Hallucination</h3><p>The model produces fluent but false text because it's trained to produce likely text, not verified truth. Mitigate with retrieval, citations, asking it to say "I don't know", verification steps.</p></div>
+          <div class="card"><h3>Knowledge cutoff</h3><p>Training data stops at a date; use search or RAG for current facts.</p></div>
+          <div class="card"><h3>Prompt injection</h3><p>Instructions hidden in retrieved documents, emails or web pages can hijack an agent. Separate trusted instructions from untrusted data, limit tool permissions, require confirmation for actions.</p></div>
+          <div class="card"><h3>Bias and sycophancy</h3><p>Models can reflect training-data bias or agree with the user too readily; evaluate on diverse cases.</p></div>
+          <div class="card"><h3>Tokenisation quirks</h3><p>Counting letters, arithmetic on long numbers; use tools (a calculator or code) for exact work.</p></div>
+          <div class="card"><h3>Long-context degradation</h3><p>Information in the middle of very long prompts can be used less reliably; put key instructions at the start or end and test.</p></div>
+        </div>
+      </section>
+
+      <section id="qs" data-nav="8 · 30 questions" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PRACTICE</span><h2>Thirty interview questions</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Short answer</th></tr>
+          <tr><td>What is a token?</td><td>Sub-word unit from BPE; ~¾ English word</td></tr>
+          <tr><td>Why divide by √d<sub>k</sub>?</td><td>Keep dot products from growing with dimension, so softmax doesn't saturate and gradients don't vanish</td></tr>
+          <tr><td>Why transformers over RNNs?</td><td>Parallel training, long-range dependencies, scale well</td></tr>
+          <tr><td>What does the causal mask do?</td><td>Stops attending to future tokens</td></tr>
+          <tr><td>Multi-head attention — why?</td><td>Different heads learn different relations</td></tr>
+          <tr><td>What is RoPE?</td><td>Rotary position embeddings rotating Q/K by position</td></tr>
+          <tr><td>Encoder vs decoder?</td><td>Bidirectional understanding vs causal generation</td></tr>
+          <tr><td>What loss is used in pre-training?</td><td>Cross-entropy on next token</td></tr>
+          <tr><td>What is perplexity?</td><td>exp(average cross-entropy); lower = better prediction</td></tr>
+          <tr><td>SFT vs RLHF?</td><td>Imitate good answers vs optimise for preferred answers</td></tr>
+          <tr><td>RLHF vs DPO?</td><td>Reward model + RL vs direct loss on preference pairs</td></tr>
+          <tr><td>What's a reward model?</td><td>Model scoring responses, trained on human rankings</td></tr>
+          <tr><td>Why the KL penalty in RLHF?</td><td>Stop the policy drifting into reward hacking</td></tr>
+          <tr><td>What are reasoning models?</td><td>Trained with RL to think step-by-step; use test-time compute</td></tr>
+          <tr><td>Temperature 0 vs 1?</td><td>Deterministic vs more varied</td></tr>
+          <tr><td>Top-p sampling?</td><td>Sample from smallest set reaching probability p</td></tr>
+          <tr><td>Why are output tokens pricier?</td><td>Generated sequentially; prefill is parallel</td></tr>
+          <tr><td>What is the KV cache?</td><td>Stored keys/values of past tokens; memory grows with context</td></tr>
+          <tr><td>Why is long context expensive?</td><td>O(n²) attention and KV memory</td></tr>
+          <tr><td>What is MoE?</td><td>Router sends tokens to a few experts; large total, small active parameters</td></tr>
+          <tr><td>LoRA in one line?</td><td>Train small low-rank update matrices, freeze base</td></tr>
+          <tr><td>Quantisation trade-off?</td><td>Less memory and faster, slight accuracy loss</td></tr>
+          <tr><td>Distillation?</td><td>Small student learns from big teacher's outputs</td></tr>
+          <tr><td>Fine-tune or RAG for company policies?</td><td>RAG (changing facts, citations)</td></tr>
+          <tr><td>Why do LLMs hallucinate?</td><td>Trained for plausibility, not truth; gaps in knowledge</td></tr>
+          <tr><td>What is an embedding model?</td><td>Maps text to vectors for similarity search</td></tr>
+          <tr><td>What are scaling laws?</td><td>Predictable loss decrease with compute, data, parameters</td></tr>
+          <tr><td>What is speculative decoding?</td><td>Draft with small model, verify in parallel with large</td></tr>
+          <tr><td>What is prompt injection?</td><td>Untrusted text that overrides instructions</td></tr>
+          <tr><td>How would you evaluate an LLM for a task?</td><td>Task-specific eval set, metrics, human review, cost/latency (M3)</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="9 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Redo the 3-token attention example by hand, then in NumPy</label>
+          <label class="checkline"><input type="checkbox"> Watch/read one "build GPT from scratch" walkthrough and train a tiny character model</label>
+          <label class="checkline"><input type="checkbox"> Explain the training pipeline in 90 seconds</label>
+          <label class="checkline"><input type="checkbox"> Compute KV cache and quantised memory for a model you know</label>
+          <label class="checkline"><input type="checkbox"> Fine-tune a small open model with LoRA on a free GPU (one afternoon)</label>
+          <label class="checkline"><input type="checkbox"> Follow the GenAI-intern roadmap in your folder (AI_ML roadmaps)</label>
+        </div>
+        <div class="memory">Next: M3 (RAG, agents and evals), where these ideas turn into products. Pair with P3 for the product side.</div>
+      </section>

@@ -1,0 +1,91 @@
+<!--META P2 | Metrics, RCA + A/B | P2 / METRICS | Product track · Module P2 | Metrics, root cause<br>+ experiments | Three questions come up in almost every PM, analyst and product-consulting interview: "what metrics would you track?", "metric X dropped 20% — why?" and "how would you test this?". This module gives you a metric tree method, a root-cause checklist that never misses the boring explanations, an experiment design template, and ten worked cases from Indian consumer and fintech products. | Metric trees; RCA checklist; 10 worked cases -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What these questions test</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Metric definition</strong><span class="muted">choose metrics that reflect user value and business goal, and define them precisely</span></div><span class="frequency">35%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Root cause analysis</strong><span class="muted">structured diagnosis of a metric change; check data and external causes first</span></div><span class="frequency">40%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Experiment design</strong><span class="muted">hypothesis, unit, metrics, guardrails, sample size, decision rule (stats in D3)</span></div><span class="frequency">25%</span></div>
+        </div>
+        <div class="memory"><b>Your real example:</b> at CheQ you ran A/B tests on onboarding. Prepare a 60-second version: hypothesis, metric, result, what you learned. It turns a textbook answer into a credible one.</div>
+      </section>
+
+      <section id="metrics" data-nav="1 · Choosing metrics" data-search>
+        <div class="section-head"><div><span class="section-no">01 / METRICS</span><h2>Choosing and defining metrics</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>North-star metric</b><span>One number that best captures value delivered to users and predicts long-term revenue. Spotify: time spent listening; Airbnb: nights booked; a UPI app: successful transactions per monthly active user; a card issuer: active spenders × spend per spender.</span></div>
+          <div class="formula-row"><b>Input metrics</b><span>Drivers the team can move that add up to the north star (acquisition, activation, frequency, value per use).</span></div>
+          <div class="formula-row"><b>Guardrail metrics</b><span>Things that must not get worse: latency, crash rate, complaints, fraud, unsubscribes, credit losses, cannibalisation.</span></div>
+          <div class="formula-row"><b>Define precisely</b><span>"Weekly active user = logged-in user with ≥1 meaningful action (payment, search, order) in a 7-day window, excluding employees and bots." Name the numerator, denominator, time window and filters.</span></div>
+        </div>
+        <h3>Frameworks</h3>
+        <table class="compare">
+          <tr><th>Framework</th><th>Stages</th><th>Use when</th></tr>
+          <tr><td>AARRR (pirate)</td><td>Acquisition, Activation, Retention, Referral, Revenue</td><td>Growth questions, funnel thinking</td></tr>
+          <tr><td>HEART (Google)</td><td>Happiness, Engagement, Adoption, Retention, Task success</td><td>User-experience features</td></tr>
+          <tr><td>Metric tree</td><td>Break the goal metric into a product of drivers</td><td>RCA and prioritisation</td></tr>
+          <tr><td>Two-sided marketplace</td><td>Supply health, demand health, match quality (fill rate, time-to-match)</td><td>Swiggy, Uber, Urban Company, OLX</td></tr>
+        </table>
+        <div class="eq">Revenue = Users × Active rate × Orders per active user × Average order value × Take rate</div>
+        <div class="memory"><b>Good metric traits:</b> moves with real user value, sensitive enough to detect change in weeks, hard to game, understandable by the team. Vanity metrics (downloads, total registered users, page views) fail at least one.</div>
+      </section>
+
+      <section id="rca" data-nav="2 · Root cause analysis" data-search>
+        <div class="section-head"><div><span class="section-no">02 / RCA</span><h2>Root cause analysis: "metric X dropped — why?"</h2></div><span class="tag hot">most asked</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Clarify the metric</b><span>Exact definition; how much did it drop (absolute and %)? Over what period? Sudden or gradual? Compared with what (last week, same week last year)?</span></div>
+          <div class="formula-row"><b>2. Check the data</b><span>Tracking change, logging bug, dashboard filter, delayed pipeline, definition change. A large share of real drops are instrumentation.</span></div>
+          <div class="formula-row"><b>3. External factors</b><span>Seasonality and holidays (Diwali, exam season, month-end salary cycle), competitor launch or offer, regulation (RBI rule), outage of a partner (UPI network, bank, payment gateway), app-store issues, news.</span></div>
+          <div class="formula-row"><b>4. Internal changes</b><span>Recent release, experiment, pricing change, marketing spend cut, policy change (KYC, credit rules), ops issue (delivery partners, inventory).</span></div>
+          <div class="formula-row"><b>5. Segment</b><span>Platform (Android/iOS/web), app version, geography, new vs existing users, channel, device, user cohort, merchant category. Find where the drop is concentrated.</span></div>
+          <div class="formula-row"><b>6. Decompose</b><span>Use the metric tree / funnel: which step fell? (traffic, conversion, frequency, AOV).</span></div>
+          <div class="formula-row"><b>7. Hypothesise + validate</b><span>State 2–3 hypotheses ranked by likelihood; name the data that confirms or rejects each.</span></div>
+          <div class="formula-row"><b>8. Fix + prevent</b><span>Short-term fix, long-term fix, alert/monitor so it's caught earlier next time.</span></div>
+        </div>
+        <div class="memory"><b>Say this early:</b> "Before diagnosing user behaviour, I'd rule out a data issue and any external event, then segment to see where the drop is concentrated." Interviewers mark you down for jumping straight to a product theory.</div>
+      </section>
+
+      <section id="exp" data-nav="3 · Experiment design" data-search>
+        <div class="section-head"><div><span class="section-no">03 / EXPERIMENTS</span><h2>Experiment design template</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Hypothesis</b><span>"Showing the delivery time on the home screen will increase order conversion because users drop when they discover delays at checkout."</span></div>
+          <div class="formula-row"><b>Unit of randomisation</b><span>User (usual), session, device, city/store (when users interact, e.g. marketplaces, to avoid spillover).</span></div>
+          <div class="formula-row"><b>Primary metric</b><span>One metric the decision rests on (conversion per visitor).</span></div>
+          <div class="formula-row"><b>Secondary + guardrails</b><span>AOV, cancellations, latency, complaints, revenue per user.</span></div>
+          <div class="formula-row"><b>Sample size + duration</b><span>From baseline, minimum detectable effect, α 5%, power 80% (D3: 10%→11% needs ≈14,751 users per arm). Run full weeks to cover day-of-week patterns.</span></div>
+          <div class="formula-row"><b>Decision rule</b><span>Ship if primary significantly up and no guardrail significantly worse; written before launch.</span></div>
+          <div class="formula-row"><b>Threats</b><span>Novelty effect, sample-ratio mismatch, peeking, network effects, multiple metrics, seasonality.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>When A/B isn't possible</th><th>Alternative</th></tr>
+          <tr><td>Marketplace with spillovers</td><td>Geo or switchback tests (alternate time slots by city)</td></tr>
+          <tr><td>Pricing seen publicly</td><td>City-level tests, difference-in-differences</td></tr>
+          <tr><td>Too few users (B2B)</td><td>Before/after with controls, qualitative interviews, staged rollout</td></tr>
+          <tr><td>Already launched</td><td>Difference-in-differences, regression discontinuity, synthetic control</td></tr>
+        </table>
+      </section>
+
+      <section id="cases" data-nav="4 · Ten worked cases" data-search>
+        <div class="section-head"><div><span class="section-no">04 / PRACTICE</span><h2>Ten worked cases</h2></div><span class="tag pyq">try first</span></div>
+        <details><summary><b>1 · UPI app: successful transactions down 15% yesterday</b></summary><p>Data: check success vs initiated; tracking release. External: NPCI or a large bank's servers down (check bank-wise success rate — concentrated in one bank points to a partner outage), holiday. Internal: app release causing failures on one Android version. Segment by bank, app version, P2P vs P2M. Fix: route messages, show bank-down banner, alert on bank-wise success rate.</p></details>
+        <details><summary><b>2 · Quick-commerce: orders per user down 8% over a month</b></summary><p>Gradual → not a bug. Check: competitor offers (Instamart/Zepto discounts), our delivery-fee change, stock-outs (fill rate), delivery-time increase (rain, rider shortage), cohort mix (new users from a campaign order less). Decompose: visits per user × conversion × orders. Validate with fill-rate and ETA by store.</p></details>
+        <details><summary><b>3 · Credit card: spend per active card down 10%</b></summary><p>Check: seasonality (post-festive dip), reward devaluation (users moved spend to other cards), MCC changes (rent/wallet loads excluded from rewards), credit-limit cuts, decline-rate increase (fraud rules), new-card mix. Segment by MCC, tenure, limit band. Guardrail: delinquency.</p></details>
+        <details><summary><b>4 · Food delivery: app-open to order conversion down on iOS only</b></summary><p>Platform-specific → likely release or OS update. Check iOS version split, crash logs, payment-gateway failures on iOS, Apple Pay/UPI intent changes. Roll back or hot-fix.</p></details>
+        <details><summary><b>5 · Metrics for WhatsApp Pay / UPI in a chat app</b></summary><p>North star: monthly transacting users. Inputs: activation (first payment within 7 days of onboarding), frequency, P2M share. Guardrails: failure rate, fraud complaints, chat engagement (don't hurt core product).</p></details>
+        <details><summary><b>6 · Metrics for LinkedIn "Open to Work"</b></summary><p>Goal: help seekers get hired without hurting recruiter experience. Adoption among job seekers; recruiter InMails to flagged members; response rate; hires attributed. Guardrail: stigma signals (profile hides), spam reports.</p></details>
+        <details><summary><b>7 · Test free delivery above ₹199 vs ₹299</b></summary><p>City-level or user-level test; primary: contribution margin per user (not orders alone); secondary: orders, AOV; guardrail: retention. Expect AOV bunching just above the threshold.</p></details>
+        <details><summary><b>8 · Test a new onboarding flow (CheQ-style)</b></summary><p>Unit: new user; primary: % completing KYC and linking a card within 7 days; guardrail: drop-off at each step, support tickets; check SRM, run 2 full weeks.</p></details>
+        <details><summary><b>9 · DAU up 20% but revenue flat</b></summary><p>Possible: low-value users from a campaign, engagement feature not tied to purchase, discounting, bots. Segment new vs existing; check revenue per DAU; check ARPU by cohort.</p></details>
+        <details><summary><b>10 · Experiment won but metric fell after launch</b></summary><p>Novelty effect, winner's curse (overestimated effect), seasonality, interaction with other launches, test population not representative. Use holdback groups to measure long-run effect.</p></details>
+      </section>
+
+      <section id="plan" data-nav="5 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Draw metric trees for a UPI app, a credit card, and a quick-commerce app</label>
+          <label class="checkline"><input type="checkbox"> Do the ten cases aloud in under 8 minutes each</label>
+          <label class="checkline"><input type="checkbox"> Write up your CheQ A/B test as a 60-second story</label>
+          <label class="checkline"><input type="checkbox"> Do 5 RCA cases from the "Product Metrics" resource and casebooks in your folder</label>
+          <label class="checkline"><input type="checkbox"> Compute one sample size by hand using D3</label>
+        </div>
+        <div class="memory"><b>Pair with:</b> D1 (SQL to pull the segments), D3 (statistics) and P1 (product sense). Next: P3 (technical and AI product).</div>
+      </section>

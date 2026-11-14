@@ -97,20 +97,20 @@ var VK_CONTENT = (function () {
   const MODULES = [
     ['A1', 'Mental maths + speed', 'Aptitude / OA', '2026-12-02', 'notes/A1_Mental_Maths_Speed.html'], ['A2', 'Quant aptitude (CAT-style)', 'Aptitude / OA', '2026-12-03', 'notes/A2_Quant_Aptitude.html'],
     ['A3', 'Data interpretation + logical reasoning', 'Aptitude / OA', '2026-12-08', 'notes/A3_DI_Logical_Reasoning.html'], ['A4', 'Probability, P&C, expected value + puzzles', 'Aptitude / OA', '2026-12-11', 'notes/A4_Probability_Puzzles.html'],
-    ['A5', 'Verbal, psychometric + GD', 'Aptitude / OA', '2027-01-17'],
+    ['A5', 'Verbal, psychometric + GD', 'Aptitude / OA', '2027-01-17', 'notes/A5_Verbal_Psychometric_GD.html'],
     ['S1', 'Guesstimates + structured thinking', 'Case spine', '2026-11-09', 'notes/S1_Guesstimates_Structured_Thinking.html'],
     ['S2', 'Case frameworks (card + lending cases)', 'Case spine', '2026-12-05', 'notes/S2_Case_Frameworks.html'], ['S3', 'Story bank + HR', 'Case spine', '2026-12-06', 'notes/S3_Story_Bank_HR.html'],
     ['S4', 'CV from scratch (internship + CDC)', 'Case spine', '2026-12-13', 'notes/S4_CV_From_Scratch.html'], ['B1', 'Banking + credit-card business', 'Case spine', '2026-12-14', 'notes/B1_Banking_Card_Business.html'],
     ['S5', 'Business + unit economics', 'Case spine', '2026-12-20', 'notes/S5_Business_Unit_Economics.html'], ['S6', 'Outreach + email playbook', 'Case spine', '2026-12-15', 'notes/S6_Outreach_Email_Playbook.html'],
     ['D1', 'SQL: zero to interview', 'Data', '2026-12-10', 'notes/D1_SQL_Zero_to_Interview.html'], ['D2', 'Python + pandas for analysts', 'Data', '2026-12-17', 'notes/D2_Python_Pandas.html'],
     ['D3', 'Statistics + A/B testing', 'Data', '2026-12-19', 'notes/D3_Statistics_AB_Testing.html'], ['D4', 'DSA-lite, the fun way', 'Data', '2027-03-15'],
-    ['M1', 'Classical ML rapid-fire', 'AI/ML', '2026-12-22', 'notes/M1_Classical_ML.html'], ['M2', 'LLM internals', 'AI/ML', '2027-02-07'],
+    ['M1', 'Classical ML rapid-fire', 'AI/ML', '2026-12-22', 'notes/M1_Classical_ML.html'], ['M2', 'LLM internals', 'AI/ML', '2027-02-07', 'notes/M2_LLM_Internals.html'],
     ['M3', 'RAG, agents, evals', 'AI/ML', '2027-02-21'], ['M5', 'ML system design + project stories', 'AI/ML', '2027-03-28'],
     ['F1', 'Accounting + 3 statements', 'Finance', '2026-12-23', 'notes/F1_Accounting_3_Statements.html'], ['F2', 'Valuation', 'Finance', '2026-12-28', 'notes/F2_Valuation.html'],
-    ['F4', 'VC + PE, investment memo', 'Finance', '2027-01-24'], ['F3', 'M&A + LBO', 'Finance', '2027-03-14'],
+    ['F4', 'VC + PE, investment memo', 'Finance', '2027-01-24', 'notes/F4_VC_PE_Investment_Memo.html'], ['F3', 'M&A + LBO', 'Finance', '2027-03-14'],
     ['Q1', 'Quant trading interviews', 'Finance', '2027-04-18'], ['F5', 'Markets + finance Q-bank', 'Finance', '2027-08-15'],
-    ['P1', 'Product sense + design', 'Product', '2026-12-26', 'notes/P1_Product_Sense_Design.html'], ['P2', 'Metrics, RCA, A/B', 'Product', '2026-12-30'],
-    ['P3', 'Tech + AI product', 'Product', '2027-01-31'], ['P4', 'Deck, PRD, teardown', 'Product', '2027-02-14'],
+    ['P1', 'Product sense + design', 'Product', '2026-12-26', 'notes/P1_Product_Sense_Design.html'], ['P2', 'Metrics, RCA, A/B', 'Product', '2026-12-30', 'notes/P2_Metrics_RCA_AB.html'],
+    ['P3', 'Tech + AI product', 'Product', '2027-01-31', 'notes/P3_Tech_AI_Product.html'], ['P4', 'Deck, PRD, teardown', 'Product', '2027-02-14'],
     ['X2', 'Company dossiers', 'Final', '2027-08-31'], ['X1', 'Final revision pack', 'Final', '2027-09-30']
   ].map(([c, t, track, due, local]) => ({ c, t, track, due, local: local || null }));
 

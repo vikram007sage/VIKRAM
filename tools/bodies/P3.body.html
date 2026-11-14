@@ -1,0 +1,103 @@
+<!--META P3 | Tech + AI product | P3 / TECH PRODUCT | Product track · Module P3 | Tech understanding<br>+ AI product | PM and product-consulting interviews now include a technical round: "what happens when you type a URL?", "how would you scale this?", "how does an LLM feature work and what would it cost?". You don't need to code, but you must reason about systems, trade-offs and AI the way an engineer would respect. This module covers the web stack, APIs, databases, scaling, payments rails, and how to build, price and measure AI features in 2026. | System basics for PMs; UPI + card rails; AI feature cost maths -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What "technical" means for a PM</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Explain how things work</strong><span class="muted">client–server, APIs, databases, caching, how an app talks to a backend</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Reason about trade-offs</strong><span class="muted">speed vs cost vs reliability; build vs buy; consistency vs availability</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>AI product judgment</strong><span class="muted">when to use a model, which kind, how to evaluate and what it costs</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Work with engineers</strong><span class="muted">estimating, scoping MVPs, technical debt, incidents</span></div><span class="frequency">10%</span></div>
+        </div>
+        <div class="memory"><b>Note:</b> Google removed its standalone PM technical interview in its 2026 process but probes technical depth inside product design rounds. Indian fintech and SaaS roles still ask direct technical questions.</div>
+      </section>
+
+      <section id="web" data-nav="1 · How the web works" data-search>
+        <div class="section-head"><div><span class="section-no">01 / WEB</span><h2>What happens when you open an app or URL</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>DNS</b><span>The domain name is looked up to find the server's IP address (cached by browser, OS, ISP).</span></div>
+          <div class="formula-row"><b>Connection</b><span>TCP connection + TLS handshake (HTTPS encryption with certificates).</span></div>
+          <div class="formula-row"><b>CDN</b><span>Static files (images, scripts) often served from a nearby content delivery network edge.</span></div>
+          <div class="formula-row"><b>Load balancer → app servers</b><span>Request routed to one of many servers running the backend code.</span></div>
+          <div class="formula-row"><b>Cache → database</b><span>Server checks a cache (e.g. Redis) and then the database; builds a response.</span></div>
+          <div class="formula-row"><b>Response</b><span>JSON (for an app) or HTML; the client renders it. Each step adds latency — users notice above ~100–300 ms for interactions.</span></div>
+        </div>
+        <div class="grid">
+          <div class="card"><h3>APIs</h3><p>A contract for how software talks: REST (resources + HTTP verbs GET/POST/PUT/DELETE, JSON), GraphQL (client asks for exactly the fields it needs), webhooks (server calls you when something happens, e.g. payment success). Status codes: 200 OK, 400 bad request, 401 unauthorised, 404 not found, 429 rate-limited, 500 server error.</p></div>
+          <div class="card"><h3>Databases</h3><p>SQL/relational (Postgres, MySQL): structured, transactions, strong consistency — payments, orders. NoSQL (MongoDB, DynamoDB, Cassandra): flexible schema, horizontal scale — feeds, logs, catalogues. Vector databases: similarity search over embeddings (M3).</p></div>
+          <div class="card"><h3>Front end vs back end</h3><p>Front end: what users see (web, Android, iOS, or cross-platform like React Native/Flutter). Back end: business logic, data, integrations. Native apps need app-store releases; web and server changes ship instantly — this affects how fast you can experiment.</p></div>
+        </div>
+      </section>
+
+      <section id="scale" data-nav="2 · Scaling + reliability" data-search>
+        <div class="section-head"><div><span class="section-no">02 / SCALE</span><h2>Scaling, reliability and trade-offs</h2></div></div>
+        <table class="compare">
+          <tr><th>Concept</th><th>Plain meaning</th><th>Product example</th></tr>
+          <tr><td>Vertical vs horizontal scaling</td><td>Bigger machine vs more machines</td><td>Flash sale on an e-commerce app: add servers automatically</td></tr>
+          <tr><td>Caching</td><td>Keep frequent answers in fast memory</td><td>Restaurant menu cached; live order status not</td></tr>
+          <tr><td>Queues (Kafka, SQS)</td><td>Process work later, smooth spikes</td><td>Send order-confirmation SMS asynchronously</td></tr>
+          <tr><td>Microservices vs monolith</td><td>Many small services vs one codebase</td><td>Microservices let teams ship independently but add complexity</td></tr>
+          <tr><td>CAP trade-off</td><td>During a network split, choose consistency or availability</td><td>Bank balance: consistency; social feed: availability</td></tr>
+          <tr><td>Idempotency</td><td>Repeating a request has the same effect as once</td><td>Payment retry must not charge twice</td></tr>
+          <tr><td>SLA / SLO, uptime</td><td>99.9% ≈ 8.8 hours down a year; 99.99% ≈ 53 minutes</td><td>Payments need higher uptime than a blog</td></tr>
+          <tr><td>Rate limiting</td><td>Cap requests per user/time</td><td>Prevent OTP abuse</td></tr>
+        </table>
+        <details><summary><b>Practice: "Design the backend for a flash sale of 1 lakh phones in 1 minute"</b></summary><p>Virtual waiting room/queue, inventory held in a fast in-memory store with atomic decrements, reservation with a timer before payment, idempotent payment calls, CDN for static pages, auto-scaling, bot protection (captcha, rate limits). Metrics: successful orders, time to purchase, error rate, oversell count (must be 0).</p></details>
+      </section>
+
+      <section id="pay" data-nav="3 · Payments rails" data-search>
+        <div class="section-head"><div><span class="section-no">03 / PAYMENTS</span><h2>How UPI and card payments flow</h2></div><span class="tag hot">fintech</span></div>
+        <div class="grid">
+          <div class="card"><h3>UPI</h3><p>Payer app (PSP, e.g. PhonePe/GPay) → payer's PSP bank → NPCI UPI switch → payee's bank → credit; confirmation back through the chain, usually in seconds. Uses a virtual payment address (VPA); authorised with UPI PIN. Zero merchant discount rate for most person-to-merchant UPI. Failures often come from a bank's server being down — success rates are tracked per bank.</p></div>
+          <div class="card"><h3>Cards</h3><p>Customer → merchant → acquirer (merchant's bank / payment aggregator like Razorpay) → card network (Visa, Mastercard, RuPay) → issuer (customer's bank) approves → settlement later (T+1). The merchant pays the MDR, split among issuer (interchange), network and acquirer. RBI rules: card tokenisation (no storing card numbers), additional factor of authentication for domestic online payments.</p></div>
+          <div class="card"><h3>RuPay credit on UPI</h3><p>RuPay credit cards can be linked to UPI, bringing credit to QR payments. Small-value merchants typically pay no MDR on small transactions; issuers earn interchange on larger ones. Important for card growth among young users (B1).</p></div>
+        </div>
+      </section>
+
+      <section id="ai" data-nav="4 · AI features" data-search>
+        <div class="section-head"><div><span class="section-no">04 / AI</span><h2>Building AI features as a PM</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Approach</th><th>When</th><th>Trade-off</th></tr>
+          <tr><td>Prompting a hosted LLM via API</td><td>First version of most features</td><td>Fast to build; per-call cost; data leaves your system (check terms)</td></tr>
+          <tr><td>RAG (retrieval + LLM)</td><td>Answers must use your documents/data (FAQs, policies, product catalogue)</td><td>Quality depends on retrieval; easier to update than fine-tuning (M3)</td></tr>
+          <tr><td>Tools / agents (function calling, MCP)</td><td>The model must act: check order status, book, file a ticket</td><td>More powerful, more risk; needs permissions and human approval for sensitive actions</td></tr>
+          <tr><td>Fine-tuning a model</td><td>Consistent style/format at scale, a narrow task, or cost reduction with a small model</td><td>Needs good labelled data; harder to update</td></tr>
+          <tr><td>Classical ML</td><td>Prediction on structured data: fraud, credit risk, churn, ranking</td><td>Cheaper, explainable, well understood (M1)</td></tr>
+          <tr><td>Rules</td><td>Clear logic, compliance</td><td>Brittle but predictable</td></tr>
+        </table>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Cost maths</b><span>Cost per call = (input tokens × input price + output tokens × output price) ÷ 1,000,000. Example: a support bot uses 3,000 input + 400 output tokens per answer at $2/$10 per million → $0.006 + $0.004 = $0.010 ≈ ₹0.85. At 1 lakh chats/day ≈ ₹85,000/day. A smaller model at a tenth the price, or caching, may make the feature profitable.</span></div>
+          <div class="formula-row"><b>Latency</b><span>Time to first token and total time; stream responses; use small models for simple steps.</span></div>
+          <div class="formula-row"><b>Quality</b><span>Build an eval set before launch (100–500 real examples with expected answers); measure accuracy, hallucination rate, refusal rate; online: resolution rate, escalation to human, CSAT (M3).</span></div>
+          <div class="formula-row"><b>Risks</b><span>Hallucination, prompt injection (malicious text in documents or web pages instructing the model), data privacy (India's DPDP Act), bias, over-reliance; mitigate with grounding, permission limits, human review, logging.</span></div>
+        </div>
+        <div class="memory"><b>2026 context:</b> frontier models from OpenAI, Google, Anthropic and others release every few weeks; open-weight models (Qwen, DeepSeek, Llama, Kimi and others) are competitive for many tasks. Agents connect to tools through standards such as the Model Context Protocol (MCP, created by Anthropic in Nov 2024 and since adopted by OpenAI, Google and Microsoft; ~97 million monthly SDK downloads by March 2026) and agent-to-agent protocols such as Google's A2A. Say "I'd pick the model by evaluating 2–3 on our own eval set for quality, cost and latency" rather than naming a favourite.</div>
+      </section>
+
+      <section id="qs" data-nav="5 · Interview questions" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PRACTICE</span><h2>Questions to prepare</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Key points</th></tr>
+          <tr><td>What happens when you type swiggy.com?</td><td>Section 1 chain</td></tr>
+          <tr><td>Explain an API to a 10-year-old.</td><td>A waiter: takes your order to the kitchen, brings back food; you don't enter the kitchen</td></tr>
+          <tr><td>SQL vs NoSQL for an order system?</td><td>SQL for orders/payments (transactions); NoSQL for activity feeds</td></tr>
+          <tr><td>The app is slow. How do you investigate?</td><td>Where: client, network, server, database; which screens; recent release; metrics p50/p95 latency</td></tr>
+          <tr><td>How does UPI work?</td><td>Section 3</td></tr>
+          <tr><td>Why do payments fail?</td><td>Bank down, wrong PIN, limits, network timeouts, risk declines; retries need idempotency</td></tr>
+          <tr><td>Build vs buy for KYC?</td><td>Buy (regulated, vendors exist); build only core differentiators</td></tr>
+          <tr><td>Design an AI support bot for a bank.</td><td>RAG on policies, tools for account info with authentication, escalation, evals, guardrails on advice</td></tr>
+          <tr><td>How would you reduce LLM costs?</td><td>Smaller models, caching, shorter prompts, batching, route only hard queries to big models</td></tr>
+          <tr><td>How do you know the AI feature works?</td><td>Offline evals + online A/B (P2) on task success, not just usage</td></tr>
+          <tr><td>What is technical debt and when do you allow it?</td><td>Shortcuts that cost later; accept for experiments, repay before scaling</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="6 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Explain the URL chain and an API aloud in 2 minutes each</label>
+          <label class="checkline"><input type="checkbox"> Draw the UPI and card flows from memory</label>
+          <label class="checkline"><input type="checkbox"> Do the flash-sale design and one AI feature design (cost + evals)</label>
+          <label class="checkline"><input type="checkbox"> Read the "ML for Product Managers" file in your folder</label>
+          <label class="checkline"><input type="checkbox"> Build one small AI feature yourself (e.g. a notes Q&amp;A for VIKRAM) and measure its cost per query</label>
+        </div>
+        <div class="memory">Pair with M2 (how LLMs work) and M3 (RAG, agents, evals). Next in Product: P4 (deck, PRD, teardown).</div>
+      </section>
