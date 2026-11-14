@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>F3 | M&A + LBO — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">F3 / DEALS</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#process">1 · Deal process</a><a href="#accretion">2 · Accretion / dilution</a><a href="#synergies">3 · Synergies + premium</a><a href="#lbo">4 · Paper LBO</a><a href="#india">5 · India deals 2026</a><a href="#qs">6 · Interview questions</a><a href="#plan">7 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Finance track · Module F3</div><h1>M&amp;A + LBO<br></h1><p>Investment banking, corporate development, PE and strategy-consulting interviews ask why companies merge, whether a deal is accretive, how synergies are valued, and to run a paper LBO in your head. This module covers deal rationale and process, accretion/dilution with four worked cases, synergies and why deals fail, a full paper LBO with returns attribution, Indian deal activity in 2026, and the questions to prepare.</p><div class="meta"><span class="pill"><span class=dot></span> Accretion/dilution worked</span><span class="pill">paper LBO 3.4×</span><span class="pill">India deals 2026</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Why companies buy companies</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Strategic reasons</h3><p>Growth (new markets, customers, products), capabilities and technology, scale and cost synergies, vertical integration, removing a competitor, diversification.</p></div>
+          <div class="card"><h3>Financial reasons</h3><p>Undervalued target, tax benefits, using excess cash, EPS accretion (weak reason on its own).</p></div>
+          <div class="card"><h3>Why deals fail</h3><p>Overpaying (winner's curse), synergies overestimated, culture clash, integration failure, leadership loss, too much debt. HBR's M&amp;A collection in your folder covers these; studies commonly find most acquisitions fail to create value for the buyer.</p></div>
+        </div>
+        <div class="memory"><b>Interview frame:</b> "A deal creates value only if the value of the combined business exceeds the price paid plus integration costs: V(A+B) − V(A) − V(B) = synergies, and synergies must exceed the premium."</div>
+      </section>
+
+      <section id="process" data-nav="1 · Deal process" data-search>
+        <div class="section-head"><div><span class="section-no">01 / PROCESS</span><h2>How a deal happens</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Strategy + target screening</b><span>Acquirer (or its bankers) lists targets fitting the strategy.</span></div>
+          <div class="formula-row"><b>2. Approach + NDA</b><span>Confidentiality agreement; initial information.</span></div>
+          <div class="formula-row"><b>3. Valuation + indicative offer</b><span>Non-binding letter of intent / term sheet with price range (F2 methods, plus synergies).</span></div>
+          <div class="formula-row"><b>4. Due diligence</b><span>Financial, legal, tax, commercial, technology, HR, ESG — quality of earnings, hidden liabilities.</span></div>
+          <div class="formula-row"><b>5. Binding offer + definitive agreements</b><span>Share purchase agreement, representations and warranties, indemnities, conditions.</span></div>
+          <div class="formula-row"><b>6. Approvals</b><span>India: Competition Commission of India (including the deal-value threshold for large tech deals), SEBI takeover code (an open offer is triggered on acquiring 25% of a listed company), RBI/FEMA for cross-border, sector regulators, NCLT for schemes of merger.</span></div>
+          <div class="formula-row"><b>7. Close + integration</b><span>100-day plan; synergy tracking.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Sell-side</th><th>Buy-side</th></tr>
+          <tr><td>Bank runs an auction: teaser → information memorandum → first-round bids → management presentations → final bids</td><td>Bank helps find, value and negotiate for a target</td></tr>
+        </table>
+      </section>
+
+      <section id="accretion" data-nav="2 · Accretion / dilution" data-search>
+        <div class="section-head"><div><span class="section-no">02 / EPS</span><h2>Accretion and dilution</h2></div><span class="tag hot">most asked</span></div>
+        <div class="eq">Pro-forma EPS = (Acquirer NI + Target NI ± synergies − after-tax cost of financing) ÷ (Acquirer shares + new shares issued)</div>
+        <p><b>Setup:</b> acquirer net income ₹1,000 cr, 100 cr shares (EPS ₹10), P/E 20× (price ₹200). Target net income ₹100 cr, bought for ₹1,500 cr (15× P/E). Tax 25%.</p>
+        <table class="compare">
+          <tr><th>Financing</th><th>Calculation</th><th>Pro-forma EPS</th><th>Result</th></tr>
+          <tr><td>All stock</td><td>Issue 1,500 ÷ 200 = 7.5 cr shares; 1,100 ÷ 107.5</td><td>₹10.23</td><td>Accretive (+2.3%)</td></tr>
+          <tr><td>All debt at 8%</td><td>Interest after tax 1,500 × 8% × 0.75 = 90; 1,010 ÷ 100</td><td>₹10.10</td><td>Accretive (+1%)</td></tr>
+          <tr><td>All cash earning 5%</td><td>Lost interest after tax 56; 1,044 ÷ 100</td><td>₹10.44</td><td>Accretive (+4.4%)</td></tr>
+          <tr><td>All stock, target at 25× (₹2,500 cr)</td><td>Issue 12.5 cr shares; 1,100 ÷ 112.5</td><td>₹9.78</td><td>Dilutive (−2.2%); needs ₹25 cr after-tax synergies to break even</td></tr>
+        </table>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Shortcut</b><span>Compare the target's earnings yield (1 ÷ P/E paid) with the acquirer's cost of each funding source: cost of stock = acquirer's earnings yield (1 ÷ 20 = 5%); after-tax cost of debt = 8% × 0.75 = 6%; cash = 5% × 0.75 = 3.75%. Target yield at 15× = 6.7% → beats all three → accretive. At 25× = 4% → below the 5% cost of stock → dilutive.</span></div>
+          <div class="formula-row"><b>Caveat</b><span>Accretion ≠ value creation. A deal can be accretive and still destroy value if the price exceeds the target's value plus synergies.</span></div>
+        </div>
+      </section>
+
+      <section id="synergies" data-nav="3 · Synergies + premium" data-search>
+        <div class="section-head"><div><span class="section-no">03 / SYNERGIES</span><h2>Synergies and the control premium</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Cost synergies</h3><p>Overlapping branches, headcount, procurement scale, shared technology. More reliable; usually realised over 2–3 years.</p></div>
+          <div class="card"><h3>Revenue synergies</h3><p>Cross-selling, new channels, pricing power. Less reliable; buyers often discount them heavily.</p></div>
+          <div class="card"><h3>Valuing them</h3><p>PV of after-tax synergies minus integration costs, phased in. ₹50 cr a year pre-tax from year 3, perpetuity at 12% WACC → roughly (50 × 0.75 ÷ 0.12) discounted 2 years ≈ ₹250 cr.</p></div>
+        </div>
+        <div class="memory"><b>Premium:</b> offer price over undisturbed share price, often 20–40%. Rule: the premium paid should not exceed the PV of synergies the buyer can capture, or the value goes to the target's shareholders.</div>
+      </section>
+
+      <section id="lbo" data-nav="4 · Paper LBO" data-search>
+        <div class="section-head"><div><span class="section-no">04 / LBO</span><h2>A paper LBO you can do in your head</h2></div><span class="tag core">core</span></div>
+        <p><b>Assumptions (₹ cr):</b> EBITDA 100; buy at 8× → EV 800; debt 5× EBITDA = 500 at 10%; equity 300. EBITDA grows 10% a year. D&amp;A 20, capex 20, working-capital increase 5, tax 25%. All free cash flow repays debt. Exit after 5 years at 8×.</p>
+        <table class="compare">
+          <tr><th>Year</th><th>EBITDA</th><th>Interest</th><th>FCF to repay debt</th><th>Debt at year end</th></tr>
+          <tr><td>1</td><td>110</td><td>50</td><td>25</td><td>475</td></tr>
+          <tr><td>2</td><td>121</td><td>48</td><td>35</td><td>440</td></tr>
+          <tr><td>3</td><td>133</td><td>44</td><td>47</td><td>393</td></tr>
+          <tr><td>4</td><td>146</td><td>39</td><td>60</td><td>333</td></tr>
+          <tr><td>5</td><td>161</td><td>33</td><td>76</td><td>257</td></tr>
+        </table>
+        <p>FCF = EBITDA − interest − tax on (EBITDA − D&amp;A − interest) − capex − ΔNWC; year 1 = 110 − 50 − 10 − 20 − 5 = 25. Exit EV = 161 × 8 ≈ 1,288; less debt 257 → equity ≈ 1,032. <b>MOIC ≈ 3.4×, IRR ≈ 28%.</b> At a 9× exit: MOIC ≈ 4.0×, IRR ≈ 32%.</p>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Returns attribution</b><span>Equity gain ≈ 732 = EBITDA growth (61 × 8 ≈ 488) + debt paydown (500 − 257 ≈ 243) + multiple expansion (0 here).</span></div>
+          <div class="formula-row"><b>Mental shortcuts</b><span>2× in 5 years ≈ 15% IRR; 3× ≈ 25%; 2× in 3 years ≈ 26%. Rule of 72: years to double ≈ 72 ÷ IRR%.</span></div>
+          <div class="formula-row"><b>What raises IRR</b><span>Lower entry price, more debt (if serviceable), faster EBITDA growth, higher exit multiple, earlier exit, dividend recapitalisation.</span></div>
+          <div class="formula-row"><b>Debt package</b><span>Senior secured loans (cheapest, amortising) → high-yield bonds / mezzanine (pricier, bullet) → equity. Covenants: max leverage, minimum interest cover. In India, leverage for buyouts is often via offshore holding companies or NCDs, and Indian banks face restrictions on financing share acquisitions.</span></div>
+        </div>
+      </section>
+
+      <section id="india" data-nav="5 · India deals 2026" data-search>
+        <div class="section-head"><div><span class="section-no">05 / MARKET</span><h2>Indian deal activity in 2026</h2></div><span class="tag hot">current</span></div>
+        <table class="compare">
+          <tr><th>Indicator (Grant Thornton Bharat Dealtracker)</th><th>Latest</th></tr>
+          <tr><td>2025 full year</td><td>2,658 M&amp;A + PE transactions worth ~US$133 bn</td></tr>
+          <tr><td>Q2 2026</td><td>240 M&amp;A deals worth US$27.9 bn — highest quarterly M&amp;A value since Q2 2022; outbound deals 84% of M&amp;A value; PE 325 deals worth US$8.4 bn</td></tr>
+          <tr><td>Largest deal</td><td>Sun Pharma's US$11.8 bn acquisition of US-listed Organon (announced April 2026) — the largest overseas acquisition by an Indian pharma company</td></tr>
+          <tr><td>Big PE deals</td><td>US$1.6 bn acquisition of the Rajasthan Royals IPL franchise (Q2); KKR's US$1.4 bn acquisition of Medicover Hospitals India (August)</td></tr>
+          <tr><td>Theme</td><td>"Fewer, bigger" deals; Indian companies buying abroad for capabilities; domestic deals dominate by number, not value</td></tr>
+        </table>
+        <div class="memory"><b>Prepare one deal deeply</b> (Sun–Organon is ideal): rationale (US women's health and biosimilars portfolio, scale), price and multiple, financing, synergies, risks (debt, integration, US pricing). Interviewers love "tell me about a recent deal".</div>
+      </section>
+
+      <section id="qs" data-nav="6 · Interview questions" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PRACTICE</span><h2>Questions to prepare</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Key points</th></tr>
+          <tr><td>Walk me through a merger model.</td><td>Purchase price → financing mix → combine income statements → synergies, financing costs → pro-forma EPS → accretion/dilution, sensitivities</td></tr>
+          <tr><td>Why use stock vs cash?</td><td>Stock: acquirer shares overvalued, preserve cash/debt capacity, share risk; cash: certainty for sellers, no dilution, signals confidence</td></tr>
+          <tr><td>Is an accretive deal always good?</td><td>No — value depends on price vs value plus synergies</td></tr>
+          <tr><td>Walk me through an LBO.</td><td>Entry price and debt → project FCF and debt paydown → exit value → equity → MOIC/IRR</td></tr>
+          <tr><td>What makes a good LBO candidate?</td><td>Stable cash flows, low capex, strong market position, cost levers, low existing debt, clear exits</td></tr>
+          <tr><td>Why does leverage boost returns?</td><td>Smaller equity cheque; debt cheaper than equity; paydown transfers value to equity — but adds bankruptcy risk</td></tr>
+          <tr><td>What is goodwill in an acquisition?</td><td>Price paid over fair value of net identifiable assets; tested for impairment (F1)</td></tr>
+          <tr><td>How are synergies estimated?</td><td>Bottom-up by cost line; benchmarks from similar deals; phase-in and integration costs</td></tr>
+          <tr><td>Hostile takeover defences?</td><td>Poison pills (rare in India), promoter holding, staggered boards; in India promoter stakes make hostile deals rare (L&amp;T–Mindtree is a known exception)</td></tr>
+          <tr><td>What triggers an open offer in India?</td><td>Acquiring 25%+ voting rights (or control) of a listed company under SEBI's takeover code</td></tr>
+          <tr><td>Recent deal you followed?</td><td>Section 5</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="7 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">07 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Recompute the four accretion/dilution cases without notes</label>
+          <label class="checkline"><input type="checkbox"> Build the paper LBO in Excel, then do it on paper in 10 minutes</label>
+          <label class="checkline"><input type="checkbox"> Change one input at a time (entry multiple, leverage, growth) and note IRR</label>
+          <label class="checkline"><input type="checkbox"> Write a 1-page note on Sun Pharma–Organon</label>
+          <label class="checkline"><input type="checkbox"> Read the M&amp;A and LBO sections of the technical interview guide and Vault guide in your folder</label>
+        </div>
+        <div class="memory">Pair with F1 (accounting for goodwill), F2 (valuation) and F4 (PE). Next in Finance: F5 (markets and finance question bank).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-f3-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-f3-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-f3-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

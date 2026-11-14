@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>M3 | RAG, agents, evals — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">M3 / APPLIED GENAI</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#rag">1 · RAG pipeline</a><a href="#agents">2 · Agents</a><a href="#cost">3 · Cost + latency</a><a href="#evals">4 · Evaluation</a><a href="#prod">5 · Production</a><a href="#project">6 · CV project brief</a><a href="#qs">7 · Interview questions</a><a href="#plan">8 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">AI/ML track · Module M3</div><h1>RAG, agents<br>+ evals</h1><p>Most GenAI work in 2026 isn't training models — it's building systems around them: retrieval so answers use your data, agents that call tools, and evaluations that prove it works. Interviewers ask you to design these, debug them and say how you'd measure them. This module covers the RAG pipeline choice by choice, agent patterns and protocols (MCP, A2A), evaluation with worked metrics, production concerns, and a project you can build for your CV.</p><div class="meta"><span class="pill"><span class=dot></span> RAG pipeline + fixes</span><span class="pill">agent patterns</span><span class="pill">eval maths + project brief</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>The three building blocks</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>RAG</h3><p>Retrieve relevant text from your documents, give it to the model, answer from it with citations. Solves: private and fresh knowledge, fewer hallucinations.</p></div>
+          <div class="card"><h3>Agents</h3><p>A model in a loop that decides which tool to call (search, database, API, code), observes the result, and continues until the task is done.</p></div>
+          <div class="card"><h3>Evals</h3><p>Test sets and metrics that tell you whether a change made the system better — the difference between a demo and a product.</p></div>
+        </div>
+        <div class="memory"><b>Your CV gap → opportunity:</b> the roadmap in VIKRAM has "Project 2: RAG app with an eval set" due 31 March 2027. Section 6 gives a brief for exactly that project, using your own notes as the corpus.</div>
+      </section>
+
+      <section id="rag" data-nav="1 · RAG pipeline" data-search>
+        <div class="section-head"><div><span class="section-no">01 / RAG</span><h2>The RAG pipeline, choice by choice</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Ingest</b><span>Parse PDFs, HTML, docs; clean headers/footers; keep metadata (title, section, date, source URL, access permissions).</span></div>
+          <div class="formula-row"><b>2. Chunk</b><span>Split into 200–1,000-token pieces with 10–20% overlap; better: split on structure (headings, paragraphs, table rows). A 250k-token handbook at 500-token chunks with 50 overlap → ~556 chunks.</span></div>
+          <div class="formula-row"><b>3. Embed</b><span>An embedding model turns each chunk into a vector. Choose for language (multilingual if Hindi/Indic content), domain and cost.</span></div>
+          <div class="formula-row"><b>4. Index</b><span>Vector database or library (FAISS, Chroma, pgvector, Pinecone, Weaviate, Qdrant) with approximate nearest-neighbour search (HNSW).</span></div>
+          <div class="formula-row"><b>5. Retrieve</b><span>Embed the question; top-k by cosine similarity. Better: hybrid search (vector + BM25 keyword search) to catch exact terms like product codes, plus metadata filters (date, user's permissions).</span></div>
+          <div class="formula-row"><b>6. Re-rank</b><span>A cross-encoder re-ranker scores (question, chunk) pairs more accurately; keep top 3–8.</span></div>
+          <div class="formula-row"><b>7. Generate</b><span>Prompt: "Answer only from the context; cite chunk ids; say you don't know if the answer isn't there."</span></div>
+          <div class="formula-row"><b>8. Evaluate + monitor</b><span>Retrieval and answer metrics separately (section 4); log queries with no good results.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Problem</th><th>Likely cause</th><th>Fix</th></tr>
+          <tr><td>Right document never retrieved</td><td>Chunking splits the answer; vocabulary mismatch</td><td>Structure-aware chunks, hybrid search, query rewriting, HyDE (embed a hypothetical answer)</td></tr>
+          <tr><td>Retrieved but answer wrong</td><td>Too many irrelevant chunks; model ignores context</td><td>Re-ranking, fewer chunks, stricter prompt, better model</td></tr>
+          <tr><td>Answers mix up versions</td><td>Old documents indexed</td><td>Metadata dates, filters, re-indexing pipeline</td></tr>
+          <tr><td>Multi-step questions fail</td><td>One retrieval isn't enough</td><td>Query decomposition, iterative/agentic retrieval</td></tr>
+          <tr><td>Tables and numbers wrong</td><td>PDF parsing</td><td>Table-aware parsers, store tables as structured data, use SQL tool</td></tr>
+          <tr><td>Users see documents they shouldn't</td><td>No access control in retrieval</td><td>Permission filters at retrieval time</td></tr>
+        </table>
+        <div class="memory"><b>Variants to name:</b> GraphRAG (build a knowledge graph of entities for "global" questions), agentic RAG (model decides when and what to retrieve), long-context models as an alternative for small corpora (simpler but costlier per query).</div>
+      </section>
+
+      <section id="agents" data-nav="2 · Agents" data-search>
+        <div class="section-head"><div><span class="section-no">02 / AGENTS</span><h2>Agents: patterns and protocols</h2></div><span class="tag hot">2026</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Tool calling</b><span>You describe tools (name, purpose, JSON schema of arguments); the model outputs a structured call; your code executes it and returns the result.</span></div>
+          <div class="formula-row"><b>ReAct loop</b><span>Reason → act (call tool) → observe → repeat → final answer. Cap the number of steps.</span></div>
+          <div class="formula-row"><b>Planner–executor</b><span>One step makes a plan; others execute sub-tasks; good for long tasks.</span></div>
+          <div class="formula-row"><b>Workflows vs agents</b><span>Fixed sequences of LLM calls (workflows) are more predictable; use open-ended agents only when steps can't be known in advance.</span></div>
+          <div class="formula-row"><b>Multi-agent</b><span>Specialised agents (researcher, writer, checker) coordinating; adds cost and failure points — justify it.</span></div>
+          <div class="formula-row"><b>Memory</b><span>Short-term (conversation), long-term (stored facts/preferences in a database), retrieved when relevant.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Protocol</th><th>What it standardises</th></tr>
+          <tr><td>Model Context Protocol (MCP)</td><td>How an AI application connects to tools and data (servers expose tools/resources; clients like assistants or IDEs call them). Introduced by Anthropic in November 2024; adopted by OpenAI, Google and Microsoft; ~97 million monthly SDK downloads by March 2026 and thousands of public servers</td></tr>
+          <tr><td>Agent2Agent (A2A)</td><td>How agents from different vendors delegate tasks to each other; started by Google, now under the Linux Foundation</td></tr>
+          <tr><td>AGENTS.md and similar</td><td>Instructions files that tell coding agents how to work in a repository</td></tr>
+        </table>
+        <div class="memory"><b>Safety for agents:</b> least-privilege tools, human approval for irreversible or money-moving actions, treat all tool output and web content as untrusted (prompt injection), log every action, sandbox code execution, step and spend limits.</div>
+      </section>
+
+      <section id="cost" data-nav="3 · Cost + latency" data-search>
+        <div class="section-head"><div><span class="section-no">03 / ECONOMICS</span><h2>Cost and latency of agents</h2></div></div>
+        <div class="card">
+          <p><b>Example:</b> an agent takes 6 steps; each call sends ~4,000 input tokens (growing context) and gets ~300 output tokens; at $3 / $15 per million → 6 × (0.012 + 0.0045) ≈ <b>$0.10 per task</b> (≈ ₹8). At 10,000 tasks a day that's ~$1,000/day. Levers: smaller model for routine steps, prompt caching of the fixed system prompt and tool definitions, trimming context, fewer steps via a better plan.</p>
+        </div>
+        <div class="memory"><b>Rule of thumb:</b> agents multiply cost and latency by the number of steps. Always compare against a simpler workflow on the same eval set.</div>
+      </section>
+
+      <section id="evals" data-nav="4 · Evaluation" data-search>
+        <div class="section-head"><div><span class="section-no">04 / EVALS</span><h2>Evaluating RAG and agents</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Layer</th><th>Metric</th><th>How</th></tr>
+          <tr><td>Retrieval</td><td>Recall@k, precision@k, MRR, nDCG</td><td>Label which chunks are relevant for each test question</td></tr>
+          <tr><td>Answer</td><td>Correctness, faithfulness (supported by retrieved context), completeness, citation accuracy</td><td>Reference answers + human or LLM-as-judge grading</td></tr>
+          <tr><td>Agent</td><td>Task success rate, steps per task, tool-call error rate, cost and time per task</td><td>Scripted scenarios with checkable end states</td></tr>
+          <tr><td>Safety</td><td>Harmful outputs, prompt-injection success rate, data leakage, refusal correctness</td><td>Adversarial test set</td></tr>
+          <tr><td>Online</td><td>Resolution rate, escalation to human, thumbs up/down, retention, CSAT</td><td>A/B tests and dashboards (P2)</td></tr>
+        </table>
+        <details><summary><b>Worked metrics</b></summary>
+          <p><b>Retrieval:</b> 5 test questions; the relevant chunk appears at ranks 1, 3, not found, 2, 1. Recall@3 = 4/5 = 0.80. MRR = (1 + 1/3 + 0 + 1/2 + 1) ÷ 5 ≈ 0.57.</p>
+          <p><b>Answers:</b> 200 graded answers: 170 correct (85%), 18 hallucinated (9%), 12 correctly refused (6%). Target the 9% first: inspect whether retrieval failed (fix search) or generation ignored context (fix prompt/model).</p></details>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Building the eval set</b><span>Start with 50–200 real or realistic questions, include hard and "not answerable" ones, label expected answers and sources; grow it from production failures.</span></div>
+          <div class="formula-row"><b>LLM-as-judge</b><span>Fast and scalable; check it against human grades on a sample (agreement rate), use clear rubrics, watch for bias toward longer answers or its own outputs.</span></div>
+          <div class="formula-row"><b>Regression testing</b><span>Run the eval set on every prompt, model or retrieval change before shipping.</span></div>
+          <div class="formula-row"><b>Tools</b><span>Ragas, DeepEval, promptfoo, LangSmith, Arize Phoenix, OpenAI Evals — or a simple spreadsheet + script to start.</span></div>
+        </div>
+      </section>
+
+      <section id="prod" data-nav="5 · Production" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PRODUCTION</span><h2>Production concerns</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Observability</h3><p>Trace every request: prompt, retrieved chunks, tool calls, tokens, latency, cost, user feedback.</p></div>
+          <div class="card"><h3>Guardrails</h3><p>Input filters (PII, abuse), output checks (format validation, policy), structured outputs (JSON schemas), fallbacks to human.</p></div>
+          <div class="card"><h3>Data + privacy</h3><p>Don't send sensitive data without agreements; mask PII; India's DPDP Act consent rules; RBI expectations for regulated entities using AI.</p></div>
+          <div class="card"><h3>Versioning</h3><p>Version prompts, indexes and model choices; re-run evals when a provider updates a model.</p></div>
+          <div class="card"><h3>Frameworks</h3><p>LangChain/LangGraph, LlamaIndex, provider agent SDKs; or plain code — frameworks help speed, plain code helps debugging.</p></div>
+          <div class="card"><h3>Caching</h3><p>Cache embeddings, frequent answers and prompt prefixes.</p></div>
+        </div>
+      </section>
+
+      <section id="project" data-nav="6 · CV project brief" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PROJECT</span><h2>Project brief: "Ask my placement notes"</h2></div><span class="tag hot">build this</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Goal</b><span>A RAG assistant over your VIKRAM notes and casebooks that answers prep questions with citations.</span></div>
+          <div class="formula-row"><b>Week 1</b><span>Parse the HTML notes and 5 casebook PDFs; structure-aware chunking; embeddings; FAISS or Chroma; a simple Streamlit/Gradio UI.</span></div>
+          <div class="formula-row"><b>Week 2</b><span>Build an eval set of 100 questions (30 factual, 30 conceptual, 20 multi-hop, 20 not-answerable). Measure recall@5 and answer correctness.</span></div>
+          <div class="formula-row"><b>Week 3</b><span>Improve: hybrid search + re-ranker; compare 2 models on quality, cost and latency; add a quiz-me tool (agent calls a "generate question" tool).</span></div>
+          <div class="formula-row"><b>CV bullet</b><span>"Built a RAG assistant over 30 study modules (≈[N] chunks); raised retrieval recall@5 from [x]% to [y]% with hybrid search and re-ranking on a 100-question eval set, at ₹[z] per query."</span></div>
+        </div>
+      </section>
+
+      <section id="qs" data-nav="7 · Interview questions" data-search>
+        <div class="section-head"><div><span class="section-no">07 / PRACTICE</span><h2>Questions to prepare</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Key points</th></tr>
+          <tr><td>Design a customer-support assistant for a bank.</td><td>RAG on policies, authenticated tools for account data, escalation, guardrails, evals, DPDP</td></tr>
+          <tr><td>RAG vs fine-tuning vs long context?</td><td>Changing knowledge → RAG; behaviour → fine-tune; small corpus → long context</td></tr>
+          <tr><td>How do you choose chunk size?</td><td>Test on the eval set; structure-aware; trade precision vs context</td></tr>
+          <tr><td>Why hybrid search?</td><td>Vectors catch meaning; BM25 catches exact terms</td></tr>
+          <tr><td>What does a re-ranker do?</td><td>Scores question–chunk pairs jointly, more accurate than embeddings</td></tr>
+          <tr><td>The bot hallucinates. Debug it.</td><td>Check retrieval first (recall), then prompt and model; add "don't know" path</td></tr>
+          <tr><td>How do you evaluate without labels?</td><td>Create a small labelled set; LLM-as-judge calibrated to humans; user feedback</td></tr>
+          <tr><td>What is MCP?</td><td>Standard protocol connecting AI apps to tools/data</td></tr>
+          <tr><td>When not to use an agent?</td><td>Steps are known → workflow; high-risk actions without oversight</td></tr>
+          <tr><td>How do you defend against prompt injection?</td><td>Separate instructions and data, limit tools, confirmations, filters, monitoring</td></tr>
+          <tr><td>How do you cut cost by 50%?</td><td>Routing to small models, caching, shorter context, fewer steps</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="8 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Run the 10-line RAG example from your ML master notes (section 30.5)</label>
+          <label class="checkline"><input type="checkbox"> Build the section-6 project weeks 1–3</label>
+          <label class="checkline"><input type="checkbox"> Compute recall@k and MRR on your own eval set</label>
+          <label class="checkline"><input type="checkbox"> Build one tool-calling agent (e.g. checks a calendar and drafts a reminder) with step limits</label>
+          <label class="checkline"><input type="checkbox"> Practise the "design a support assistant" question in 20 minutes</label>
+        </div>
+        <div class="memory">Pair with M2 (internals), P3 (product side) and M5 (ML system design and project stories).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-m3-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-m3-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-m3-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

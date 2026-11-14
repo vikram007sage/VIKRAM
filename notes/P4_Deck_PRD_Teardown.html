@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P4 | Deck, PRD, teardown — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">P4 / ARTEFACTS</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#deck">1 · Deck rules</a><a href="#prd">2 · PRD template</a><a href="#teardown">3 · Teardown template</a><a href="#takehome">4 · Take-home process</a><a href="#check">5 · Review checklist</a><a href="#plan">6 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Product track · Module P4</div><h1>Decks, PRDs<br>+ product teardowns</h1><p>Many PM and consulting shortlists ask for a take-home: a product teardown, a PRD, a case deck or a growth plan, often in 24–72 hours, and case competitions are judged on the deck. This module gives you the structure of each artefact, slide-writing rules from consulting, a PRD template, a teardown template with a worked outline, and a checklist that catches the mistakes reviewers spot first.</p><div class="meta"><span class="pill"><span class=dot></span> Deck rules</span><span class="pill">PRD + teardown templates</span><span class="pill">review checklist</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What reviewers look for</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>A clear answer up front</strong><span class="muted">the recommendation on slide 1 or page 1, then the support</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Insight from evidence</strong><span class="muted">user research, data, competitor facts — not opinions</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Prioritised, feasible solutions</strong><span class="muted">with metrics and a rollout plan</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Clean communication</strong><span class="muted">one message per slide, readable charts, no typos</span></div><span class="frequency">15%</span></div>
+        </div>
+        <div class="memory"><b>Your assets:</b> VIKRAM's PRD (you wrote one) and your CheQ work. A teardown of a fintech app you used at CheQ shows domain depth.</div>
+      </section>
+
+      <section id="deck" data-nav="1 · Deck rules" data-search>
+        <div class="section-head"><div><span class="section-no">01 / DECKS</span><h2>Writing slides like a consultant</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Pyramid principle</b><span>Answer first, then 3 supporting arguments, each backed by evidence (Barbara Minto).</span></div>
+          <div class="formula-row"><b>Action titles</b><span>Each slide title is a full-sentence takeaway: not "Market size" but "Tier-2 cities will drive 60% of new card users by 2030".</span></div>
+          <div class="formula-row"><b>Horizontal flow</b><span>Read only the titles in order — they should tell the whole story.</span></div>
+          <div class="formula-row"><b>One message per slide</b><span>The body proves the title; remove anything that doesn't.</span></div>
+          <div class="formula-row"><b>Charts</b><span>Pick by message: trend → line; comparison → bar; composition → stacked bar; relationship → scatter. Label directly, highlight the key bar, cite the source, avoid 3D and pie charts with many slices.</span></div>
+          <div class="formula-row"><b>Structure</b><span>Executive summary → situation/complication → analysis → recommendation → impact and metrics → roadmap → risks → appendix.</span></div>
+        </div>
+        <div class="memory"><b>Case-competition deck (10–12 slides):</b> title, executive summary, problem and context, user/market insight (2 slides), solution (2–3), financials/impact, implementation roadmap, risks, conclusion; appendix for methodology. Bridgeway's consulting guide and the IITB casebook in your folder have examples.</div>
+      </section>
+
+      <section id="prd" data-nav="2 · PRD template" data-search>
+        <div class="section-head"><div><span class="section-no">02 / PRD</span><h2>Product requirements document template</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Problem</b><span>Who has it, how often, evidence (data, quotes), why now.</span></div>
+          <div class="formula-row"><b>2. Goals and non-goals</b><span>What success looks like; what this release won't do.</span></div>
+          <div class="formula-row"><b>3. Users and use cases</b><span>Personas or segments; top user stories ("As a first-time cardholder, I want…, so that…").</span></div>
+          <div class="formula-row"><b>4. Solution</b><span>User flow, key screens (wireframes), behaviour and edge cases.</span></div>
+          <div class="formula-row"><b>5. Requirements</b><span>Must-have / should-have / later (MoSCoW); acceptance criteria for each.</span></div>
+          <div class="formula-row"><b>6. Metrics</b><span>North star, input metrics, guardrails; experiment plan (P2).</span></div>
+          <div class="formula-row"><b>7. Dependencies and risks</b><span>Teams, vendors, legal/regulatory (RBI, DPDP), technical risks.</span></div>
+          <div class="formula-row"><b>8. Rollout</b><span>MVP, phased launch, feature flags, support and communication plan.</span></div>
+          <div class="formula-row"><b>9. Open questions</b><span>What still needs a decision, and by whom.</span></div>
+        </div>
+      </section>
+
+      <section id="teardown" data-nav="3 · Teardown template" data-search>
+        <div class="section-head"><div><span class="section-no">03 / TEARDOWN</span><h2>Product teardown template</h2></div><span class="tag hot">common take-home</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Product and business</b><span>What it does, users, business model, key metrics, competitors.</span></div>
+          <div class="formula-row"><b>2. Core user journey</b><span>Screenshots of onboarding and the main job; note friction and delight at each step.</span></div>
+          <div class="formula-row"><b>3. What works and why</b><span>Design and strategy decisions to praise, with reasons.</span></div>
+          <div class="formula-row"><b>4. Problems</b><span>Ranked by impact on users and business, with evidence (app-store reviews, Reddit, your own test, a 5-user survey).</span></div>
+          <div class="formula-row"><b>5. Recommendations</b><span>2–3 prioritised improvements with mock-ups, metrics and an experiment.</span></div>
+          <div class="formula-row"><b>6. Strategy view</b><span>Where the product should go in 1–3 years.</span></div>
+        </div>
+        <details><summary><b>Worked outline: teardown of a credit-card management app (CRED-style)</b></summary>
+          <p><b>Business:</b> users pay card bills and earn rewards; revenue from merchant offers, lending, commerce. <b>Journey:</b> sign-up, card linking via SMS/email parsing, bill reminder, payment, rewards. <b>What works:</b> trust signals, fast payment, reward gamification. <b>Problems:</b> rewards feel low-value (reviews), difficult to find statement insights, cross-sell prompts interrupt payment. <b>Recommendations:</b> (1) "spend insights" after each bill — metric: monthly active users viewing insights, retention; (2) move offers after payment confirmation — metric: payment completion time, offer CTR; (3) due-date auto-pay with salary-day timing — metric: % on-time payments. <b>Strategy:</b> become the default credit-health app as RuPay-on-UPI grows credit card use among young users.</p></details>
+      </section>
+
+      <section id="takehome" data-nav="4 · Take-home process" data-search>
+        <div class="section-head"><div><span class="section-no">04 / PROCESS</span><h2>Doing a 48-hour take-home</h2></div></div>
+        <table class="compare">
+          <tr><th>Time</th><th>Do</th></tr>
+          <tr><td>First 2 hours</td><td>Read the brief twice; write the question in one line; draft a hypothesis and storyline (titles only)</td></tr>
+          <tr><td>Next 10 hours</td><td>Evidence: use the product, read reviews, talk to 5 users, gather data; size the opportunity</td></tr>
+          <tr><td>Next 8 hours</td><td>Build slides/document to the storyline; mock-ups (Figma, or an AI prototyping tool)</td></tr>
+          <tr><td>Last 4 hours</td><td>Review against the checklist; cut 20%; proofread; export PDF</td></tr>
+        </table>
+        <div class="memory"><b>AI tools:</b> using AI for research and mock-ups is increasingly accepted (and in some rounds expected), but verify every fact and number, and make the judgment your own. State your sources.</div>
+      </section>
+
+      <section id="check" data-nav="5 · Review checklist" data-search>
+        <div class="section-head"><div><span class="section-no">05 / CHECKLIST</span><h2>Before you submit</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Recommendation stated in the first slide/page</label>
+          <label class="checkline"><input type="checkbox"> Titles alone tell the story</label>
+          <label class="checkline"><input type="checkbox"> Every number has a source or a stated assumption</label>
+          <label class="checkline"><input type="checkbox"> Each solution has a metric and an experiment</label>
+          <label class="checkline"><input type="checkbox"> Risks and trade-offs acknowledged</label>
+          <label class="checkline"><input type="checkbox"> Within page/slide limit; fonts and colours consistent; no typos</label>
+          <label class="checkline"><input type="checkbox"> File named clearly (Name_Company_Assignment.pdf)</label>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="6 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Write one teardown (8–10 slides) of an Indian fintech or q-commerce app</label>
+          <label class="checkline"><input type="checkbox"> Write a 2-page PRD for one improvement from that teardown</label>
+          <label class="checkline"><input type="checkbox"> Rewrite 10 slide titles from a casebook deck as action titles</label>
+          <label class="checkline"><input type="checkbox"> Enter one case competition (Unstop) and build the full deck</label>
+          <label class="checkline"><input type="checkbox"> Get two seniors to review the teardown</label>
+        </div>
+        <div class="memory">These artefacts double as portfolio pieces: link them in emails (S6) and on your CV (S4).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-p4-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-p4-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-p4-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

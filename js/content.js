@@ -105,12 +105,12 @@ var VK_CONTENT = (function () {
     ['D1', 'SQL: zero to interview', 'Data', '2026-12-10', 'notes/D1_SQL_Zero_to_Interview.html'], ['D2', 'Python + pandas for analysts', 'Data', '2026-12-17', 'notes/D2_Python_Pandas.html'],
     ['D3', 'Statistics + A/B testing', 'Data', '2026-12-19', 'notes/D3_Statistics_AB_Testing.html'], ['D4', 'DSA-lite, the fun way', 'Data', '2027-03-15'],
     ['M1', 'Classical ML rapid-fire', 'AI/ML', '2026-12-22', 'notes/M1_Classical_ML.html'], ['M2', 'LLM internals', 'AI/ML', '2027-02-07', 'notes/M2_LLM_Internals.html'],
-    ['M3', 'RAG, agents, evals', 'AI/ML', '2027-02-21'], ['M5', 'ML system design + project stories', 'AI/ML', '2027-03-28'],
+    ['M3', 'RAG, agents, evals', 'AI/ML', '2027-02-21', 'notes/M3_RAG_Agents_Evals.html'], ['M5', 'ML system design + project stories', 'AI/ML', '2027-03-28'],
     ['F1', 'Accounting + 3 statements', 'Finance', '2026-12-23', 'notes/F1_Accounting_3_Statements.html'], ['F2', 'Valuation', 'Finance', '2026-12-28', 'notes/F2_Valuation.html'],
-    ['F4', 'VC + PE, investment memo', 'Finance', '2027-01-24', 'notes/F4_VC_PE_Investment_Memo.html'], ['F3', 'M&A + LBO', 'Finance', '2027-03-14'],
+    ['F4', 'VC + PE, investment memo', 'Finance', '2027-01-24', 'notes/F4_VC_PE_Investment_Memo.html'], ['F3', 'M&A + LBO', 'Finance', '2027-03-14', 'notes/F3_MA_LBO.html'],
     ['Q1', 'Quant trading interviews', 'Finance', '2027-04-18'], ['F5', 'Markets + finance Q-bank', 'Finance', '2027-08-15'],
     ['P1', 'Product sense + design', 'Product', '2026-12-26', 'notes/P1_Product_Sense_Design.html'], ['P2', 'Metrics, RCA, A/B', 'Product', '2026-12-30', 'notes/P2_Metrics_RCA_AB.html'],
-    ['P3', 'Tech + AI product', 'Product', '2027-01-31', 'notes/P3_Tech_AI_Product.html'], ['P4', 'Deck, PRD, teardown', 'Product', '2027-02-14'],
+    ['P3', 'Tech + AI product', 'Product', '2027-01-31', 'notes/P3_Tech_AI_Product.html'], ['P4', 'Deck, PRD, teardown', 'Product', '2027-02-14', 'notes/P4_Deck_PRD_Teardown.html'],
     ['X2', 'Company dossiers', 'Final', '2027-08-31'], ['X1', 'Final revision pack', 'Final', '2027-09-30']
   ].map(([c, t, track, due, local]) => ({ c, t, track, due, local: local || null }));
 

@@ -1,0 +1,135 @@
+<!--META M3 | RAG, agents, evals | M3 / APPLIED GENAI | AI/ML track · Module M3 | RAG, agents<br>+ evals | Most GenAI work in 2026 isn't training models — it's building systems around them: retrieval so answers use your data, agents that call tools, and evaluations that prove it works. Interviewers ask you to design these, debug them and say how you'd measure them. This module covers the RAG pipeline choice by choice, agent patterns and protocols (MCP, A2A), evaluation with worked metrics, production concerns, and a project you can build for your CV. | RAG pipeline + fixes; agent patterns; eval maths + project brief -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>The three building blocks</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>RAG</h3><p>Retrieve relevant text from your documents, give it to the model, answer from it with citations. Solves: private and fresh knowledge, fewer hallucinations.</p></div>
+          <div class="card"><h3>Agents</h3><p>A model in a loop that decides which tool to call (search, database, API, code), observes the result, and continues until the task is done.</p></div>
+          <div class="card"><h3>Evals</h3><p>Test sets and metrics that tell you whether a change made the system better — the difference between a demo and a product.</p></div>
+        </div>
+        <div class="memory"><b>Your CV gap → opportunity:</b> the roadmap in VIKRAM has "Project 2: RAG app with an eval set" due 31 March 2027. Section 6 gives a brief for exactly that project, using your own notes as the corpus.</div>
+      </section>
+
+      <section id="rag" data-nav="1 · RAG pipeline" data-search>
+        <div class="section-head"><div><span class="section-no">01 / RAG</span><h2>The RAG pipeline, choice by choice</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Ingest</b><span>Parse PDFs, HTML, docs; clean headers/footers; keep metadata (title, section, date, source URL, access permissions).</span></div>
+          <div class="formula-row"><b>2. Chunk</b><span>Split into 200–1,000-token pieces with 10–20% overlap; better: split on structure (headings, paragraphs, table rows). A 250k-token handbook at 500-token chunks with 50 overlap → ~556 chunks.</span></div>
+          <div class="formula-row"><b>3. Embed</b><span>An embedding model turns each chunk into a vector. Choose for language (multilingual if Hindi/Indic content), domain and cost.</span></div>
+          <div class="formula-row"><b>4. Index</b><span>Vector database or library (FAISS, Chroma, pgvector, Pinecone, Weaviate, Qdrant) with approximate nearest-neighbour search (HNSW).</span></div>
+          <div class="formula-row"><b>5. Retrieve</b><span>Embed the question; top-k by cosine similarity. Better: hybrid search (vector + BM25 keyword search) to catch exact terms like product codes, plus metadata filters (date, user's permissions).</span></div>
+          <div class="formula-row"><b>6. Re-rank</b><span>A cross-encoder re-ranker scores (question, chunk) pairs more accurately; keep top 3–8.</span></div>
+          <div class="formula-row"><b>7. Generate</b><span>Prompt: "Answer only from the context; cite chunk ids; say you don't know if the answer isn't there."</span></div>
+          <div class="formula-row"><b>8. Evaluate + monitor</b><span>Retrieval and answer metrics separately (section 4); log queries with no good results.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Problem</th><th>Likely cause</th><th>Fix</th></tr>
+          <tr><td>Right document never retrieved</td><td>Chunking splits the answer; vocabulary mismatch</td><td>Structure-aware chunks, hybrid search, query rewriting, HyDE (embed a hypothetical answer)</td></tr>
+          <tr><td>Retrieved but answer wrong</td><td>Too many irrelevant chunks; model ignores context</td><td>Re-ranking, fewer chunks, stricter prompt, better model</td></tr>
+          <tr><td>Answers mix up versions</td><td>Old documents indexed</td><td>Metadata dates, filters, re-indexing pipeline</td></tr>
+          <tr><td>Multi-step questions fail</td><td>One retrieval isn't enough</td><td>Query decomposition, iterative/agentic retrieval</td></tr>
+          <tr><td>Tables and numbers wrong</td><td>PDF parsing</td><td>Table-aware parsers, store tables as structured data, use SQL tool</td></tr>
+          <tr><td>Users see documents they shouldn't</td><td>No access control in retrieval</td><td>Permission filters at retrieval time</td></tr>
+        </table>
+        <div class="memory"><b>Variants to name:</b> GraphRAG (build a knowledge graph of entities for "global" questions), agentic RAG (model decides when and what to retrieve), long-context models as an alternative for small corpora (simpler but costlier per query).</div>
+      </section>
+
+      <section id="agents" data-nav="2 · Agents" data-search>
+        <div class="section-head"><div><span class="section-no">02 / AGENTS</span><h2>Agents: patterns and protocols</h2></div><span class="tag hot">2026</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Tool calling</b><span>You describe tools (name, purpose, JSON schema of arguments); the model outputs a structured call; your code executes it and returns the result.</span></div>
+          <div class="formula-row"><b>ReAct loop</b><span>Reason → act (call tool) → observe → repeat → final answer. Cap the number of steps.</span></div>
+          <div class="formula-row"><b>Planner–executor</b><span>One step makes a plan; others execute sub-tasks; good for long tasks.</span></div>
+          <div class="formula-row"><b>Workflows vs agents</b><span>Fixed sequences of LLM calls (workflows) are more predictable; use open-ended agents only when steps can't be known in advance.</span></div>
+          <div class="formula-row"><b>Multi-agent</b><span>Specialised agents (researcher, writer, checker) coordinating; adds cost and failure points — justify it.</span></div>
+          <div class="formula-row"><b>Memory</b><span>Short-term (conversation), long-term (stored facts/preferences in a database), retrieved when relevant.</span></div>
+        </div>
+        <table class="compare">
+          <tr><th>Protocol</th><th>What it standardises</th></tr>
+          <tr><td>Model Context Protocol (MCP)</td><td>How an AI application connects to tools and data (servers expose tools/resources; clients like assistants or IDEs call them). Introduced by Anthropic in November 2024; adopted by OpenAI, Google and Microsoft; ~97 million monthly SDK downloads by March 2026 and thousands of public servers</td></tr>
+          <tr><td>Agent2Agent (A2A)</td><td>How agents from different vendors delegate tasks to each other; started by Google, now under the Linux Foundation</td></tr>
+          <tr><td>AGENTS.md and similar</td><td>Instructions files that tell coding agents how to work in a repository</td></tr>
+        </table>
+        <div class="memory"><b>Safety for agents:</b> least-privilege tools, human approval for irreversible or money-moving actions, treat all tool output and web content as untrusted (prompt injection), log every action, sandbox code execution, step and spend limits.</div>
+      </section>
+
+      <section id="cost" data-nav="3 · Cost + latency" data-search>
+        <div class="section-head"><div><span class="section-no">03 / ECONOMICS</span><h2>Cost and latency of agents</h2></div></div>
+        <div class="card">
+          <p><b>Example:</b> an agent takes 6 steps; each call sends ~4,000 input tokens (growing context) and gets ~300 output tokens; at $3 / $15 per million → 6 × (0.012 + 0.0045) ≈ <b>$0.10 per task</b> (≈ ₹8). At 10,000 tasks a day that's ~$1,000/day. Levers: smaller model for routine steps, prompt caching of the fixed system prompt and tool definitions, trimming context, fewer steps via a better plan.</p>
+        </div>
+        <div class="memory"><b>Rule of thumb:</b> agents multiply cost and latency by the number of steps. Always compare against a simpler workflow on the same eval set.</div>
+      </section>
+
+      <section id="evals" data-nav="4 · Evaluation" data-search>
+        <div class="section-head"><div><span class="section-no">04 / EVALS</span><h2>Evaluating RAG and agents</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Layer</th><th>Metric</th><th>How</th></tr>
+          <tr><td>Retrieval</td><td>Recall@k, precision@k, MRR, nDCG</td><td>Label which chunks are relevant for each test question</td></tr>
+          <tr><td>Answer</td><td>Correctness, faithfulness (supported by retrieved context), completeness, citation accuracy</td><td>Reference answers + human or LLM-as-judge grading</td></tr>
+          <tr><td>Agent</td><td>Task success rate, steps per task, tool-call error rate, cost and time per task</td><td>Scripted scenarios with checkable end states</td></tr>
+          <tr><td>Safety</td><td>Harmful outputs, prompt-injection success rate, data leakage, refusal correctness</td><td>Adversarial test set</td></tr>
+          <tr><td>Online</td><td>Resolution rate, escalation to human, thumbs up/down, retention, CSAT</td><td>A/B tests and dashboards (P2)</td></tr>
+        </table>
+        <details><summary><b>Worked metrics</b></summary>
+          <p><b>Retrieval:</b> 5 test questions; the relevant chunk appears at ranks 1, 3, not found, 2, 1. Recall@3 = 4/5 = 0.80. MRR = (1 + 1/3 + 0 + 1/2 + 1) ÷ 5 ≈ 0.57.</p>
+          <p><b>Answers:</b> 200 graded answers: 170 correct (85%), 18 hallucinated (9%), 12 correctly refused (6%). Target the 9% first: inspect whether retrieval failed (fix search) or generation ignored context (fix prompt/model).</p></details>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Building the eval set</b><span>Start with 50–200 real or realistic questions, include hard and "not answerable" ones, label expected answers and sources; grow it from production failures.</span></div>
+          <div class="formula-row"><b>LLM-as-judge</b><span>Fast and scalable; check it against human grades on a sample (agreement rate), use clear rubrics, watch for bias toward longer answers or its own outputs.</span></div>
+          <div class="formula-row"><b>Regression testing</b><span>Run the eval set on every prompt, model or retrieval change before shipping.</span></div>
+          <div class="formula-row"><b>Tools</b><span>Ragas, DeepEval, promptfoo, LangSmith, Arize Phoenix, OpenAI Evals — or a simple spreadsheet + script to start.</span></div>
+        </div>
+      </section>
+
+      <section id="prod" data-nav="5 · Production" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PRODUCTION</span><h2>Production concerns</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Observability</h3><p>Trace every request: prompt, retrieved chunks, tool calls, tokens, latency, cost, user feedback.</p></div>
+          <div class="card"><h3>Guardrails</h3><p>Input filters (PII, abuse), output checks (format validation, policy), structured outputs (JSON schemas), fallbacks to human.</p></div>
+          <div class="card"><h3>Data + privacy</h3><p>Don't send sensitive data without agreements; mask PII; India's DPDP Act consent rules; RBI expectations for regulated entities using AI.</p></div>
+          <div class="card"><h3>Versioning</h3><p>Version prompts, indexes and model choices; re-run evals when a provider updates a model.</p></div>
+          <div class="card"><h3>Frameworks</h3><p>LangChain/LangGraph, LlamaIndex, provider agent SDKs; or plain code — frameworks help speed, plain code helps debugging.</p></div>
+          <div class="card"><h3>Caching</h3><p>Cache embeddings, frequent answers and prompt prefixes.</p></div>
+        </div>
+      </section>
+
+      <section id="project" data-nav="6 · CV project brief" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PROJECT</span><h2>Project brief: "Ask my placement notes"</h2></div><span class="tag hot">build this</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Goal</b><span>A RAG assistant over your VIKRAM notes and casebooks that answers prep questions with citations.</span></div>
+          <div class="formula-row"><b>Week 1</b><span>Parse the HTML notes and 5 casebook PDFs; structure-aware chunking; embeddings; FAISS or Chroma; a simple Streamlit/Gradio UI.</span></div>
+          <div class="formula-row"><b>Week 2</b><span>Build an eval set of 100 questions (30 factual, 30 conceptual, 20 multi-hop, 20 not-answerable). Measure recall@5 and answer correctness.</span></div>
+          <div class="formula-row"><b>Week 3</b><span>Improve: hybrid search + re-ranker; compare 2 models on quality, cost and latency; add a quiz-me tool (agent calls a "generate question" tool).</span></div>
+          <div class="formula-row"><b>CV bullet</b><span>"Built a RAG assistant over 30 study modules (≈[N] chunks); raised retrieval recall@5 from [x]% to [y]% with hybrid search and re-ranking on a 100-question eval set, at ₹[z] per query."</span></div>
+        </div>
+      </section>
+
+      <section id="qs" data-nav="7 · Interview questions" data-search>
+        <div class="section-head"><div><span class="section-no">07 / PRACTICE</span><h2>Questions to prepare</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Key points</th></tr>
+          <tr><td>Design a customer-support assistant for a bank.</td><td>RAG on policies, authenticated tools for account data, escalation, guardrails, evals, DPDP</td></tr>
+          <tr><td>RAG vs fine-tuning vs long context?</td><td>Changing knowledge → RAG; behaviour → fine-tune; small corpus → long context</td></tr>
+          <tr><td>How do you choose chunk size?</td><td>Test on the eval set; structure-aware; trade precision vs context</td></tr>
+          <tr><td>Why hybrid search?</td><td>Vectors catch meaning; BM25 catches exact terms</td></tr>
+          <tr><td>What does a re-ranker do?</td><td>Scores question–chunk pairs jointly, more accurate than embeddings</td></tr>
+          <tr><td>The bot hallucinates. Debug it.</td><td>Check retrieval first (recall), then prompt and model; add "don't know" path</td></tr>
+          <tr><td>How do you evaluate without labels?</td><td>Create a small labelled set; LLM-as-judge calibrated to humans; user feedback</td></tr>
+          <tr><td>What is MCP?</td><td>Standard protocol connecting AI apps to tools/data</td></tr>
+          <tr><td>When not to use an agent?</td><td>Steps are known → workflow; high-risk actions without oversight</td></tr>
+          <tr><td>How do you defend against prompt injection?</td><td>Separate instructions and data, limit tools, confirmations, filters, monitoring</td></tr>
+          <tr><td>How do you cut cost by 50%?</td><td>Routing to small models, caching, shorter context, fewer steps</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="8 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Run the 10-line RAG example from your ML master notes (section 30.5)</label>
+          <label class="checkline"><input type="checkbox"> Build the section-6 project weeks 1–3</label>
+          <label class="checkline"><input type="checkbox"> Compute recall@k and MRR on your own eval set</label>
+          <label class="checkline"><input type="checkbox"> Build one tool-calling agent (e.g. checks a calendar and drafts a reminder) with step limits</label>
+          <label class="checkline"><input type="checkbox"> Practise the "design a support assistant" question in 20 minutes</label>
+        </div>
+        <div class="memory">Pair with M2 (internals), P3 (product side) and M5 (ML system design and project stories).</div>
+      </section>
