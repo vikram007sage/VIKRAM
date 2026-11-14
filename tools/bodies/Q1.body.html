@@ -1,0 +1,101 @@
+<!--META Q1 | Quant trading interviews | Q1 / QUANT | Finance track · Module Q1 | Quant trading<br>interviews | Quant trading firms (Optiver, Jane Street, Tower Research, Graviton, Quadeye, IMC, Da Vinci, Squarepoint and others recruiting at IIT campuses) test fast mental maths, probability and expected value, betting and market-making games, and calm reasoning under pressure. This module gives the formats, a probability toolkit, 20 classic puzzles with verified answers, market-making and option basics, and a daily training routine. | 20 verified puzzles; market-making method; mental-maths drill -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Formats you'll meet</h2></div></div>
+        <table class="compare">
+          <tr><th>Stage</th><th>What it is</th></tr>
+          <tr><td>Online test</td><td>Timed mental arithmetic (e.g. 80 questions in 8 minutes, no calculator), number sequences, probability MCQs, sometimes a coding round</td></tr>
+          <tr><td>Probability / brainteaser interview</td><td>Puzzles solved aloud; follow-ups change the rules</td></tr>
+          <tr><td>Market-making / trading game</td><td>Quote a bid and ask on an unknown quantity; update as information arrives; manage position</td></tr>
+          <tr><td>Betting / sizing</td><td>How much to bet given an edge (Kelly), risk of ruin</td></tr>
+          <tr><td>Behavioural / fit</td><td>Why trading, handling losses, teamwork; some firms add a "game day"</td></tr>
+        </table>
+        <div class="memory"><b>Honest positioning:</b> these roles are highly competitive and maths-heavy; your biotech background is fine if your mental maths and probability are sharp. Treat Q1 as an optional lane — the daily drill also boosts your aptitude OA scores (A1–A4).</div>
+      </section>
+
+      <section id="tools" data-nav="1 · Probability toolkit" data-search>
+        <div class="section-head"><div><span class="section-no">01 / TOOLKIT</span><h2>Probability toolkit</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Expected value</b><span>E[X] = Σ x · P(x); linearity: E[X + Y] = E[X] + E[Y] even when dependent — the most powerful trick in puzzles.</span></div>
+          <div class="formula-row"><b>Conditional + Bayes</b><span>P(A|B) = P(B|A) P(A) ÷ P(B). Draw a tree or count equally likely cases.</span></div>
+          <div class="formula-row"><b>Geometric waiting time</b><span>Expected trials until first success with probability p = 1 ÷ p.</span></div>
+          <div class="formula-row"><b>Recursion / states</b><span>Write E for each state and solve equations (coin patterns, random walks).</span></div>
+          <div class="formula-row"><b>Symmetry</b><span>Look for equivalent outcomes to avoid computation.</span></div>
+          <div class="formula-row"><b>Variance</b><span>Var(X) = E[X²] − (E[X])²; for a fair die E[X²] = 91/6 ≈ 15.17, Var = 35/12.</span></div>
+          <div class="formula-row"><b>Combinatorics</b><span>nCr, stars and bars, inclusion–exclusion, complements ("at least one" = 1 − none).</span></div>
+        </div>
+      </section>
+
+      <section id="puzzles" data-nav="2 · 20 classic puzzles" data-search>
+        <div class="section-head"><div><span class="section-no">02 / PUZZLES</span><h2>Twenty classic puzzles (answers verified)</h2></div><span class="tag pyq">try first</span></div>
+        <table class="compare">
+          <tr><th>Puzzle</th><th>Answer</th><th>Key idea</th></tr>
+          <tr><td>Roll a die; you may re-roll once and keep the second. Expected value with best play?</td><td>17/4 = 4.25</td><td>Keep 4, 5, 6 (above 3.5); re-roll 1–3</td></tr>
+          <tr><td>Expected rolls of a die to get a 6?</td><td>6</td><td>Geometric, 1/p</td></tr>
+          <tr><td>Expected coin flips to get HH? To get HT?</td><td>6; 4</td><td>States: HH can "reset", HT can't</td></tr>
+          <tr><td>Expected rolls to see all six faces?</td><td>14.7</td><td>Coupon collector: 6 × (1 + 1/2 + … + 1/6)</td></tr>
+          <tr><td>Expected maximum of two dice?</td><td>161/36 ≈ 4.47</td><td>P(max ≤ k) = (k/6)²</td></tr>
+          <tr><td>People needed for &gt;50% chance of a shared birthday?</td><td>23 (50.7%)</td><td>Complement of all distinct</td></tr>
+          <tr><td>Monty Hall: switch?</td><td>Yes, 2/3 win</td><td>Host's choice gives information</td></tr>
+          <tr><td>Two children, at least one boy. P(both boys)?</td><td>1/3</td><td>Cases BB, BG, GB</td></tr>
+          <tr><td>Break a stick at two random points. P(pieces form a triangle)?</td><td>1/4</td><td>No piece longer than 1/2</td></tr>
+          <tr><td>Fair game: start ₹10, win/lose ₹1 each round, stop at ₹0 or ₹20. P(reach 20)?</td><td>1/2</td><td>Gambler's ruin: start ÷ target</td></tr>
+          <tr><td>Guess a number 1–100 with higher/lower hints. Worst-case guesses?</td><td>7</td><td>⌈log₂ 100⌉</td></tr>
+          <tr><td>100 people board a plane; first sits randomly, others take their seat if free. P(last gets own seat)?</td><td>1/2</td><td>Symmetry between seats 1 and 100</td></tr>
+          <tr><td>Bet: a die pays its face value in ₹. Fair price?</td><td>₹3.50</td><td>EV</td></tr>
+          <tr><td>Bet with 60% win chance at even odds. Kelly fraction?</td><td>20% of bankroll</td><td>f = p − q = 2p − 1</td></tr>
+          <tr><td>A test is 99% accurate; disease prevalence 1%. P(disease | positive)?</td><td>50%</td><td>Bayes: 0.99×0.01 ÷ (0.99×0.01 + 0.01×0.99)</td></tr>
+          <tr><td>Expected number of people who get their own hat back when n hats are shuffled?</td><td>1</td><td>Linearity: n × 1/n</td></tr>
+          <tr><td>How many trailing zeros in 100!?</td><td>24</td><td>⌊100/5⌋ + ⌊100/25⌋</td></tr>
+          <tr><td>Clock at 3:15: angle between hands?</td><td>7.5°</td><td>Hour hand moves 0.5° per minute</td></tr>
+          <tr><td>Two ropes each burn in 60 minutes unevenly. Measure 45 minutes?</td><td>Light rope A both ends and B one end; when A finishes (30 min) light B's other end (15 more)</td><td>Burning both ends halves time</td></tr>
+          <tr><td>25 horses, 5 per race, no timer. Races to find the top 3?</td><td>7</td><td>5 heats, race of winners, final race of 5 candidates</td></tr>
+        </table>
+        <div class="memory"><b>How to answer aloud:</b> restate, try a small case, state your approach ("I'll use linearity of expectation"), compute, sanity-check (is it between the obvious bounds?). Interviewers care about the process and how you use hints.</div>
+      </section>
+
+      <section id="mm" data-nav="3 · Market making" data-search>
+        <div class="section-head"><div><span class="section-no">03 / TRADING</span><h2>Market-making games</h2></div><span class="tag hot">signature round</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>The setup</b><span>"Make me a market on the sum of three dice" or "on the number of cars in Delhi". You quote bid (price you buy at) and ask (price you sell at).</span></div>
+          <div class="formula-row"><b>Step 1: fair value</b><span>Estimate the expected value: three dice → 10.5. Range 3–18.</span></div>
+          <div class="formula-row"><b>Step 2: width</b><span>Wider when uncertain, narrower when confident or when competing: e.g. 9.5 – 11.5.</span></div>
+          <div class="formula-row"><b>Step 3: update</b><span>If the interviewer keeps buying from you, your ask may be too low — raise both quotes. If told one die shows 6, fair value becomes 6 + 7 = 13.</span></div>
+          <div class="formula-row"><b>Step 4: manage position</b><span>If you're long a lot, skew quotes down to attract buyers; think about worst-case loss.</span></div>
+          <div class="formula-row"><b>Adverse selection</b><span>Someone choosing to trade with you may know more; when a counterparty trades instantly, assume they have information.</span></div>
+        </div>
+        <details><summary><b>Fermi markets</b></summary><p>For unknown quantities (e.g. "weight of an elephant in kg"), give a fair-value estimate with reasoning (Asian elephant ~3,000–5,000 kg), then a wide market (3,000 – 6,000), and tighten as you get clues. Same method as guesstimates in S1.</p></details>
+      </section>
+
+      <section id="options" data-nav="4 · Options basics" data-search>
+        <div class="section-head"><div><span class="section-no">04 / OPTIONS</span><h2>Options basics they expect you to know</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Payoffs</b><span>Call = max(S − K, 0); put = max(K − S, 0).</span></div>
+          <div class="formula-row"><b>Put–call parity</b><span>C − P = S − K·e<sup>−rT</sup> (European options, no dividends).</span></div>
+          <div class="formula-row"><b>At-the-money approximation</b><span>C ≈ 0.4 × S × σ × √T. S = 100, σ = 20%, T = 1 year → ≈ 8.0 (Black–Scholes gives 7.97 at r = 0).</span></div>
+          <div class="formula-row"><b>Greeks</b><span>Delta (price sensitivity; ATM call ≈ 0.5), gamma (delta's sensitivity), vega (volatility), theta (time decay), rho (rates).</span></div>
+          <div class="formula-row"><b>Intuition questions</b><span>Higher volatility raises both call and put values; a call's value rises with time to expiry; deep in-the-money call delta → 1.</span></div>
+        </div>
+        <div class="memory"><b>Indian context:</b> NSE is the world's largest derivatives exchange by contracts traded, driven by index options; SEBI tightened F&amp;O rules in 2024–25 after finding most retail traders lose money. Good talking point for "why trading" and markets questions (F5).</div>
+      </section>
+
+      <section id="drill" data-nav="5 · Mental maths drill" data-search>
+        <div class="section-head"><div><span class="section-no">05 / DRILL</span><h2>Daily mental-maths drill</h2></div><span class="tag core">core</span></div>
+        <div class="grid">
+          <div class="card"><h3>Speed</h3><p>10 minutes a day on an arithmetic trainer (e.g. Zetamac-style: 120 seconds of +, −, ×, ÷). Track your score; aim for 50+ then 65+ (VIKRAM's OA milestone).</p></div>
+          <div class="card"><h3>Tricks</h3><p>Multiply near 100: 97 × 96 = (100 − 3)(100 − 4) = 9,312. Squares ending in 5: 65² = 6×7 | 25 = 4,225. Percentages: 15% of 240 = 10% (24) + 5% (12) = 36. Fractions ↔ decimals: 1/7 ≈ 0.1429, 1/8 = 0.125.</p></div>
+          <div class="card"><h3>Probability daily</h3><p>Two puzzles a day from "Heard on the Street" (Crack), "A Practical Guide to Quantitative Finance Interviews" (Zhou) or "Fifty Challenging Problems in Probability" (Mosteller).</p></div>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="6 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Solve the 20 puzzles without looking; explain each aloud</label>
+          <label class="checkline"><input type="checkbox"> 10 minutes of arithmetic speed daily for 6 weeks</label>
+          <label class="checkline"><input type="checkbox"> 3 market-making games with a friend (dice, cards, Fermi)</label>
+          <label class="checkline"><input type="checkbox"> Learn put–call parity and the ATM approximation; do 5 option questions</label>
+          <label class="checkline"><input type="checkbox"> Read the Vault guide to advanced finance and quant interviews in your folder</label>
+          <label class="checkline"><input type="checkbox"> One timed quant OA mock</label>
+        </div>
+        <div class="memory">Pair with A1 (mental maths), D3 (statistics) and F5 (markets).</div>
+      </section>

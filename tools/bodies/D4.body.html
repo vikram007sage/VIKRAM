@@ -1,0 +1,150 @@
+<!--META D4 | DSA-lite, the fun way | D4 / DSA-LITE | Data track · Module D4 | DSA-lite,<br>the fun way | You're not aiming for software-engineering roles, but analyst, data-science, product and quant OAs often include one or two easy-to-medium coding problems. This module teaches the eight patterns that solve most of them, each with a tested Python solution and a plain-English idea, a 30-problem ladder from your 50-day roadmap, and a weekly rhythm that keeps it light: two problems a week. | 8 patterns, 13 tested solutions; 30-problem ladder -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>The goal: pass the coding question, not become a competitive programmer</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Arrays, strings, hash maps</strong><span class="muted">most OA questions</span></div><span class="frequency">45%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Two pointers, sliding window</strong><span class="muted">substrings, sorted arrays</span></div><span class="frequency">20%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Stack, binary search</strong><span class="muted">brackets, sorted search</span></div><span class="frequency">15%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>BFS/DFS, simple DP</strong><span class="muted">grids, counting ways</span></div><span class="frequency">20%</span></div>
+        </div>
+        <div class="memory"><b>How to solve any problem:</b> (1) restate with an example, (2) brute force first and its complexity, (3) ask "what am I recomputing?" — usually a hash map, pointer or running value fixes it, (4) code, (5) test edge cases: empty, one element, duplicates, negatives. Say this out loud in interviews.</div>
+      </section>
+
+      <section id="bigo" data-nav="1 · Big-O in 2 minutes" data-search>
+        <div class="section-head"><div><span class="section-no">01 / COMPLEXITY</span><h2>Big-O in two minutes</h2></div></div>
+        <table class="compare">
+          <tr><th>Complexity</th><th>Example</th><th>n = 10⁵ feasible?</th></tr>
+          <tr><td>O(1)</td><td>Dict lookup</td><td>Yes</td></tr>
+          <tr><td>O(log n)</td><td>Binary search</td><td>Yes</td></tr>
+          <tr><td>O(n)</td><td>One loop</td><td>Yes</td></tr>
+          <tr><td>O(n log n)</td><td>Sorting</td><td>Yes</td></tr>
+          <tr><td>O(n²)</td><td>Two nested loops</td><td>No (10¹⁰ steps)</td></tr>
+          <tr><td>O(2ⁿ)</td><td>All subsets</td><td>Only n ≤ ~20</td></tr>
+        </table>
+        <div class="memory"><b>Rule:</b> about 10⁷–10⁸ simple operations per second in Python is a safe estimate. Python sets/dicts give O(1) lookups — your most useful tool.</div>
+      </section>
+
+      <section id="patterns" data-nav="2 · Eight patterns" data-search>
+        <div class="section-head"><div><span class="section-no">02 / PATTERNS</span><h2>Eight patterns with tested solutions</h2></div><span class="tag core">core</span></div>
+        <details open><summary><b>1 · Hash map — Two Sum (LC 1)</b></summary><p>Idea: for each number, check whether its partner (target − x) was seen. O(n).</p>
+<pre><code>def two_sum(nums, t):
+    seen = {}
+    for i, x in enumerate(nums):
+        if t - x in seen:
+            return [seen[t - x], i]
+        seen[x] = i
+# two_sum([2,7,11,15], 9) -> [0, 1]</code></pre>
+        <p>Also: group anagrams (LC 49) — key = sorted word; top-k frequent (LC 347) — <code>Counter(nums).most_common(k)</code>.</p></details>
+        <details><summary><b>2 · Running value — Best time to buy and sell stock (LC 121)</b></summary><p>Track the lowest price so far; best profit = max(price − lowest). O(n).</p>
+<pre><code>def max_profit(p):
+    lo, best = float('inf'), 0
+    for x in p:
+        lo = min(lo, x)
+        best = max(best, x - lo)
+    return best
+# [7,1,5,3,6,4] -> 5</code></pre>
+        <p>Same family: maximum subarray (Kadane, LC 53): <code>cur = max(x, cur + x)</code> → [−2,1,−3,4,−1,2,1,−5,4] gives 6.</p></details>
+        <details><summary><b>3 · Two pointers — Valid palindrome (LC 125)</b></summary>
+<pre><code>def is_pal(s):
+    s = [c.lower() for c in s if c.isalnum()]
+    i, j = 0, len(s) - 1
+    while i &lt; j:
+        if s[i] != s[j]: return False
+        i += 1; j -= 1
+    return True</code></pre></details>
+        <details><summary><b>4 · Sliding window — Longest substring without repeats (LC 3)</b></summary><p>Move the window start past the last repeat of the current character. O(n).</p>
+<pre><code>def longest_unique(s):
+    last, start, best = {}, 0, 0
+    for i, c in enumerate(s):
+        if c in last and last[c] &gt;= start:
+            start = last[c] + 1
+        last[c] = i
+        best = max(best, i - start + 1)
+    return best
+# "abcabcbb" -> 3</code></pre></details>
+        <details><summary><b>5 · Stack — Valid parentheses (LC 20)</b></summary>
+<pre><code>def valid_paren(s):
+    st, m = [], {')': '(', ']': '[', '}': '{'}
+    for c in s:
+        if c in m:
+            if not st or st.pop() != m[c]: return False
+        else:
+            st.append(c)
+    return not st</code></pre></details>
+        <details><summary><b>6 · Binary search (LC 704)</b></summary>
+<pre><code>def bsearch(a, t):
+    lo, hi = 0, len(a) - 1
+    while lo &lt;= hi:
+        mid = (lo + hi) // 2
+        if a[mid] == t: return mid
+        if a[mid] &lt; t: lo = mid + 1
+        else: hi = mid - 1
+    return -1</code></pre>
+        <p>Python shortcut: <code>bisect.bisect_left(a, t)</code>. Binary search also works on the answer ("smallest capacity that ships in D days").</p></details>
+        <details><summary><b>7 · BFS on a grid — Number of islands (LC 200)</b></summary>
+<pre><code>from collections import deque
+def islands(grid):
+    R, C, seen, n = len(grid), len(grid[0]), set(), 0
+    for r in range(R):
+        for c in range(C):
+            if grid[r][c] == '1' and (r, c) not in seen:
+                n += 1; q = deque([(r, c)]); seen.add((r, c))
+                while q:
+                    a, b = q.popleft()
+                    for da, db in ((1,0), (-1,0), (0,1), (0,-1)):
+                        x, y = a + da, b + db
+                        if 0 &lt;= x &lt; R and 0 &lt;= y &lt; C and grid[x][y] == '1' and (x, y) not in seen:
+                            seen.add((x, y)); q.append((x, y))
+    return n</code></pre></details>
+        <details><summary><b>8 · Simple DP — Climbing stairs (LC 70) and coin change (LC 322)</b></summary>
+<pre><code>def climb(n):           # ways to climb n steps, 1 or 2 at a time
+    a, b = 1, 1
+    for _ in range(n): a, b = b, a + b
+    return a            # climb(5) -> 8
+
+def coin_change(coins, amt):   # fewest coins
+    dp = [0] + [float('inf')] * amt
+    for v in range(1, amt + 1):
+        for c in coins:
+            if c &lt;= v: dp[v] = min(dp[v], dp[v - c] + 1)
+    return dp[amt] if dp[amt] != float('inf') else -1
+# coin_change([1,2,5], 11) -> 3</code></pre>
+        <p>DP recipe: define the state (dp[v] = best answer for v), the transition, the base case, the order.</p></details>
+        <div class="memory">All 13 solutions above were run and give the outputs shown.</div>
+      </section>
+
+      <section id="ladder" data-nav="3 · 30-problem ladder" data-search>
+        <div class="section-head"><div><span class="section-no">03 / LADDER</span><h2>The 30-problem ladder</h2></div><span class="tag pyq">do in order</span></div>
+        <table class="compare">
+          <tr><th>Stage</th><th>Problems (LeetCode numbers)</th></tr>
+          <tr><td>Warm-up</td><td>1480 Running sum · 1672 Richest customer · 217 Contains duplicate · 283 Move zeroes · 1 Two sum</td></tr>
+          <tr><td>Hash maps + strings</td><td>242 Valid anagram · 49 Group anagrams · 347 Top k frequent · 387 First unique character · 13 Roman to integer</td></tr>
+          <tr><td>Running value</td><td>121 Stock · 53 Maximum subarray · 238 Product except self · 1929 Concatenation (easy confidence)</td></tr>
+          <tr><td>Two pointers</td><td>125 Valid palindrome · 167 Two sum II · 11 Container with most water · 26 Remove duplicates</td></tr>
+          <tr><td>Sliding window</td><td>3 Longest substring · 643 Max average subarray · 209 Minimum size subarray sum</td></tr>
+          <tr><td>Stack + search</td><td>20 Valid parentheses · 155 Min stack · 704 Binary search · 35 Search insert position</td></tr>
+          <tr><td>Graphs + DP</td><td>200 Number of islands · 733 Flood fill · 70 Climbing stairs · 198 House robber · 322 Coin change</td></tr>
+        </table>
+        <div class="memory"><b>SQL counts too:</b> many data OAs include SQL problems instead of DSA — LeetCode's "SQL 50" pairs with D1.</div>
+      </section>
+
+      <section id="rhythm" data-nav="4 · Weekly rhythm" data-search>
+        <div class="section-head"><div><span class="section-no">04 / RHYTHM</span><h2>Keeping it light and fun</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Two a week</h3><p>One new problem, one re-solve of an old one from memory. 30–45 minutes each.</p></div>
+          <div class="card"><h3>Time-box</h3><p>Stuck for 20 minutes? Read the hint or solution, understand it, then close it and code it yourself the next day.</p></div>
+          <div class="card"><h3>Make it a game</h3><p>Keep a streak in VIKRAM's habits; try one weekly contest problem for fun; explain each solution in one line in a log.</p></div>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="5 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Type out and run all 8 pattern solutions</label>
+          <label class="checkline"><input type="checkbox"> Finish the warm-up and hash-map stages (10 problems)</label>
+          <label class="checkline"><input type="checkbox"> 20 easy problems by 15 March 2027 (VIKRAM milestone)</label>
+          <label class="checkline"><input type="checkbox"> All 30 by August 2027; re-solve 10 at random in the week before OAs</label>
+          <label class="checkline"><input type="checkbox"> One timed OA mock with a coding section</label>
+        </div>
+        <div class="memory">Source: your 50-day DSA roadmap (AI_ML roadmaps folder), trimmed to what non-SDE roles need. Pair with D1 (SQL) and D2 (pandas).</div>
+      </section>

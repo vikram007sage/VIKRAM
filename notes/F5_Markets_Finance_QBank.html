@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>F5 | Markets + finance Q-bank — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">F5 / MARKETS</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#macro">1 · How macro links work</a><a href="#fi">2 · Bonds + FX</a><a href="#pitch">3 · Stock pitch</a><a href="#qbank">4 · 60-question bank</a><a href="#plan">5 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Finance track · Module F5</div><h1>Markets +<br>finance question bank</h1><p>"What's the Nifty at? Why did the RBI hike? What happens to bonds if inflation rises? Pitch me a stock." Finance interviews always include markets awareness and quick conceptual questions. This module gives a November 2026 market dashboard with the story behind it, how the main macro links work, fixed income and FX basics, a stock-pitch template, and a 60-question bank across the finance modules with short answers.</p><div class="meta"><span class="pill"><span class=dot></span> Nov 2026 dashboard</span><span class="pill">macro links</span><span class="pill">60 rapid-fire Qs</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>The market dashboard (mid-November 2026)</h2></div><span class="tag hot">refresh weekly</span></div>
+        <table class="compare">
+          <tr><th>Indicator</th><th>Level</th><th>Story</th></tr>
+          <tr><td>Nifty 50</td><td>~25,250–25,400 (11 Nov 2026)</td><td>Highest in ~9 months after a rally led by banks and autos; still below the 2025 record highs (~26,300)</td></tr>
+          <tr><td>RBI repo rate</td><td>5.50%</td><td>Hiked 25 bp on 7 Oct 2026 (unanimous), stance changed to "calibrated tightening"</td></tr>
+          <tr><td>CPI inflation</td><td>5.54% (Sep 2026)</td><td>23-month high; above the 4% target; oil and food pressures</td></tr>
+          <tr><td>Real GDP growth</td><td>7.8% (Q1 FY27)</td><td>Strong services (~10%) and investment; IMF and Moody's see ~7% for FY27</td></tr>
+          <tr><td>10-year G-sec</td><td>~7.15–7.20%</td><td>Hit ~7.47% in late October (3-year high), eased as oil fell</td></tr>
+          <tr><td>USD/INR</td><td>~93.7</td><td>Rupee weakened sharply through 2026 (was ~88–89 in late 2025) on oil, outflows, strong dollar</td></tr>
+          <tr><td>Brent crude</td><td>~$91/bbl</td><td>Above $100 at times after the West Asia/Iran energy shock; easing in November</td></tr>
+          <tr><td>FX reserves</td><td>~$721 bn (16 Oct 2026)</td><td>Buffer RBI uses to smooth the rupee</td></tr>
+          <tr><td>US Fed funds</td><td>3.75–4.00%</td><td>Fed under Chair Kevin Warsh hiked in September 2026, paused in October</td></tr>
+          <tr><td>Gold (MCX)</td><td>~₹1.41 lakh per 10 g</td><td>Safe-haven demand plus weak rupee</td></tr>
+        </table>
+        <div class="memory"><b>Narrative in one breath:</b> "India is growing ~7–8%, but an oil shock pushed inflation above 5%, so the RBI started hiking; bond yields and the dollar rose, the rupee fell to ~94, and equities corrected before recovering as oil eased." Check every number the week of your interview (RBI, NSE, MOSPI, tradingeconomics).</div>
+      </section>
+
+      <section id="macro" data-nav="1 · How macro links work" data-search>
+        <div class="section-head"><div><span class="section-no">01 / MACRO</span><h2>How the macro links work</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>If…</th><th>Then usually…</th><th>Why</th></tr>
+          <tr><td>Inflation rises</td><td>Central bank hikes → bond yields up, bond prices down; equity valuations fall (higher discount rate)</td><td>Inflation erodes real returns; policy responds</td></tr>
+          <tr><td>RBI cuts the repo rate</td><td>Loans cheaper, bank NIMs may compress initially, rate-sensitive sectors (autos, real estate, NBFCs) rally</td><td>Lower cost of money</td></tr>
+          <tr><td>Oil price rises</td><td>India's trade deficit widens, rupee weakens, inflation rises; OMCs, airlines, paints hurt; upstream oil producers gain</td><td>India imports ~85% of its crude</td></tr>
+          <tr><td>Rupee weakens</td><td>IT services, pharma exporters benefit; importers and companies with dollar debt hurt; imported inflation</td><td>Revenue/costs in dollars</td></tr>
+          <tr><td>US Fed hikes</td><td>Dollar strengthens, foreign investors pull money from emerging markets, rupee and Indian bonds pressured</td><td>Higher US returns attract capital</td></tr>
+          <tr><td>Fiscal deficit rises</td><td>More government borrowing → higher bond yields, crowding out</td><td>Bond supply</td></tr>
+          <tr><td>Strong GDP data</td><td>Equities up (earnings), yields may rise (less need for rate cuts)</td><td>Growth and policy expectations</td></tr>
+        </table>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Monetary tools (RBI)</b><span>Repo rate, standing deposit facility, CRR, SLR, open-market operations, variable-rate repo/reverse repo, FX intervention.</span></div>
+          <div class="formula-row"><b>Real rate</b><span>Nominal − expected inflation: 5.50% repo − ~5.5% inflation ≈ 0% real policy rate, which is why markets expect more hikes.</span></div>
+        </div>
+      </section>
+
+      <section id="fi" data-nav="2 · Bonds + FX" data-search>
+        <div class="section-head"><div><span class="section-no">02 / FIXED INCOME</span><h2>Bonds and currencies</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Price and yield</b><span>Move in opposite directions. A bond paying fixed coupons is worth less when new bonds pay more.</span></div>
+          <div class="formula-row"><b>Duration</b><span>Approximate % price change for a 1% yield change. ΔP ≈ −Duration × Δy: a 7-year-duration bond loses ~7% if yields rise 1%; ~1.75% for a 25 bp rise.</span></div>
+          <div class="formula-row"><b>Yield curve</b><span>Normally upward sloping; inverted (short &gt; long) often precedes recessions; flattening when the central bank hikes.</span></div>
+          <div class="formula-row"><b>Credit spread</b><span>Corporate yield − G-sec yield; widens in stress.</span></div>
+          <div class="formula-row"><b>Interest-rate parity</b><span>Forward rate ≈ spot × (1 + i<sub>INR</sub>) ÷ (1 + i<sub>USD</sub>). With rupee rates higher than dollar rates, the rupee trades at a forward discount.</span></div>
+          <div class="formula-row"><b>Index inclusion</b><span>Indian G-secs joined JP Morgan's EM bond index from 2024 (and later FTSE); Bloomberg deferred its decision in 2026 — inclusion brings passive foreign inflows.</span></div>
+        </div>
+      </section>
+
+      <section id="pitch" data-nav="3 · Stock pitch" data-search>
+        <div class="section-head"><div><span class="section-no">03 / PITCH</span><h2>Stock-pitch template (2 minutes)</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Recommendation</b><span>Buy/sell, current price, target price, upside, time horizon.</span></div>
+          <div class="formula-row"><b>2. Business in two lines</b><span>What it does, how it makes money, market position.</span></div>
+          <div class="formula-row"><b>3. Thesis (3 points)</b><span>Where you differ from the market: e.g. margin expansion not priced in, new segment, industry tailwind.</span></div>
+          <div class="formula-row"><b>4. Valuation</b><span>P/E or EV/EBITDA vs history and peers; DCF cross-check (F2).</span></div>
+          <div class="formula-row"><b>5. Catalysts</b><span>Results, launches, regulation, capacity coming online.</span></div>
+          <div class="formula-row"><b>6. Risks</b><span>2–3 risks and what would make you change your mind.</span></div>
+        </div>
+        <div class="memory"><b>Prepare two:</b> one bank or NBFC (link to B1: NIM, credit cost, ROA, P/B) and one consumer or tech company. Avoid the most obvious names unless you have a genuinely different view.</div>
+      </section>
+
+      <section id="qbank" data-nav="4 · 60-question bank" data-search>
+        <div class="section-head"><div><span class="section-no">04 / Q-BANK</span><h2>Sixty rapid-fire questions</h2></div><span class="tag pyq">answer aloud</span></div>
+        <h3>Accounting (F1)</h3>
+        <table class="compare">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Depreciation rises ₹10 (tax 25%) — effect on the three statements?</td><td>NI −7.5; CFO +2.5 (−7.5 + 10); PP&amp;E −10, cash +2.5, equity −7.5</td></tr>
+          <tr><td>Inventory up ₹20 funded by cash?</td><td>No income-statement effect; CFO −20</td></tr>
+          <tr><td>Why can a profitable company go bankrupt?</td><td>Cash flow: working capital, debt maturities</td></tr>
+          <tr><td>EBITDA vs operating cash flow?</td><td>OCF includes interest, tax and working-capital changes</td></tr>
+          <tr><td>What's deferred revenue?</td><td>Cash received before delivery; a liability</td></tr>
+          <tr><td>What is goodwill?</td><td>Purchase price above fair value of net assets</td></tr>
+          <tr><td>Ind AS 116 effect on EBITDA?</td><td>Raises it: lease rent becomes depreciation + interest</td></tr>
+          <tr><td>Free cash flow?</td><td>CFO − capex</td></tr>
+          <tr><td>Working capital cycle?</td><td>Inventory days + receivable days − payable days</td></tr>
+          <tr><td>Most important statement?</td><td>Cash flow statement (hardest to manipulate) — defend any choice</td></tr>
+        </table>
+        <h3>Valuation (F2)</h3>
+        <table class="compare">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Three valuation methods?</td><td>DCF, trading comps, precedent transactions (+ LBO)</td></tr>
+          <tr><td>Which gives the highest value?</td><td>Usually precedents (control premium)</td></tr>
+          <tr><td>EV formula?</td><td>Equity + debt + preferred + minority − cash</td></tr>
+          <tr><td>Why is terminal value large?</td><td>It captures all cash flows beyond the forecast</td></tr>
+          <tr><td>Cost of equity formula?</td><td>R<sub>f</sub> + β × ERP</td></tr>
+          <tr><td>Indian risk-free rate now?</td><td>~7.2% (10-year G-sec)</td></tr>
+          <tr><td>Rates rise 1% — growth or value stocks hurt more?</td><td>Growth (long-duration cash flows)</td></tr>
+          <tr><td>P/E of 20 means?</td><td>Investors pay ₹20 per ₹1 of earnings; earnings yield 5%</td></tr>
+          <tr><td>Bank valuation multiple?</td><td>P/B with ROE</td></tr>
+          <tr><td>WACC higher or lower than cost of equity?</td><td>Lower (cheaper after-tax debt)</td></tr>
+        </table>
+        <h3>Deals and private markets (F3, F4)</h3>
+        <table class="compare">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Accretive deal?</td><td>Pro-forma EPS rises</td></tr>
+          <tr><td>Quick accretion test?</td><td>Target earnings yield vs acquirer's cost of funding</td></tr>
+          <tr><td>LBO return drivers?</td><td>EBITDA growth, multiple expansion, debt paydown</td></tr>
+          <tr><td>2× in 5 years IRR?</td><td>~15%</td></tr>
+          <tr><td>2 and 20?</td><td>2% management fee, 20% carry</td></tr>
+          <tr><td>DPI?</td><td>Cash distributed ÷ paid-in capital</td></tr>
+          <tr><td>Liquidation preference?</td><td>Investor gets money back before common</td></tr>
+          <tr><td>Pre-money ₹80 cr, invest ₹20 cr — ownership?</td><td>20%</td></tr>
+          <tr><td>Largest Indian outbound deal of 2026?</td><td>Sun Pharma–Organon (~$11.8 bn)</td></tr>
+          <tr><td>SEBI open-offer trigger?</td><td>25% stake</td></tr>
+        </table>
+        <h3>Banking and markets (B1, this module)</h3>
+        <table class="compare">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>What is NIM?</td><td>(Interest income − interest expense) ÷ average earning assets</td></tr>
+          <tr><td>CRR vs SLR?</td><td>Cash with RBI (3%) vs liquid assets like G-secs (18%)</td></tr>
+          <tr><td>What is GNPA?</td><td>Loans 90+ days overdue as % of loans; ~1.8% for Indian banks (FSR June 2026)</td></tr>
+          <tr><td>What changes with ECL from April 2027?</td><td>Provisions based on expected, not incurred, losses — higher upfront provisions</td></tr>
+          <tr><td>Why did RBI hike in October 2026?</td><td>Inflation above target after oil shock; rupee pressure</td></tr>
+          <tr><td>Repo rate today?</td><td>5.50%</td></tr>
+          <tr><td>Bond price if yields rise?</td><td>Falls</td></tr>
+          <tr><td>Duration 7, yields +50 bp?</td><td>Price ≈ −3.5%</td></tr>
+          <tr><td>What moves the rupee?</td><td>Oil, capital flows, interest differential, trade deficit, RBI intervention</td></tr>
+          <tr><td>Nifty level?</td><td>~25,300 (mid-Nov 2026) — check on the day</td></tr>
+          <tr><td>What is an IPO grey-market premium?</td><td>Unofficial pre-listing premium; signal of demand</td></tr>
+          <tr><td>FPI vs FDI?</td><td>Portfolio (liquid, short-term) vs direct (control, long-term)</td></tr>
+          <tr><td>What is a QIP?</td><td>Qualified institutional placement: listed company raises equity from institutions</td></tr>
+          <tr><td>Why do F&amp;O volumes matter?</td><td>NSE leads globally in contracts; SEBI curbed retail speculation</td></tr>
+          <tr><td>UPI monthly volume?</td><td>~25 bn transactions (Oct 2026)</td></tr>
+        </table>
+        <h3>Concepts and quant</h3>
+        <table class="compare">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Time value of money?</td><td>₹1 today &gt; ₹1 tomorrow; discounting</td></tr>
+          <tr><td>₹100 at 10% for 3 years?</td><td>₹133.1</td></tr>
+          <tr><td>Rule of 72 at 8%?</td><td>~9 years to double</td></tr>
+          <tr><td>Annuity of ₹100 for 5 years at 10%: PV?</td><td>≈ ₹379</td></tr>
+          <tr><td>Beta of 1.5 means?</td><td>Moves 1.5% for 1% market move</td></tr>
+          <tr><td>Sharpe ratio?</td><td>(Return − risk-free) ÷ volatility</td></tr>
+          <tr><td>Diversification removes which risk?</td><td>Unsystematic (company-specific)</td></tr>
+          <tr><td>Call option value as volatility rises?</td><td>Rises</td></tr>
+          <tr><td>Put–call parity?</td><td>C − P = S − PV(K)</td></tr>
+          <tr><td>What is a hedge?</td><td>Position that offsets risk (e.g. exporter sells USD forward)</td></tr>
+          <tr><td>CAGR from 100 to 200 in 5 years?</td><td>~14.9%</td></tr>
+          <tr><td>Real return: 7% nominal, 5% inflation?</td><td>≈ 1.9%</td></tr>
+          <tr><td>Why do companies buy back shares?</td><td>Return cash, signal undervaluation, raise EPS</td></tr>
+          <tr><td>Dividend vs buyback in India tax?</td><td>Dividends taxed in shareholders' hands; buyback taxation changed in 2024 to tax shareholders</td></tr>
+          <tr><td>Why do you want finance?</td><td>Your story: Oister Global research, CheQ fintech, KiFayti fundraising (S3)</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="5 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Refresh the dashboard every Sunday (10 minutes)</label>
+          <label class="checkline"><input type="checkbox"> Read one markets newsletter daily (ET Markets, Mint, Bloomberg/Reuters India)</label>
+          <label class="checkline"><input type="checkbox"> Answer all 60 questions aloud; mark the ones you hesitate on</label>
+          <label class="checkline"><input type="checkbox"> Prepare two stock pitches with numbers</label>
+          <label class="checkline"><input type="checkbox"> Explain the October RBI hike and the rupee move in 60 seconds</label>
+          <label class="checkline"><input type="checkbox"> Use the Vault guide and technical interview guide in your folder for 50 more questions</label>
+        </div>
+        <div class="memory">This module ties F1–F4, B1 and Q1 together. Use it as the last-week revision sheet for finance roles (with X1).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-f5-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-f5-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-f5-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

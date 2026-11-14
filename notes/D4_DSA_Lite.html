@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>D4 | DSA-lite, the fun way — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">D4 / DSA-LITE</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#bigo">1 · Big-O in 2 minutes</a><a href="#patterns">2 · Eight patterns</a><a href="#ladder">3 · 30-problem ladder</a><a href="#rhythm">4 · Weekly rhythm</a><a href="#plan">5 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Data track · Module D4</div><h1>DSA-lite,<br>the fun way</h1><p>You're not aiming for software-engineering roles, but analyst, data-science, product and quant OAs often include one or two easy-to-medium coding problems. This module teaches the eight patterns that solve most of them, each with a tested Python solution and a plain-English idea, a 30-problem ladder from your 50-day roadmap, and a weekly rhythm that keeps it light: two problems a week.</p><div class="meta"><span class="pill"><span class=dot></span> 8 patterns, 13 tested solutions</span><span class="pill">30-problem ladder</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>The goal: pass the coding question, not become a competitive programmer</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Arrays, strings, hash maps</strong><span class="muted">most OA questions</span></div><span class="frequency">45%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Two pointers, sliding window</strong><span class="muted">substrings, sorted arrays</span></div><span class="frequency">20%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Stack, binary search</strong><span class="muted">brackets, sorted search</span></div><span class="frequency">15%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>BFS/DFS, simple DP</strong><span class="muted">grids, counting ways</span></div><span class="frequency">20%</span></div>
+        </div>
+        <div class="memory"><b>How to solve any problem:</b> (1) restate with an example, (2) brute force first and its complexity, (3) ask "what am I recomputing?" — usually a hash map, pointer or running value fixes it, (4) code, (5) test edge cases: empty, one element, duplicates, negatives. Say this out loud in interviews.</div>
+      </section>
+
+      <section id="bigo" data-nav="1 · Big-O in 2 minutes" data-search>
+        <div class="section-head"><div><span class="section-no">01 / COMPLEXITY</span><h2>Big-O in two minutes</h2></div></div>
+        <table class="compare">
+          <tr><th>Complexity</th><th>Example</th><th>n = 10⁵ feasible?</th></tr>
+          <tr><td>O(1)</td><td>Dict lookup</td><td>Yes</td></tr>
+          <tr><td>O(log n)</td><td>Binary search</td><td>Yes</td></tr>
+          <tr><td>O(n)</td><td>One loop</td><td>Yes</td></tr>
+          <tr><td>O(n log n)</td><td>Sorting</td><td>Yes</td></tr>
+          <tr><td>O(n²)</td><td>Two nested loops</td><td>No (10¹⁰ steps)</td></tr>
+          <tr><td>O(2ⁿ)</td><td>All subsets</td><td>Only n ≤ ~20</td></tr>
+        </table>
+        <div class="memory"><b>Rule:</b> about 10⁷–10⁸ simple operations per second in Python is a safe estimate. Python sets/dicts give O(1) lookups — your most useful tool.</div>
+      </section>
+
+      <section id="patterns" data-nav="2 · Eight patterns" data-search>
+        <div class="section-head"><div><span class="section-no">02 / PATTERNS</span><h2>Eight patterns with tested solutions</h2></div><span class="tag core">core</span></div>
+        <details open><summary><b>1 · Hash map — Two Sum (LC 1)</b></summary><p>Idea: for each number, check whether its partner (target − x) was seen. O(n).</p>
+<pre><code>def two_sum(nums, t):
+    seen = {}
+    for i, x in enumerate(nums):
+        if t - x in seen:
+            return [seen[t - x], i]
+        seen[x] = i
+# two_sum([2,7,11,15], 9) -> [0, 1]</code></pre>
+        <p>Also: group anagrams (LC 49) — key = sorted word; top-k frequent (LC 347) — <code>Counter(nums).most_common(k)</code>.</p></details>
+        <details><summary><b>2 · Running value — Best time to buy and sell stock (LC 121)</b></summary><p>Track the lowest price so far; best profit = max(price − lowest). O(n).</p>
+<pre><code>def max_profit(p):
+    lo, best = float('inf'), 0
+    for x in p:
+        lo = min(lo, x)
+        best = max(best, x - lo)
+    return best
+# [7,1,5,3,6,4] -> 5</code></pre>
+        <p>Same family: maximum subarray (Kadane, LC 53): <code>cur = max(x, cur + x)</code> → [−2,1,−3,4,−1,2,1,−5,4] gives 6.</p></details>
+        <details><summary><b>3 · Two pointers — Valid palindrome (LC 125)</b></summary>
+<pre><code>def is_pal(s):
+    s = [c.lower() for c in s if c.isalnum()]
+    i, j = 0, len(s) - 1
+    while i &lt; j:
+        if s[i] != s[j]: return False
+        i += 1; j -= 1
+    return True</code></pre></details>
+        <details><summary><b>4 · Sliding window — Longest substring without repeats (LC 3)</b></summary><p>Move the window start past the last repeat of the current character. O(n).</p>
+<pre><code>def longest_unique(s):
+    last, start, best = {}, 0, 0
+    for i, c in enumerate(s):
+        if c in last and last[c] &gt;= start:
+            start = last[c] + 1
+        last[c] = i
+        best = max(best, i - start + 1)
+    return best
+# "abcabcbb" -> 3</code></pre></details>
+        <details><summary><b>5 · Stack — Valid parentheses (LC 20)</b></summary>
+<pre><code>def valid_paren(s):
+    st, m = [], {')': '(', ']': '[', '}': '{'}
+    for c in s:
+        if c in m:
+            if not st or st.pop() != m[c]: return False
+        else:
+            st.append(c)
+    return not st</code></pre></details>
+        <details><summary><b>6 · Binary search (LC 704)</b></summary>
+<pre><code>def bsearch(a, t):
+    lo, hi = 0, len(a) - 1
+    while lo &lt;= hi:
+        mid = (lo + hi) // 2
+        if a[mid] == t: return mid
+        if a[mid] &lt; t: lo = mid + 1
+        else: hi = mid - 1
+    return -1</code></pre>
+        <p>Python shortcut: <code>bisect.bisect_left(a, t)</code>. Binary search also works on the answer ("smallest capacity that ships in D days").</p></details>
+        <details><summary><b>7 · BFS on a grid — Number of islands (LC 200)</b></summary>
+<pre><code>from collections import deque
+def islands(grid):
+    R, C, seen, n = len(grid), len(grid[0]), set(), 0
+    for r in range(R):
+        for c in range(C):
+            if grid[r][c] == '1' and (r, c) not in seen:
+                n += 1; q = deque([(r, c)]); seen.add((r, c))
+                while q:
+                    a, b = q.popleft()
+                    for da, db in ((1,0), (-1,0), (0,1), (0,-1)):
+                        x, y = a + da, b + db
+                        if 0 &lt;= x &lt; R and 0 &lt;= y &lt; C and grid[x][y] == '1' and (x, y) not in seen:
+                            seen.add((x, y)); q.append((x, y))
+    return n</code></pre></details>
+        <details><summary><b>8 · Simple DP — Climbing stairs (LC 70) and coin change (LC 322)</b></summary>
+<pre><code>def climb(n):           # ways to climb n steps, 1 or 2 at a time
+    a, b = 1, 1
+    for _ in range(n): a, b = b, a + b
+    return a            # climb(5) -> 8
+
+def coin_change(coins, amt):   # fewest coins
+    dp = [0] + [float('inf')] * amt
+    for v in range(1, amt + 1):
+        for c in coins:
+            if c &lt;= v: dp[v] = min(dp[v], dp[v - c] + 1)
+    return dp[amt] if dp[amt] != float('inf') else -1
+# coin_change([1,2,5], 11) -> 3</code></pre>
+        <p>DP recipe: define the state (dp[v] = best answer for v), the transition, the base case, the order.</p></details>
+        <div class="memory">All 13 solutions above were run and give the outputs shown.</div>
+      </section>
+
+      <section id="ladder" data-nav="3 · 30-problem ladder" data-search>
+        <div class="section-head"><div><span class="section-no">03 / LADDER</span><h2>The 30-problem ladder</h2></div><span class="tag pyq">do in order</span></div>
+        <table class="compare">
+          <tr><th>Stage</th><th>Problems (LeetCode numbers)</th></tr>
+          <tr><td>Warm-up</td><td>1480 Running sum · 1672 Richest customer · 217 Contains duplicate · 283 Move zeroes · 1 Two sum</td></tr>
+          <tr><td>Hash maps + strings</td><td>242 Valid anagram · 49 Group anagrams · 347 Top k frequent · 387 First unique character · 13 Roman to integer</td></tr>
+          <tr><td>Running value</td><td>121 Stock · 53 Maximum subarray · 238 Product except self · 1929 Concatenation (easy confidence)</td></tr>
+          <tr><td>Two pointers</td><td>125 Valid palindrome · 167 Two sum II · 11 Container with most water · 26 Remove duplicates</td></tr>
+          <tr><td>Sliding window</td><td>3 Longest substring · 643 Max average subarray · 209 Minimum size subarray sum</td></tr>
+          <tr><td>Stack + search</td><td>20 Valid parentheses · 155 Min stack · 704 Binary search · 35 Search insert position</td></tr>
+          <tr><td>Graphs + DP</td><td>200 Number of islands · 733 Flood fill · 70 Climbing stairs · 198 House robber · 322 Coin change</td></tr>
+        </table>
+        <div class="memory"><b>SQL counts too:</b> many data OAs include SQL problems instead of DSA — LeetCode's "SQL 50" pairs with D1.</div>
+      </section>
+
+      <section id="rhythm" data-nav="4 · Weekly rhythm" data-search>
+        <div class="section-head"><div><span class="section-no">04 / RHYTHM</span><h2>Keeping it light and fun</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Two a week</h3><p>One new problem, one re-solve of an old one from memory. 30–45 minutes each.</p></div>
+          <div class="card"><h3>Time-box</h3><p>Stuck for 20 minutes? Read the hint or solution, understand it, then close it and code it yourself the next day.</p></div>
+          <div class="card"><h3>Make it a game</h3><p>Keep a streak in VIKRAM's habits; try one weekly contest problem for fun; explain each solution in one line in a log.</p></div>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="5 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Type out and run all 8 pattern solutions</label>
+          <label class="checkline"><input type="checkbox"> Finish the warm-up and hash-map stages (10 problems)</label>
+          <label class="checkline"><input type="checkbox"> 20 easy problems by 15 March 2027 (VIKRAM milestone)</label>
+          <label class="checkline"><input type="checkbox"> All 30 by August 2027; re-solve 10 at random in the week before OAs</label>
+          <label class="checkline"><input type="checkbox"> One timed OA mock with a coding section</label>
+        </div>
+        <div class="memory">Source: your 50-day DSA roadmap (AI_ML roadmaps folder), trimmed to what non-SDE roles need. Pair with D1 (SQL) and D2 (pandas).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-d4-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-d4-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-d4-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

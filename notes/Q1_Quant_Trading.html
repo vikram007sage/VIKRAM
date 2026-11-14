@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Q1 | Quant trading interviews — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Q1 / QUANT</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#tools">1 · Probability toolkit</a><a href="#puzzles">2 · 20 classic puzzles</a><a href="#mm">3 · Market making</a><a href="#options">4 · Options basics</a><a href="#drill">5 · Mental maths drill</a><a href="#plan">6 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Finance track · Module Q1</div><h1>Quant trading<br>interviews</h1><p>Quant trading firms (Optiver, Jane Street, Tower Research, Graviton, Quadeye, IMC, Da Vinci, Squarepoint and others recruiting at IIT campuses) test fast mental maths, probability and expected value, betting and market-making games, and calm reasoning under pressure. This module gives the formats, a probability toolkit, 20 classic puzzles with verified answers, market-making and option basics, and a daily training routine.</p><div class="meta"><span class="pill"><span class=dot></span> 20 verified puzzles</span><span class="pill">market-making method</span><span class="pill">mental-maths drill</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Formats you'll meet</h2></div></div>
+        <table class="compare">
+          <tr><th>Stage</th><th>What it is</th></tr>
+          <tr><td>Online test</td><td>Timed mental arithmetic (e.g. 80 questions in 8 minutes, no calculator), number sequences, probability MCQs, sometimes a coding round</td></tr>
+          <tr><td>Probability / brainteaser interview</td><td>Puzzles solved aloud; follow-ups change the rules</td></tr>
+          <tr><td>Market-making / trading game</td><td>Quote a bid and ask on an unknown quantity; update as information arrives; manage position</td></tr>
+          <tr><td>Betting / sizing</td><td>How much to bet given an edge (Kelly), risk of ruin</td></tr>
+          <tr><td>Behavioural / fit</td><td>Why trading, handling losses, teamwork; some firms add a "game day"</td></tr>
+        </table>
+        <div class="memory"><b>Honest positioning:</b> these roles are highly competitive and maths-heavy; your biotech background is fine if your mental maths and probability are sharp. Treat Q1 as an optional lane — the daily drill also boosts your aptitude OA scores (A1–A4).</div>
+      </section>
+
+      <section id="tools" data-nav="1 · Probability toolkit" data-search>
+        <div class="section-head"><div><span class="section-no">01 / TOOLKIT</span><h2>Probability toolkit</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Expected value</b><span>E[X] = Σ x · P(x); linearity: E[X + Y] = E[X] + E[Y] even when dependent — the most powerful trick in puzzles.</span></div>
+          <div class="formula-row"><b>Conditional + Bayes</b><span>P(A|B) = P(B|A) P(A) ÷ P(B). Draw a tree or count equally likely cases.</span></div>
+          <div class="formula-row"><b>Geometric waiting time</b><span>Expected trials until first success with probability p = 1 ÷ p.</span></div>
+          <div class="formula-row"><b>Recursion / states</b><span>Write E for each state and solve equations (coin patterns, random walks).</span></div>
+          <div class="formula-row"><b>Symmetry</b><span>Look for equivalent outcomes to avoid computation.</span></div>
+          <div class="formula-row"><b>Variance</b><span>Var(X) = E[X²] − (E[X])²; for a fair die E[X²] = 91/6 ≈ 15.17, Var = 35/12.</span></div>
+          <div class="formula-row"><b>Combinatorics</b><span>nCr, stars and bars, inclusion–exclusion, complements ("at least one" = 1 − none).</span></div>
+        </div>
+      </section>
+
+      <section id="puzzles" data-nav="2 · 20 classic puzzles" data-search>
+        <div class="section-head"><div><span class="section-no">02 / PUZZLES</span><h2>Twenty classic puzzles (answers verified)</h2></div><span class="tag pyq">try first</span></div>
+        <table class="compare">
+          <tr><th>Puzzle</th><th>Answer</th><th>Key idea</th></tr>
+          <tr><td>Roll a die; you may re-roll once and keep the second. Expected value with best play?</td><td>17/4 = 4.25</td><td>Keep 4, 5, 6 (above 3.5); re-roll 1–3</td></tr>
+          <tr><td>Expected rolls of a die to get a 6?</td><td>6</td><td>Geometric, 1/p</td></tr>
+          <tr><td>Expected coin flips to get HH? To get HT?</td><td>6; 4</td><td>States: HH can "reset", HT can't</td></tr>
+          <tr><td>Expected rolls to see all six faces?</td><td>14.7</td><td>Coupon collector: 6 × (1 + 1/2 + … + 1/6)</td></tr>
+          <tr><td>Expected maximum of two dice?</td><td>161/36 ≈ 4.47</td><td>P(max ≤ k) = (k/6)²</td></tr>
+          <tr><td>People needed for &gt;50% chance of a shared birthday?</td><td>23 (50.7%)</td><td>Complement of all distinct</td></tr>
+          <tr><td>Monty Hall: switch?</td><td>Yes, 2/3 win</td><td>Host's choice gives information</td></tr>
+          <tr><td>Two children, at least one boy. P(both boys)?</td><td>1/3</td><td>Cases BB, BG, GB</td></tr>
+          <tr><td>Break a stick at two random points. P(pieces form a triangle)?</td><td>1/4</td><td>No piece longer than 1/2</td></tr>
+          <tr><td>Fair game: start ₹10, win/lose ₹1 each round, stop at ₹0 or ₹20. P(reach 20)?</td><td>1/2</td><td>Gambler's ruin: start ÷ target</td></tr>
+          <tr><td>Guess a number 1–100 with higher/lower hints. Worst-case guesses?</td><td>7</td><td>⌈log₂ 100⌉</td></tr>
+          <tr><td>100 people board a plane; first sits randomly, others take their seat if free. P(last gets own seat)?</td><td>1/2</td><td>Symmetry between seats 1 and 100</td></tr>
+          <tr><td>Bet: a die pays its face value in ₹. Fair price?</td><td>₹3.50</td><td>EV</td></tr>
+          <tr><td>Bet with 60% win chance at even odds. Kelly fraction?</td><td>20% of bankroll</td><td>f = p − q = 2p − 1</td></tr>
+          <tr><td>A test is 99% accurate; disease prevalence 1%. P(disease | positive)?</td><td>50%</td><td>Bayes: 0.99×0.01 ÷ (0.99×0.01 + 0.01×0.99)</td></tr>
+          <tr><td>Expected number of people who get their own hat back when n hats are shuffled?</td><td>1</td><td>Linearity: n × 1/n</td></tr>
+          <tr><td>How many trailing zeros in 100!?</td><td>24</td><td>⌊100/5⌋ + ⌊100/25⌋</td></tr>
+          <tr><td>Clock at 3:15: angle between hands?</td><td>7.5°</td><td>Hour hand moves 0.5° per minute</td></tr>
+          <tr><td>Two ropes each burn in 60 minutes unevenly. Measure 45 minutes?</td><td>Light rope A both ends and B one end; when A finishes (30 min) light B's other end (15 more)</td><td>Burning both ends halves time</td></tr>
+          <tr><td>25 horses, 5 per race, no timer. Races to find the top 3?</td><td>7</td><td>5 heats, race of winners, final race of 5 candidates</td></tr>
+        </table>
+        <div class="memory"><b>How to answer aloud:</b> restate, try a small case, state your approach ("I'll use linearity of expectation"), compute, sanity-check (is it between the obvious bounds?). Interviewers care about the process and how you use hints.</div>
+      </section>
+
+      <section id="mm" data-nav="3 · Market making" data-search>
+        <div class="section-head"><div><span class="section-no">03 / TRADING</span><h2>Market-making games</h2></div><span class="tag hot">signature round</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>The setup</b><span>"Make me a market on the sum of three dice" or "on the number of cars in Delhi". You quote bid (price you buy at) and ask (price you sell at).</span></div>
+          <div class="formula-row"><b>Step 1: fair value</b><span>Estimate the expected value: three dice → 10.5. Range 3–18.</span></div>
+          <div class="formula-row"><b>Step 2: width</b><span>Wider when uncertain, narrower when confident or when competing: e.g. 9.5 – 11.5.</span></div>
+          <div class="formula-row"><b>Step 3: update</b><span>If the interviewer keeps buying from you, your ask may be too low — raise both quotes. If told one die shows 6, fair value becomes 6 + 7 = 13.</span></div>
+          <div class="formula-row"><b>Step 4: manage position</b><span>If you're long a lot, skew quotes down to attract buyers; think about worst-case loss.</span></div>
+          <div class="formula-row"><b>Adverse selection</b><span>Someone choosing to trade with you may know more; when a counterparty trades instantly, assume they have information.</span></div>
+        </div>
+        <details><summary><b>Fermi markets</b></summary><p>For unknown quantities (e.g. "weight of an elephant in kg"), give a fair-value estimate with reasoning (Asian elephant ~3,000–5,000 kg), then a wide market (3,000 – 6,000), and tighten as you get clues. Same method as guesstimates in S1.</p></details>
+      </section>
+
+      <section id="options" data-nav="4 · Options basics" data-search>
+        <div class="section-head"><div><span class="section-no">04 / OPTIONS</span><h2>Options basics they expect you to know</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Payoffs</b><span>Call = max(S − K, 0); put = max(K − S, 0).</span></div>
+          <div class="formula-row"><b>Put–call parity</b><span>C − P = S − K·e<sup>−rT</sup> (European options, no dividends).</span></div>
+          <div class="formula-row"><b>At-the-money approximation</b><span>C ≈ 0.4 × S × σ × √T. S = 100, σ = 20%, T = 1 year → ≈ 8.0 (Black–Scholes gives 7.97 at r = 0).</span></div>
+          <div class="formula-row"><b>Greeks</b><span>Delta (price sensitivity; ATM call ≈ 0.5), gamma (delta's sensitivity), vega (volatility), theta (time decay), rho (rates).</span></div>
+          <div class="formula-row"><b>Intuition questions</b><span>Higher volatility raises both call and put values; a call's value rises with time to expiry; deep in-the-money call delta → 1.</span></div>
+        </div>
+        <div class="memory"><b>Indian context:</b> NSE is the world's largest derivatives exchange by contracts traded, driven by index options; SEBI tightened F&amp;O rules in 2024–25 after finding most retail traders lose money. Good talking point for "why trading" and markets questions (F5).</div>
+      </section>
+
+      <section id="drill" data-nav="5 · Mental maths drill" data-search>
+        <div class="section-head"><div><span class="section-no">05 / DRILL</span><h2>Daily mental-maths drill</h2></div><span class="tag core">core</span></div>
+        <div class="grid">
+          <div class="card"><h3>Speed</h3><p>10 minutes a day on an arithmetic trainer (e.g. Zetamac-style: 120 seconds of +, −, ×, ÷). Track your score; aim for 50+ then 65+ (VIKRAM's OA milestone).</p></div>
+          <div class="card"><h3>Tricks</h3><p>Multiply near 100: 97 × 96 = (100 − 3)(100 − 4) = 9,312. Squares ending in 5: 65² = 6×7 | 25 = 4,225. Percentages: 15% of 240 = 10% (24) + 5% (12) = 36. Fractions ↔ decimals: 1/7 ≈ 0.1429, 1/8 = 0.125.</p></div>
+          <div class="card"><h3>Probability daily</h3><p>Two puzzles a day from "Heard on the Street" (Crack), "A Practical Guide to Quantitative Finance Interviews" (Zhou) or "Fifty Challenging Problems in Probability" (Mosteller).</p></div>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="6 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Solve the 20 puzzles without looking; explain each aloud</label>
+          <label class="checkline"><input type="checkbox"> 10 minutes of arithmetic speed daily for 6 weeks</label>
+          <label class="checkline"><input type="checkbox"> 3 market-making games with a friend (dice, cards, Fermi)</label>
+          <label class="checkline"><input type="checkbox"> Learn put–call parity and the ATM approximation; do 5 option questions</label>
+          <label class="checkline"><input type="checkbox"> Read the Vault guide to advanced finance and quant interviews in your folder</label>
+          <label class="checkline"><input type="checkbox"> One timed quant OA mock</label>
+        </div>
+        <div class="memory">Pair with A1 (mental maths), D3 (statistics) and F5 (markets).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-q1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-q1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-q1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

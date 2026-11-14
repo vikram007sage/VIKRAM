@@ -1,0 +1,88 @@
+<!--META M5 | ML system design + project stories | M5 / ML SYSTEMS | AI/ML track · Module M5 | ML system design<br>+ project stories | Data-science and ML interviews end with "design a fraud model for a card issuer" or "walk me through your project — why that model, what went wrong, how would you deploy it?". This module gives a nine-step ML design template with three Indian fintech and consumer worked designs, the production topics interviewers probe (features, drift, monitoring, fairness), and interview-ready versions of your two ML projects with the follow-up questions they will trigger. | 9-step template; fraud, credit, ranking designs; your 2 projects as stories -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What an ML design round tests</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Problem framing</strong><span class="muted">business goal → ML task → label → metric; knowing when ML isn't needed</span></div><span class="frequency">30%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Data + features</strong><span class="muted">sources, leakage, imbalance, feature freshness</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Model + evaluation</strong><span class="muted">baseline first, offline metric tied to business cost</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Deployment + monitoring</strong><span class="muted">latency, drift, feedback loops, A/B testing</span></div><span class="frequency">20%</span></div>
+        </div>
+      </section>
+
+      <section id="template" data-nav="1 · 9-step template" data-search>
+        <div class="section-head"><div><span class="section-no">01 / TEMPLATE</span><h2>The nine-step template</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Business goal + constraints</b><span>What decision does the model drive? Latency (real-time vs batch), scale, regulation, explainability needs.</span></div>
+          <div class="formula-row"><b>2. ML framing</b><span>Classification, regression, ranking, forecasting, clustering? What exactly is the label and when is it known?</span></div>
+          <div class="formula-row"><b>3. Data</b><span>Sources, volume, label quality, class balance, how to split (time-based for anything with time).</span></div>
+          <div class="formula-row"><b>4. Features</b><span>Raw → engineered (aggregates over windows, ratios, recency/frequency), available at prediction time (no leakage), stored in a feature store for consistency.</span></div>
+          <div class="formula-row"><b>5. Baseline</b><span>Rules or logistic regression first; then gradient-boosted trees (XGBoost/LightGBM) — the default for tabular data; deep learning for text, images, sequences.</span></div>
+          <div class="formula-row"><b>6. Offline evaluation</b><span>Metric matching the cost of errors: precision/recall at a threshold, PR-AUC for imbalance, ROC-AUC/Gini/KS for credit, NDCG for ranking, MAPE for forecasts; calibration if probabilities are used.</span></div>
+          <div class="formula-row"><b>7. Deployment</b><span>Batch scoring vs real-time API; latency budget; shadow mode before switching on; fallback rules.</span></div>
+          <div class="formula-row"><b>8. Online evaluation</b><span>A/B or champion–challenger test on the business metric (P2, D3).</span></div>
+          <div class="formula-row"><b>9. Monitoring + iteration</b><span>Data drift (PSI), prediction drift, performance once labels arrive, retraining schedule, feedback loops, fairness checks.</span></div>
+        </div>
+        <div class="memory"><b>Say early:</b> "Before choosing a model, I'd confirm the label, when it becomes available, and how much each kind of error costs." This one sentence separates strong candidates.</div>
+      </section>
+
+      <section id="designs" data-nav="2 · Three worked designs" data-search>
+        <div class="section-head"><div><span class="section-no">02 / PRACTICE</span><h2>Three worked designs</h2></div><span class="tag pyq">try first</span></div>
+        <details><summary><b>1 · Real-time card fraud detection</b></summary>
+          <p><b>Goal:</b> block fraudulent transactions with &lt;100 ms added latency while keeping false declines low (each false decline annoys a good customer). <b>Label:</b> chargeback or customer-reported fraud — arrives days to weeks later; fraud rate often well under 1%. <b>Features:</b> amount vs customer's usual, merchant category, new device or location, transactions in last 1/10/60 minutes (velocity), distance from last transaction, card-not-present flag, merchant risk score. <b>Model:</b> rules + gradient-boosted trees; graph features for fraud rings. <b>Metric:</b> recall at a fixed false-positive rate, or expected loss saved minus cost of declines. <b>Deploy:</b> real-time scoring; three actions — approve, step-up authentication (OTP), decline. <b>Monitor:</b> fraudsters adapt (concept drift) → frequent retraining; delayed labels → use proxy labels.</p></details>
+        <details><summary><b>2 · Credit scoring for a first-time card applicant ("new to credit")</b></summary>
+          <p><b>Goal:</b> approve good borrowers without bureau history. <b>Label:</b> 90+ days past due within 12 months of issue (needs a long window; use vintage data). <b>Features:</b> bank-statement cash flows (with consent via the Account Aggregator framework), income stability, UPI transaction patterns, employer, device data within rules. <b>Model:</b> logistic regression scorecard (explainable, regulator-friendly) vs gradient boosting with SHAP explanations. <b>Metric:</b> Gini/KS, approval rate at a target loss rate, calibration. <b>Issues:</b> reject inference (you only see outcomes for approved applicants), fairness, RBI expectations on explainability and digital lending rules. <b>Monitor:</b> PSI on features, vintage curves.</p></details>
+        <details><summary><b>3 · Search ranking for a quick-commerce app</b></summary>
+          <p><b>Goal:</b> users find and add items fast. <b>Label:</b> add-to-cart after a search (implicit feedback). <b>Pipeline:</b> retrieval (keyword + embeddings, handle Hinglish and misspellings like "atta"/"aata") → ranking model (learning-to-rank with gradient-boosted trees: relevance, popularity in this dark store, in-stock, price, personal history) → business rules (out-of-stock removed). <b>Metric:</b> NDCG offline; online search-to-cart conversion, zero-result rate. <b>Pitfalls:</b> position bias in clicks, cold start for new items.</p></details>
+      </section>
+
+      <section id="prod" data-nav="3 · Production topics" data-search>
+        <div class="section-head"><div><span class="section-no">03 / PRODUCTION</span><h2>Production topics interviewers probe</h2></div></div>
+        <table class="compare">
+          <tr><th>Topic</th><th>What to say</th></tr>
+          <tr><td>Data leakage</td><td>Features that wouldn't exist at prediction time (e.g. "days to chargeback"); split by time; build features as of the prediction timestamp</td></tr>
+          <tr><td>Class imbalance</td><td>Use PR-AUC, class weights, threshold tuning; resampling only on training data</td></tr>
+          <tr><td>Train–serve skew</td><td>Same feature code for training and serving; feature store</td></tr>
+          <tr><td>Drift</td><td>PSI &gt; 0.25 on a key feature = investigate; monitor score distribution and approval rates</td></tr>
+          <tr><td>Feedback loops</td><td>The model's decisions change future data (declined users never show repayment); keep a small random exploration/holdout group</td></tr>
+          <tr><td>Explainability</td><td>SHAP values, reason codes for declines (regulated lending)</td></tr>
+          <tr><td>Fairness</td><td>Check outcomes across groups; avoid proxies for protected attributes</td></tr>
+          <tr><td>MLOps</td><td>Versioned data and models (MLflow), CI for models, automated retraining, rollback</td></tr>
+          <tr><td>LLMs in the stack</td><td>Use LLMs for text features (complaint classification, document extraction) or as a component; keep classical ML for structured risk decisions (M3)</td></tr>
+        </table>
+      </section>
+
+      <section id="stories" data-nav="4 · Your project stories" data-search>
+        <div class="section-head"><div><span class="section-no">04 / YOUR PROJECTS</span><h2>Your two ML projects as interview stories</h2></div><span class="tag hot">personal</span></div>
+        <details open><summary><b>LIG sensor fabrication optimiser (Gaussian Process + batch Bayesian optimisation)</b></summary>
+          <p><b>60-second version:</b> "Making good laser-induced graphene depends on several laser and substrate parameters, and each experiment costs time and material. I built a Gaussian Process surrogate model that predicts sheet resistance from fabrication parameters and gives uncertainty. Using Bayesian optimisation with Kriging Believer batching, it proposes several experiments at once, choosing points that are either promising or uncertain. It cut the search for optimal parameters from about 500 trials to around 60. I deployed it on Streamlit with Supabase so lab members can log results, and added transfer learning between similar carbon materials."</p>
+          <p><b>Expect these follow-ups:</b> Why a GP and not a neural net? (Small data, uncertainty estimates, smooth response.) Which kernel? (Matérn is a common default; say what you used.) Which acquisition function? (Expected improvement / UCB — know yours.) What is Kriging Believer? (Pretend the model's prediction at a chosen point is the true result, update, pick the next point — gives a batch.) How did you validate "500 → 60"? (Be precise: compared against what baseline? Raman-validated runs?) Limits? (GPs scale poorly beyond a few thousand points; high dimensions.)</p></details>
+        <details><summary><b>Tourist arrival prediction (SARIMA vs LSTM)</b></summary>
+          <p><b>60-second version:</b> "I forecast weekly regional tourist arrivals using 11 years of arrival and search data. A SARIMA model with a rolling forecast captured the strong yearly seasonality and beat LSTM models; I extracted three seasonal patterns useful for planning."</p>
+          <p><b>Fix before interviews (from S4):</b> your CV says "0.989 R" — say whether it is correlation R or R², and add an error metric interviewers trust for forecasts (MAPE or RMSE on a hold-out period). <b>Follow-ups:</b> How did you choose (p,d,q)(P,D,Q,s)? (ACF/PACF, AIC.) Stationarity test? (ADF.) Why did SARIMA beat LSTM? (Small data, clear seasonality; LSTMs need more data.) How was the rolling forecast done? (Re-fit/forecast one step ahead, no peeking.) What would you add? (Holiday effects, Prophet or gradient boosting with lag features, prediction intervals.)</p></details>
+        <div class="memory"><b>Also usable:</b> CheQ A/B tests (experimentation, P2) and your planned RAG project (M3). Interviewers value an honest "what went wrong" — prepare one mistake per project.</div>
+      </section>
+
+      <section id="qs" data-nav="5 · Questions" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PRACTICE</span><h2>More design prompts</h2></div></div>
+        <table class="compare">
+          <tr><th>Prompt</th><th>Key twist</th></tr>
+          <tr><td>Predict customer churn for a telecom or app</td><td>Define churn precisely; act on the prediction (retention offer uplift, not just risk)</td></tr>
+          <tr><td>Forecast daily orders per dark store</td><td>Hierarchical forecasting, weather, festivals, promotions</td></tr>
+          <tr><td>Recommend credit-card offers</td><td>Explore vs exploit; avoid pushing debt to stressed users</td></tr>
+          <tr><td>Detect fake reviews</td><td>Text + behaviour features, graph of reviewers</td></tr>
+          <tr><td>Estimate delivery time (ETA)</td><td>Regression with quantiles; penalise under-estimates more</td></tr>
+          <tr><td>Classify customer complaints</td><td>LLM or fine-tuned small model; routing; evaluation set</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="6 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Do the three designs aloud in 20 minutes each</label>
+          <label class="checkline"><input type="checkbox"> Write your two project stories in your own words; time to 60 seconds</label>
+          <label class="checkline"><input type="checkbox"> Fix the R vs R² line and add MAPE to the tourism project</label>
+          <label class="checkline"><input type="checkbox"> Answer every follow-up in section 4 without notes</label>
+          <label class="checkline"><input type="checkbox"> One mock ML design interview with a friend or senior</label>
+        </div>
+        <div class="memory">Pair with M1 (classical ML), D3 (statistics) and M3 (RAG and evals).</div>
+      </section>

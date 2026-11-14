@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>X2 | Company dossiers — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">X2 / DOSSIERS</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#template">1 · Dossier template</a><a href="#consulting">2 · Consulting</a><a href="#product">3 · Product + tech</a><a href="#analytics">4 · Analytics + finance</a><a href="#shortlist">5 · Slot shortlist</a><a href="#plan">6 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Final track · Module X2</div><h1>Company<br>dossiers</h1><p>Before each test or interview you need a one-page view of the company: what it does, how it earns, what's happening to it now, what the selection process looks like, and why you fit. This module gives the dossier template, process notes for the firm types that recruit for your lanes at IIT Kharagpur (consulting, product, analytics, finance, quant), 2026 updates on assessment formats, and a slot-shortlist method.</p><div class="meta"><span class="pill"><span class=dot></span> Dossier template</span><span class="pill">MBB 2026 formats</span><span class="pill">slot shortlist method</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Why dossiers win interviews</h2></div></div>
+        <p class="lede">Most candidates answer "why us?" generically. A specific answer — a recent result, a product decision, a strategic bet, and how your experience connects — is the cheapest way to stand out. Build one page per company the week its shortlist or test is announced.</p>
+        <div class="memory"><b>Important:</b> exact processes change every year and differ by campus. Confirm the current format with CDC notices, the company's pre-placement talk, and seniors who interviewed last season. Treat the process notes below as a starting point, not a guarantee.</div>
+      </section>
+
+      <section id="template" data-nav="1 · Dossier template" data-search>
+        <div class="section-head"><div><span class="section-no">01 / TEMPLATE</span><h2>One-page dossier template</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Snapshot</b><span>What it does, segments, size (revenue, users), business model, main competitors.</span></div>
+          <div class="formula-row"><b>2. Numbers</b><span>Latest results: revenue growth, profitability, key operating metric (for a bank: NIM, GNPA; for a platform: GMV, users; for a consultancy: practice areas).</span></div>
+          <div class="formula-row"><b>3. Now</b><span>3 recent developments (launches, deals, regulation, leadership) with dates.</span></div>
+          <div class="formula-row"><b>4. Role</b><span>Job description in your words; skills it tests; team.</span></div>
+          <div class="formula-row"><b>5. Process</b><span>Test type, rounds, typical questions (from seniors and casebooks).</span></div>
+          <div class="formula-row"><b>6. Why me</b><span>Two links between your experience and their needs (e.g. CheQ A/B testing → product analytics role).</span></div>
+          <div class="formula-row"><b>7. Smart questions</b><span>Two questions for the interviewer that show you've done the work.</span></div>
+          <div class="formula-row"><b>8. Prep links</b><span>Which VIKRAM modules to revise (e.g. B1 + D1 + P2 for a card-issuer analyst role).</span></div>
+        </div>
+      </section>
+
+      <section id="consulting" data-nav="2 · Consulting" data-search>
+        <div class="section-head"><div><span class="section-no">02 / CONSULTING</span><h2>Consulting firms</h2></div><span class="tag hot">2026 formats</span></div>
+        <table class="compare">
+          <tr><th>Firm</th><th>Screen</th><th>Interviews</th><th>2026 notes</th></tr>
+          <tr><td>McKinsey</td><td>Solve: gamified problem-solving test, ~60–70 minutes; AI tools banned in it</td><td>Interviewer-led cases + Personal Experience Interview (PEI)</td><td>Pilot (from January 2026, select US offices) of a final-round case solved with its internal AI tool Lilli; free AI case-practice tool released April 2026</td></tr>
+          <tr><td>BCG</td><td>Casey chatbot online case, Consulting Career Assessment, cognitive test, Pymetrics games, one-way video — varies by office</td><td>Candidate-led cases + fit</td><td>AI-assisted case interviews in pilot at selected offices (confirmed September 2026)</td></tr>
+          <tr><td>Bain</td><td>Online tests (e.g. SOVA, TestGorilla) depending on office</td><td>Cases (many offices now interviewer-led) + fit</td><td>Said AI would become part of interviews from summer 2026; format not fully public</td></tr>
+          <tr><td>Kearney, Accenture Strategy, Strategy&amp;, EY-Parthenon, Alvarez &amp; Marsal, Praxis, Redseer</td><td>Aptitude/written tests or CV shortlist</td><td>Cases + guesstimates + fit</td><td>Indian campus processes often include a guesstimate and a group discussion</td></tr>
+        </table>
+        <div class="memory"><b>Revise:</b> S1 (guesstimates), S2 (frameworks and 8 cases), S3 (fit stories), A5 (GD). Prepare to use an AI tool well in a case: prompt clearly, check its numbers, and own the recommendation (P1 section 4).</div>
+      </section>
+
+      <section id="product" data-nav="3 · Product + tech" data-search>
+        <div class="section-head"><div><span class="section-no">03 / PRODUCT</span><h2>Product roles</h2></div></div>
+        <table class="compare">
+          <tr><th>Company type</th><th>Typical process</th><th>What to show</th></tr>
+          <tr><td>Big tech APM/associate PM (where offered)</td><td>Aptitude/coding-lite test → product design, metrics, strategy, technical understanding, behavioural</td><td>Structured product sense (P1), metrics (P2), tech basics (P3)</td></tr>
+          <tr><td>Indian consumer internet (Swiggy, Zomato/Eternal, Flipkart, Meesho, Zepto)</td><td>Online test → case (product improvement, RCA) → guesstimate → HR</td><td>Unit economics (S5), RCA (P2), quick-commerce knowledge</td></tr>
+          <tr><td>Fintech (CRED, PhonePe, Razorpay, Groww, CheQ-type startups)</td><td>Assignment or case → product + metrics → founder/HR round</td><td>Payments rails (P3), card economics (B1), your CheQ experience</td></tr>
+          <tr><td>SaaS (Freshworks, Zoho, Postman, Atlassian India)</td><td>Product case, PRD or teardown take-home (P4)</td><td>B2B metrics (S5), writing quality</td></tr>
+        </table>
+      </section>
+
+      <section id="analytics" data-nav="4 · Analytics + finance" data-search>
+        <div class="section-head"><div><span class="section-no">04 / ANALYTICS + FINANCE</span><h2>Analytics, banking and finance roles</h2></div></div>
+        <table class="compare">
+          <tr><th>Company type</th><th>Typical process</th><th>Revise</th></tr>
+          <tr><td>Card and payments analytics (American Express, Mastercard, Visa, Capital One-type roles)</td><td>Aptitude + SQL/statistics test → case on card metrics or risk → technical (SQL, A/B, ML basics) → HR</td><td>B1, D1, D3, M1, P2</td></tr>
+          <tr><td>Analytics firms (Fractal, Tiger Analytics, ZS, Mu Sigma, EXL)</td><td>Aptitude → guesstimate/case → SQL/Python/statistics</td><td>A1–A4, S1, D1–D3</td></tr>
+          <tr><td>Investment banks and global markets (Goldman Sachs, JPMorgan, Morgan Stanley, Barclays, Deutsche, Nomura)</td><td>Aptitude (often HackerRank-style) → technical finance → markets awareness → HR; some analyst roles test coding</td><td>F1–F5, A1</td></tr>
+          <tr><td>Indian banks and NBFCs (HDFC, ICICI, Axis, Bajaj Finance), insurance</td><td>Aptitude → GD → interview on banking basics and current affairs</td><td>B1, F5, A5</td></tr>
+          <tr><td>VC/PE internships</td><td>CV + email outreach → investment memo or startup pitch → partner chat</td><td>F4, S5, S6</td></tr>
+          <tr><td>Quant trading (Optiver, Graviton, Tower Research, Quadeye, Jane Street, IMC)</td><td>Mental maths test → probability interviews → trading games</td><td>Q1, A1</td></tr>
+        </table>
+      </section>
+
+      <section id="shortlist" data-nav="5 · Slot shortlist" data-search>
+        <div class="section-head"><div><span class="section-no">05 / STRATEGY</span><h2>Building your slot shortlist</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. List</b><span>All companies from last year's placement and internship data (CDC records, seniors) that recruit for your lanes and accept your department.</span></div>
+          <div class="formula-row"><b>2. Score</b><span>Fit (how well your CV matches: 1–5), interest (1–5), past shortlists from your CGPA band and department, slot (day 1, day 2…).</span></div>
+          <div class="formula-row"><b>3. Tier</b><span>Dream (low odds, high interest), target (good fit), safe (high fit, good odds). Aim for a spread in each slot.</span></div>
+          <div class="formula-row"><b>4. Map prep</b><span>For each target, the VIKRAM modules to revise and the dossier deadline.</span></div>
+          <div class="formula-row"><b>5. Rules</b><span>Read CDC's application and offer rules carefully (e.g. what happens once you accept an offer) — confirm with the current CDC notice.</span></div>
+        </div>
+        <div class="memory"><b>Your CGPA (7.91):</b> some firms use cut-offs (often 7.5 or 8.0 — varies). Prioritise firms where your CheQ, KiFayti, case-competition gold and analyst experience outweigh grades, and prepare a crisp answer on CGPA (S3).</div>
+      </section>
+
+      <section id="plan" data-nav="6 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">06 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Build the slot shortlist spreadsheet (30–50 companies) by 31 August 2027</label>
+          <label class="checkline"><input type="checkbox"> Write dossiers for your top 10 targets</label>
+          <label class="checkline"><input type="checkbox"> Talk to one senior per target company about last year's process</label>
+          <label class="checkline"><input type="checkbox"> Attend pre-placement talks and note two specifics per company</label>
+          <label class="checkline"><input type="checkbox"> Prepare "why this company" in 45 seconds for each top-10 firm</label>
+        </div>
+        <div class="memory">Next: X1, the final revision pack for the last month before placements.</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-x2-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-x2-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-x2-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

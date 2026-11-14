@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>X1 | Final revision pack — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">X1 / FINAL</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#plan30">1 · 30-day plan</a><a href="#oneliners">2 · Every module in one line</a><a href="#dayof">3 · Day-before + day-of</a><a href="#bad">4 · After a bad round</a><a href="#plan">5 · Final ticks</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Final track · Module X1</div><h1>Final revision<br>pack</h1><p>The last 30 days before placements are about recall, speed and calm, not new material. This pack gives a 30-day plan, the one-line essentials from every VIKRAM module on a single page, a day-before and day-of checklist, and a method for handling a bad round. Read it alongside your own notes; tick each line only when you can say it without looking.</p><div class="meta"><span class="pill"><span class=dot></span> 30-day plan</span><span class="pill">every module in one line</span><span class="pill">day-of checklist</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>How to use the last month</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Daily timed practice</strong><span class="muted">one OA section and one mock case/interview every day</span></div><span class="frequency">50%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Active recall</strong><span class="muted">say the one-liners below aloud; revise only what you miss</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Company prep</strong><span class="muted">dossiers for the next slot (X2)</span></div><span class="frequency">15%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Rest</strong><span class="muted">sleep 7+ hours; one off evening a week</span></div><span class="frequency">10%</span></div>
+        </div>
+      </section>
+
+      <section id="plan30" data-nav="1 · 30-day plan" data-search>
+        <div class="section-head"><div><span class="section-no">01 / PLAN</span><h2>The 30-day plan</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Days</th><th>Focus</th><th>Daily</th></tr>
+          <tr><td>1–7</td><td>Aptitude speed (A1–A5) + CV final (S4) + story bank (S3)</td><td>1 timed OA, 1 guesstimate, 10 minutes mental maths</td></tr>
+          <tr><td>8–14</td><td>Your main lane deep revision (cases S2/S5, or product P1–P4, or finance F1–F5, or data D1–D3/M1)</td><td>1 OA section, 1 full mock, review the mock</td></tr>
+          <tr><td>15–21</td><td>Second lane + technical (D1 SQL, D3 stats, M2/M3 if AI roles)</td><td>1 OA, 1 mock, 5 rapid-fire questions</td></tr>
+          <tr><td>22–27</td><td>Company dossiers (X2), markets dashboard (F5), HR answers aloud</td><td>Full timed OA mock, 1 mock interview</td></tr>
+          <tr><td>28–30</td><td>Light review only: one-liners, stories, checklists</td><td>Sleep, exercise, short practice</td></tr>
+        </table>
+        <div class="memory"><b>VIKRAM milestones this matches:</b> "Final revision pack; 1 timed OA daily" (30 September 2027) and "15 full OA mocks; math sprint 65+" (31 October 2027).</div>
+      </section>
+
+      <section id="oneliners" data-nav="2 · Every module in one line" data-search>
+        <div class="section-head"><div><span class="section-no">02 / RECALL</span><h2>Every module in one line</h2></div><span class="tag hot">say aloud</span></div>
+        <table class="compare">
+          <tr><th>Module</th><th>The line to remember</th></tr>
+          <tr><td>A1–A4 Aptitude</td><td>Approximate first, eliminate options, skip after 90 seconds; percentages, ratios, time-speed-work, probability, data interpretation, logic puzzles</td></tr>
+          <tr><td>A5 Verbal + GD</td><td>Answer from the passage only; find the assumption; in GDs add a new angle, build on others, summarise</td></tr>
+          <tr><td>S1 Guesstimates</td><td>Clarify → choose supply or demand → segment → assumptions with reasons → calculate → sanity-check</td></tr>
+          <tr><td>S2 Cases</td><td>Clarify, structure (MECE), hypothesis, analyse with numbers, synthesise: answer, reasons, next steps</td></tr>
+          <tr><td>S3 Stories</td><td>STAR, 90 seconds, your action and the result in numbers; TMAY in three lanes</td></tr>
+          <tr><td>S4 CV</td><td>Action + what + number + impact; fix "600M farmers", R vs R², add a skills line</td></tr>
+          <tr><td>S5 Unit economics</td><td>Contribution margin per order, LTV/CAC &gt; 3, payback &lt; 12–18 months; growth must earn its cost</td></tr>
+          <tr><td>S6 Outreach</td><td>Short, specific, one ask, follow up once; respect CDC rules</td></tr>
+          <tr><td>B1 Banking + cards</td><td>Bank P&amp;L = NII + fees − opex − provisions; card revenue = interest + interchange + fees; repo 5.50%, ECL from April 2027</td></tr>
+          <tr><td>F1 Accounting</td><td>Net income flows to retained earnings and starts the cash-flow statement; cash closes the balance sheet</td></tr>
+          <tr><td>F2 Valuation</td><td>EV = equity + debt − cash; DCF = forecast FCFF, WACC, terminal value; India R<sub>f</sub> ~7.2%, ERP ~7%</td></tr>
+          <tr><td>F3 M&amp;A + LBO</td><td>Accretive if target earnings yield &gt; cost of funding; LBO returns = EBITDA growth + multiple + debt paydown</td></tr>
+          <tr><td>F4 VC + PE</td><td>Post-money = exit value ÷ target multiple; power law; memo = thesis, market, traction, valuation, risks</td></tr>
+          <tr><td>F5 Markets</td><td>Inflation up → rates up → bonds and growth stocks down; oil up → rupee down; know today's numbers</td></tr>
+          <tr><td>Q1 Quant</td><td>Linearity of expectation, 1/p waiting time, Bayes; market making: fair value, width, update, skew</td></tr>
+          <tr><td>P1 Product sense</td><td>Goal → users → pains → ideas → prioritise → metrics → summary</td></tr>
+          <tr><td>P2 Metrics + RCA</td><td>Check data and external factors first, then segment and decompose; north star + guardrails</td></tr>
+          <tr><td>P3 Tech + AI product</td><td>Client → API → server → cache → database; UPI via NPCI; AI cost = tokens × price; evals before launch</td></tr>
+          <tr><td>P4 Decks + PRDs</td><td>Answer first, action titles, one message per slide; PRD = problem, goals, users, solution, metrics, risks</td></tr>
+          <tr><td>D1 SQL</td><td>JOIN, GROUP BY + HAVING, window functions (ROW_NUMBER, LAG, running SUM), CTEs; COUNT DISTINCT for users</td></tr>
+          <tr><td>D2 pandas</td><td>groupby-agg, merge, pivot_table, .loc for assignment (copy-on-write), cohorts and RFM</td></tr>
+          <tr><td>D3 Statistics + A/B</td><td>n ≈ 16σ²/δ² per arm; p-value is not P(H₀ true); check SRM, don't peek</td></tr>
+          <tr><td>D4 DSA-lite</td><td>Hash map, running value, two pointers, sliding window, stack, binary search, BFS, simple DP</td></tr>
+          <tr><td>M1 Classical ML</td><td>Bias–variance, regularisation, trees and boosting for tabular data, precision/recall for imbalance, cross-validation</td></tr>
+          <tr><td>M2 LLM internals</td><td>softmax(QKᵀ/√d)V; pre-training → SFT → RLHF/DPO → reasoning RL; KV cache makes long context costly</td></tr>
+          <tr><td>M3 RAG + agents</td><td>Chunk → embed → retrieve (hybrid) → re-rank → generate with citations; evaluate retrieval and answers separately</td></tr>
+          <tr><td>M5 ML design</td><td>Goal, label, data, features (no leakage), baseline, metric tied to cost, deploy, monitor drift</td></tr>
+          <tr><td>X2 Dossiers</td><td>Snapshot, numbers, now, role, process, why me, smart questions</td></tr>
+        </table>
+      </section>
+
+      <section id="dayof" data-nav="3 · Day-before + day-of" data-search>
+        <div class="section-head"><div><span class="section-no">03 / CHECKLIST</span><h2>Day-before and day-of checklist</h2></div><span class="tag core">core</span></div>
+        <div class="grid">
+          <div class="card"><h3>Day before</h3>
+            <label class="checkline"><input type="checkbox"> Read the company dossier and the job description</label>
+            <label class="checkline"><input type="checkbox"> Say TMAY, "why this company" and 3 stories aloud</label>
+            <label class="checkline"><input type="checkbox"> Print or download 3 copies of the CDC CV; carry ID</label>
+            <label class="checkline"><input type="checkbox"> Test laptop, camera, mic, internet, charger (online rounds)</label>
+            <label class="checkline"><input type="checkbox"> Formal clothes ready; sleep by 11 pm</label>
+          </div>
+          <div class="card"><h3>Day of</h3>
+            <label class="checkline"><input type="checkbox"> Eat, water, reach 30 minutes early</label>
+            <label class="checkline"><input type="checkbox"> Pen, paper, calculator if allowed</label>
+            <label class="checkline"><input type="checkbox"> Phone silent; check CDC notices for room changes</label>
+            <label class="checkline"><input type="checkbox"> In the room: listen fully, clarify, think aloud, summarise</label>
+            <label class="checkline"><input type="checkbox"> End with one good question; thank the interviewer</label>
+          </div>
+        </div>
+      </section>
+
+      <section id="bad" data-nav="4 · After a bad round" data-search>
+        <div class="section-head"><div><span class="section-no">04 / RESILIENCE</span><h2>After a bad round</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>10 minutes</b><span>Write what went wrong in 3 bullets (one fact each, not a judgment of yourself).</span></div>
+          <div class="formula-row"><b>Fix one thing</b><span>Pick the single most fixable issue and practise it once before the next round.</span></div>
+          <div class="formula-row"><b>Reset</b><span>Walk, eat, talk to a friend; the next company doesn't know about the last round.</span></div>
+          <div class="formula-row"><b>Perspective</b><span>Placement outcomes depend partly on luck and slot timing. Many people who struggle on day 1 get good offers later; keep applying the process.</span></div>
+        </div>
+        <div class="memory">If stress starts affecting sleep or mood for more than a few days, talk to someone you trust or the campus counselling centre — it's a normal and smart thing to do in placement season.</div>
+      </section>
+
+      <section id="plan" data-nav="5 · Final ticks" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PLAN</span><h2>Final ticks</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Every one-liner in section 2 said aloud without looking</label>
+          <label class="checkline"><input type="checkbox"> 15 full timed OA mocks done</label>
+          <label class="checkline"><input type="checkbox"> Mental-maths score 65+</label>
+          <label class="checkline"><input type="checkbox"> 8+ mock interviews across lanes</label>
+          <label class="checkline"><input type="checkbox"> Dossiers for the first two slots ready</label>
+          <label class="checkline"><input type="checkbox"> CV final, reviewed by two seniors</label>
+        </div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-x1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-x1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-x1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>
