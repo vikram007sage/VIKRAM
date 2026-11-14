@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>M1 | Classical ML rapid-fire — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">M1 / ML</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#map">1 · The algorithm map</a><a href="#bv">2 · Bias, variance, regularisation</a><a href="#metrics">3 · Metrics</a><a href="#validation">4 · Validation + leakage</a><a href="#trees">5 · Trees + ensembles</a><a href="#unsup">6 · Unsupervised + features</a><a href="#rapid">7 · 60 rapid-fire</a><a href="#design">8 · Mini case: churn model</a><a href="#plan">9 · Plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Data + AI track · Module M1</div><h1>Classical ML<br>rapid-fire</h1><p>Data-science, analytics, quant-research and AI-product interviews still open with classical machine learning: bias–variance, regularisation, trees vs boosting, metrics, leakage. This module is the interview layer on top of your ML/AI master notes: what each algorithm is for, the trade-offs interviewers probe, credit-risk metrics (AUC, Gini, KS, PSI), and 60 rapid-fire questions with crisp answers.</p><div class="meta"><span class="pill"><span class=dot></span> 60 rapid-fire Q&amp</span><span class="pill">A</span><span class="pill">Credit-model metrics</span><span class="pill">Builds on your master notes</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>How ML gets tested outside SDE roles</h2></div></div>
+        <p class="lede">Interviewers want to know you can pick a sensible model, evaluate it honestly and explain it to a business person. Derivations are rare outside research roles; trade-offs and failure modes are common.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Evaluation</strong><span class="muted">metrics, validation, leakage, imbalance</span></div><span class="frequency">every interview</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Bias–variance + regularisation</strong><span class="muted">why models overfit and how to stop it</span></div><span class="frequency">very high</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Trees, forests, boosting</strong><span class="muted">the default for tabular business data</span></div><span class="frequency">very high</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Your project, end to end</strong><span class="muted">GP optimiser, SARIMA forecast (M5 module)</span></div><span class="frequency">every interview</span></div>
+        </div>
+        <div class="memory"><b>Your master notes</b> (10_MY NOTES/E_DATA_AI_ML/ML_AI_Master_Notes and Deep_Learning_Master_Notes) cover the theory from Andrew Ng's courses. This module is the fast-recall layer: read it the week before any data interview.</div>
+      </section>
+
+      <section id="map" data-nav="1 · The algorithm map" data-search>
+        <div class="section-head"><div><span class="section-no">01 / MAP</span><h2>Which model, when</h2></div><span class="tag core">core</span></div>
+        <table class="compare">
+          <tr><th>Model</th><th>Use when</th><th>Watch out</th></tr>
+          <tr><td>Linear / logistic regression</td><td>Need interpretability (credit scorecards, regulators), baseline, few features</td><td>Assumes linear effects; scale features; multicollinearity</td></tr>
+          <tr><td>Decision tree</td><td>Explainable rules, mixed data types</td><td>Overfits badly alone</td></tr>
+          <tr><td>Random forest</td><td>Strong default, little tuning, robust to noise</td><td>Large, slower predictions, less accurate than boosting</td></tr>
+          <tr><td>Gradient boosting (XGBoost, LightGBM, CatBoost)</td><td>Best accuracy on tabular data: fraud, churn, default, pricing</td><td>Needs tuning; can overfit; less interpretable (use SHAP)</td></tr>
+          <tr><td>k-NN</td><td>Small data, similarity search</td><td>Slow at scale; needs scaling; curse of dimensionality</td></tr>
+          <tr><td>Naive Bayes</td><td>Text classification baseline, very fast</td><td>Independence assumption</td></tr>
+          <tr><td>SVM</td><td>Medium data, clear margins, kernels for non-linearity</td><td>Slow on large data; less used now</td></tr>
+          <tr><td>k-means / DBSCAN / hierarchical</td><td>Customer segmentation, anomaly groups</td><td>k-means needs k and spherical clusters</td></tr>
+          <tr><td>PCA</td><td>Reduce dimensions, remove correlation, visualise</td><td>Components are hard to interpret</td></tr>
+          <tr><td>Time-series (ARIMA/SARIMA, Prophet, gradient boosting with lags)</td><td>Forecasting demand, volumes, arrivals</td><td>Never shuffle; validate on later time periods</td></tr>
+          <tr><td>Gaussian process</td><td>Small data, need uncertainty, Bayesian optimisation (your optimiser)</td><td>Scales poorly beyond a few thousand points</td></tr>
+          <tr><td>Neural networks</td><td>Images, text, audio, very large data</td><td>Usually beaten by boosting on small/medium tabular data</td></tr>
+        </table>
+        <div class="memory"><b>Interview line:</b> "For tabular business problems I'd start with logistic regression as a baseline and LightGBM as the main model, compare them on a time-based holdout, and explain the winner with SHAP."</div>
+      </section>
+
+      <section id="bv" data-nav="2 · Bias, variance, regularisation" data-search>
+        <div class="section-head"><div><span class="section-no">02 / FUNDAMENTALS</span><h2>Bias–variance and regularisation</h2></div></div>
+        <div class="eq">Expected error = Bias² + Variance + Irreducible noise</div>
+        <div class="grid">
+          <div class="card"><h3>High bias (underfit)</h3><p>Training and validation error both high. Fix: richer model, more features, less regularisation, train longer.</p></div>
+          <div class="card"><h3>High variance (overfit)</h3><p>Training error low, validation error high. Fix: more data, simpler model, regularisation, dropout, early stopping, bagging, feature selection.</p></div>
+          <div class="card"><h3>Learning curves</h3><p>Plot train/validation error vs training size. Gap that closes with more data → variance (get data). Both plateau high → bias (change model).</p></div>
+        </div>
+        <table class="compare">
+          <tr><th></th><th>L1 (Lasso)</th><th>L2 (Ridge)</th></tr>
+          <tr><td>Penalty</td><td>λ Σ|w|</td><td>λ Σw²</td></tr>
+          <tr><td>Effect</td><td>Pushes some weights to exactly 0 → feature selection</td><td>Shrinks all weights smoothly; handles correlated features</td></tr>
+          <tr><td>Use</td><td>Many features, want a sparse model</td><td>Multicollinearity, default choice</td></tr>
+        </table>
+        <p>Elastic Net mixes both. In trees, regularisation = max depth, min samples per leaf, learning rate, subsampling, number of trees with early stopping.</p>
+      </section>
+
+      <section id="metrics" data-nav="3 · Metrics" data-search>
+        <div class="section-head"><div><span class="section-no">03 / METRICS</span><h2>Choosing and reading metrics</h2></div><span class="tag hot">most asked</span></div>
+        <div class="eq">Precision = TP ÷ (TP + FP) &nbsp;·&nbsp; Recall = TP ÷ (TP + FN) &nbsp;·&nbsp; F1 = 2PR ÷ (P + R) &nbsp;·&nbsp; Accuracy = (TP + TN) ÷ all</div>
+        <p><b>Worked:</b> 1,000 transactions, 20 are fraud. The model flags 40, of which 16 are fraud. Precision = 16/40 = 40%; recall = 16/20 = 80%; F1 ≈ 0.53; accuracy = (16 + 956)/1000 = 97.2% — but a model that flags nothing scores 98% accuracy. <b>Accuracy is useless on imbalanced data.</b></p>
+        <table class="compare">
+          <tr><th>Problem</th><th>Metric</th><th>Why</th></tr>
+          <tr><td>Fraud, disease (rare, costly misses)</td><td>Recall at acceptable precision; PR-AUC</td><td>Missing fraud is expensive; ROC-AUC looks flattering when positives are rare</td></tr>
+          <tr><td>Spam filter, marketing offers (costly false alarms)</td><td>Precision</td><td>Annoying good customers costs more</td></tr>
+          <tr><td>Ranking risk (credit scoring)</td><td>ROC-AUC / Gini, KS</td><td>The lender sets the cut-off later</td></tr>
+          <tr><td>Regression</td><td>MAE (robust, in units), RMSE (punishes big errors), MAPE (relative; breaks near zero)</td><td>Pick what matches the business cost</td></tr>
+          <tr><td>Forecasting</td><td>MAPE/WAPE on a later time window</td><td>Time-ordered validation</td></tr>
+        </table>
+        <h3>Credit-risk model metrics (Amex, Capital One, banks, fintechs)</h3>
+        <div class="formula-list card">
+          <div class="formula-row"><b>ROC-AUC</b><span>Probability a random defaulter is scored riskier than a random good borrower. 0.5 = random, 0.7–0.8 typical for application scorecards.</span></div>
+          <div class="formula-row"><b>Gini</b><span>= 2 × AUC − 1. AUC 0.75 → Gini 0.50. Banks usually quote Gini.</span></div>
+          <div class="formula-row"><b>KS statistic</b><span>Maximum gap between cumulative % of bads and goods across score bands; higher = better separation (30–50 is common).</span></div>
+          <div class="formula-row"><b>PSI</b><span>Population stability index: has the score distribution shifted since development? &lt;0.1 stable, 0.1–0.25 watch, &gt;0.25 investigate/retrain.</span></div>
+          <div class="formula-row"><b>Calibration</b><span>Do predicted PDs match actual default rates by band? Needed for pricing and ECL provisioning (B1).</span></div>
+        </div>
+      </section>
+
+      <section id="validation" data-nav="4 · Validation + leakage" data-search>
+        <div class="section-head"><div><span class="section-no">04 / HONESTY</span><h2>Validation, leakage and imbalance</h2></div><span class="tag core">core</span></div>
+        <div class="grid">
+          <div class="card"><h3>Splits</h3><p>Train / validation / test. k-fold cross-validation for small data (stratified for classification). <b>Time-based split</b> for anything with time (train on Jan–Jun, test on Jul–Aug). Grouped split when a customer appears many times.</p></div>
+          <div class="card"><h3>Leakage</h3><p>Information from the future or the label sneaking into features: "number of collection calls" predicting default, scaling on the full dataset before splitting, target encoding without folds. Symptom: suspiciously high validation scores that collapse in production.</p></div>
+          <div class="card"><h3>Imbalance</h3><p>Use the right metric first. Then class weights, threshold tuning, or resampling (undersample majority, SMOTE) — only on training data, never the test set.</p></div>
+        </div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Hyperparameter tuning</b><span>Grid (small spaces), random search (better per trial), Bayesian optimisation (Optuna; same idea as your GP optimiser).</span></div>
+          <div class="formula-row"><b>Threshold</b><span>The 0.5 cut-off is arbitrary. Choose the threshold that minimises expected business cost (cost of a missed fraud vs a false alarm).</span></div>
+          <div class="formula-row"><b>Drift</b><span>Data drift (inputs change: new customer mix after a RuPay-on-UPI push) and concept drift (relationship changes: a recession). Monitor PSI and performance; retrain on a schedule.</span></div>
+        </div>
+      </section>
+
+      <section id="trees" data-nav="5 · Trees + ensembles" data-search>
+        <div class="section-head"><div><span class="section-no">05 / ENSEMBLES</span><h2>Trees, bagging and boosting</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Decision tree</h3><p>Splits on the feature/threshold that most reduces impurity (Gini impurity or entropy for classification, variance for regression). Greedy; deep trees memorise.</p></div>
+          <div class="card"><h3>Bagging → Random forest</h3><p>Train many deep trees on bootstrap samples, each split choosing from a random subset of features; average them. Reduces <b>variance</b>. Out-of-bag error gives free validation.</p></div>
+          <div class="card"><h3>Boosting</h3><p>Train shallow trees sequentially, each fitting the residual errors (gradients) of the ensemble so far; learning rate shrinks each step. Reduces <b>bias</b>. XGBoost adds regularisation; LightGBM is fast (histogram, leaf-wise); CatBoost handles categoricals well.</p></div>
+        </div>
+        <div class="memory"><b>Feature importance:</b> built-in split importance is biased toward high-cardinality features. Prefer permutation importance or SHAP values, which also explain individual predictions ("this applicant was declined mainly because of high utilisation and 2 recent enquiries") — useful for credit adverse-action reasons.</div>
+      </section>
+
+      <section id="unsup" data-nav="6 · Unsupervised + features" data-search>
+        <div class="section-head"><div><span class="section-no">06 / UNSUPERVISED</span><h2>Clustering, PCA and feature engineering</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>k-means</b><span>Assign points to nearest centroid, move centroids, repeat. Choose k with the elbow method or silhouette score; scale features first. Use: customer segments by spend mix.</span></div>
+          <div class="formula-row"><b>DBSCAN</b><span>Density-based; finds arbitrary shapes and flags noise points (anomalies); no k needed.</span></div>
+          <div class="formula-row"><b>PCA</b><span>Rotates data to orthogonal directions of maximum variance; keep components explaining ~90–95% of variance.</span></div>
+          <div class="formula-row"><b>Feature engineering (tabular)</b><span>Ratios (utilisation = balance ÷ limit), recency/frequency/monetary, rolling windows (spend last 30/90 days), trends (this month vs 3-month average), counts (enquiries in 6 months), date parts, target/frequency encoding for categories.</span></div>
+          <div class="formula-row"><b>Scaling</b><span>Needed for distance and gradient-based models (k-NN, SVM, linear, neural nets); not for trees.</span></div>
+          <div class="formula-row"><b>Missing values</b><span>Impute (median, model-based) and add a "was missing" flag — missingness itself is often predictive (no salary info).</span></div>
+        </div>
+      </section>
+
+      <section id="rapid" data-nav="7 · 60 rapid-fire" data-search>
+        <div class="section-head"><div><span class="section-no">07 / RAPID FIRE</span><h2>Sixty rapid-fire questions</h2></div><span class="tag pyq">say the answer in one breath</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Answer</th></tr>
+          <tr><td>Supervised vs unsupervised?</td><td>Labels vs no labels</td></tr>
+          <tr><td>Classification vs regression?</td><td>Category vs number</td></tr>
+          <tr><td>What is overfitting?</td><td>Fits noise in training data; poor on new data</td></tr>
+          <tr><td>How to detect overfitting?</td><td>Train ≫ validation performance; learning curves</td></tr>
+          <tr><td>Cost function of linear regression?</td><td>Mean squared error</td></tr>
+          <tr><td>Of logistic regression?</td><td>Log loss (binary cross-entropy)</td></tr>
+          <tr><td>Why not MSE for logistic?</td><td>Non-convex with sigmoid; log loss is convex</td></tr>
+          <tr><td>Gradient descent learning rate too high?</td><td>Diverges/oscillates; too low = slow</td></tr>
+          <tr><td>Batch vs stochastic vs mini-batch GD?</td><td>All data / one sample / small batches per step</td></tr>
+          <tr><td>Why feature scaling?</td><td>Faster convergence, fair distances</td></tr>
+          <tr><td>L1 vs L2?</td><td>L1 sparse (selection); L2 shrinks (stable)</td></tr>
+          <tr><td>What does λ control?</td><td>Regularisation strength (bias ↑ as λ ↑)</td></tr>
+          <tr><td>Multicollinearity symptom?</td><td>Unstable, sign-flipping coefficients; high VIF</td></tr>
+          <tr><td>R² of 0.95 means a good model?</td><td>Not necessarily: leakage, overfit, wrong question</td></tr>
+          <tr><td>Odds ratio in logistic regression?</td><td>exp(β): multiplicative change in odds per unit</td></tr>
+          <tr><td>Precision vs recall?</td><td>Of predicted positives, % right / of actual positives, % found</td></tr>
+          <tr><td>When F1?</td><td>Balance P and R on imbalanced data</td></tr>
+          <tr><td>ROC vs PR curve?</td><td>PR more informative when positives are rare</td></tr>
+          <tr><td>AUC meaning?</td><td>P(random positive scored above random negative)</td></tr>
+          <tr><td>Gini from AUC?</td><td>2 × AUC − 1</td></tr>
+          <tr><td>What is KS in credit?</td><td>Max separation of cumulative goods vs bads</td></tr>
+          <tr><td>What is PSI?</td><td>Score-distribution shift; &gt;0.25 act</td></tr>
+          <tr><td>Bias–variance trade-off?</td><td>Simpler → bias; complex → variance</td></tr>
+          <tr><td>Bagging reduces?</td><td>Variance</td></tr>
+          <tr><td>Boosting reduces?</td><td>Bias (mostly)</td></tr>
+          <tr><td>Random forest randomness?</td><td>Bootstrap rows + random feature subsets per split</td></tr>
+          <tr><td>Gini impurity vs entropy?</td><td>Both measure node purity; similar results</td></tr>
+          <tr><td>Why shallow trees in boosting?</td><td>Weak learners; each corrects residuals</td></tr>
+          <tr><td>XGBoost vs LightGBM?</td><td>LightGBM faster (histograms, leaf-wise); both strong</td></tr>
+          <tr><td>Do trees need scaling?</td><td>No</td></tr>
+          <tr><td>k in k-NN small vs large?</td><td>Small = high variance; large = high bias</td></tr>
+          <tr><td>Curse of dimensionality?</td><td>Distances lose meaning; data becomes sparse</td></tr>
+          <tr><td>Naive Bayes assumption?</td><td>Features independent given class</td></tr>
+          <tr><td>SVM support vectors?</td><td>Points on the margin that define the boundary</td></tr>
+          <tr><td>Kernel trick?</td><td>Implicit high-dimensional mapping via dot products</td></tr>
+          <tr><td>Choose k in k-means?</td><td>Elbow, silhouette, business sense</td></tr>
+          <tr><td>k-means weaknesses?</td><td>Needs k, spherical clusters, sensitive to scale/outliers</td></tr>
+          <tr><td>PCA does what?</td><td>Projects onto max-variance orthogonal axes</td></tr>
+          <tr><td>Cross-validation why?</td><td>Stable estimate using all data</td></tr>
+          <tr><td>Time-series validation?</td><td>Rolling/expanding window; never shuffle</td></tr>
+          <tr><td>Data leakage example?</td><td>Feature known only after the outcome</td></tr>
+          <tr><td>Handle imbalance?</td><td>Right metric, class weights, threshold, resampling (train only)</td></tr>
+          <tr><td>SMOTE?</td><td>Synthetic minority samples by interpolation</td></tr>
+          <tr><td>Missing data?</td><td>Impute + missing flag; or model that handles NaN</td></tr>
+          <tr><td>Categorical with 1,000 levels?</td><td>Target/frequency encoding, embeddings, CatBoost</td></tr>
+          <tr><td>One-hot pitfall?</td><td>Dimensional blow-up; dummy trap in linear models</td></tr>
+          <tr><td>Early stopping?</td><td>Stop when validation stops improving</td></tr>
+          <tr><td>Grid vs random search?</td><td>Random covers more useful space per trial</td></tr>
+          <tr><td>Bayesian optimisation?</td><td>Surrogate model (often GP) picks next trial</td></tr>
+          <tr><td>Explain a model to a manager?</td><td>SHAP top drivers + examples</td></tr>
+          <tr><td>Concept vs data drift?</td><td>Relationship changes vs input distribution changes</td></tr>
+          <tr><td>Why logistic for credit scorecards?</td><td>Interpretable, stable, regulator-friendly, reason codes</td></tr>
+          <tr><td>Reject inference?</td><td>Estimating outcomes for declined applicants to reduce bias</td></tr>
+          <tr><td>Correlation vs causation in ML?</td><td>Models find correlation; causal claims need experiments</td></tr>
+          <tr><td>ARIMA's p, d, q?</td><td>AR lags, differencing order, MA lags</td></tr>
+          <tr><td>SARIMA adds?</td><td>Seasonal terms (P, D, Q, s)</td></tr>
+          <tr><td>Stationarity test?</td><td>ADF test; difference to fix</td></tr>
+          <tr><td>Gaussian process gives?</td><td>Prediction + uncertainty (mean + variance)</td></tr>
+          <tr><td>Deep learning vs boosting on tabular?</td><td>Boosting usually wins on small/medium tabular data</td></tr>
+          <tr><td>Model in production fails silently — first check?</td><td>Input data pipeline and distribution shift</td></tr>
+        </table>
+      </section>
+
+      <section id="design" data-nav="8 · Mini case: churn model" data-search>
+        <div class="section-head"><div><span class="section-no">08 / CASE</span><h2>Mini case: build a card-churn model</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Define</b><span>Churn = no spend for 90 days or card closed within the next 90 days; score monthly.</span></div>
+          <div class="formula-row"><b>Data</b><span>Spend trends, category mix, rewards balance, fee due date, complaints, utilisation, tenure, competitor offers (if known). Only features available at scoring time.</span></div>
+          <div class="formula-row"><b>Model</b><span>Logistic baseline + LightGBM; time-based validation; PR-AUC and lift in top decile.</span></div>
+          <div class="formula-row"><b>Action</b><span>Target the top-risk decile with retention offers; but use an uplift test (D3): some would stay anyway, some leave regardless.</span></div>
+          <div class="formula-row"><b>Measure</b><span>A/B test the intervention; track saved spend net of offer cost; monitor PSI monthly.</span></div>
+        </div>
+      </section>
+
+      <section id="plan" data-nav="9 · Plan" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>One-week revision plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Day 1: sections 1–2; reread your master notes on regression and gradient descent</label>
+          <label class="checkline"><input type="checkbox"> Day 2: section 3; compute precision, recall, F1, AUC on a toy example by hand</label>
+          <label class="checkline"><input type="checkbox"> Day 3: section 4; list 5 leakage examples from cards/lending</label>
+          <label class="checkline"><input type="checkbox"> Day 4: sections 5–6; train RF vs LightGBM on a Kaggle credit-default dataset; compare AUC/Gini, plot SHAP</label>
+          <label class="checkline"><input type="checkbox"> Day 5: the 60 rapid-fire answers aloud, twice</label>
+          <label class="checkline"><input type="checkbox"> Day 6: section 8 as a 5-minute spoken answer</label>
+          <label class="checkline"><input type="checkbox"> Day 7: explain your GP optimiser and SARIMA projects using this module's words (bias, validation, uncertainty)</label>
+        </div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-m1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-m1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-m1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

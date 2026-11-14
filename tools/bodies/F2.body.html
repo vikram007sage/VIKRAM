@@ -1,0 +1,156 @@
+<!--META F2 | Valuation | F2 / VALUATION | Finance track · Module F2 | Valuation<br> | "Walk me through a DCF", "how would you value this startup?" and "is this stock cheap?" come up in finance, consulting, VC and strategy interviews. This module covers enterprise vs equity value, the DCF step by step with a worked example and sensitivity table, cost of capital with live Indian inputs (November 2026), multiples, valuing banks and startups, and the questions interviewers ask. | Worked DCF + sensitivity; India WACC inputs (Nov 2026); 25 technical Qs -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Three ways to value anything</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Intrinsic (DCF)</h3><p>Value = present value of future cash flows. Most rigorous; most sensitive to assumptions.</p></div>
+          <div class="card"><h3>Relative (multiples)</h3><p>Value = a multiple of a metric, based on similar companies or deals. Fast, market-anchored; inherits market mood.</p></div>
+          <div class="card"><h3>Transaction / other</h3><p>Precedent deals (include a control premium), LBO (what a PE buyer could pay), sum-of-the-parts, asset/liquidation value, VC method for startups.</p></div>
+        </div>
+        <div class="memory"><b>Interview line (Damodaran):</b> "Every valuation is a story told with numbers." Start with the story (why this company grows, how profitable it can be, what could go wrong), then turn it into inputs. Your folder has Damodaran's <i>Little Book of Valuation</i> and <i>Investment Valuation</i>, plus McKinsey's <i>Valuation</i>.</div>
+      </section>
+
+      <section id="ev" data-nav="1 · EV vs equity value" data-search>
+        <div class="section-head"><div><span class="section-no">01 / BRIDGE</span><h2>Enterprise value and equity value</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Enterprise value = Equity value + Debt + Preferred + Minority interest − Cash (and non-operating assets)</div>
+        <div class="grid">
+          <div class="card"><h3>Enterprise value</h3><p>Value of the operating business to all capital providers. Pair with metrics before interest: revenue, EBITDA, EBIT, unlevered FCF.</p></div>
+          <div class="card"><h3>Equity value</h3><p>Value to shareholders = market cap for a listed company (share price × diluted shares). Pair with metrics after interest: net income, EPS, levered FCF, book value.</p></div>
+          <div class="card"><h3>Why subtract cash?</h3><p>A buyer of the whole business gets the cash, which effectively lowers the price paid; debt must be repaid or assumed, so it adds to the cost.</p></div>
+        </div>
+        <div class="memory"><b>Classic question:</b> "A company raises ₹100 of debt and holds it as cash. What happens to EV and equity value?" Equity value: unchanged (no value created). EV: unchanged too (+100 debt, −100 cash).</div>
+      </section>
+
+      <section id="dcf" data-nav="2 · DCF step by step" data-search>
+        <div class="section-head"><div><span class="section-no">02 / DCF</span><h2>The DCF, step by step</h2></div><span class="tag hot">most asked</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Forecast</b><span>5–10 years of revenue, margins and reinvestment, tied to a story (market size, share, competition).</span></div>
+          <div class="formula-row"><b>2. Unlevered FCF</b><span>FCFF = EBIT × (1 − t) + D&amp;A − Capex − ΔNWC = NOPAT − net reinvestment.</span></div>
+          <div class="formula-row"><b>3. Discount rate</b><span>WACC (section 3), in the same currency and inflation terms as the cash flows.</span></div>
+          <div class="formula-row"><b>4. Terminal value</b><span>Gordon growth: TV = FCF<sub>n+1</sub> ÷ (WACC − g), with g ≤ long-run nominal GDP growth; or exit multiple (TV = EBITDA × multiple). Cross-check one with the other.</span></div>
+          <div class="formula-row"><b>5. Discount + sum</b><span>EV = Σ FCF<sub>t</sub> ÷ (1+WACC)<sup>t</sup> + TV ÷ (1+WACC)<sup>n</sup>.</span></div>
+          <div class="formula-row"><b>6. Bridge to equity</b><span>Equity = EV − debt + cash (± other claims); ÷ diluted shares = value per share.</span></div>
+          <div class="formula-row"><b>7. Sensitise</b><span>Table of value vs WACC and g (and vs margin); state what you must believe for the current price to be right.</span></div>
+        </div>
+        <h3>Worked example (₹ cr)</h3>
+        <p>Revenue ₹1,000 today, growing 15% a year for 5 years; EBIT margin 20%; tax 25%; reinvests 35% of NOPAT; WACC 12%; terminal growth 5% with return on capital 15% (so terminal reinvestment = g ÷ ROIC = 33%).</p>
+        <table class="compare">
+          <tr><th>Year</th><th>Revenue</th><th>NOPAT</th><th>FCFF</th><th>Discount factor</th><th>PV</th></tr>
+          <tr><td>1</td><td>1,150</td><td>172</td><td>112</td><td>0.893</td><td>100</td></tr>
+          <tr><td>2</td><td>1,322</td><td>198</td><td>129</td><td>0.797</td><td>103</td></tr>
+          <tr><td>3</td><td>1,521</td><td>228</td><td>148</td><td>0.712</td><td>106</td></tr>
+          <tr><td>4</td><td>1,749</td><td>262</td><td>171</td><td>0.636</td><td>108</td></tr>
+          <tr><td>5</td><td>2,011</td><td>302</td><td>196</td><td>0.567</td><td>111</td></tr>
+        </table>
+        <p>Sum of PVs ≈ ₹528 cr. Year-6 FCFF ≈ ₹211 cr; TV = 211 ÷ (0.12 − 0.05) ≈ ₹3,020 cr; PV of TV ≈ ₹1,714 cr. <b>EV ≈ ₹2,242 cr</b>, of which ~76% is terminal value (typical, and why terminal assumptions matter so much). With ₹300 cr debt, ₹100 cr cash and 50 cr shares: equity ≈ ₹2,042 cr, ≈ ₹41 per share.</p>
+        <table class="compare">
+          <tr><th>EV (₹ cr)</th><th>g = 4%</th><th>g = 5%</th><th>g = 6%</th></tr>
+          <tr><td>WACC 11%</td><td>2,494</td><td>2,632</td><td>2,820</td></tr>
+          <tr><td>WACC 12%</td><td>2,160</td><td>2,240</td><td>2,343</td></tr>
+          <tr><td>WACC 13%</td><td>1,902</td><td>1,947</td><td>2,002</td></tr>
+        </table>
+        <div class="memory"><b>Growth isn't free:</b> growth only adds value when return on capital exceeds the cost of capital. If ROIC = WACC, faster growth adds nothing; tying reinvestment to g ÷ ROIC keeps the terminal value honest.</div>
+      </section>
+
+      <section id="wacc" data-nav="3 · Cost of capital (India, now)" data-search>
+        <div class="section-head"><div><span class="section-no">03 / DISCOUNT RATE</span><h2>Cost of capital, with live Indian inputs</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Cost of equity (CAPM) = R<sub>f</sub> + β × ERP &nbsp;·&nbsp; WACC = E/V × K<sub>e</sub> + D/V × K<sub>d</sub> × (1 − t)</div>
+        <table class="compare">
+          <tr><th>Input</th><th>November 2026 value</th><th>Notes</th></tr>
+          <tr><td>Risk-free rate (₹)</td><td>10-year G-sec ~7.1–7.2%</td><td>Up from ~6.8% in mid-2026 after the October repo hike and high oil; hit a 3-year high near 7.47% in late October</td></tr>
+          <tr><td>Equity risk premium (India)</td><td>~6.5–7.5%</td><td>Damodaran: mature-market ERP ~4.2% (July 2026) plus an India country risk premium; Indian practitioners commonly use ~7%</td></tr>
+          <tr><td>Beta</td><td>Bottom-up: unlever peer betas, re-lever at target D/E</td><td>β<sub>U</sub> = β<sub>L</sub> ÷ (1 + (1 − t) D/E)</td></tr>
+          <tr><td>Cost of debt</td><td>Yield on the company's bonds / rating-based spread over G-sec</td><td>After-tax: × (1 − t)</td></tr>
+          <tr><td>Tax</td><td>~25.2% (22% concessional regime + surcharge + cess)</td><td>Marginal rate for the tax shield</td></tr>
+        </table>
+        <p><b>Example:</b> R<sub>f</sub> 7.2%, β 1.1, ERP 7% → K<sub>e</sub> ≈ 14.9%. K<sub>d</sub> 9% pre-tax, 80/20 equity/debt → WACC ≈ 0.8 × 14.9% + 0.2 × 9% × 0.75 ≈ 13.3%. Rupee discount rates are higher than dollar ones because Indian inflation and bond yields are higher — always match currency of cash flows and discount rate.</p>
+        <div class="memory"><b>Beta re-levering:</b> peer levered β 1.2 at D/E 0.5 → unlevered 1.2 ÷ (1 + 0.75 × 0.5) ≈ 0.87; at your target D/E 0.25 → 0.87 × (1 + 0.75 × 0.25) ≈ 1.04.</div>
+      </section>
+
+      <section id="multiples" data-nav="4 · Multiples" data-search>
+        <div class="section-head"><div><span class="section-no">04 / MULTIPLES</span><h2>Relative valuation</h2></div></div>
+        <table class="compare">
+          <tr><th>Multiple</th><th>Use for</th><th>Watch</th></tr>
+          <tr><td>EV/EBITDA</td><td>Most industries; ignores capital structure and D&amp;A policy</td><td>Ignores capex: capital-heavy firms look cheap</td></tr>
+          <tr><td>EV/Revenue</td><td>Loss-making or early companies (SaaS, new-age tech)</td><td>Says nothing about profitability; compare with margins and growth</td></tr>
+          <tr><td>P/E</td><td>Mature, profitable companies</td><td>Affected by leverage, one-offs, accounting</td></tr>
+          <tr><td>PEG</td><td>P/E ÷ growth %</td><td>Rough; assumes growth quality equal</td></tr>
+          <tr><td>P/B</td><td>Banks, insurers, NBFCs</td><td>Justified P/B = (ROE − g) ÷ (K<sub>e</sub> − g)</td></tr>
+          <tr><td>EV/GMV, EV/users</td><td>Marketplaces, platforms</td><td>Only meaningful with take-rate and unit-economics context</td></tr>
+        </table>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Steps</b><span>Pick 5–10 truly comparable companies (business model, growth, size, geography) → compute multiples on the same basis (LTM or forward) → use median and range → adjust for differences in growth and margins.</span></div>
+          <div class="formula-row"><b>Example</b><span>Peer EV/EBITDA 12×, 14×, 15×, 16×, 18× → median 15×. Target EBITDA ₹250 cr → EV ₹3,750 cr; less ₹300 cr debt plus ₹100 cr cash → equity ₹3,550 cr. Compare with the DCF (₹2,042 cr): the market is pricing in more growth or a lower discount rate than our DCF.</span></div>
+          <div class="formula-row"><b>Precedent transactions</b><span>Multiples paid in past acquisitions; usually higher than trading comps because they include a control premium (often 20–40%).</span></div>
+        </div>
+      </section>
+
+      <section id="special" data-nav="5 · Banks, startups, others" data-search>
+        <div class="section-head"><div><span class="section-no">05 / SPECIAL CASES</span><h2>Valuing banks, startups and odd businesses</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Banks and NBFCs</h3><p>Debt is raw material, not financing, so EV/EBITDA and FCFF don't work. Use P/B vs ROE, P/E, dividend discount, or residual income. Bank with ROE 16%, K<sub>e</sub> 13.5%, g 8% → justified P/B ≈ (16 − 8) ÷ (13.5 − 8) ≈ 1.45×.</p></div>
+          <div class="card"><h3>Startups: VC method</h3><p>Estimate exit value (e.g. year-5 revenue × exit multiple), divide by target return multiple (often 10–30× for early stage) → post-money today. Pre-money = post-money − investment. Ownership = investment ÷ post-money (F4).</p></div>
+          <div class="card"><h3>Loss-making growth companies</h3><p>DCF with a path to target margins (based on mature peers), a probability of failure, and large reinvestment early; or EV/Revenue cross-checked with growth and gross margin.</p></div>
+          <div class="card"><h3>Cyclicals and commodities</h3><p>Use normalised (mid-cycle) earnings; low P/E at the peak often means expensive.</p></div>
+          <div class="card"><h3>Sum of the parts</h3><p>Value each segment with its own method (e.g. Eternal: food delivery on EBITDA multiples, Blinkit on growth-adjusted revenue multiple), add, subtract net debt and holding discount.</p></div>
+          <div class="card"><h3>Dividend discount</h3><p>Gordon: P = D<sub>1</sub> ÷ (r − g). D<sub>1</sub> ₹10, r 12%, g 6% → ₹167.</p></div>
+        </div>
+      </section>
+
+      <section id="traps" data-nav="6 · Common mistakes" data-search>
+        <div class="section-head"><div><span class="section-no">06 / TRAPS</span><h2>Valuation mistakes interviewers probe</h2></div></div>
+        <table class="compare">
+          <tr><th>Mistake</th><th>Fix</th></tr>
+          <tr><td>Terminal growth above economy growth (or above WACC)</td><td>g ≤ long-run nominal GDP growth; check TV share of EV</td></tr>
+          <tr><td>Mixing levered and unlevered (FCFE with WACC)</td><td>FCFF ↔ WACC ↔ EV; FCFE ↔ K<sub>e</sub> ↔ equity value</td></tr>
+          <tr><td>Growth without reinvestment</td><td>Reinvestment = g ÷ ROIC</td></tr>
+          <tr><td>Currency mismatch</td><td>Rupee cash flows with rupee rates; dollar with dollar</td></tr>
+          <tr><td>Double-counting risk</td><td>Don't raise the discount rate and also haircut cash flows for the same risk</td></tr>
+          <tr><td>Using diluted shares wrongly</td><td>Treasury-stock method for options; include RSUs</td></tr>
+          <tr><td>Comps that aren't comparable</td><td>Match growth, margins, business model; explain differences</td></tr>
+        </table>
+      </section>
+
+      <section id="bank" data-nav="7 · 25 technical questions" data-search>
+        <div class="section-head"><div><span class="section-no">07 / PRACTICE</span><h2>Twenty-five technical questions</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Short answer</th></tr>
+          <tr><td>Walk me through a DCF.</td><td>Section 2 in 60 seconds: forecast FCFF, WACC, terminal value, discount, bridge to equity, sensitise</td></tr>
+          <tr><td>Why use unlevered FCF?</td><td>Values the business independent of financing; matches WACC and EV</td></tr>
+          <tr><td>How do you calculate WACC?</td><td>Weights × costs; K<sub>e</sub> via CAPM; after-tax K<sub>d</sub></td></tr>
+          <tr><td>What's beta?</td><td>Sensitivity of a stock's returns to the market's</td></tr>
+          <tr><td>Why is debt cheaper than equity?</td><td>Senior claim, fixed payments, tax-deductible interest</td></tr>
+          <tr><td>Can more debt lower WACC forever?</td><td>No: distress costs raise both K<sub>d</sub> and K<sub>e</sub></td></tr>
+          <tr><td>Gordon growth vs exit multiple?</td><td>Intrinsic vs market-based terminal value; cross-check</td></tr>
+          <tr><td>What % of EV is terminal value usually?</td><td>Often 60–80%</td></tr>
+          <tr><td>EV vs equity value?</td><td>Section 1 bridge</td></tr>
+          <tr><td>Why subtract cash from EV?</td><td>Non-operating; buyer gets it</td></tr>
+          <tr><td>Which multiple for a bank?</td><td>P/B (with ROE), P/E</td></tr>
+          <tr><td>Why not EV/EBITDA for a bank?</td><td>Debt is operating; interest is a cost of goods</td></tr>
+          <tr><td>Company A has a higher P/E than B. Why?</td><td>Higher growth, lower risk, higher ROE, or overvalued</td></tr>
+          <tr><td>How do you value a pre-revenue startup?</td><td>VC method, comparable rounds, scenario DCF with failure probability</td></tr>
+          <tr><td>DCF says ₹500, market price ₹800. What do you do?</td><td>Find which assumption the market believes (growth, margin, risk); test plausibility</td></tr>
+          <tr><td>How does a rate hike affect valuations?</td><td>Higher R<sub>f</sub> → higher WACC → lower values, especially long-duration growth stocks</td></tr>
+          <tr><td>What is a control premium?</td><td>Extra paid to acquire control (synergies, decision rights)</td></tr>
+          <tr><td>Accretion/dilution?</td><td>Does the acquirer's EPS rise after a deal? Compare target's earnings yield with cost of financing (F3)</td></tr>
+          <tr><td>How does ₹10 more D&amp;A change a DCF?</td><td>FCF up by tax shield (₹2.5 at 25%), so value slightly up, if it's real tax depreciation</td></tr>
+          <tr><td>Mid-year convention?</td><td>Discount cash flows at t − 0.5, assuming they arrive through the year</td></tr>
+          <tr><td>Levered vs unlevered beta?</td><td>Unlevered strips financial risk; re-lever to target structure</td></tr>
+          <tr><td>Why do new-age tech IPOs trade on EV/Revenue?</td><td>Losses make P/E meaningless; but markets now demand a profit path (PhonePe and Zepto IPO valuations were cut in 2026)</td></tr>
+          <tr><td>What's ROIC and why compare with WACC?</td><td>NOPAT ÷ invested capital; value created only if ROIC &gt; WACC</td></tr>
+          <tr><td>Sum-of-the-parts — when?</td><td>Conglomerates and multi-segment firms (Reliance, Eternal)</td></tr>
+          <tr><td>Biggest weakness of DCF?</td><td>Garbage in, garbage out; terminal value dominance</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="8 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Rebuild the section-2 DCF in Excel and reproduce the sensitivity table</label>
+          <label class="checkline"><input type="checkbox"> Compute WACC for one listed Indian company using today's 10-year G-sec yield</label>
+          <label class="checkline"><input type="checkbox"> Build a trading-comps table (5 peers, EV/EBITDA and P/E) for that company</label>
+          <label class="checkline"><input type="checkbox"> Value one bank on P/B vs ROE (link to B1)</label>
+          <label class="checkline"><input type="checkbox"> Read Damodaran's <i>Little Book of Valuation</i> chapters on young and mature companies (in your folder)</label>
+          <label class="checkline"><input type="checkbox"> Write a 1-page "story + numbers" valuation of a company you follow</label>
+        </div>
+        <div class="memory"><b>Keep the inputs fresh:</b> check the 10-year G-sec yield and Damodaran's country risk premium (updated each January and July) before any valuation interview. Next: F4 (VC and PE, investment memo) and F3 (M&amp;A and LBO).</div>
+      </section>

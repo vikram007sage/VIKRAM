@@ -1,0 +1,147 @@
+<!--META F1 | Accounting + 3 statements | F1 / ACCOUNTS | Finance track · Module F1 | Accounting +<br>three statements | Finance, consulting and VC interviews start with "walk me through the three statements" and "what happens if depreciation goes up by 10?". This module builds the income statement, balance sheet and cash-flow statement from one small example that balances to the rupee, covers the Indian (Ind AS) twists, and drills the 30 technical questions that come up most. | One example that balances; Ind AS notes; 30 technical Qs -->
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What you must be able to do</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Explain each statement in 30 seconds</strong><span class="muted">what it shows, key lines, how they link</span></div><span class="frequency">every finance interview</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Flow a change through all three</strong><span class="muted">depreciation, inventory, debt, a write-down</span></div><span class="frequency">very high (IB, PE, VC)</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Read a real annual report</strong><span class="muted">spot quality of earnings and red flags</span></div><span class="frequency">equity research, PE, credit</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Ratios</strong><span class="muted">profitability, efficiency, leverage, liquidity</span></div><span class="frequency">all roles</span></div>
+        </div>
+        <div class="memory"><b>Your master notes</b> (C_FINANCE/Finance_Master_Notes, Part 3) cover fundamentals from Zerodha Varsity. This module is the interview version: precise linkages and technical answers.</div>
+      </section>
+
+      <section id="three" data-nav="1 · The three statements" data-search>
+        <div class="section-head"><div><span class="section-no">01 / STATEMENTS</span><h2>The three statements in one minute</h2></div><span class="tag core">core</span></div>
+        <div class="grid">
+          <div class="card"><h3>Income statement (P&amp;L)</h3><p>Performance over a <b>period</b>, on an accrual basis: revenue when earned, expenses when incurred. Revenue → gross profit → EBITDA → EBIT → profit before tax → net income.</p></div>
+          <div class="card"><h3>Balance sheet</h3><p>Snapshot on <b>one date</b>. Assets = Liabilities + Equity. What the company owns, what it owes, and what's left for shareholders.</p></div>
+          <div class="card"><h3>Cash-flow statement</h3><p>Actual cash in and out over a period, in three parts: operating, investing, financing. Reconciles net income to the change in cash.</p></div>
+        </div>
+        <div class="eq">Net income → top of the cash-flow statement and into retained earnings (equity) &nbsp;·&nbsp; Ending cash from the CFS = cash on the balance sheet &nbsp;·&nbsp; Changes in balance-sheet items drive the CFS</div>
+        <div class="memory"><b>"Walk me through the three statements" answer:</b> "The income statement shows revenue and expenses over a period, ending in net income. Net income flows into the cash-flow statement, where we add back non-cash items like depreciation and adjust for working-capital changes to get operating cash flow, then add investing and financing flows to get the change in cash. That ending cash appears on the balance sheet, and net income less dividends increases retained earnings, so the balance sheet still balances."</div>
+      </section>
+
+      <section id="example" data-nav="2 · One example, fully linked" data-search>
+        <div class="section-head"><div><span class="section-no">02 / BUILD IT</span><h2>One small company, all three statements</h2></div><span class="tag hot">rebuild this in Excel</span></div>
+        <div class="grid">
+          <div class="card"><h3>Income statement (₹ cr)</h3><p>Revenue 1,000<br>− COGS 600 → Gross profit 400<br>− SG&amp;A 150 → EBITDA 250<br>− D&amp;A 50 → EBIT 200<br>− Interest 20 → PBT 180<br>− Tax @25% 45 → <b>Net income 135</b></p></div>
+          <div class="card"><h3>Cash-flow statement</h3><p>Net income 135<br>+ D&amp;A 50<br>− Increase in receivables 40<br>− Increase in inventory 30<br>+ Increase in payables 25<br>= <b>CFO 140</b><br>Capex −80 = <b>CFI −80</b><br>Debt repaid −30, dividends −20 = <b>CFF −50</b><br><b>Net change in cash +10</b></p></div>
+          <div class="card"><h3>Balance sheet: opening → closing</h3><p>Cash 100 → 110<br>Receivables 150 → 190<br>Inventory 120 → 150<br>PP&amp;E 500 → 530 (+80 capex − 50 D&amp;A)<br><b>Assets 870 → 980</b><br>Payables 90 → 115<br>Debt 300 → 270<br>Equity 480 → 595 (+135 NI − 20 dividends)<br><b>L + E 870 → 980</b> ✓</p></div>
+        </div>
+        <div class="memory"><b>Why CFO ≠ net income:</b> depreciation is a non-cash expense (add back); sales on credit raise receivables without cash (subtract the increase); buying inventory uses cash (subtract); delaying payment to suppliers keeps cash (add the increase in payables).</div>
+      </section>
+
+      <section id="walks" data-nav="3 · Walk-throughs" data-search>
+        <div class="section-head"><div><span class="section-no">03 / FLOWS</span><h2>Classic "what happens if" walk-throughs</h2></div><span class="tag hot">most asked</span></div>
+        <details open><summary><b>Depreciation rises by ₹10 (tax 25%)</b></summary><p><b>IS:</b> EBIT −10, tax −2.5, net income −7.5. <b>CFS:</b> NI −7.5, add back D&amp;A +10 → cash +2.5 (the tax saving). <b>BS:</b> PP&amp;E −10, cash +2.5 → assets −7.5; retained earnings −7.5 → L+E −7.5. Balanced.</p></details>
+        <details><summary><b>Company buys ₹100 of inventory with cash</b></summary><p>IS: nothing. CFS: increase in inventory −100 in CFO. BS: cash −100, inventory +100. Balanced; no profit impact until the goods are sold.</p></details>
+        <details><summary><b>Inventory of ₹100 is sold for ₹150 on credit</b></summary><p>IS: revenue +150, COGS +100, PBT +50, tax −12.5, NI +37.5. CFS: NI +37.5, increase in receivables −150, decrease in inventory +100 → cash −12.5 (tax paid, cash not yet collected). BS: receivables +150, inventory −100, cash −12.5 → assets +37.5; RE +37.5.</p></details>
+        <details><summary><b>Company borrows ₹100 and buys equipment</b></summary><p>Day 0: IS nothing. CFS: capex −100 (CFI), debt +100 (CFF), net 0. BS: PP&amp;E +100, debt +100. Year 1 (10-year life, 10% interest): IS D&amp;A −10, interest −10, PBT −20, NI −15. CFS: NI −15 + D&amp;A 10 = −5. BS: cash −5, PP&amp;E −10 (net 90) → assets −15; RE −15.</p></details>
+        <details><summary><b>Asset written down by ₹100</b></summary><p>IS: impairment −100 (non-cash), tax −25 (if deductible), NI −75. CFS: NI −75, add back impairment +100 → cash +25. BS: asset −100, cash +25 → assets −75; RE −75. (In practice impairments are often not tax-deductible immediately; then a deferred tax asset is created instead — say so.)</p></details>
+        <details><summary><b>Customer prepays ₹100 for next year's service</b></summary><p>IS: nothing now (revenue not yet earned). CFS: increase in deferred revenue +100 (CFO). BS: cash +100, deferred revenue (liability) +100. Next year revenue is recognised and the liability unwinds.</p></details>
+        <details><summary><b>Company issues ₹100 of shares and pays a ₹20 dividend</b></summary><p>IS: nothing (dividends are not an expense). CFS: CFF +100 −20. BS: cash +80; equity +100 (share capital) −20 (retained earnings).</p></details>
+      </section>
+
+      <section id="concepts" data-nav="4 · Key concepts" data-search>
+        <div class="section-head"><div><span class="section-no">04 / CONCEPTS</span><h2>Concepts that come up</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Accrual vs cash</b><span>Revenue when earned and expenses when incurred, not when cash moves. Hence receivables, payables, deferred revenue, prepaid expenses.</span></div>
+          <div class="formula-row"><b>Working capital</b><span>Current assets − current liabilities. Operating (non-cash) WC = receivables + inventory − payables. An increase uses cash.</span></div>
+          <div class="formula-row"><b>Cash conversion cycle</b><span>Days inventory + days receivables − days payables. Negative CCC (customers pay before you pay suppliers) is a gift: q-commerce, supermarkets.</span></div>
+          <div class="formula-row"><b>EBITDA</b><span>Proxy for operating cash before capex, interest and tax. Ignores capex and working capital — so not the same as cash flow.</span></div>
+          <div class="formula-row"><b>Free cash flow</b><span>FCF to firm = EBIT(1 − t) + D&amp;A − capex − ΔNWC (used in DCF, F2). FCF to equity also subtracts interest after tax and adds net borrowing.</span></div>
+          <div class="formula-row"><b>Deferred tax</b><span>Arises when book and tax accounting differ (e.g. faster tax depreciation creates a deferred tax liability).</span></div>
+          <div class="formula-row"><b>Goodwill</b><span>Purchase price above fair value of net identifiable assets in an acquisition. Not amortised under Ind AS/IFRS; tested for impairment yearly.</span></div>
+          <div class="formula-row"><b>Capitalise vs expense</b><span>Spending with multi-year benefit (equipment, some development) is capitalised and depreciated; aggressive capitalisation inflates profits.</span></div>
+        </div>
+      </section>
+
+      <section id="indas" data-nav="5 · Indian specifics (Ind AS)" data-search>
+        <div class="section-head"><div><span class="section-no">05 / INDIA</span><h2>Ind AS and Indian reporting twists</h2></div></div>
+        <table class="compare">
+          <tr><th>Topic</th><th>What to know</th></tr>
+          <tr><td>Ind AS</td><td>India's converged version of IFRS, used by listed and large companies. Smaller companies use older Indian GAAP. Banks are moving to Expected Credit Loss provisioning from 1 April 2027 (B1).</td></tr>
+          <tr><td>Ind AS 116 (leases)</td><td>Most leases go on the balance sheet: right-of-use asset + lease liability. Rent becomes depreciation + interest, so EBITDA rises. That's why Eternal and Swiggy report "adjusted EBITDA" treating rent as a cost (S5).</td></tr>
+          <tr><td>Ind AS 115 (revenue)</td><td>Five steps: contract → performance obligations → price → allocate → recognise when each obligation is met. Matters for SaaS, construction, bundled offers.</td></tr>
+          <tr><td>Schedule III</td><td>The format Indian companies must follow for statements; "Other income" and "Exceptional items" are worth checking separately.</td></tr>
+          <tr><td>Tax</td><td>Domestic companies opting for the concessional regime pay 22% base (~25.2% effective with surcharge and cess) — the 25% in our example.</td></tr>
+          <tr><td>Consolidated vs standalone</td><td>Indian companies publish both; use consolidated for groups with subsidiaries.</td></tr>
+          <tr><td>Promoter pledges, related-party transactions</td><td>Disclosed in notes; frequent red flags in Indian mid-caps.</td></tr>
+        </table>
+      </section>
+
+      <section id="ratios" data-nav="6 · Ratios" data-search>
+        <div class="section-head"><div><span class="section-no">06 / RATIOS</span><h2>Ratios that matter</h2></div></div>
+        <table class="compare">
+          <tr><th>Group</th><th>Ratio</th><th>Formula</th></tr>
+          <tr><td>Profitability</td><td>Gross / EBITDA / net margin</td><td>÷ revenue</td></tr>
+          <tr><td></td><td>ROE</td><td>Net income ÷ average equity (DuPont: margin × asset turnover × leverage)</td></tr>
+          <tr><td></td><td>ROCE</td><td>EBIT ÷ (equity + debt); compare with cost of capital</td></tr>
+          <tr><td>Efficiency</td><td>Asset turnover</td><td>Revenue ÷ average assets</td></tr>
+          <tr><td></td><td>Receivable days</td><td>Receivables ÷ revenue × 365</td></tr>
+          <tr><td></td><td>Inventory days</td><td>Inventory ÷ COGS × 365</td></tr>
+          <tr><td>Leverage</td><td>Debt/equity, net debt/EBITDA</td><td>Banks worry above ~3× net debt/EBITDA for most companies</td></tr>
+          <tr><td></td><td>Interest coverage</td><td>EBIT ÷ interest</td></tr>
+          <tr><td>Liquidity</td><td>Current ratio, quick ratio</td><td>Current assets ÷ current liabilities; quick excludes inventory</td></tr>
+          <tr><td>Cash quality</td><td>CFO ÷ net income</td><td>Consistently below ~0.8 is a warning</td></tr>
+        </table>
+        <p>Our example: net margin 13.5%, ROE ≈ 135 ÷ avg(480, 595) ≈ 25%, receivable days 190 ÷ 1,000 × 365 ≈ 69, CFO/NI ≈ 1.04.</p>
+      </section>
+
+      <section id="flags" data-nav="7 · Red flags" data-search>
+        <div class="section-head"><div><span class="section-no">07 / FORENSICS</span><h2>Red flags in financial statements</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Earnings quality</h3><p>Profit growing but CFO flat or falling; receivable days rising fast (revenue booked, cash not collected); large "other income"; frequent exceptional items.</p></div>
+          <div class="card"><h3>Balance-sheet games</h3><p>Rising capitalised expenses; inventory growing faster than sales; large loans to related parties; contingent liabilities and guarantees in the notes.</p></div>
+          <div class="card"><h3>Governance</h3><p>Auditor resignations or qualified opinions, frequent changes in accounting policy, high promoter pledging, complex group structures.</p></div>
+        </div>
+      </section>
+
+      <section id="bank" data-nav="8 · 30 technical questions" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PRACTICE</span><h2>Thirty technical questions</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Short answer</th></tr>
+          <tr><td>Most important statement if you had only one?</td><td>Cash-flow statement: shows real cash generation (though you need all three for a full picture)</td></tr>
+          <tr><td>Can a profitable company go bankrupt?</td><td>Yes: if it runs out of cash (working capital, debt maturities)</td></tr>
+          <tr><td>Can a company with positive cash flow be loss-making?</td><td>Yes: large non-cash expenses, customer prepayments, or financing inflows</td></tr>
+          <tr><td>How does inventory affect the statements?</td><td>Buying: BS only (cash ↓, inventory ↑), CFO ↓. Selling: COGS on IS</td></tr>
+          <tr><td>Where do dividends appear?</td><td>CFF outflow; reduce retained earnings; not on IS</td></tr>
+          <tr><td>Why add back depreciation in CFS?</td><td>Non-cash expense that reduced net income</td></tr>
+          <tr><td>Difference between capex and opex?</td><td>Capex: long-lived assets, capitalised; opex: expensed immediately</td></tr>
+          <tr><td>What is goodwill and when is it impaired?</td><td>Excess purchase price; impaired when the acquired business is worth less than its carrying value</td></tr>
+          <tr><td>What are deferred tax liabilities?</td><td>Tax payable later because tax expense on books exceeded tax paid now</td></tr>
+          <tr><td>LIFO vs FIFO in rising prices?</td><td>FIFO: lower COGS, higher profit; LIFO not allowed under Ind AS/IFRS</td></tr>
+          <tr><td>What is working capital and why does an increase use cash?</td><td>Short-term operating assets minus liabilities; growth ties cash in receivables/inventory</td></tr>
+          <tr><td>EBITDA vs operating cash flow?</td><td>OCF deducts tax, interest (often) and working-capital changes</td></tr>
+          <tr><td>Why do companies like adjusted EBITDA?</td><td>Excludes SBC, one-offs, lease effects; flatters results — always reconcile</td></tr>
+          <tr><td>How does stock-based compensation flow?</td><td>Expense on IS (non-cash), added back in CFO, increases equity</td></tr>
+          <tr><td>Accounts receivable rises ₹50 — effect?</td><td>CFO ↓ 50; cash ↓ on BS; no IS effect itself</td></tr>
+          <tr><td>Accounts payable rises ₹50?</td><td>CFO ↑ 50; cash ↑</td></tr>
+          <tr><td>Debt repaid ₹100?</td><td>CFF −100; cash ↓, debt ↓; interest falls next period</td></tr>
+          <tr><td>What is negative working capital good for?</td><td>Funds growth with suppliers' money (supermarkets, q-commerce)</td></tr>
+          <tr><td>What's the difference between ROE and ROCE?</td><td>ROE: return to equity holders (affected by leverage); ROCE: return on all capital</td></tr>
+          <tr><td>What is EV and how is it different from equity value?</td><td>EV = equity value + debt − cash (+ minorities, preferred); value of the whole business (F2)</td></tr>
+          <tr><td>Revenue recognised but cash not received — where is it?</td><td>Accounts receivable</td></tr>
+          <tr><td>Cash received but revenue not earned?</td><td>Deferred revenue (liability)</td></tr>
+          <tr><td>What is a contingent liability?</td><td>Possible obligation depending on a future event (lawsuit); disclosed in notes</td></tr>
+          <tr><td>How does a lease show under Ind AS 116?</td><td>ROU asset + lease liability; depreciation + interest instead of rent</td></tr>
+          <tr><td>What's DuPont analysis?</td><td>ROE = net margin × asset turnover × equity multiplier</td></tr>
+          <tr><td>What would you look at first in an annual report?</td><td>Auditor's report, CFO vs profit trend, debt, notes on related parties and contingencies</td></tr>
+          <tr><td>How is a bank's P&amp;L different?</td><td>Interest income/expense are the main lines; provisions replace COGS; capital ratios matter (B1)</td></tr>
+          <tr><td>What is an impairment test?</td><td>Compare carrying value to recoverable amount; write down the excess</td></tr>
+          <tr><td>Why might net income rise while EPS falls?</td><td>More shares issued (dilution)</td></tr>
+          <tr><td>How do share buybacks affect statements?</td><td>CFF outflow, equity ↓ (treasury shares or cancellation), EPS ↑ (fewer shares)</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="9 · Plan" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Rebuild the section-2 company in Excel with formulas linking all three statements; check it balances</label>
+          <label class="checkline"><input type="checkbox"> Run the seven walk-throughs in your model and confirm each answer</label>
+          <label class="checkline"><input type="checkbox"> Download one Indian annual report (e.g. Asian Paints or Eternal); compute the section-6 ratios for 3 years</label>
+          <label class="checkline"><input type="checkbox"> Write a 1-page "quality of earnings" note on that company using section 7</label>
+          <label class="checkline"><input type="checkbox"> Answer the 30 questions aloud; re-do the ones you hesitated on</label>
+        </div>
+        <div class="memory"><b>Your folder:</b> 20_SOURCES/FINANCE has the "Technical Interview Guide for Finance Interviews", "Ace Finance Interviews", the Vault finance guide, CFI's ratios cheat sheet and "Accounting and Finance for Non-Specialists" — use them for extra drills. Next: F2 (valuation).</div>
+      </section>

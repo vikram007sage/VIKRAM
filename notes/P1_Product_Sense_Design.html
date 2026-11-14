@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P1 | Product sense + design — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">P1 / PRODUCT</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#structure">1 · The structure</a><a href="#segments">2 · Segments + pains</a><a href="#ideas">3 · Ideas + prioritisation</a><a href="#ai">4 · AI product sense</a><a href="#worked">5 · Six worked answers</a><a href="#strategy">6 · Strategy questions</a><a href="#plan">7 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Product track · Module P1</div><h1>Product sense<br>+ design</h1><p>The product sense round asks you to design or improve a product in 30–45 minutes: pick the right user, find a real problem, generate ideas, choose one and define how you'd know it worked. This module gives you one flexible structure, the reasoning interviewers reward at each step, the new AI-assisted formats appearing in 2026, and six worked answers including Indian fintech and campus products.</p><div class="meta"><span class="pill"><span class=dot></span> One structure, 6 worked answers</span><span class="pill">AI product sense format</span><span class="pill">Favourite-product drill</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What product sense means to an interviewer</h2></div></div>
+        <p class="lede">Product sense is judgment about what to build and why. Interviewers score: did you understand the goal, pick a meaningful user segment, find a painful problem, generate creative but feasible solutions, prioritise with clear criteria, and define success? Frameworks help you not forget steps; they don't earn points by themselves.</p>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>User + problem depth</strong><span class="muted">a specific segment and a real pain, not "users want convenience"</span></div><span class="frequency">35%</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Prioritisation with reasons</strong><span class="muted">why this segment, why this problem, why this solution</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Creative, concrete solutions</strong><span class="muted">at least one non-obvious idea, described as a user experience</span></div><span class="frequency">25%</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Success metrics + risks</strong><span class="muted">north-star metric, guardrails, what could go wrong (P2)</span></div><span class="frequency">15%</span></div>
+        </div>
+        <h3>2026 formats</h3>
+        <table class="compare">
+          <tr><th>Company type</th><th>Format</th></tr>
+          <tr><td>Indian campus PM roles (fintech, consumer, SaaS, APM programmes)</td><td>Product design/improvement case + guesstimate + metrics/RCA, often in one round</td></tr>
+          <tr><td>Google</td><td>"Product design" round, open prompts ("design a feature for Google Maps", "your favourite product"), heavy follow-ups</td></tr>
+          <tr><td>Meta</td><td>Structured product sense round; since late 2025 a "Product Sense with AI" round: ~30 minutes of product sense, then you use an AI tool to build a quick working prototype (confirmed for some tracks)</td></tr>
+          <tr><td>AI-native companies (OpenAI and others)</td><td>AI product sense is a required round: designing products around model capabilities and limits</td></tr>
+        </table>
+        <div class="memory"><b>Your edge:</b> you shipped A/B-tested onboarding changes at CheQ, you're building VIKRAM (a real product with a PRD and users = you), and KiFayti. Use them as examples inside answers, not only in behavioural rounds.</div>
+      </section>
+
+      <section id="structure" data-nav="1 · The structure" data-search>
+        <div class="section-head"><div><span class="section-no">01 / STRUCTURE</span><h2>One structure for design and improvement questions</h2></div><span class="tag core">core</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Clarify the goal (2 min)</b><span>Whose product? Which company — what is its mission and business model? Why would it build this now? Any constraint (market, platform, time)? Agree on the objective: growth, engagement, revenue, a new market.</span></div>
+          <div class="formula-row"><b>2. Users + segments (5 min)</b><span>List 3–4 segments by behaviour or need (not just demographics). Pick one with a reason: size × pain × fit with company goal.</span></div>
+          <div class="formula-row"><b>3. Pain points (5 min)</b><span>Walk through the chosen user's journey; list 3–5 problems; rank by frequency × severity; pick one.</span></div>
+          <div class="formula-row"><b>4. Solutions (8 min)</b><span>3 ideas: one incremental, one bold, one in between. Describe each as what the user sees and does.</span></div>
+          <div class="formula-row"><b>5. Prioritise (3 min)</b><span>Impact on the goal, effort, confidence, risk. Pick one; say what the MVP is.</span></div>
+          <div class="formula-row"><b>6. Metrics + risks (5 min)</b><span>North-star metric, 2 supporting metrics, 1–2 guardrails; risks and mitigations; how you'd test it.</span></div>
+          <div class="formula-row"><b>7. Summarise (1 min)</b><span>"For [segment], whose biggest pain is [problem], I'd build [solution], measured by [metric]."</span></div>
+        </div>
+        <div class="memory"><b>Pacing:</b> keep a visible structure (say "I'll go goal → users → pains → ideas → pick → metrics"), check in with the interviewer after segments and after pains ("Does that segment sound good to go deep on?"). Many candidates lose the round by spending 15 minutes on segments.</div>
+      </section>
+
+      <section id="segments" data-nav="2 · Segments + pains" data-search>
+        <div class="section-head"><div><span class="section-no">02 / USERS</span><h2>Segmenting users and finding real pain</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Segment by behaviour</h3><p>"Students who split expenses with friends weekly" beats "18–24 year olds". Good axes: frequency of the job, motivation (save money vs save time), expertise (first-timer vs power user), context (commuter, small-town, family decision-maker).</p></div>
+          <div class="card"><h3>Jobs to be done</h3><p>People "hire" a product to make progress in a situation: "When my card bill arrives, I want to know if I can pay in full without breaking my month's budget." Frame pains as blocked jobs.</p></div>
+          <div class="card"><h3>Pick with a reason</h3><p>Size (how many), pain (how acute and frequent), underserved (do current options fail them?), strategic fit (does it move the company's goal?). Say the trade-off out loud.</p></div>
+        </div>
+        <div class="memory"><b>Indian context points interviewers like:</b> vernacular users, low-end Android phones and patchy data, UPI-first behaviour, trust and fraud concerns, family influence on decisions, tier-2/3 cities, cash-on-delivery culture. Use them only when they truly fit the prompt.</div>
+      </section>
+
+      <section id="ideas" data-nav="3 · Ideas + prioritisation" data-search>
+        <div class="section-head"><div><span class="section-no">03 / IDEAS</span><h2>Generating and choosing solutions</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Idea generators</h3><p>Remove a step; automate a decision; bring information to the moment of decision; add a social layer; change the default; borrow from another industry; use AI to personalise or summarise; partner instead of build.</p></div>
+          <div class="card"><h3>Prioritisation tools</h3><p><b>RICE</b> = Reach × Impact × Confidence ÷ Effort. <b>Impact vs effort</b> 2×2. <b>Kano</b>: basic needs, performance needs, delighters. Use one, briefly.</p></div>
+          <div class="card"><h3>Describe the experience</h3><p>Not "add AI insights" but "after you scan the QR, the app shows 'This keeps you within your ₹8,000 food budget — ₹1,240 left this month' before you enter your PIN."</p></div>
+        </div>
+        <div class="memory"><b>Design principles to name:</b> reduce cognitive load (Hick's law: more choices = slower decisions), make the next step obvious, progressive disclosure, sensible defaults, feedback for every action, accessibility. Your folder has "Laws of UX" notes (20_SOURCES/PRODUCT_CONSULTING/Product).</div>
+      </section>
+
+      <section id="ai" data-nav="4 · AI product sense" data-search>
+        <div class="section-head"><div><span class="section-no">04 / AI</span><h2>AI product sense and AI-assisted rounds</h2></div><span class="tag hot">new in 2026</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Is AI the right tool?</b><span>Use AI when the task needs judgment over messy inputs (text, images, conversations) and errors are tolerable or catchable. Don't use it where a rule or a form works better.</span></div>
+          <div class="formula-row"><b>Design for errors</b><span>Models are probabilistic: show confidence, let users correct, keep a human in the loop for high-stakes actions (money, health), give sources.</span></div>
+          <div class="formula-row"><b>Data + feedback loop</b><span>Where does the context come from (user data, documents, tools)? How do user corrections improve it? Privacy and consent (India's DPDP Act).</span></div>
+          <div class="formula-row"><b>Cost + latency</b><span>Each model call costs money and time; design so the expensive model is used only when needed.</span></div>
+          <div class="formula-row"><b>Evaluate</b><span>Offline evals (test sets, graded outputs) plus online metrics (task success, acceptance rate, edits, complaints). See M3.</span></div>
+          <div class="formula-row"><b>In AI-assisted rounds</b><span>You're judged on how you direct the tool: clear prompts, checking its output, deciding what to keep. Narrate your reasoning; don't let the tool decide your segment or metric.</span></div>
+        </div>
+      </section>
+
+      <section id="worked" data-nav="5 · Six worked answers" data-search>
+        <div class="section-head"><div><span class="section-no">05 / PRACTICE</span><h2>Six worked answers (outline level)</h2></div><span class="tag pyq">try first</span></div>
+        <details><summary><b>1 · Improve a credit-card app for young first-time cardholders</b></summary>
+          <p><b>Goal:</b> issuer wants healthy usage and fewer early delinquencies. <b>Segments:</b> first-job salaried 22–26, students with secured/FD cards, gig workers. <b>Pick:</b> first-job salaried (large, fast-growing, high early delinquency per bureau data). <b>Pains:</b> don't understand minimum due vs total due; lose track of spend across UPI-linked RuPay card; surprise interest. <b>Ideas:</b> (a) "pay in full" default with salary-day auto-pay; (b) live "spend vs budget" banner on every UPI-card payment; (c) explain-my-bill AI assistant in Hindi/English. <b>Pick:</b> (a)+(b) as MVP (high impact, low effort). <b>Metrics:</b> % of statements paid in full (north star for this segment), active usage, guardrails: spend per card, complaints.</p></details>
+        <details><summary><b>2 · Design a product to help farmers test soil (KiFayti-adjacent)</b></summary>
+          <p><b>Users:</b> smallholder farmers, FPO coordinators, agri-input dealers, government soil-health programmes. <b>Pick:</b> FPO coordinators (aggregate many farmers, can pay, trusted). <b>Pains:</b> lab results take weeks; reports unreadable; no link to what fertiliser to buy. <b>Solution:</b> handheld test + WhatsApp report in the local language with a crop-specific fertiliser recommendation and dealer prices. <b>Metrics:</b> tests per coordinator per month, % of farmers acting on advice, yield/fertiliser-cost change in pilots.</p></details>
+        <details><summary><b>3 · Improve Google Maps for two-wheeler riders in India</b></summary>
+          <p>Segments: daily commuters, delivery riders, weekend tourers. Pick delivery riders (large, frequent, pain is time = money). Pains: routes assume car lanes; parking/entry at apartment complexes; rain and waterlogging. Ideas: two-wheeler routing that uses narrow lanes, community-reported waterlogging alerts, building-entry pins. Metric: on-time arrival, re-route rate, guardrail: safety incidents/reports.</p></details>
+        <details><summary><b>4 · Design a product for the IIT KGP placement season (CDC)</b></summary>
+          <p>Users: students, CDC coordinators, recruiters. Pick students. Pains: scattered notices, deadline misses, no idea which prep matters for which company. Ideas: single deadline feed with reminders, company-wise prep packs from seniors, mock-interview matching. MVP: deadline feed + reminders (VIKRAM-style). Metric: missed-deadline rate, weekly active students in season.</p></details>
+        <details><summary><b>5 · Your favourite product and how you'd improve it</b></summary>
+          <p>Pick one you use daily and can discuss deeply (e.g. a UPI app, Spotify, Notion). Structure: why you love it (user, job, what it does better than alternatives, a design decision you admire), then one improvement using the full structure, with a metric. Avoid products with no clear user problem to improve.</p></details>
+        <details><summary><b>6 · Build an AI money assistant inside a UPI app</b></summary>
+          <p>Goal: engagement + cross-sell (savings, insurance) without mis-selling. Segment: salaried users who overspend before month-end. Pain: no visibility until the balance is low. Solution: weekly AI summary ("You spent 32% more on food delivery than last month"), a "can I afford this?" check at payment, goals. Risks: wrong categorisation, privacy, pushing loans to stressed users — guardrails: opt-in, explainable categories, no loan offers when stress signals appear. Metrics: weekly active users of the assistant, % users meeting goals, opt-out rate.</p></details>
+      </section>
+
+      <section id="strategy" data-nav="6 · Strategy questions" data-search>
+        <div class="section-head"><div><span class="section-no">06 / STRATEGY</span><h2>Product strategy questions</h2></div></div>
+        <table class="compare">
+          <tr><th>Prompt</th><th>How to approach</th></tr>
+          <tr><td>"Should Swiggy launch X?"</td><td>Mission fit → market size → right to win → economics (S5) → risks → recommendation</td></tr>
+          <tr><td>"How would you grow Y in tier-2 cities?"</td><td>Segments, adoption barriers (trust, language, price), channel, pilot plan, metrics</td></tr>
+          <tr><td>"Competitor launched Z. Respond?"</td><td>Is it a threat to our core users? Data on switching? Options: match, differentiate, ignore; decide with evidence</td></tr>
+          <tr><td>"What should this company build in 3 years?"</td><td>Trends (AI, UPI, regulation), company strengths, 2–3 bets, sequencing</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="7 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">07 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Learn the 7-step structure; time yourself to 35 minutes</label>
+          <label class="checkline"><input type="checkbox"> Do the six worked answers in full, aloud, without opening them first</label>
+          <label class="checkline"><input type="checkbox"> Prepare your "favourite product" answer for two products</label>
+          <label class="checkline"><input type="checkbox"> 10 cases from the IITK PM casebook 2024–25 and IIM-B Sigma casebook in your folder</label>
+          <label class="checkline"><input type="checkbox"> Two AI-assisted practice cases: solve with ChatGPT open, then build a 1-screen prototype with an AI tool</label>
+          <label class="checkline"><input type="checkbox"> Write a 1-page teardown of VIKRAM: user, problem, solution, metrics, what you'd build next (P4)</label>
+        </div>
+        <div class="memory"><b>Your folder:</b> "Decode and Conquer" (CIRCLES method), "Cracking the PM Interview", IITK, IIM-B, IIM-L and XLRI PM casebooks, and "The Product Book" — all in 20_SOURCES/PRODUCT_CONSULTING. Next: P2 (metrics, root-cause analysis, A/B tests).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-p1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-p1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-p1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

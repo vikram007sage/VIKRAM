@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>F1 | Accounting + 3 statements — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">F1 / ACCOUNTS</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#three">1 · The three statements</a><a href="#example">2 · One example, fully linked</a><a href="#walks">3 · Walk-throughs</a><a href="#concepts">4 · Key concepts</a><a href="#indas">5 · Indian specifics (Ind AS)</a><a href="#ratios">6 · Ratios</a><a href="#flags">7 · Red flags</a><a href="#bank">8 · 30 technical questions</a><a href="#plan">9 · Plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Finance track · Module F1</div><h1>Accounting +<br>three statements</h1><p>Finance, consulting and VC interviews start with "walk me through the three statements" and "what happens if depreciation goes up by 10?". This module builds the income statement, balance sheet and cash-flow statement from one small example that balances to the rupee, covers the Indian (Ind AS) twists, and drills the 30 technical questions that come up most.</p><div class="meta"><span class="pill"><span class=dot></span> One example that balances</span><span class="pill">Ind AS notes</span><span class="pill">30 technical Qs</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>What you must be able to do</h2></div></div>
+        <div class="card">
+          <div class="priority"><span class="rank">1</span><div><strong>Explain each statement in 30 seconds</strong><span class="muted">what it shows, key lines, how they link</span></div><span class="frequency">every finance interview</span></div>
+          <div class="priority"><span class="rank">2</span><div><strong>Flow a change through all three</strong><span class="muted">depreciation, inventory, debt, a write-down</span></div><span class="frequency">very high (IB, PE, VC)</span></div>
+          <div class="priority"><span class="rank">3</span><div><strong>Read a real annual report</strong><span class="muted">spot quality of earnings and red flags</span></div><span class="frequency">equity research, PE, credit</span></div>
+          <div class="priority"><span class="rank">4</span><div><strong>Ratios</strong><span class="muted">profitability, efficiency, leverage, liquidity</span></div><span class="frequency">all roles</span></div>
+        </div>
+        <div class="memory"><b>Your master notes</b> (C_FINANCE/Finance_Master_Notes, Part 3) cover fundamentals from Zerodha Varsity. This module is the interview version: precise linkages and technical answers.</div>
+      </section>
+
+      <section id="three" data-nav="1 · The three statements" data-search>
+        <div class="section-head"><div><span class="section-no">01 / STATEMENTS</span><h2>The three statements in one minute</h2></div><span class="tag core">core</span></div>
+        <div class="grid">
+          <div class="card"><h3>Income statement (P&amp;L)</h3><p>Performance over a <b>period</b>, on an accrual basis: revenue when earned, expenses when incurred. Revenue → gross profit → EBITDA → EBIT → profit before tax → net income.</p></div>
+          <div class="card"><h3>Balance sheet</h3><p>Snapshot on <b>one date</b>. Assets = Liabilities + Equity. What the company owns, what it owes, and what's left for shareholders.</p></div>
+          <div class="card"><h3>Cash-flow statement</h3><p>Actual cash in and out over a period, in three parts: operating, investing, financing. Reconciles net income to the change in cash.</p></div>
+        </div>
+        <div class="eq">Net income → top of the cash-flow statement and into retained earnings (equity) &nbsp;·&nbsp; Ending cash from the CFS = cash on the balance sheet &nbsp;·&nbsp; Changes in balance-sheet items drive the CFS</div>
+        <div class="memory"><b>"Walk me through the three statements" answer:</b> "The income statement shows revenue and expenses over a period, ending in net income. Net income flows into the cash-flow statement, where we add back non-cash items like depreciation and adjust for working-capital changes to get operating cash flow, then add investing and financing flows to get the change in cash. That ending cash appears on the balance sheet, and net income less dividends increases retained earnings, so the balance sheet still balances."</div>
+      </section>
+
+      <section id="example" data-nav="2 · One example, fully linked" data-search>
+        <div class="section-head"><div><span class="section-no">02 / BUILD IT</span><h2>One small company, all three statements</h2></div><span class="tag hot">rebuild this in Excel</span></div>
+        <div class="grid">
+          <div class="card"><h3>Income statement (₹ cr)</h3><p>Revenue 1,000<br>− COGS 600 → Gross profit 400<br>− SG&amp;A 150 → EBITDA 250<br>− D&amp;A 50 → EBIT 200<br>− Interest 20 → PBT 180<br>− Tax @25% 45 → <b>Net income 135</b></p></div>
+          <div class="card"><h3>Cash-flow statement</h3><p>Net income 135<br>+ D&amp;A 50<br>− Increase in receivables 40<br>− Increase in inventory 30<br>+ Increase in payables 25<br>= <b>CFO 140</b><br>Capex −80 = <b>CFI −80</b><br>Debt repaid −30, dividends −20 = <b>CFF −50</b><br><b>Net change in cash +10</b></p></div>
+          <div class="card"><h3>Balance sheet: opening → closing</h3><p>Cash 100 → 110<br>Receivables 150 → 190<br>Inventory 120 → 150<br>PP&amp;E 500 → 530 (+80 capex − 50 D&amp;A)<br><b>Assets 870 → 980</b><br>Payables 90 → 115<br>Debt 300 → 270<br>Equity 480 → 595 (+135 NI − 20 dividends)<br><b>L + E 870 → 980</b> ✓</p></div>
+        </div>
+        <div class="memory"><b>Why CFO ≠ net income:</b> depreciation is a non-cash expense (add back); sales on credit raise receivables without cash (subtract the increase); buying inventory uses cash (subtract); delaying payment to suppliers keeps cash (add the increase in payables).</div>
+      </section>
+
+      <section id="walks" data-nav="3 · Walk-throughs" data-search>
+        <div class="section-head"><div><span class="section-no">03 / FLOWS</span><h2>Classic "what happens if" walk-throughs</h2></div><span class="tag hot">most asked</span></div>
+        <details open><summary><b>Depreciation rises by ₹10 (tax 25%)</b></summary><p><b>IS:</b> EBIT −10, tax −2.5, net income −7.5. <b>CFS:</b> NI −7.5, add back D&amp;A +10 → cash +2.5 (the tax saving). <b>BS:</b> PP&amp;E −10, cash +2.5 → assets −7.5; retained earnings −7.5 → L+E −7.5. Balanced.</p></details>
+        <details><summary><b>Company buys ₹100 of inventory with cash</b></summary><p>IS: nothing. CFS: increase in inventory −100 in CFO. BS: cash −100, inventory +100. Balanced; no profit impact until the goods are sold.</p></details>
+        <details><summary><b>Inventory of ₹100 is sold for ₹150 on credit</b></summary><p>IS: revenue +150, COGS +100, PBT +50, tax −12.5, NI +37.5. CFS: NI +37.5, increase in receivables −150, decrease in inventory +100 → cash −12.5 (tax paid, cash not yet collected). BS: receivables +150, inventory −100, cash −12.5 → assets +37.5; RE +37.5.</p></details>
+        <details><summary><b>Company borrows ₹100 and buys equipment</b></summary><p>Day 0: IS nothing. CFS: capex −100 (CFI), debt +100 (CFF), net 0. BS: PP&amp;E +100, debt +100. Year 1 (10-year life, 10% interest): IS D&amp;A −10, interest −10, PBT −20, NI −15. CFS: NI −15 + D&amp;A 10 = −5. BS: cash −5, PP&amp;E −10 (net 90) → assets −15; RE −15.</p></details>
+        <details><summary><b>Asset written down by ₹100</b></summary><p>IS: impairment −100 (non-cash), tax −25 (if deductible), NI −75. CFS: NI −75, add back impairment +100 → cash +25. BS: asset −100, cash +25 → assets −75; RE −75. (In practice impairments are often not tax-deductible immediately; then a deferred tax asset is created instead — say so.)</p></details>
+        <details><summary><b>Customer prepays ₹100 for next year's service</b></summary><p>IS: nothing now (revenue not yet earned). CFS: increase in deferred revenue +100 (CFO). BS: cash +100, deferred revenue (liability) +100. Next year revenue is recognised and the liability unwinds.</p></details>
+        <details><summary><b>Company issues ₹100 of shares and pays a ₹20 dividend</b></summary><p>IS: nothing (dividends are not an expense). CFS: CFF +100 −20. BS: cash +80; equity +100 (share capital) −20 (retained earnings).</p></details>
+      </section>
+
+      <section id="concepts" data-nav="4 · Key concepts" data-search>
+        <div class="section-head"><div><span class="section-no">04 / CONCEPTS</span><h2>Concepts that come up</h2></div></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Accrual vs cash</b><span>Revenue when earned and expenses when incurred, not when cash moves. Hence receivables, payables, deferred revenue, prepaid expenses.</span></div>
+          <div class="formula-row"><b>Working capital</b><span>Current assets − current liabilities. Operating (non-cash) WC = receivables + inventory − payables. An increase uses cash.</span></div>
+          <div class="formula-row"><b>Cash conversion cycle</b><span>Days inventory + days receivables − days payables. Negative CCC (customers pay before you pay suppliers) is a gift: q-commerce, supermarkets.</span></div>
+          <div class="formula-row"><b>EBITDA</b><span>Proxy for operating cash before capex, interest and tax. Ignores capex and working capital — so not the same as cash flow.</span></div>
+          <div class="formula-row"><b>Free cash flow</b><span>FCF to firm = EBIT(1 − t) + D&amp;A − capex − ΔNWC (used in DCF, F2). FCF to equity also subtracts interest after tax and adds net borrowing.</span></div>
+          <div class="formula-row"><b>Deferred tax</b><span>Arises when book and tax accounting differ (e.g. faster tax depreciation creates a deferred tax liability).</span></div>
+          <div class="formula-row"><b>Goodwill</b><span>Purchase price above fair value of net identifiable assets in an acquisition. Not amortised under Ind AS/IFRS; tested for impairment yearly.</span></div>
+          <div class="formula-row"><b>Capitalise vs expense</b><span>Spending with multi-year benefit (equipment, some development) is capitalised and depreciated; aggressive capitalisation inflates profits.</span></div>
+        </div>
+      </section>
+
+      <section id="indas" data-nav="5 · Indian specifics (Ind AS)" data-search>
+        <div class="section-head"><div><span class="section-no">05 / INDIA</span><h2>Ind AS and Indian reporting twists</h2></div></div>
+        <table class="compare">
+          <tr><th>Topic</th><th>What to know</th></tr>
+          <tr><td>Ind AS</td><td>India's converged version of IFRS, used by listed and large companies. Smaller companies use older Indian GAAP. Banks are moving to Expected Credit Loss provisioning from 1 April 2027 (B1).</td></tr>
+          <tr><td>Ind AS 116 (leases)</td><td>Most leases go on the balance sheet: right-of-use asset + lease liability. Rent becomes depreciation + interest, so EBITDA rises. That's why Eternal and Swiggy report "adjusted EBITDA" treating rent as a cost (S5).</td></tr>
+          <tr><td>Ind AS 115 (revenue)</td><td>Five steps: contract → performance obligations → price → allocate → recognise when each obligation is met. Matters for SaaS, construction, bundled offers.</td></tr>
+          <tr><td>Schedule III</td><td>The format Indian companies must follow for statements; "Other income" and "Exceptional items" are worth checking separately.</td></tr>
+          <tr><td>Tax</td><td>Domestic companies opting for the concessional regime pay 22% base (~25.2% effective with surcharge and cess) — the 25% in our example.</td></tr>
+          <tr><td>Consolidated vs standalone</td><td>Indian companies publish both; use consolidated for groups with subsidiaries.</td></tr>
+          <tr><td>Promoter pledges, related-party transactions</td><td>Disclosed in notes; frequent red flags in Indian mid-caps.</td></tr>
+        </table>
+      </section>
+
+      <section id="ratios" data-nav="6 · Ratios" data-search>
+        <div class="section-head"><div><span class="section-no">06 / RATIOS</span><h2>Ratios that matter</h2></div></div>
+        <table class="compare">
+          <tr><th>Group</th><th>Ratio</th><th>Formula</th></tr>
+          <tr><td>Profitability</td><td>Gross / EBITDA / net margin</td><td>÷ revenue</td></tr>
+          <tr><td></td><td>ROE</td><td>Net income ÷ average equity (DuPont: margin × asset turnover × leverage)</td></tr>
+          <tr><td></td><td>ROCE</td><td>EBIT ÷ (equity + debt); compare with cost of capital</td></tr>
+          <tr><td>Efficiency</td><td>Asset turnover</td><td>Revenue ÷ average assets</td></tr>
+          <tr><td></td><td>Receivable days</td><td>Receivables ÷ revenue × 365</td></tr>
+          <tr><td></td><td>Inventory days</td><td>Inventory ÷ COGS × 365</td></tr>
+          <tr><td>Leverage</td><td>Debt/equity, net debt/EBITDA</td><td>Banks worry above ~3× net debt/EBITDA for most companies</td></tr>
+          <tr><td></td><td>Interest coverage</td><td>EBIT ÷ interest</td></tr>
+          <tr><td>Liquidity</td><td>Current ratio, quick ratio</td><td>Current assets ÷ current liabilities; quick excludes inventory</td></tr>
+          <tr><td>Cash quality</td><td>CFO ÷ net income</td><td>Consistently below ~0.8 is a warning</td></tr>
+        </table>
+        <p>Our example: net margin 13.5%, ROE ≈ 135 ÷ avg(480, 595) ≈ 25%, receivable days 190 ÷ 1,000 × 365 ≈ 69, CFO/NI ≈ 1.04.</p>
+      </section>
+
+      <section id="flags" data-nav="7 · Red flags" data-search>
+        <div class="section-head"><div><span class="section-no">07 / FORENSICS</span><h2>Red flags in financial statements</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Earnings quality</h3><p>Profit growing but CFO flat or falling; receivable days rising fast (revenue booked, cash not collected); large "other income"; frequent exceptional items.</p></div>
+          <div class="card"><h3>Balance-sheet games</h3><p>Rising capitalised expenses; inventory growing faster than sales; large loans to related parties; contingent liabilities and guarantees in the notes.</p></div>
+          <div class="card"><h3>Governance</h3><p>Auditor resignations or qualified opinions, frequent changes in accounting policy, high promoter pledging, complex group structures.</p></div>
+        </div>
+      </section>
+
+      <section id="bank" data-nav="8 · 30 technical questions" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PRACTICE</span><h2>Thirty technical questions</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Short answer</th></tr>
+          <tr><td>Most important statement if you had only one?</td><td>Cash-flow statement: shows real cash generation (though you need all three for a full picture)</td></tr>
+          <tr><td>Can a profitable company go bankrupt?</td><td>Yes: if it runs out of cash (working capital, debt maturities)</td></tr>
+          <tr><td>Can a company with positive cash flow be loss-making?</td><td>Yes: large non-cash expenses, customer prepayments, or financing inflows</td></tr>
+          <tr><td>How does inventory affect the statements?</td><td>Buying: BS only (cash ↓, inventory ↑), CFO ↓. Selling: COGS on IS</td></tr>
+          <tr><td>Where do dividends appear?</td><td>CFF outflow; reduce retained earnings; not on IS</td></tr>
+          <tr><td>Why add back depreciation in CFS?</td><td>Non-cash expense that reduced net income</td></tr>
+          <tr><td>Difference between capex and opex?</td><td>Capex: long-lived assets, capitalised; opex: expensed immediately</td></tr>
+          <tr><td>What is goodwill and when is it impaired?</td><td>Excess purchase price; impaired when the acquired business is worth less than its carrying value</td></tr>
+          <tr><td>What are deferred tax liabilities?</td><td>Tax payable later because tax expense on books exceeded tax paid now</td></tr>
+          <tr><td>LIFO vs FIFO in rising prices?</td><td>FIFO: lower COGS, higher profit; LIFO not allowed under Ind AS/IFRS</td></tr>
+          <tr><td>What is working capital and why does an increase use cash?</td><td>Short-term operating assets minus liabilities; growth ties cash in receivables/inventory</td></tr>
+          <tr><td>EBITDA vs operating cash flow?</td><td>OCF deducts tax, interest (often) and working-capital changes</td></tr>
+          <tr><td>Why do companies like adjusted EBITDA?</td><td>Excludes SBC, one-offs, lease effects; flatters results — always reconcile</td></tr>
+          <tr><td>How does stock-based compensation flow?</td><td>Expense on IS (non-cash), added back in CFO, increases equity</td></tr>
+          <tr><td>Accounts receivable rises ₹50 — effect?</td><td>CFO ↓ 50; cash ↓ on BS; no IS effect itself</td></tr>
+          <tr><td>Accounts payable rises ₹50?</td><td>CFO ↑ 50; cash ↑</td></tr>
+          <tr><td>Debt repaid ₹100?</td><td>CFF −100; cash ↓, debt ↓; interest falls next period</td></tr>
+          <tr><td>What is negative working capital good for?</td><td>Funds growth with suppliers' money (supermarkets, q-commerce)</td></tr>
+          <tr><td>What's the difference between ROE and ROCE?</td><td>ROE: return to equity holders (affected by leverage); ROCE: return on all capital</td></tr>
+          <tr><td>What is EV and how is it different from equity value?</td><td>EV = equity value + debt − cash (+ minorities, preferred); value of the whole business (F2)</td></tr>
+          <tr><td>Revenue recognised but cash not received — where is it?</td><td>Accounts receivable</td></tr>
+          <tr><td>Cash received but revenue not earned?</td><td>Deferred revenue (liability)</td></tr>
+          <tr><td>What is a contingent liability?</td><td>Possible obligation depending on a future event (lawsuit); disclosed in notes</td></tr>
+          <tr><td>How does a lease show under Ind AS 116?</td><td>ROU asset + lease liability; depreciation + interest instead of rent</td></tr>
+          <tr><td>What's DuPont analysis?</td><td>ROE = net margin × asset turnover × equity multiplier</td></tr>
+          <tr><td>What would you look at first in an annual report?</td><td>Auditor's report, CFO vs profit trend, debt, notes on related parties and contingencies</td></tr>
+          <tr><td>How is a bank's P&amp;L different?</td><td>Interest income/expense are the main lines; provisions replace COGS; capital ratios matter (B1)</td></tr>
+          <tr><td>What is an impairment test?</td><td>Compare carrying value to recoverable amount; write down the excess</td></tr>
+          <tr><td>Why might net income rise while EPS falls?</td><td>More shares issued (dilution)</td></tr>
+          <tr><td>How do share buybacks affect statements?</td><td>CFF outflow, equity ↓ (treasury shares or cancellation), EPS ↑ (fewer shares)</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="9 · Plan" data-search>
+        <div class="section-head"><div><span class="section-no">09 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Rebuild the section-2 company in Excel with formulas linking all three statements; check it balances</label>
+          <label class="checkline"><input type="checkbox"> Run the seven walk-throughs in your model and confirm each answer</label>
+          <label class="checkline"><input type="checkbox"> Download one Indian annual report (e.g. Asian Paints or Eternal); compute the section-6 ratios for 3 years</label>
+          <label class="checkline"><input type="checkbox"> Write a 1-page "quality of earnings" note on that company using section 7</label>
+          <label class="checkline"><input type="checkbox"> Answer the 30 questions aloud; re-do the ones you hesitated on</label>
+        </div>
+        <div class="memory"><b>Your folder:</b> 20_SOURCES/FINANCE has the "Technical Interview Guide for Finance Interviews", "Ace Finance Interviews", the Vault finance guide, CFI's ratios cheat sheet and "Accounting and Finance for Non-Specialists" — use them for extra drills. Next: F2 (valuation).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-f1-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-f1-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-f1-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>

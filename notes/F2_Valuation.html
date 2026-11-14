@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>F2 | Valuation — CDC Prep</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,750&display=swap');
+    :root{--paper:#f4f0e7;--ink:#18211d;--muted:#687169;--line:#c9c6ba;--green:#174c3c;--mint:#dce9de;--orange:#e36a35;--gold:#eab84e;--red:#9e3f32;--white:#fffdf7;--shadow:0 14px 40px rgba(31,40,33,.1);--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--ink);background:var(--paper);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;background-image:radial-gradient(#174c3c13 1px,transparent 1px);background-size:24px 24px}
+    button,input{font:inherit}.mono,.tag,.eyebrow,.formula-label,.nav a,.search,.stat,.checkline{font-family:"DM Mono",monospace}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 3vw;background:#f4f0e7ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{white-space:nowrap;font-weight:750;color:var(--green)}.search{flex:1;max-width:680px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 16px;color:var(--ink);outline:none}.search:focus{border-color:var(--green);box-shadow:0 0 0 3px #174c3c18}.toolbar{display:flex;gap:8px}.btn{border:1px solid var(--green);background:transparent;color:var(--green);border-radius:999px;padding:8px 12px;cursor:pointer;font:500 12px "DM Mono",monospace}.btn:hover{background:var(--green);color:white}
+    .layout{display:grid;grid-template-columns:270px minmax(0,900px);gap:40px;max-width:1260px;margin:auto;padding:34px 28px 90px}.nav{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:#fffdf7d9}.nav .eyebrow{margin-bottom:12px}.nav a{display:block;color:#526057;text-decoration:none;font-size:12px;line-height:1.35;padding:8px 9px;border-left:2px solid transparent}.nav a:hover,.nav a.active{color:var(--green);border-left-color:var(--orange);background:var(--mint)}.nav hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+    main{min-width:0}.hero{position:relative;overflow:hidden;background:var(--green);color:#fff;padding:48px;border-radius:28px;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:290px;height:290px;border:1px solid #ffffff35;border-radius:50%;right:-80px;top:-75px;box-shadow:0 0 0 34px #ffffff0d,0 0 0 68px #ffffff09}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.92;margin:18px 0 20px;max-width:720px}.hero p{max-width:650px;color:#dce9de;margin:0;font-size:20px}.hero .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff4a;border-radius:99px;font:12px "DM Mono",monospace}.dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    section{margin-top:54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}.section-no{font:500 12px "DM Mono",monospace;color:var(--orange)}h2{font-size:38px;line-height:1;margin:4px 0 0}h3{font-size:26px;line-height:1.15;margin:0 0 10px}h4{font-size:20px;margin:22px 0 5px}p{margin:8px 0 14px}.lede{font-size:21px;color:#39473f}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px #25382d08}.card.accent{border-top:5px solid var(--orange)}.card.dark{background:#1c2923;color:white;border-color:#1c2923}.card.dark .muted{color:#bdd0c4}.span2{grid-column:1/-1}.muted{color:var(--muted)}.tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 7px;margin:0 5px 5px 0;background:var(--mint);color:var(--green)}.tag.hot{background:#ffe0cd;color:#7b2d17}.tag.pyq{background:#fff0b8;color:#704b00}.tag.core{background:#d9e7ff;color:#214e7b}.priority{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:14px;padding:15px 0;border-top:1px solid var(--line)}.rank{font:750 30px "Newsreader",serif;color:var(--orange)}.priority strong{display:block}.frequency{font:11px "DM Mono",monospace;color:var(--green)}
+    ul,ol{padding-left:22px;margin:8px 0 14px}li{margin:5px 0}b,strong{font-weight:750}.memory{border-left:4px solid var(--gold);padding:12px 16px;background:#fff5d5;margin:14px 0}.summary{padding:16px 18px;border:1px dashed var(--green);background:var(--mint);border-radius:12px}.summary:before{content:"60-SECOND SUMMARY";display:block;font:500 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--green);margin-bottom:5px}.eq{display:block;overflow-x:auto;background:#14231d;color:#f8f5ea;border-radius:12px;padding:13px 16px;margin:11px 0;font:500 15px/1.5 "DM Mono",monospace}.eq em{color:#f3c75b;font-style:normal}.formula-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}.derive{counter-reset:steps;list-style:none;padding:0}.derive li{counter-increment:steps;position:relative;padding:10px 12px 10px 48px;margin:0;border-left:1px solid var(--line)}.derive li:before{content:counter(steps);position:absolute;left:11px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:white;font:11px "DM Mono",monospace}.derive li:last-child{border-left-color:transparent}.compare{width:100%;border-collapse:collapse;font-size:16px}.compare th,.compare td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.compare th{font:500 11px "DM Mono",monospace;text-transform:uppercase;color:var(--green);background:var(--mint)}.compare tr:last-child td{border-bottom:0}.sketch{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.sketch div{padding:12px 8px;text-align:center;background:var(--mint);border-radius:10px;font:12px "DM Mono",monospace;position:relative}.sketch div:not(:last-child):after{content:"→";position:absolute;right:-11px;z-index:2;color:var(--orange);font-weight:bold}.warning{border:1px solid #d39a85;background:#fff0e9;border-radius:12px;padding:14px 16px;color:#653124}.exam{border-left:5px solid var(--orange)}details{background:var(--white);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}summary{cursor:pointer;padding:15px 18px;font-weight:750;list-style:none}summary:after{content:"+";float:right;color:var(--orange)}details[open] summary:after{content:"−"}details>div{padding:0 18px 18px}.checkline{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 0}.checkline input{accent-color:var(--green);margin-top:4px}.formula-list{display:grid;gap:12px}.formula-row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr;gap:15px;padding:15px;border-bottom:1px solid var(--line);align-items:start}.formula-row:last-child{border:0}.formula-row code{font:500 13px "DM Mono",monospace;color:var(--green);overflow-wrap:anywhere}.formula-row small{color:var(--muted)}.hidden{display:none!important}.no-results{display:none;padding:26px;border:1px dashed var(--red);border-radius:12px;color:var(--red)}footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);color:var(--muted);font-size:14px}.print-only{display:none}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;padding:20px 16px 70px}.nav{display:none}.hero{padding:34px 26px}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.formula-row{grid-template-columns:1fr}.toolbar .btn:first-child{display:none}.brand{font-size:14px}.sketch{grid-template-columns:1fr 1fr}.sketch div:nth-child(2):after{display:none}}
+    @media print{body{background:white;font-size:11pt}.topbar,.nav,.toolbar{display:none}.layout{display:block;max-width:none;padding:0}.hero{box-shadow:none;border-radius:0;padding:28px;background:#174c3c!important;-webkit-print-color-adjust:exact}.hero h1{font-size:40pt}.card,details{break-inside:avoid;box-shadow:none}.section-head{break-after:avoid}details>div{display:block!important}.print-only{display:block}.tag,.eq,.summary,.memory{-webkit-print-color-adjust:exact}section{margin-top:28px}}
+  </style>
+  <style>.back{display:inline-block;margin:0 0 14px;font:12px "DM Mono",monospace;color:var(--green);text-decoration:none}.qa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.qa-grid div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}.qa-grid b{display:block;font:500 12px "DM Mono",monospace;color:var(--orange)}@media(max-width:900px){.qa-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.toolbar{display:none}.brand{font-size:13px}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">F2 / VALUATION</div>
+    <input id="search" class="search" type="search" placeholder="Search this module…" aria-label="Search notes">
+    <div class="toolbar"><button class="btn" id="resetChecks">Reset checklist</button><button class="btn" onclick="window.print()">Print / PDF</button></div>
+  </header>
+  <div class="layout">
+    <aside class="nav" aria-label="Contents"><div class="eyebrow">Study route</div><a href="#start">Start here</a><a href="#ev">1 · EV vs equity value</a><a href="#dcf">2 · DCF step by step</a><a href="#wacc">3 · Cost of capital (India, now)</a><a href="#multiples">4 · Multiples</a><a href="#special">5 · Banks, startups, others</a><a href="#traps">6 · Common mistakes</a><a href="#bank">7 · 25 technical questions</a><a href="#plan">8 · Practice plan</a></aside>
+    <main>
+      <a class="back" href="../index.html#prep">← Back to VIKRAM</a>
+      <div class="hero"><div class="eyebrow">Finance track · Module F2</div><h1>Valuation<br></h1><p>"Walk me through a DCF", "how would you value this startup?" and "is this stock cheap?" come up in finance, consulting, VC and strategy interviews. This module covers enterprise vs equity value, the DCF step by step with a worked example and sensitivity table, cost of capital with live Indian inputs (November 2026), multiples, valuing banks and startups, and the questions interviewers ask.</p><div class="meta"><span class="pill"><span class=dot></span> Worked DCF + sensitivity</span><span class="pill">India WACC inputs (Nov 2026)</span><span class="pill">25 technical Qs</span></div></div>
+
+      <section id="start" data-nav="Start here" data-search>
+        <div class="section-head"><div><span class="section-no">00 / ORIENTATION</span><h2>Three ways to value anything</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Intrinsic (DCF)</h3><p>Value = present value of future cash flows. Most rigorous; most sensitive to assumptions.</p></div>
+          <div class="card"><h3>Relative (multiples)</h3><p>Value = a multiple of a metric, based on similar companies or deals. Fast, market-anchored; inherits market mood.</p></div>
+          <div class="card"><h3>Transaction / other</h3><p>Precedent deals (include a control premium), LBO (what a PE buyer could pay), sum-of-the-parts, asset/liquidation value, VC method for startups.</p></div>
+        </div>
+        <div class="memory"><b>Interview line (Damodaran):</b> "Every valuation is a story told with numbers." Start with the story (why this company grows, how profitable it can be, what could go wrong), then turn it into inputs. Your folder has Damodaran's <i>Little Book of Valuation</i> and <i>Investment Valuation</i>, plus McKinsey's <i>Valuation</i>.</div>
+      </section>
+
+      <section id="ev" data-nav="1 · EV vs equity value" data-search>
+        <div class="section-head"><div><span class="section-no">01 / BRIDGE</span><h2>Enterprise value and equity value</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Enterprise value = Equity value + Debt + Preferred + Minority interest − Cash (and non-operating assets)</div>
+        <div class="grid">
+          <div class="card"><h3>Enterprise value</h3><p>Value of the operating business to all capital providers. Pair with metrics before interest: revenue, EBITDA, EBIT, unlevered FCF.</p></div>
+          <div class="card"><h3>Equity value</h3><p>Value to shareholders = market cap for a listed company (share price × diluted shares). Pair with metrics after interest: net income, EPS, levered FCF, book value.</p></div>
+          <div class="card"><h3>Why subtract cash?</h3><p>A buyer of the whole business gets the cash, which effectively lowers the price paid; debt must be repaid or assumed, so it adds to the cost.</p></div>
+        </div>
+        <div class="memory"><b>Classic question:</b> "A company raises ₹100 of debt and holds it as cash. What happens to EV and equity value?" Equity value: unchanged (no value created). EV: unchanged too (+100 debt, −100 cash).</div>
+      </section>
+
+      <section id="dcf" data-nav="2 · DCF step by step" data-search>
+        <div class="section-head"><div><span class="section-no">02 / DCF</span><h2>The DCF, step by step</h2></div><span class="tag hot">most asked</span></div>
+        <div class="formula-list card">
+          <div class="formula-row"><b>1. Forecast</b><span>5–10 years of revenue, margins and reinvestment, tied to a story (market size, share, competition).</span></div>
+          <div class="formula-row"><b>2. Unlevered FCF</b><span>FCFF = EBIT × (1 − t) + D&amp;A − Capex − ΔNWC = NOPAT − net reinvestment.</span></div>
+          <div class="formula-row"><b>3. Discount rate</b><span>WACC (section 3), in the same currency and inflation terms as the cash flows.</span></div>
+          <div class="formula-row"><b>4. Terminal value</b><span>Gordon growth: TV = FCF<sub>n+1</sub> ÷ (WACC − g), with g ≤ long-run nominal GDP growth; or exit multiple (TV = EBITDA × multiple). Cross-check one with the other.</span></div>
+          <div class="formula-row"><b>5. Discount + sum</b><span>EV = Σ FCF<sub>t</sub> ÷ (1+WACC)<sup>t</sup> + TV ÷ (1+WACC)<sup>n</sup>.</span></div>
+          <div class="formula-row"><b>6. Bridge to equity</b><span>Equity = EV − debt + cash (± other claims); ÷ diluted shares = value per share.</span></div>
+          <div class="formula-row"><b>7. Sensitise</b><span>Table of value vs WACC and g (and vs margin); state what you must believe for the current price to be right.</span></div>
+        </div>
+        <h3>Worked example (₹ cr)</h3>
+        <p>Revenue ₹1,000 today, growing 15% a year for 5 years; EBIT margin 20%; tax 25%; reinvests 35% of NOPAT; WACC 12%; terminal growth 5% with return on capital 15% (so terminal reinvestment = g ÷ ROIC = 33%).</p>
+        <table class="compare">
+          <tr><th>Year</th><th>Revenue</th><th>NOPAT</th><th>FCFF</th><th>Discount factor</th><th>PV</th></tr>
+          <tr><td>1</td><td>1,150</td><td>172</td><td>112</td><td>0.893</td><td>100</td></tr>
+          <tr><td>2</td><td>1,322</td><td>198</td><td>129</td><td>0.797</td><td>103</td></tr>
+          <tr><td>3</td><td>1,521</td><td>228</td><td>148</td><td>0.712</td><td>106</td></tr>
+          <tr><td>4</td><td>1,749</td><td>262</td><td>171</td><td>0.636</td><td>108</td></tr>
+          <tr><td>5</td><td>2,011</td><td>302</td><td>196</td><td>0.567</td><td>111</td></tr>
+        </table>
+        <p>Sum of PVs ≈ ₹528 cr. Year-6 FCFF ≈ ₹211 cr; TV = 211 ÷ (0.12 − 0.05) ≈ ₹3,020 cr; PV of TV ≈ ₹1,714 cr. <b>EV ≈ ₹2,242 cr</b>, of which ~76% is terminal value (typical, and why terminal assumptions matter so much). With ₹300 cr debt, ₹100 cr cash and 50 cr shares: equity ≈ ₹2,042 cr, ≈ ₹41 per share.</p>
+        <table class="compare">
+          <tr><th>EV (₹ cr)</th><th>g = 4%</th><th>g = 5%</th><th>g = 6%</th></tr>
+          <tr><td>WACC 11%</td><td>2,494</td><td>2,632</td><td>2,820</td></tr>
+          <tr><td>WACC 12%</td><td>2,160</td><td>2,240</td><td>2,343</td></tr>
+          <tr><td>WACC 13%</td><td>1,902</td><td>1,947</td><td>2,002</td></tr>
+        </table>
+        <div class="memory"><b>Growth isn't free:</b> growth only adds value when return on capital exceeds the cost of capital. If ROIC = WACC, faster growth adds nothing; tying reinvestment to g ÷ ROIC keeps the terminal value honest.</div>
+      </section>
+
+      <section id="wacc" data-nav="3 · Cost of capital (India, now)" data-search>
+        <div class="section-head"><div><span class="section-no">03 / DISCOUNT RATE</span><h2>Cost of capital, with live Indian inputs</h2></div><span class="tag core">core</span></div>
+        <div class="eq">Cost of equity (CAPM) = R<sub>f</sub> + β × ERP &nbsp;·&nbsp; WACC = E/V × K<sub>e</sub> + D/V × K<sub>d</sub> × (1 − t)</div>
+        <table class="compare">
+          <tr><th>Input</th><th>November 2026 value</th><th>Notes</th></tr>
+          <tr><td>Risk-free rate (₹)</td><td>10-year G-sec ~7.1–7.2%</td><td>Up from ~6.8% in mid-2026 after the October repo hike and high oil; hit a 3-year high near 7.47% in late October</td></tr>
+          <tr><td>Equity risk premium (India)</td><td>~6.5–7.5%</td><td>Damodaran: mature-market ERP ~4.2% (July 2026) plus an India country risk premium; Indian practitioners commonly use ~7%</td></tr>
+          <tr><td>Beta</td><td>Bottom-up: unlever peer betas, re-lever at target D/E</td><td>β<sub>U</sub> = β<sub>L</sub> ÷ (1 + (1 − t) D/E)</td></tr>
+          <tr><td>Cost of debt</td><td>Yield on the company's bonds / rating-based spread over G-sec</td><td>After-tax: × (1 − t)</td></tr>
+          <tr><td>Tax</td><td>~25.2% (22% concessional regime + surcharge + cess)</td><td>Marginal rate for the tax shield</td></tr>
+        </table>
+        <p><b>Example:</b> R<sub>f</sub> 7.2%, β 1.1, ERP 7% → K<sub>e</sub> ≈ 14.9%. K<sub>d</sub> 9% pre-tax, 80/20 equity/debt → WACC ≈ 0.8 × 14.9% + 0.2 × 9% × 0.75 ≈ 13.3%. Rupee discount rates are higher than dollar ones because Indian inflation and bond yields are higher — always match currency of cash flows and discount rate.</p>
+        <div class="memory"><b>Beta re-levering:</b> peer levered β 1.2 at D/E 0.5 → unlevered 1.2 ÷ (1 + 0.75 × 0.5) ≈ 0.87; at your target D/E 0.25 → 0.87 × (1 + 0.75 × 0.25) ≈ 1.04.</div>
+      </section>
+
+      <section id="multiples" data-nav="4 · Multiples" data-search>
+        <div class="section-head"><div><span class="section-no">04 / MULTIPLES</span><h2>Relative valuation</h2></div></div>
+        <table class="compare">
+          <tr><th>Multiple</th><th>Use for</th><th>Watch</th></tr>
+          <tr><td>EV/EBITDA</td><td>Most industries; ignores capital structure and D&amp;A policy</td><td>Ignores capex: capital-heavy firms look cheap</td></tr>
+          <tr><td>EV/Revenue</td><td>Loss-making or early companies (SaaS, new-age tech)</td><td>Says nothing about profitability; compare with margins and growth</td></tr>
+          <tr><td>P/E</td><td>Mature, profitable companies</td><td>Affected by leverage, one-offs, accounting</td></tr>
+          <tr><td>PEG</td><td>P/E ÷ growth %</td><td>Rough; assumes growth quality equal</td></tr>
+          <tr><td>P/B</td><td>Banks, insurers, NBFCs</td><td>Justified P/B = (ROE − g) ÷ (K<sub>e</sub> − g)</td></tr>
+          <tr><td>EV/GMV, EV/users</td><td>Marketplaces, platforms</td><td>Only meaningful with take-rate and unit-economics context</td></tr>
+        </table>
+        <div class="formula-list card">
+          <div class="formula-row"><b>Steps</b><span>Pick 5–10 truly comparable companies (business model, growth, size, geography) → compute multiples on the same basis (LTM or forward) → use median and range → adjust for differences in growth and margins.</span></div>
+          <div class="formula-row"><b>Example</b><span>Peer EV/EBITDA 12×, 14×, 15×, 16×, 18× → median 15×. Target EBITDA ₹250 cr → EV ₹3,750 cr; less ₹300 cr debt plus ₹100 cr cash → equity ₹3,550 cr. Compare with the DCF (₹2,042 cr): the market is pricing in more growth or a lower discount rate than our DCF.</span></div>
+          <div class="formula-row"><b>Precedent transactions</b><span>Multiples paid in past acquisitions; usually higher than trading comps because they include a control premium (often 20–40%).</span></div>
+        </div>
+      </section>
+
+      <section id="special" data-nav="5 · Banks, startups, others" data-search>
+        <div class="section-head"><div><span class="section-no">05 / SPECIAL CASES</span><h2>Valuing banks, startups and odd businesses</h2></div></div>
+        <div class="grid">
+          <div class="card"><h3>Banks and NBFCs</h3><p>Debt is raw material, not financing, so EV/EBITDA and FCFF don't work. Use P/B vs ROE, P/E, dividend discount, or residual income. Bank with ROE 16%, K<sub>e</sub> 13.5%, g 8% → justified P/B ≈ (16 − 8) ÷ (13.5 − 8) ≈ 1.45×.</p></div>
+          <div class="card"><h3>Startups: VC method</h3><p>Estimate exit value (e.g. year-5 revenue × exit multiple), divide by target return multiple (often 10–30× for early stage) → post-money today. Pre-money = post-money − investment. Ownership = investment ÷ post-money (F4).</p></div>
+          <div class="card"><h3>Loss-making growth companies</h3><p>DCF with a path to target margins (based on mature peers), a probability of failure, and large reinvestment early; or EV/Revenue cross-checked with growth and gross margin.</p></div>
+          <div class="card"><h3>Cyclicals and commodities</h3><p>Use normalised (mid-cycle) earnings; low P/E at the peak often means expensive.</p></div>
+          <div class="card"><h3>Sum of the parts</h3><p>Value each segment with its own method (e.g. Eternal: food delivery on EBITDA multiples, Blinkit on growth-adjusted revenue multiple), add, subtract net debt and holding discount.</p></div>
+          <div class="card"><h3>Dividend discount</h3><p>Gordon: P = D<sub>1</sub> ÷ (r − g). D<sub>1</sub> ₹10, r 12%, g 6% → ₹167.</p></div>
+        </div>
+      </section>
+
+      <section id="traps" data-nav="6 · Common mistakes" data-search>
+        <div class="section-head"><div><span class="section-no">06 / TRAPS</span><h2>Valuation mistakes interviewers probe</h2></div></div>
+        <table class="compare">
+          <tr><th>Mistake</th><th>Fix</th></tr>
+          <tr><td>Terminal growth above economy growth (or above WACC)</td><td>g ≤ long-run nominal GDP growth; check TV share of EV</td></tr>
+          <tr><td>Mixing levered and unlevered (FCFE with WACC)</td><td>FCFF ↔ WACC ↔ EV; FCFE ↔ K<sub>e</sub> ↔ equity value</td></tr>
+          <tr><td>Growth without reinvestment</td><td>Reinvestment = g ÷ ROIC</td></tr>
+          <tr><td>Currency mismatch</td><td>Rupee cash flows with rupee rates; dollar with dollar</td></tr>
+          <tr><td>Double-counting risk</td><td>Don't raise the discount rate and also haircut cash flows for the same risk</td></tr>
+          <tr><td>Using diluted shares wrongly</td><td>Treasury-stock method for options; include RSUs</td></tr>
+          <tr><td>Comps that aren't comparable</td><td>Match growth, margins, business model; explain differences</td></tr>
+        </table>
+      </section>
+
+      <section id="bank" data-nav="7 · 25 technical questions" data-search>
+        <div class="section-head"><div><span class="section-no">07 / PRACTICE</span><h2>Twenty-five technical questions</h2></div><span class="tag pyq">answer aloud</span></div>
+        <table class="compare">
+          <tr><th>Question</th><th>Short answer</th></tr>
+          <tr><td>Walk me through a DCF.</td><td>Section 2 in 60 seconds: forecast FCFF, WACC, terminal value, discount, bridge to equity, sensitise</td></tr>
+          <tr><td>Why use unlevered FCF?</td><td>Values the business independent of financing; matches WACC and EV</td></tr>
+          <tr><td>How do you calculate WACC?</td><td>Weights × costs; K<sub>e</sub> via CAPM; after-tax K<sub>d</sub></td></tr>
+          <tr><td>What's beta?</td><td>Sensitivity of a stock's returns to the market's</td></tr>
+          <tr><td>Why is debt cheaper than equity?</td><td>Senior claim, fixed payments, tax-deductible interest</td></tr>
+          <tr><td>Can more debt lower WACC forever?</td><td>No: distress costs raise both K<sub>d</sub> and K<sub>e</sub></td></tr>
+          <tr><td>Gordon growth vs exit multiple?</td><td>Intrinsic vs market-based terminal value; cross-check</td></tr>
+          <tr><td>What % of EV is terminal value usually?</td><td>Often 60–80%</td></tr>
+          <tr><td>EV vs equity value?</td><td>Section 1 bridge</td></tr>
+          <tr><td>Why subtract cash from EV?</td><td>Non-operating; buyer gets it</td></tr>
+          <tr><td>Which multiple for a bank?</td><td>P/B (with ROE), P/E</td></tr>
+          <tr><td>Why not EV/EBITDA for a bank?</td><td>Debt is operating; interest is a cost of goods</td></tr>
+          <tr><td>Company A has a higher P/E than B. Why?</td><td>Higher growth, lower risk, higher ROE, or overvalued</td></tr>
+          <tr><td>How do you value a pre-revenue startup?</td><td>VC method, comparable rounds, scenario DCF with failure probability</td></tr>
+          <tr><td>DCF says ₹500, market price ₹800. What do you do?</td><td>Find which assumption the market believes (growth, margin, risk); test plausibility</td></tr>
+          <tr><td>How does a rate hike affect valuations?</td><td>Higher R<sub>f</sub> → higher WACC → lower values, especially long-duration growth stocks</td></tr>
+          <tr><td>What is a control premium?</td><td>Extra paid to acquire control (synergies, decision rights)</td></tr>
+          <tr><td>Accretion/dilution?</td><td>Does the acquirer's EPS rise after a deal? Compare target's earnings yield with cost of financing (F3)</td></tr>
+          <tr><td>How does ₹10 more D&amp;A change a DCF?</td><td>FCF up by tax shield (₹2.5 at 25%), so value slightly up, if it's real tax depreciation</td></tr>
+          <tr><td>Mid-year convention?</td><td>Discount cash flows at t − 0.5, assuming they arrive through the year</td></tr>
+          <tr><td>Levered vs unlevered beta?</td><td>Unlevered strips financial risk; re-lever to target structure</td></tr>
+          <tr><td>Why do new-age tech IPOs trade on EV/Revenue?</td><td>Losses make P/E meaningless; but markets now demand a profit path (PhonePe and Zepto IPO valuations were cut in 2026)</td></tr>
+          <tr><td>What's ROIC and why compare with WACC?</td><td>NOPAT ÷ invested capital; value created only if ROIC &gt; WACC</td></tr>
+          <tr><td>Sum-of-the-parts — when?</td><td>Conglomerates and multi-segment firms (Reliance, Eternal)</td></tr>
+          <tr><td>Biggest weakness of DCF?</td><td>Garbage in, garbage out; terminal value dominance</td></tr>
+        </table>
+      </section>
+
+      <section id="plan" data-nav="8 · Practice plan" data-search>
+        <div class="section-head"><div><span class="section-no">08 / PLAN</span><h2>Practice plan</h2></div></div>
+        <div class="card">
+          <label class="checkline"><input type="checkbox"> Rebuild the section-2 DCF in Excel and reproduce the sensitivity table</label>
+          <label class="checkline"><input type="checkbox"> Compute WACC for one listed Indian company using today's 10-year G-sec yield</label>
+          <label class="checkline"><input type="checkbox"> Build a trading-comps table (5 peers, EV/EBITDA and P/E) for that company</label>
+          <label class="checkline"><input type="checkbox"> Value one bank on P/B vs ROE (link to B1)</label>
+          <label class="checkline"><input type="checkbox"> Read Damodaran's <i>Little Book of Valuation</i> chapters on young and mature companies (in your folder)</label>
+          <label class="checkline"><input type="checkbox"> Write a 1-page "story + numbers" valuation of a company you follow</label>
+        </div>
+        <div class="memory"><b>Keep the inputs fresh:</b> check the 10-year G-sec yield and Damodaran's country risk premium (updated each January and July) before any valuation interview. Next: F4 (VC and PE, investment memo) and F3 (M&amp;A and LBO).</div>
+      </section>
+
+      <div id="none" class="no-results">No match. Try a shorter term.</div>
+    </main>
+  </div>
+  <script>
+    const search=document.getElementById('search'), blocks=[...document.querySelectorAll('[data-search]')], none=document.getElementById('none');
+    search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let shown=0;blocks.forEach(b=>{const hit=!q||b.innerText.toLowerCase().includes(q);b.classList.toggle('hidden',!hit);if(hit)shown++});none.style.display=shown?'none':'block'});
+    const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+    const checks=[...document.querySelectorAll('.checkline input')];checks.forEach((c,i)=>{c.checked=store.get('cdc-f2-'+i)==='1';c.addEventListener('change',()=>store.set('cdc-f2-'+i,c.checked?'1':'0'))});
+    document.getElementById('resetChecks').addEventListener('click',()=>{checks.forEach((c,i)=>{c.checked=false;store.del('cdc-f2-'+i)})});
+    const nav=[...document.querySelectorAll('.nav a')], sections=[...document.querySelectorAll('main section[id]')];
+    const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});sections.forEach(s=>obs.observe(s));
+  </script>
+</body>
+</html>
